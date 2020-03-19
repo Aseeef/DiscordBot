@@ -16,6 +16,9 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectId" id="1YplmcKc1xSxFTqjIPBr0wRiY3s" />
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -85,7 +88,7 @@
       <workItem from="1584534334568" duration="1501000" />
       <workItem from="1584535855426" duration="35727000" />
       <workItem from="1584576729190" duration="4168000" />
-      <workItem from="1584624342097" duration="21222000" />
+      <workItem from="1584624342097" duration="21487000" />
     </task>
     <servers />
   </component>
