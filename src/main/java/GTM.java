@@ -1,22 +1,20 @@
 import Database.BaseDatabase;
+import Utils.AutoDeleter.AutoDelete;
 import Utils.Config;
 import Utils.MineStat;
 import Utils.tools.GTools;
 import commands.PlayerCountCommand;
+import commands.SuggestionsCommand;
 import events.LogCommands;
 import events.OnSuggestion;
-import commands.SuggestionsCommand;
 import events.PlayerCountUpdater;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import Utils.AutoDeleter.AutoDelete;
 
-import javax.security.auth.login.Configuration;
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
-import java.sql.Connection;
 
 import static Utils.tools.GTools.jda;
 
@@ -31,7 +29,7 @@ public class GTM extends ListenerAdapter {
             Config.load();
 
             // Load SQL Database
-            //loadMySQL();
+            loadMySQL();
 
             // Initialize GTM MineStat
             GTools.log("Loading MineStat data on GTM...");
@@ -66,7 +64,7 @@ public class GTM extends ListenerAdapter {
     private static void loadMySQL() {
         BaseDatabase.getInstance().init(
                 Config.get().getSqlHostname(),
-                Integer.parseInt(Config.get().getSqlPort()),
+                Config.get().getSqlPort(),
                 Config.get().getSqlDatabase(),
                 Config.get().getSqlUsername(),
                 Config.get().getSqlPassword()

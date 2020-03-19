@@ -13,7 +13,7 @@ public class Config {
     private long suggestionChannelId;
     private long playerCountChannelId;
     private String sqlHostname;
-    private String sqlPort;
+    private int sqlPort;
     private String sqlUsername;
     private String sqlPassword;
     private String sqlDatabase;
@@ -86,7 +86,7 @@ public class Config {
         return sqlHostname;
     }
 
-    public String getSqlPort() {
+    public int getSqlPort() {
         return sqlPort;
     }
 
