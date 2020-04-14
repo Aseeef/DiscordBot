@@ -1,0 +1,80 @@
+---
+########################################
+### GRAND THEFT MINECART DISCORD BOT ###
+###       CONFIGURATION FILE         ###
+########################################
+
+
+########################
+# GENERAL BOT SETTINGS #
+########################
+
+# The bot token that the bot should use to log in
+botToken: "NjkwNjU5NzQxNTQ1OTIyNjAx.XnU3DA.qsiZ4ZcbiUvjmCxT91YCQ0PQKn8"
+
+# The name of the bot (warning: if the name is too common, the bot will not start)
+botName: "QA-GTM"
+
+# The prefix that the bot commands should use
+commandPrefix: "/"
+
+#########################
+# MY SQL DATABASE CREDS #
+#########################
+
+# SQL hostname
+sqlHostname: "1780.bae1-bhs.srv.vlan.network"
+
+# SQL port
+sqlPort: 3306
+
+# SQL login username
+sqlUsername: "root"
+
+# SQL login password
+sqlPassword: "gtmmysqlpass"
+
+# Database name
+sqlDatabase: "users"
+
+#########################
+#   RAID MODE SETTINGS  #
+#########################
+
+# The number of players that need to join in the below configured time to active raid mode
+raidModePlayers: 5
+
+# The time peroid over which raid mode checks players in seconds
+raidModeTime: 30
+
+# If raid mode is active, and a new player joins with in this many seconds of the previous player, kicks/bans them (this time can't be larger then raidModeTime)
+raidModePunishTime: 10
+
+# What should we do to the players detected as bots? (Options: KICK, BAN, NOTIFY)
+raidModePunishType: "KICK"
+
+# What should the bot message the player on executing the punishment. You may use discord formating. Use \n for linebreaks. (Note: This only works for bans / kicks)
+raidModeMessage: "**You were kicked from the discord because you were detected being a bot! If you believe this was an error, simply rejoin.**"
+
+#########################
+#     ROLES NAMES       #
+#########################
+
+# The bot uses the following role names to get the role for each rank.
+# There should NEVER be multiple roles with the same name to prevent
+# errors! This list is NOT caps sensitive.
+
+manager: "Manager"
+developer: "Developer"
+admin: "Admin"
+builder: "Builder"
+srmod: "Sr. Mod"
+mod: "Moderator"
+helper: "Helper"
+buildteam: "Build Team"
+youtuber: "Youtuber"
+supreme: "Supreme"
+sponsor: "Sponsor"
+elite: "Elite"
+premium: "Premium"
+vip: "VIP"

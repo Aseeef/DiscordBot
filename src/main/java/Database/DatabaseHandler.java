@@ -2,11 +2,15 @@ package Database;
 
 import Database.component.Database;
 import Database.component.DatabaseCredentials;
+import Utils.tools.GTools;
+import Utils.tools.Logs;
 import com.zaxxer.hikari.HikariDataSource;
 
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+
+import static Utils.tools.Logs.log;
 
 /**
  * A generic database handler that holds a HikariCP data source so we can have
@@ -31,9 +35,9 @@ public class DatabaseHandler implements Database {
 	// https://github.com/brettwooldridge/HikariCP
 
 	/** How many minimum idle connections should we always have (2) */
-	protected int minIdle = 2;
+	protected int minIdle = 1;
 	/** How many max connections should exist in pool (2) */
-	protected int maxPoolSize = 2;
+	protected int maxPoolSize = 1;
 	/** How long, in millis, we stop waiting for new connection (15 secs) */
 	protected int connectionTimeoutMs = 15 * 1000;
 	/** How long, in millis, before connections timeout (45 secs) */
@@ -111,8 +115,13 @@ public class DatabaseHandler implements Database {
 			hikariSource.setLogWriter(new PrintWriter(System.out));
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
+			log(String.valueOf(e.initCause(e.getCause())), Logs.ERROR);
+			for (StackTraceElement error : e.getStackTrace())
+				log("        at " + error.toString(), Logs.ERROR);
 		}
+
+		log("A connection to the database has successfully been established!");
+
 	}
 
 	/**
@@ -129,25 +138,12 @@ public class DatabaseHandler implements Database {
 	 * locally in the object, then initializes the database handler.
 	 */
 	public void init(String host, int port, String dbName, String user, String pass) {
-//
-//		String host = config.getString(path + ".host", "localhost");
-//		int port = config.getInt(path + ".port", 3306);
-//		String dbName = config.getString(path + ".database", "hyphenical");
-//		String username = config.getString(path + ".user", "user");
-//		String password = config.getString(path + ".password", "pass123");
-//
-//		// connection stats
-//		int minIdle = config.getInt(path + ".min-idle", 2);
-//		int maxConns = config.getInt(path + ".max-conn", 2);
-//
-//		// load local fields
-//		this.minIdle = minIdle < 0 ? 1 : minIdle;
-//		this.maxPoolSize = maxConns < 1 ? 1 : maxConns;
-//
-//		// create database credentials
+
+
+		// create database credentials
 		DatabaseCredentials creds = new DatabaseCredentials(host, port, dbName, user, pass);
 
-//		// initialize hikari cp
+		// initialize hikari cp
 		init(creds);
 	}
 
@@ -182,8 +178,10 @@ public class DatabaseHandler implements Database {
 				return conn;
 			}
 			catch (Exception e) {
-				System.out.println("[DatabaseHandler] Unable to grab a connection from the connection pool!");
-				e.printStackTrace();
+				log("[DatabaseHandler] Unable to grab a connection from the connection pool!", Logs.ERROR);
+				log(String.valueOf(e.initCause(e.getCause())), Logs.ERROR);
+				for (StackTraceElement error : e.getStackTrace())
+					log("        at " + error.toString(), Logs.ERROR);
 			}
 		}
 

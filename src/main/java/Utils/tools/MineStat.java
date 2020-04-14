@@ -1,4 +1,4 @@
-package Utils;
+package Utils.tools;
 
 /*
  * MineStat.java - A Minecraft server status checker
@@ -25,9 +25,12 @@ package Utils;
  */
 
 import Utils.tools.GTools;
+import Utils.tools.Logs;
 
 import java.io.*;
 import java.net.*;
+
+import static Utils.tools.Logs.log;
 
 public class MineStat
 {
@@ -91,7 +94,7 @@ public class MineStat
         setTimeout(timeout);
         refresh();
 
-        GTools.log("Created new MineStat instance for " + this.getAddress());
+        log("Created new MineStat instance for " + this.getAddress());
 
     }
 
@@ -121,7 +124,7 @@ public class MineStat
         catch(Exception e)
         {
             serverUp = false;
-            //e.printStackTrace();
+            log("Failed to fetch the state of the server because the server is offline!", Logs.ERROR);
             return serverUp;
         }
 

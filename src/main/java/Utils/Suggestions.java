@@ -1,9 +1,8 @@
 package Utils;
 
-import java.io.IOException;
-import java.io.Serializable;
+import Utils.Data;
 
-public class Suggestions implements Serializable {
+public class Suggestions {
 
     private int number;
     private long id;
@@ -23,11 +22,7 @@ public class Suggestions implements Serializable {
         this.status = status;
         this.statusReason = statusReason;
 
-        try {
-            Data.storeData(Data.SUGGESTIONS, this, number);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Data.storeData(Data.SUGGESTIONS, this, number);
 
     }
 
@@ -39,7 +34,7 @@ public class Suggestions implements Serializable {
         return id;
     }
 
-    public void setId(long id) throws IOException {
+    public void setId(long id) {
         this.id = id;
         Data.storeData(Data.SUGGESTIONS, this, this.number);
     }
@@ -56,12 +51,12 @@ public class Suggestions implements Serializable {
         return status;
     }
 
-    public void setStatus(String status) throws IOException {
+    public void setStatus(String status) {
         this.status = status.toUpperCase();
         Data.storeData(Data.SUGGESTIONS, this, this.number);
     }
 
-    public void setStatusReason(String statusReason) throws IOException {
+    public void setStatusReason(String statusReason) {
         this.statusReason = statusReason;
         Data.storeData(Data.SUGGESTIONS, this, this.number);
     }

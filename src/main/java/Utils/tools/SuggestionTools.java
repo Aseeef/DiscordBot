@@ -1,6 +1,6 @@
 package Utils.tools;
 
-import Utils.Config;
+import Utils.SelfData;
 import Utils.Suggestions;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
@@ -10,27 +10,25 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
-import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
+import static Utils.tools.GTools.jda;
 import static Utils.tools.GTools.userById;
 
 public class SuggestionTools {
 
-    public static void setSuggestionsChannel (TextChannel channel) throws IOException {
-        Config.get().setSuggestionChannelId(channel.getIdLong());
-    }
-
     public static TextChannel getSuggestionsChannel (GuildMessageReceivedEvent e) {
-        return e.getGuild().getTextChannelById(Config.get().getSuggestionChannelId());
+        return e.getGuild().getTextChannelById(SelfData.get().getSuggestionChannelId());
     }
 
-    public static MessageEmbed createSuggestionEmbed (Suggestions s, GuildMessageReceivedEvent e) {
+    public static MessageEmbed createSuggestionEmbed (Suggestions s) {
         // Create suggestion embed
         EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle("<:gtmlearnables:372027028796473344> SUGGESTION ID: #" + s.getNumber());
+        String gtmLearnablesEmoji = jda.getEmotesByName("gtmlearnables", true).get(0).getAsMention();
+        embed.setTitle(gtmLearnablesEmoji + "  SUGGESTION ID: #" + s.getNumber());
         embed.setThumbnail(userById(s.getSuggesterId()).getAvatarUrl());
-        embed.setDescription(s.getMsg());
-        embed.addField("Suggestion Status: ", "**"+s.getStatus()+"**: "+s.getStatusReason(), true);
+        embed.setDescription("\n\u200E"+s.getMsg()+"\n\u200E");
+        embed.addField("**Suggestion Status:**", "**"+s.getStatus()+"**: "+s.getStatusReason(), true);
         embed.setFooter("Submitted by " + userById(s.getSuggesterId()).getAsTag() +
                 " (" + s.getSuggesterId() + ")");
         // Set embed color based on status
@@ -41,12 +39,12 @@ public class SuggestionTools {
         return embed.build();
     }
 
-    public static MessageEmbed createHowSuggestionEmbed (GuildMessageReceivedEvent s) {
+    public static MessageEmbed createHowSuggestionEmbed () {
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("How to Make a Suggestion");
         embed.setColor(Color.GRAY);
-        embed.setDescription("Welcome to the GTM Suggestions channel! To post your suggestion, simply **Copy and Paste** the below format in to chat. " +
-                "If you do not copy and paste the suggestion format in to your suggestion, the **bot will delete your message**! " +
+        embed.setDescription("Welcome to the GTM Suggestions channel! To post your suggestion, simply **Copy and Paste** the below format in to chat, " +
+                "and then fill it out. If you do not copy and paste the suggestion format in to your suggestion, the **bot will delete your message**! " +
                 "Please note, **once sent, you can NOT edit your suggestion**, so please proof read your message before sending.");
         return embed.build();
     }
@@ -56,17 +54,51 @@ public class SuggestionTools {
                 .append("```")
                 .append("**What Server is your Suggestion for?**")
                 .append("\n")
-                .append("My suggestion is for...")
+                .append("[Type what server here]")
                 .append("\n\u200E\n")
                 .append("**What is your Suggestion? Be concise!**")
                 .append("\n")
-                .append("I want to suggest that...")
+                .append("[Explain suggestion here]")
                 .append("\n\u200E\n")
                 .append("**Why do you Suggestion this?**")
                 .append("\n")
-                .append("I am suggesting this because...")
+                .append("[Explain reason here]")
                 .append("```");
         return msg.build();
+    }
+
+    // Send how to make a suggestion instructions for the next person & delete previous using callbacks
+    public static void suggestionInstruct(TextChannel channel) {
+
+        channel.sendMessage(createHowSuggestionEmbed()).queueAfter(5, TimeUnit.SECONDS, (embedMsg) -> {
+            channel.sendMessage(suggestionMessage()).queue((rawMsg) -> {
+
+                // These longs will always store the id of the previous suggestion instruction msgs
+                long prevSuggestHelpEmbedId = SelfData.get().getPrevSuggestEmbedId();
+                long prevSuggestHelpMsgId = SelfData.get().getPrevSuggestHelpMsgId();
+                TextChannel prevSuggestHelpChannel = jda.getTextChannelById(SelfData.get().getPrevSuggestHelpChannelId());
+
+                // Delete previous instruction embed & msg
+                if (prevSuggestHelpChannel != null) {
+                    prevSuggestHelpChannel.retrieveMessageById(prevSuggestHelpEmbedId).queue( (prevEmbed) -> {
+                        if (prevEmbed != null)
+                            prevEmbed.delete().queue();
+                            });
+                    prevSuggestHelpChannel.retrieveMessageById(prevSuggestHelpMsgId).queue( (prevMsg) -> {
+                        if (prevMsg != null)
+                            prevMsg.delete().queue();
+                    });
+                }
+
+                // Save current embed & msg ids
+                SelfData.get().setPrevSuggestEmbedId(embedMsg.getIdLong());
+                SelfData.get().setPrevSuggestHelpMsgId(rawMsg.getIdLong());
+                SelfData.get().setPrevSuggestHelpChannelId(channel.getIdLong());
+
+            });
+
+        });
+
     }
 
 }

@@ -1,75 +1,68 @@
 package commands;
 
-import Utils.AutoDeleter.DeleteMe;
-import Utils.Config;
+import Utils.Rank;
+import Utils.SelfData;
 import Utils.tools.GTools;
 import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-import java.io.IOException;
-import java.util.Objects;
-
-import static Utils.tools.GTools.onlinePlayersMsg;
+import static Utils.tools.GTools.*;
 
 public class PlayerCountCommand extends ListenerAdapter {
 
     public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
-        String[] args = e.getMessage().getContentRaw().split(" ");
-        if (GTools.isCommand(e, "playercount")
-                && Objects.requireNonNull(e.getMember()).getPermissions().contains(Permission.ADMINISTRATOR)) {
 
+        String msg = e.getMessage().getContentRaw();
+        Member member = e.getMember();
+        User user = e.getAuthor();
+        assert member != null;
+
+        if (GTools.isCommand(msg, user, Commands.PLAYERCOUNT) &&
+                hasRolePerms(member, Commands.PLAYERCOUNT.rank())
+            ) {
+
+            String[] args = getArgs(msg);
             TextChannel channel = e.getChannel();
 
             // If there are no command arguments send sub command help list
-            if (args.length == 1) {
-                // Queue msg to be deleted
-                DeleteMe.deleteQueue(getPlayerCountHelpMsg());
-                // Send msg
-                channel.sendMessage(getPlayerCountHelpMsg()).queue();
+            if (args.length == 0) {
+                // Send msg then delete after defined time in config
+                sendThenDelete(channel, getPlayerCountHelpMsg());
             }
 
             // Suggestions SetChannel Command
-            else if (args[1].equalsIgnoreCase("setchannel")) {
+            else if (args[0].equalsIgnoreCase("setchannel")) {
 
-                VoiceChannel playerCountChannel = GTools.jda.getVoiceChannelById(Long.parseLong(args[2]));
+                VoiceChannel playerCountChannel = GTools.jda.getVoiceChannelById(Long.parseLong(args[1]));
 
                 // If its a valid voice channel id
-                if (playerCountChannel !=null) {
+                if (playerCountChannel != null) {
 
                     // Set as player count channel
-                    try {
-                        Config.get().setPlayerCountChannelId(Long.parseLong(args[2]));
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
+                    SelfData.get().setPlayerCountChannelId(Long.parseLong(args[1]));
 
-                    // Update channel name to initialize Player Count Updater in PlayerCountUpdater()
-                    playerCountChannel.getManager()
-                            .setName(onlinePlayersMsg()).queue();
-                    GTools.log("Player Count Updater has been initialized.");
+                    // Updates online players
+                    updateOnlinePlayers();
 
-                    // Queue success msg to be deleted
-                    DeleteMe.deleteQueue(new MessageBuilder().setContent("**<`"+playerCountChannel.getIdLong()+"`>"+
-                            " has been set as the Player Count channel!**").build());
                     // Send success msg
-                    channel.sendMessage("**<`"+playerCountChannel.getIdLong()+"`>"+
-                            " has been set as the Player Count channel!**").queue();
+                    sendThenDelete(channel, "**<`"+playerCountChannel.getIdLong()+"`>"+
+                            " has been set as the Player Count channel!**");
 
                 }
 
                 // If channel id is invalid
                 else {
-                    // Queue msg to be deleted
-                    DeleteMe.deleteQueue(new MessageBuilder().setContent("**Invalid voice channel Id! Channel not set.**").build());
-                    // Send command not found msg
-                    channel.sendMessage("**Invalid voice channel Id! Channel not set.**").queue();
+                    sendThenDelete(channel, "**Invalid voice channel Id! Channel not set.**");
                 }
 
+            }
+
+            // If none of the sub arguments match
+            else {
+                // Send msg then delete after defined time in config
+                sendThenDelete(channel, getPlayerCountHelpMsg());
             }
 
         }

@@ -1,48 +1,46 @@
 package events;
 
-import Utils.AutoDeleter.DeleteMe;
 import Utils.Data;
+import Utils.SelfData;
 import Utils.Suggestions;
 import Utils.tools.GTools;
+import Utils.tools.SuggestionTools;
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-import java.io.IOException;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
-import static Utils.tools.GTools.*;
+import static Utils.tools.GTools.jda;
+import static Utils.tools.GTools.sendThenDelete;
+import static Utils.tools.Logs.log;
 import static Utils.tools.SuggestionTools.*;
 
 public class OnSuggestion extends ListenerAdapter {
 
-    // This long will always store the id of the previous suggestion instruction msgs
-    private static long suggestionHelpEmbedId = 0;
-    private static long suggestionHelpMessageId = 0;
-
     public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
 
         TextChannel channel = e.getChannel();
+        User user = e.getAuthor();
 
         // If it is a suggestion and not a command
         if (getSuggestionsChannel(e) == channel
-                && !e.getAuthor().isBot()
-                && !GTools.isCommand(e)) {
+                && !user.isBot()
+                && !GTools.isCommand(e.getMessage().getContentRaw(), e.getAuthor())) {
 
             // Delete original message
             e.getMessage().delete().queue();
 
-            if (!e.getMessage().getContentRaw().toLowerCase().contains("what server is your suggestion for") ||
-                    !e.getMessage().getContentRaw().toLowerCase().contains("what is your suggestion") ||
-                    !e.getMessage().getContentRaw().toLowerCase().contains("why do you suggestion this")) {
+            // If user didn't use suggestion format, delete their msg
+            if (!ifUsedFormat(e.getMessage().getContentRaw())) {
 
-                channel.sendMessage(e.getAuthor().getAsMention() + " your message does not follow the suggestion format!").queue();
-                DeleteMe.deleteQueue(e.getAuthor().getAsMention() + " your message does not follow the suggestion format!");
+                sendThenDelete(channel, user.getAsMention() + " your message does not follow the suggestion format! " +
+                        "Please follow the above given instructions and repost your suggestion.");
 
                 // Log failure
-                log("Incorrect Format: Deleted the following suggestion from user "+e.getAuthor().getAsTag()+" ("+e.getAuthor().getId()+"):"+
+                log("Incorrect Format: Deleted the following suggestion from user "+user.getAsTag()+" ("+user.getId()+"):"+
                         "\n"+e.getMessage().getContentRaw());
 
                 return;
@@ -52,48 +50,19 @@ public class OnSuggestion extends ListenerAdapter {
             // Create new suggestion object
             Suggestions suggestion = new Suggestions(Data.getNextNumber(Data.SUGGESTIONS), e.getMessage().getContentRaw(), Objects.requireNonNull(e.getMember()).getId(), "PENDING", "Awaiting response from staff.");
 
-            // Create and send suggestion embed
-                e.getChannel().sendMessage(
-                        createSuggestionEmbed(suggestion, e)
-                ).queue();
-
-            // Send how to make a suggestion instructions
-            channel.sendMessage(createHowSuggestionEmbed(e)).queueAfter(900, TimeUnit.MILLISECONDS);
-            channel.sendMessage(suggestionMessage()).queueAfter(1000, TimeUnit.MILLISECONDS);
-
-        }
-
-        // If the message is the suggestion reformatted and sent by the bot, add reactions to it
-        if (getSuggestionsChannel(e) == channel
-                && e.getAuthor().isBot()
-                && e.getMessage().getEmbeds().size() != 0
-                && e.getMessage().getEmbeds().get(0).getTitle().contains("SUGGESTION")
-        ) {
-
-            // React to the message
-            Emote gtmAgree = e.getGuild().getEmoteById("372027012501471242");
-            Emote gtmDisagree = e.getGuild().getEmoteById("372027027399901194");
-            assert gtmAgree != null;
-            assert gtmDisagree != null;
-            channel.addReactionById(e.getMessageId(), gtmAgree).queue();
-            channel.addReactionById(e.getMessageId(), gtmDisagree).queue();
-
-            // Get the suggestion that was just sent
-            Suggestions suggestion = null;
-            try {
-                suggestion = Data.obtainData(Data.SUGGESTIONS, Data.getCurrentNumber(Data.SUGGESTIONS));
-            } catch (IOException | ClassNotFoundException ex) {
-                ex.printStackTrace();
-            }
-            // Set suggestion message ID (right now it was null)
-            try {
-                suggestion.setId(e.getMessageIdLong());
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            // Create and send suggestion embed then use the callback to save msg id into suggestion object & add reaction
+                e.getChannel().sendMessage(createSuggestionEmbed(suggestion)).queue( (msg) -> {
+                    // Set suggestion id
+                    suggestion.setId(msg.getIdLong());
+                    // React to the message
+                    Emote gtmAgree = jda.getEmotesByName("gtmagree", true).get(0);
+                    Emote gtmDisagree = jda.getEmotesByName("gtmdisagree", true).get(0);
+                    msg.addReaction(gtmAgree).queue();
+                    msg.addReaction(gtmDisagree).queue();
+                });
 
             // Notify user a success message & inform them that they will get alerts on status change
-            userById(suggestion.getSuggesterId()).openPrivateChannel().queue((userChannel) ->
+            user.openPrivateChannel().queue((userChannel) ->
             {
                 // Send a private message to the user
                 userChannel.sendMessage("**Hello! Thank you for your suggestion! " +
@@ -101,34 +70,21 @@ public class OnSuggestion extends ListenerAdapter {
             });
 
             // Log suggestion
-            log("User "+GTools.userById(suggestion.getSuggesterId()).getAsTag()+
-                    "("+suggestion.getSuggesterId()+") just created a suggestion with ID #"+
+            log("User "+user.getAsTag()+
+                    "("+user.getIdLong()+") just created a suggestion with ID #"+
                     suggestion.getNumber());
 
+            // Send how to make a suggestion instructions for the next person
+            SuggestionTools.suggestionInstruct(channel);
+
         }
 
-        // Delete previous suggestion help and format msg
-        if (getSuggestionsChannel(e) == e.getChannel()
-                && e.getAuthor().isBot()
-                && e.getMessage().getEmbeds().size() != 0
-                && e.getMessage().getEmbeds().get(0).getTitle().equals("How to Make a Suggestion")) {
-            // Delete previous embed
-            if (suggestionHelpEmbedId != 0) {
-                channel.deleteMessageById(suggestionHelpEmbedId).queue();
-            }
-            // Save current embed id
-            suggestionHelpEmbedId = e.getMessageIdLong();
-        } else if (getSuggestionsChannel(e) == e.getChannel()
-                && e.getAuthor().isBot()
-                && e.getMessage().getContentRaw().equals(suggestionMessage().getContentRaw())) {
-            // Delete previous embed
-            if (suggestionHelpMessageId != 0) {
-                channel.deleteMessageById(suggestionHelpMessageId).queue();
-            }
-            // Save current embed id
-            suggestionHelpMessageId = e.getMessageIdLong();
-        }
+    }
 
+    private boolean ifUsedFormat(String msg) {
+        return msg.toLowerCase().contains("what server is your suggestion for") &&
+                msg.toLowerCase().contains("what is your suggestion") &&
+                msg.toLowerCase().contains("why do you suggestion this");
     }
 
 }
