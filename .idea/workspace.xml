@@ -2,47 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="updating workspace.xml">
-      <change afterPath="$PROJECT_DIR$/src/main/java/Utils/Rank.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Utils/SelfData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Utils/Staff.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Utils/Users.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Utils/tools/Logs.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Utils/tools/RaidModeTools.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Utils/tools/WelcomeTools.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/commands/Commands.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/commands/HelpCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/commands/RaidModeCommands.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/commands/SeniorsCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/commands/SuggestionCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/commands/WelcomeCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/events/OnJoin.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/events/OnReactRules.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/selfevents/CloseEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/selfevents/ConsoleCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/aseef.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/aseef.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Database/BaseDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Database/BaseDatabase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Database/DatabaseHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Database/DatabaseHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GTM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GTM.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ReadyEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/selfevents/ReadyEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/AutoDeleter/AutoDelete.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/tools/CommandsTools.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/AutoDeleter/DeleteMe.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Utils/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/Data.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/Data.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/MineStat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/tools/MineStat.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/Suggestions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/Suggestions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/tools/GTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/tools/GTools.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/tools/SuggestionTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/tools/SuggestionTools.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/PlayerCountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/PlayerCountCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/SuggestionsCommand.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/events/LogCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/events/LogCommands.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/events/OnSuggestion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/events/OnSuggestion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/events/PlayerCountUpdater.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/data.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/data.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/Staff.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/Staff.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/Users.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/Users.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/tools/RaidModeTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/tools/RaidModeTools.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/events/OnJoin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/events/OnJoin.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/10.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/11.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/5.json" beforeDir="false" />
@@ -196,7 +161,8 @@
       <workItem from="1586721465760" duration="12544000" />
       <workItem from="1586804075693" duration="4047000" />
       <workItem from="1586808996155" duration="4303000" />
-      <workItem from="1586818150542" duration="12727000" />
+      <workItem from="1586818150542" duration="13813000" />
+      <workItem from="1586889201273" duration="6563000" />
     </task>
     <task id="LOCAL-00001" summary="Init commit">
       <created>1584645971223</created>
@@ -219,7 +185,14 @@
       <option name="project" value="LOCAL" />
       <updated>1584647002290</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Initial Commit 2">
+      <created>1586831052827</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1586831052828</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -242,6 +215,7 @@
     <MESSAGE value="Init commit" />
     <MESSAGE value="Attempts to add sql capabilities" />
     <MESSAGE value="updating workspace.xml" />
-    <option name="LAST_COMMIT_MESSAGE" value="updating workspace.xml" />
+    <MESSAGE value="Initial Commit 2" />
+    <option name="LAST_COMMIT_MESSAGE" value="Initial Commit 2" />
   </component>
 </project>

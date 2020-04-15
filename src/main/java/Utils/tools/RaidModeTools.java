@@ -20,11 +20,11 @@ public class RaidModeTools {
     // raidMode[1] - Whether it was manually triggered (true = yes)
     public static boolean[] raidMode = {false, false};
 
-    private static String raidModePunishType = Config.get().getRaidModePunishType();
-    private static String raidModeMessage = Config.get().getRaidModeMessage();
+    private static final String raidModePunishType = Config.get().getRaidModePunishType();
+    private static final String raidModeMessage = Config.get().getRaidModeMessage();
 
     // Timer task to disable raid mode once it begins
-    private static Timer task = new Timer();
+    private static Timer task;
 
 
     public static void disableRaidMode(@Nullable User user) {
@@ -51,7 +51,7 @@ public class RaidModeTools {
                     else
                         alertChannel.sendMessage(
                                 "[**ALERT**] As far as I am able to tell, the raid has concluded." +
-                                        "Raid mode has been disabled. Resuming regular function..."
+                                        " Raid mode has been disabled. Resuming regular function..."
                         ).queue();
                 }
 
@@ -137,17 +137,15 @@ public class RaidModeTools {
 
         // Uses callbacks to ensure that each task is ran sequentially
         if (raidModePunishType.equalsIgnoreCase("BAN")) {
-            user.openPrivateChannel().queue( (userChannel) -> {
-                userChannel.sendMessage(raidModeMessage).queue( (msg) ->
-                        member.ban(1, "User detected as a Bot").queue());
-            });
+            user.openPrivateChannel().queue( (userChannel) ->
+                    userChannel.sendMessage(raidModeMessage).queue( (msg) ->
+                    member.ban(1, "User detected as a Bot").queue()));
         }
 
         else if (raidModePunishType.equalsIgnoreCase("KICK")) {
-            user.openPrivateChannel().queue( (userChannel) -> {
-                userChannel.sendMessage(raidModeMessage).queue( (msg) ->
-                        member.kick("User detected as a Bot").queue());
-            });
+            user.openPrivateChannel().queue( (userChannel) ->
+                    userChannel.sendMessage(raidModeMessage).queue( (msg) ->
+                    member.kick("User detected as a Bot").queue()));
         }
 
         else if (raidModePunishType.equalsIgnoreCase("NOTIFY")) {
@@ -165,11 +163,14 @@ public class RaidModeTools {
     }
 
     public static void rescheduleDisableTask() {
+        log("Rescheduling raid mode disable task...");
         task.cancel();
         scheduleDisableTask();
     }
 
     public static void scheduleDisableTask() {
+        log("Scheduled a new disable raid mode task...");
+        task = new Timer();
         task.schedule(
                 new TimerTask() {
                     @Override

@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -41,25 +42,26 @@ public class OnJoin extends ListenerAdapter {
             }
         });
 
+        // Remove if previous new joiners if they joined too long ago
+        newJoins.keySet().removeIf(joined -> newJoins.get(joined) < System.currentTimeMillis() - (1000 * raidModeTime));
+
         // Put newcomer in to the new joins map
         newJoins.put(member, System.currentTimeMillis());
 
-        // Remove previous new joiners if they joined too long ago
-        for (Map.Entry<Member, Long> entry : newJoins.entrySet()) {
-            Member joined = entry.getKey();
-            if (newJoins.get(joined) < System.currentTimeMillis() - (1000 * raidModeTime)) {
-                newJoins.remove(joined);
-            }
-        }
-
         // If raid mode is on and the player who just joined, joined too close to previous; kick
         if (raidMode[0] && newJoins.get(previousJoin) > System.currentTimeMillis() - (1000 * raidModePunishTime)) {
-            punishBot(member);
+
+            // Kick the bots that just joined
+            for (Map.Entry<Member, Long> entry2 : newJoins.entrySet()) {
+                Member bot = entry2.getKey();
+                punishBot(bot);
+            }
 
             // Reset raid mode disable timer if automatically triggered
             if (!raidMode[1]) {
                 rescheduleDisableTask();
             }
+
         }
 
         // If at any point, there 5 or more players who join within 30 sec,

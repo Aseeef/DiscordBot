@@ -55,10 +55,8 @@ public class Config {
     public Config(String botToken, String botName, String commandPrefix, int deleteTime,
                   String sqlHostname, int sqlPort, String sqlUsername, String sqlPassword, String sqlDatabase,
                   String serverIp, int serverPort, int mineStatRefresh,
-                  int raidModePlayers, int raidModeTime, int raidModePunishTime, int raidModeDisable, String raidModePunishType, String raidModeMessage,
-                  String manager, String developer, String admin, String builder, String srMod, String mod, String helper, String buildTeam, String youtuber, String supreme, String sponsor, String elite, String premium, String vip, String noRank)
-    {
-
+                  int raidModePlayers, int raidModeTime, int raidModeDisable, int raidModePunishTime, String raidModePunishType, String raidModeMessage,
+                  String manager, String developer, String admin, String builder, String srMod, String mod, String helper, String buildTeam, String youtuber, String supreme, String sponsor, String elite, String premium, String vip, String noRank) {
         this.botToken = botToken;
         this.botName = botName;
         this.commandPrefix = commandPrefix;
@@ -92,7 +90,6 @@ public class Config {
         this.premium = premium;
         this.vip = vip;
         this.noRank = noRank;
-
     }
 
     public static Config get() {
@@ -176,12 +173,12 @@ public class Config {
         return raidModeTime;
     }
 
-    public int getRaidModePunishTime() {
-        return raidModePunishTime;
-    }
-
     public int getRaidModeDisable() {
         return raidModeDisable;
+    }
+
+    public int getRaidModePunishTime() {
+        return raidModePunishTime;
     }
 
     public String getRaidModePunishType() {
@@ -255,4 +252,5 @@ public class Config {
     public String getNoRank() {
         return noRank;
     }
+
 }
