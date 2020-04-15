@@ -5,14 +5,13 @@ public class Users {
     private String uuid;
     private String username;
     private Rank rank;
-    // discord[0] is id and discord[1] is tag
-    private String[] discord;
+    private long discordId;
 
-    public Users(String uuid, String username, Rank rank, String[] discord) {
+    public Users(String uuid, String username, Rank rank, long discordId) {
         this.uuid = uuid;
         this.username = username;
         this.rank = rank;
-        this.discord = discord;
+        this.discordId = discordId;
     }
 
     public String getUuid() {
@@ -39,12 +38,12 @@ public class Users {
         this.rank = rank;
     }
 
-    public String[] getDiscord() {
-        return discord;
+    public long getDiscordId() {
+        return discordId;
     }
 
-    public void setDiscord(String[] discord) {
-        this.discord = discord;
+    public void setDiscord(long discordId) {
+        this.discordId = discordId;
     }
 
 }

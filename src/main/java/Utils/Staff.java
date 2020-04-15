@@ -9,7 +9,7 @@ public class Staff extends Users {
     private long hired;
     private long left;
 
-    public Staff(String uuid, String username, Rank rank, String[] discord, String timeZone, String status, long hired, long left) {
+    public Staff(String uuid, String username, Rank rank, long discord, String timeZone, String status, long hired, long left) {
         super(uuid, username, rank, discord);
         this.timeZone = TimeZone.getTimeZone(timeZone);
         this.status = status;
