@@ -31,8 +31,8 @@ public class OnJoin extends ListenerAdapter {
         // Set the member's role to unverified
         e.getGuild().addRoleToMember(member, Rank.UNVERIFIED.er()).queue( (callback) -> {
 
-            // Start a timer to kick user if the don't agree to rules with in 10 minutes (by checking if they still have the unverified role)
-            e.getGuild().retrieveMember(e.getUser()).queueAfter(15, TimeUnit.MINUTES, (kickableMember) -> {
+            // Start a timer to kick user if the don't agree to rules with in 15 minutes (by checking if they still have the unverified role)
+            e.getGuild().retrieveMember(e.getUser()).queueAfter(Config.get().getRaidModeTimeToAccept(), TimeUnit.MINUTES, (kickableMember) -> {
                 if (hasRolePerms(kickableMember, Rank.UNVERIFIED)) {
                     // Note: This is also a bot prevention method that prevents bots from mass DMing members
                     kickableMember.getUser().openPrivateChannel().queue((privateChannel ->

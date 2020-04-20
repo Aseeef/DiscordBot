@@ -28,6 +28,7 @@ public class Config {
     private int raidModeTime;
     private int raidModeDisable;
     private int raidModePunishTime;
+    private int raidModeTimeToAccept;
     private String raidModePunishType;
     private String raidModeMessage;
     private String manager;
@@ -56,7 +57,7 @@ public class Config {
     public Config(String botToken, String botName, String commandPrefix, int deleteTime,
                   String sqlHostname, int sqlPort, String sqlUsername, String sqlPassword, String sqlDatabase,
                   String serverIp, int serverPort, int mineStatRefresh,
-                  int raidModePlayers, int raidModeTime, int raidModeDisable, int raidModePunishTime, String raidModePunishType, String raidModeMessage,
+                  int raidModePlayers, int raidModeTime, int raidModeDisable, int raidModePunishTime, int raidModeTimeToAccept, String raidModePunishType, String raidModeMessage,
                   String manager, String developer, String admin, String builder, String srMod, String mod, String helper, String buildTeam, String youtuber, String supreme, String sponsor, String elite, String premium, String vip, String noRank, String unverified) {
         this.botToken = botToken;
         this.botName = botName;
@@ -72,6 +73,7 @@ public class Config {
         this.mineStatRefresh = mineStatRefresh;
         this.raidModePlayers = raidModePlayers;
         this.raidModeTime = raidModeTime;
+        this.raidModeTimeToAccept = raidModeTimeToAccept;
         this.raidModeDisable = raidModeDisable;
         this.raidModePunishTime = raidModePunishTime;
         this.raidModePunishType = raidModePunishType;
@@ -181,6 +183,10 @@ public class Config {
 
     public int getRaidModePunishTime() {
         return raidModePunishTime;
+    }
+
+    public int getRaidModeTimeToAccept() {
+        return raidModeTimeToAccept;
     }
 
     public String getRaidModePunishType() {

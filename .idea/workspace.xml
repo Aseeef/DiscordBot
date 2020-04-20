@@ -1,28 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="Created template for future discord - gtm verification">
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GTM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GTM.java" afterDir="false" />
+    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Utils/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/Rank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/Rank.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/tools/GTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/tools/GTools.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/HelpCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/HelpCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/PlayerCountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/PlayerCountCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/RaidModeCommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/RaidModeCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/SeniorsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/SeniorsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/SuggestionCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/SuggestionCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/WelcomeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/WelcomeCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/events/OnJoin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/events/OnJoin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/events/OnReactRules.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/events/OnReactRules.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/selfevents/ReadyEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/selfevents/ReadyEvents.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/GTM.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/GTM.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Utils/Config.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Utils/Config.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Utils/tools/GTools.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Utils/tools/GTools.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/commands/PlayerCountCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/commands/PlayerCountCommand.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -151,7 +136,7 @@
       <workItem from="1587145409895" duration="598000" />
       <workItem from="1587224523397" duration="653000" />
       <workItem from="1587327936291" duration="1441000" />
-      <workItem from="1587405792849" duration="6598000" />
+      <workItem from="1587405792849" duration="7487000" />
     </task>
     <task id="LOCAL-00001" summary="Init commit">
       <created>1584645971223</created>
@@ -209,7 +194,21 @@
       <option name="project" value="LOCAL" />
       <updated>1587412402008</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Improved bot verification system">
+      <created>1587412450579</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1587412450579</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Updated Jackson">
+      <created>1587412472774</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1587412472774</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -237,6 +236,8 @@
     <MESSAGE value="Created template for future discord - gtm verification" />
     <MESSAGE value="Bot will now message users their deleted suggestions if they don't follow the format" />
     <MESSAGE value="Command code improvement &amp; minor bug fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Command code improvement &amp; minor bug fixes" />
+    <MESSAGE value="Improved bot verification system" />
+    <MESSAGE value="Updated Jackson" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated Jackson" />
   </component>
 </project>
