@@ -39,6 +39,13 @@ public class OnSuggestion extends ListenerAdapter {
                 sendThenDelete(channel, user.getAsMention() + " your message does not follow the suggestion format! " +
                         "Please follow the above given instructions and repost your suggestion.");
 
+                // DM user their deleted suggestion so it can be reposted
+                user.openPrivateChannel().queue((userChannel) ->
+                    userChannel.sendMessage("**Your suggestion was deleted because it did not follow the suggestion format:**\n```" + e.getMessage().getContentRaw() + "```\n" + "**Please copy paste this exact format in to your message and repost your suggestion:**\n")
+                            .queue( (success) ->
+                            userChannel.sendMessage(suggestionMessage()).queue())
+                        );
+
                 // Log failure
                 log("Incorrect Format: Deleted the following suggestion from user "+user.getAsTag()+" ("+user.getId()+"):"+
                         "\n"+e.getMessage().getContentRaw());

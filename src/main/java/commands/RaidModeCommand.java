@@ -1,6 +1,5 @@
 package commands;
 
-import Utils.Rank;
 import Utils.SelfData;
 import Utils.tools.GTools;
 import net.dv8tion.jda.api.MessageBuilder;
@@ -14,7 +13,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import static Utils.tools.GTools.*;
 import static Utils.tools.RaidModeTools.*;
 
-public class RaidModeCommands extends ListenerAdapter {
+public class RaidModeCommand extends ListenerAdapter {
 
     public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
 
@@ -23,15 +22,19 @@ public class RaidModeCommands extends ListenerAdapter {
         User user = e.getAuthor();
         assert member != null;
 
-        if (GTools.isCommand(msg, user, Commands.RAIDMODE) &&
-                hasRolePerms(member, Commands.RAIDMODE.rank())
-        ) {
+        if (GTools.isCommand(msg, user, Commands.RAIDMODE)) {
 
             String[] args = getArgs(msg);
             TextChannel channel = e.getChannel();
 
+            // Check perms
+            if (!hasRolePerms(member, Commands.RAIDMODE.rank())) {
+                sendThenDelete(channel, getNoPermsLang());
+                return;
+            }
+
+            // If there are no command arguments send sub command help list
             if (args.length == 0) {
-                // Send msg then delete after defined time in config
                 sendThenDelete(channel, getRaidModeHelpMsg());
             }
 
@@ -58,6 +61,11 @@ public class RaidModeCommands extends ListenerAdapter {
                 else sendThenDelete(channel, "**Raid mode is already disabled!**");
             }
 
+            // If no sub commands match
+            else {
+                sendThenDelete(channel, getRaidModeHelpMsg());
+            }
+
         }
 
 
@@ -75,7 +83,7 @@ public class RaidModeCommands extends ListenerAdapter {
     private Message getRaidModeHelpMsg() {
         return new MessageBuilder()
                 .append("> **Please enter a valid command argument:**\n")
-                .append("> `/RaidMode SetChannel <ID>` - *Sets current channel as the Raid mode alerts channel*\n")
+                .append("> `/RaidMode SetChannel` - *Sets current channel as the Raid mode alerts channel*\n")
                 .append("> `/RaidMode Enable` - *Manually enables raid mode*\n")
                 .append("> `/RaidMode Disable` - *Manually disables raid mode*\n")
                 .build();

@@ -13,7 +13,7 @@ commands\HelpCommand.class
 commands\SuggestionCommand.class
 events\OnReactRules.class
 Utils\Users.class
-commands\RaidModeCommands.class
+commands\RaidModeCommand.class
 Utils\Rank.class
 selfevents\ConsoleCommand.class
 Utils\tools\MineStat.class

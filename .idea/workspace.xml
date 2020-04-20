@@ -1,44 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="updating workspace.xml">
+    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/Staff.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/Staff.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/Users.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/Users.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/tools/RaidModeTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/tools/RaidModeTools.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/events/OnJoin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/events/OnJoin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/10.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/11.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/5.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/6.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/7.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/8.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/9.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Database/BaseDatabase.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Database/BaseDatabase.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Database/DatabaseHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Database/DatabaseHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/GTM.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/GTM.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ReadyEvents.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Utils/AutoDeleter/AutoDelete.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Utils/AutoDeleter/DeleteMe.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Utils/Config.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Utils/Config.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Utils/Data.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Utils/Data.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Utils/MineStat.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Utils/Suggestions.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Utils/Suggestions.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Utils/tools/GTools.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Utils/tools/GTools.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Utils/tools/SuggestionTools.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Utils/tools/SuggestionTools.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/commands/PlayerCountCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/commands/PlayerCountCommand.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/commands/SuggestionsCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/config.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/data.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/data.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/events/LogCommands.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/events/LogCommands.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/events/OnSuggestion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/events/OnSuggestion.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/events/PlayerCountUpdater.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -162,7 +130,12 @@
       <workItem from="1586804075693" duration="4047000" />
       <workItem from="1586808996155" duration="4303000" />
       <workItem from="1586818150542" duration="13813000" />
-      <workItem from="1586889201273" duration="6563000" />
+      <workItem from="1586889201273" duration="7938000" />
+      <workItem from="1587078435798" duration="1893000" />
+      <workItem from="1587145409895" duration="598000" />
+      <workItem from="1587224523397" duration="653000" />
+      <workItem from="1587327936291" duration="1441000" />
+      <workItem from="1587405792849" duration="8955000" />
     </task>
     <task id="LOCAL-00001" summary="Init commit">
       <created>1584645971223</created>
@@ -192,7 +165,63 @@
       <option name="project" value="LOCAL" />
       <updated>1586831052828</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Finished and QA Team anti raid features">
+      <created>1586911659388</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1586911659388</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Created template for future discord - gtm verification">
+      <created>1586911683430</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1586911683430</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Bot will now message users their deleted suggestions if they don't follow the format">
+      <created>1587412347874</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1587412347874</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Command code improvement &amp; minor bug fixes">
+      <created>1587412402008</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1587412402008</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Improved bot verification system">
+      <created>1587412450579</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1587412450579</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Updated Jackson">
+      <created>1587412472774</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1587412472774</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Makes the raidModeTimeToAccept a configurable option in the config">
+      <created>1587413373266</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1587413373266</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Fixed bugs relating to gtm player count updater">
+      <created>1587414325667</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1587414325667</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -216,6 +245,14 @@
     <MESSAGE value="Attempts to add sql capabilities" />
     <MESSAGE value="updating workspace.xml" />
     <MESSAGE value="Initial Commit 2" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial Commit 2" />
+    <MESSAGE value="Finished and QA Team anti raid features" />
+    <MESSAGE value="Created template for future discord - gtm verification" />
+    <MESSAGE value="Bot will now message users their deleted suggestions if they don't follow the format" />
+    <MESSAGE value="Command code improvement &amp; minor bug fixes" />
+    <MESSAGE value="Improved bot verification system" />
+    <MESSAGE value="Updated Jackson" />
+    <MESSAGE value="Makes the raidModeTimeToAccept a configurable option in the config" />
+    <MESSAGE value="Fixed bugs relating to gtm player count updater" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed bugs relating to gtm player count updater" />
   </component>
 </project>

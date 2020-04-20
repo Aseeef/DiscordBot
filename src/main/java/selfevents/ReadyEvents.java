@@ -12,7 +12,6 @@ import java.util.TimerTask;
 import static Utils.tools.GTools.jda;
 import static Utils.tools.GTools.updateOnlinePlayers;
 import static Utils.tools.Logs.log;
-import static Utils.tools.RaidModeTools.raidMode;
 
 public class ReadyEvents extends ListenerAdapter {
 
@@ -26,10 +25,7 @@ public class ReadyEvents extends ListenerAdapter {
         playerCountUpdater.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                // If its a valid channel
-                if (jda.getVoiceChannelById(SelfData.get().getPlayerCountChannelId()) != null)
-                    updateOnlinePlayers();
-                else log("Failed to update Player count channel because a valid channel isn't set!");
+                updateOnlinePlayers();
             }
         }, 5000, 1000 * Config.get().getMineStatRefresh());
 
@@ -93,6 +89,9 @@ public class ReadyEvents extends ListenerAdapter {
                     " This will cause errors...", Logs.WARNING);
         else if (jda.getRolesByName(Config.get().getNoRank(), true).size() == 0)
             log("No role by the name of '" + Config.get().getNoRank() + "' was found!" +
+                    " This will cause errors...", Logs.WARNING);
+        else if (jda.getRolesByName(Config.get().getNoRank(), true).size() == 0)
+            log("No role by the name of '" + Config.get().getUnverified() + "' was found!" +
                     " This will cause errors...", Logs.WARNING);
 
 

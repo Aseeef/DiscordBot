@@ -49,7 +49,7 @@ public class GTools {
     }
 
     public static String[] getArgs(String msg) {
-        return msg.replaceFirst("/[^ ]+ ", "").split(" ");
+        return msg.replaceFirst(Config.get().getCommandPrefix() + "[^ ]+ ", "").split(" ");
     }
 
     public static User userById (String id) {
@@ -59,17 +59,28 @@ public class GTools {
     public static void updateOnlinePlayers() {
         VoiceChannel channel = jda.getVoiceChannelById(SelfData.get().getPlayerCountChannelId());
 
-        if (channel != null) {
-            GTools.gtm.refresh();
-            String msg = new MessageBuilder()
-                    .append("\uD83E\uDD3C Online Players: ")
-                    .append(gtm.getCurrentPlayers())
-                    .build().getContentRaw();
-            log("Updating Online Player count to " + gtm.getCurrentPlayers() + "...");
-            channel.getManager().setName(msg).queue();
-        } else {
+        if (channel == null) {
             log("Failed to updating online player count because Player count channel was not set", Logs.WARNING);
+            return;
         }
+
+        GTools.gtm.refresh();
+
+        if (!gtm.isServerUp()) {
+            String msg = new MessageBuilder()
+                    .append("\uD83E\uDD3C Server is Offline!")
+                    .build().getContentRaw();
+            log("Failed to updating online player count server is offline", Logs.WARNING);
+            channel.getManager().setName(msg).queue();
+            return;
+        }
+
+        String msg = new MessageBuilder()
+                .append("\uD83E\uDD3C Online Players: ")
+                .append(gtm.getCurrentPlayers())
+                .build().getContentRaw();
+        log("Updating Online Player count to " + gtm.getCurrentPlayers() + "...");
+        channel.getManager().setName(msg).queue();
     }
 
     public static void sendThenDelete(TextChannel channel, Message msg) {
@@ -82,6 +93,16 @@ public class GTools {
         channel.sendMessage(msg).queue( (sentMsg) ->
                 sentMsg.delete().queueAfter(Config.get().getDeleteTime(), TimeUnit.SECONDS)
         );
+    }
+
+    public static void sendThenDelete(TextChannel channel, MessageEmbed embed) {
+        channel.sendMessage(embed).queue( (sentMsg) ->
+                sentMsg.delete().queueAfter(Config.get().getDeleteTime(), TimeUnit.SECONDS)
+        );
+    }
+
+    public static String getNoPermsLang() {
+        return "**Sorry but you don't have permission to use that command! Use `/help` to list all commands you can use.**";
     }
 
 }

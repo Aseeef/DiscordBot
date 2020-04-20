@@ -30,22 +30,22 @@ public class OnReactRules extends ListenerAdapter {
             Emote gtmAgree = jda.getEmotesByName("gtmagree", true).get(0);
             Emote gtmDisagree = jda.getEmotesByName("gtmdisagree", true).get(0);
 
-            // If user agrees to rules & isn't already a member make them member & send welcome msg
-            if (e.getReactionEmote().getEmote() == gtmAgree && !hasRolePerms(member, Rank.NORANK)) {
+            // If user agrees to rules & is unverified
+            if (e.getReactionEmote().getEmote() == gtmAgree && hasRolePerms(member, Rank.UNVERIFIED)) {
 
                 user.openPrivateChannel().queue( (privateChannel) ->
                         privateChannel.sendMessage(getWelcomeEmbed(user)).queue()
                 );
 
-                e.getGuild().addRoleToMember(member, Rank.NORANK.er()).queue();
+                e.getGuild().removeRoleFromMember(member, Rank.UNVERIFIED.er()).queue();
 
                 // Log
-                Logs.log(user.getAsTag() + " (" + user.getId() + ") has agreed to rules and was promoted to " + Rank.NORANK.name());
+                Logs.log(user.getAsTag() + " (" + user.getId() + ") has agreed to rules and is now verified!");
 
             }
 
-            // If user doesn't agree to rules & isn't already a member, msg them and kick
-            else if (e.getReactionEmote().getEmote() == gtmDisagree && !hasRolePerms(member, Rank.NORANK)) {
+            // If user doesn't agree to rules & is unverified, msg them and kick
+            else if (e.getReactionEmote().getEmote() == gtmDisagree && hasRolePerms(member, Rank.UNVERIFIED)) {
 
                 user.openPrivateChannel().queue( (privateChannel) ->
                     privateChannel.sendMessage("**You have been kicked from the GTM Discord!** I am sorry but you have to agree to our rules in order to use the GTM discord. If you change your mind, you are free to rejoin us at http://grandtheftmc.net/discord!").queue( (msg) ->

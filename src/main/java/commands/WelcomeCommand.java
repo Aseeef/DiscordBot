@@ -20,12 +20,16 @@ public class WelcomeCommand extends ListenerAdapter {
         User user = e.getAuthor();
         assert member != null;
 
-        if (GTools.isCommand(msg, user, Commands.WELCOME) &&
-                hasRolePerms(member, Commands.WELCOME.rank())
-        ) {
+        if (GTools.isCommand(msg, user, Commands.WELCOME)) {
 
             String[] args = getArgs(msg);
             TextChannel channel = e.getChannel();
+
+            // Check perms
+            if (!hasRolePerms(member, Commands.WELCOME.rank())) {
+                sendThenDelete(channel, getNoPermsLang());
+                return;
+            }
 
             if (args[0].toLowerCase().equalsIgnoreCase("setchannel")) {
 
@@ -64,9 +68,21 @@ public class WelcomeCommand extends ListenerAdapter {
 
             }
 
+            // If no sub commands match
+            else {
+                sendThenDelete(channel, getWelcomeHelpMsg());
+            }
+
 
         }
 
+    }
+
+    private static Message getWelcomeHelpMsg() {
+        return new MessageBuilder()
+                .append("> **Please enter a valid command argument:**\n")
+                .append("> `/Welcome SetChannel` - *Set current channel to the welcome channel*\n")
+                .build();
     }
 
     private static Message welcomeChannelSet(TextChannel channel) {
