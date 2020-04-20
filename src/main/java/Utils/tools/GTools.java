@@ -59,7 +59,7 @@ public class GTools {
     public static void updateOnlinePlayers() {
         VoiceChannel channel = jda.getVoiceChannelById(SelfData.get().getPlayerCountChannelId());
 
-        if (channel != null) {
+        if (channel == null) {
             log("Failed to updating online player count because Player count channel was not set", Logs.WARNING);
             return;
         }
