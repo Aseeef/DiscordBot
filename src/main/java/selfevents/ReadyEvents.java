@@ -94,6 +94,9 @@ public class ReadyEvents extends ListenerAdapter {
         else if (jda.getRolesByName(Config.get().getNoRank(), true).size() == 0)
             log("No role by the name of '" + Config.get().getNoRank() + "' was found!" +
                     " This will cause errors...", Logs.WARNING);
+        else if (jda.getRolesByName(Config.get().getNoRank(), true).size() == 0)
+            log("No role by the name of '" + Config.get().getUnverified() + "' was found!" +
+                    " This will cause errors...", Logs.WARNING);
 
 
         // Suggestions channel not configured

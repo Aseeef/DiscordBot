@@ -22,7 +22,9 @@ public enum Rank {
     ELITE ("ELITE", jda.getRolesByName(Config.get().getElite(), true).get(0)),
     PREMIUM ("PREMIUM", jda.getRolesByName(Config.get().getPremium(), true).get(0)),
     VIP ("VIP", jda.getRolesByName(Config.get().getVip(), true).get(0)),
-    NORANK ("DEFAULT", jda.getRolesByName(Config.get().getNoRank(), true).get(0));
+    NORANK ("DEFAULT", jda.getRolesByName(Config.get().getNoRank(), true).get(0)),
+    UNVERIFIED (null, jda.getRolesByName(Config.get().getUnverified(), true).get(0))
+    ;
 
     private String name;
     private Role r;
@@ -110,6 +112,8 @@ public enum Rank {
                 roles.add(Rank.values()[i].er());
             }
         }
+        // Any Non-GTM roles (like RANK.UNVERIFIED) will always ONLY return its self
+        else roles.add(this.er());
 
         return roles;
     }
