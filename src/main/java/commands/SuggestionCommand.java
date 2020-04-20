@@ -1,7 +1,6 @@
 package commands;
 
 import Utils.Data;
-import Utils.Rank;
 import Utils.SelfData;
 import Utils.Suggestions;
 import Utils.tools.GTools;
@@ -26,12 +25,16 @@ public class SuggestionCommand extends ListenerAdapter {
         User user = e.getAuthor();
         assert member != null;
 
-        if (GTools.isCommand(msg, user, Commands.SUGGESTION) &&
-                hasRolePerms(member, Commands.SUGGESTION.rank())
-        ) {
+        if (GTools.isCommand(msg, user, Commands.SUGGESTION)) {
 
             String[] args = getArgs(msg);
             TextChannel channel = e.getChannel();
+
+            // Check perms
+            if (!hasRolePerms(member, Commands.SUGGESTION.rank())) {
+                sendThenDelete(channel, getNoPermsLang());
+                return;
+            }
 
             // If there are no command arguments send sub command help list
             if (args.length == 0) {

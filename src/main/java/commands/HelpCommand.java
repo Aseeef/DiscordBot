@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.util.ArrayList;
 
-import static Utils.tools.GTools.hasRolePerms;
+import static Utils.tools.GTools.*;
 
 public class HelpCommand extends ListenerAdapter {
 
@@ -22,13 +22,17 @@ public class HelpCommand extends ListenerAdapter {
         User user = e.getAuthor();
         assert member != null;
 
-        if (GTools.isCommand(msg, user, Commands.HELP) &&
-                hasRolePerms(member, Commands.HELP.rank())
-        ) {
+        if (GTools.isCommand(msg, user, Commands.HELP)) {
 
             TextChannel channel = e.getChannel();
 
-            channel.sendMessage(getCommandEmbed(member)).queue();
+            // Check perms
+            if (!hasRolePerms(member, Commands.HELP.rank())) {
+                sendThenDelete(channel, getNoPermsLang());
+                return;
+            }
+
+            sendThenDelete(channel, getCommandEmbed(member));
 
         }
 

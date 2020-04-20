@@ -8,8 +8,8 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-import static Utils.tools.GTools.getArgs;
-import static Utils.tools.GTools.hasRolePerms;
+import static Utils.tools.GTools.*;
+import static Utils.tools.GTools.getNoPermsLang;
 
 public class SeniorsCommand extends ListenerAdapter {
 
@@ -20,12 +20,16 @@ public class SeniorsCommand extends ListenerAdapter {
         User user = e.getAuthor();
         assert member != null;
 
-        if (GTools.isCommand(msg, user, Commands.SENIORS) &&
-                hasRolePerms(member, Commands.SENIORS.rank())
-        ) {
+        if (GTools.isCommand(msg, user, Commands.SENIORS)) {
 
             String[] args = getArgs(msg);
             TextChannel channel = e.getChannel();
+
+            // Check perms
+            if (!hasRolePerms(member, Commands.SENIORS.rank())) {
+                sendThenDelete(channel, getNoPermsLang());
+                return;
+            }
 
             if (args.length == 0) {
 
@@ -33,7 +37,6 @@ public class SeniorsCommand extends ListenerAdapter {
 
             // RaidMode SetChannel Command
             else if (args[0].equalsIgnoreCase("setchannel")) {
-
 
 
             }

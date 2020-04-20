@@ -19,12 +19,16 @@ public class PlayerCountCommand extends ListenerAdapter {
         User user = e.getAuthor();
         assert member != null;
 
-        if (GTools.isCommand(msg, user, Commands.PLAYERCOUNT) &&
-                hasRolePerms(member, Commands.PLAYERCOUNT.rank())
-            ) {
+        if (GTools.isCommand(msg, user, Commands.PLAYERCOUNT)) {
 
             String[] args = getArgs(msg);
             TextChannel channel = e.getChannel();
+
+            // Check perms
+            if (!hasRolePerms(member, Commands.PLAYERCOUNT.rank())) {
+                sendThenDelete(channel, getNoPermsLang());
+                return;
+            }
 
             // If there are no command arguments send sub command help list
             if (args.length == 0) {
