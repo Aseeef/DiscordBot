@@ -36,7 +36,7 @@ public class OnJoin extends ListenerAdapter {
                 if (hasRolePerms(kickableMember, Rank.UNVERIFIED)) {
                     // Note: This is also a bot prevention method that prevents bots from mass DMing members
                     kickableMember.getUser().openPrivateChannel().queue((privateChannel ->
-                            privateChannel.sendMessage("**You have been kicked from the GTM Discord!** You took too react to the rules. You have to agree to the GTM Discord Rules in order to use your discord. You are free to rejoin at http://grandtheftmc.net/discord!").queue((msg) -> {
+                            privateChannel.sendMessage("**You have been kicked from the GTM Discord!** You took too long to react to the rules. You have to agree to the GTM Discord Rules in order to use your discord. You are free to rejoin at http://grandtheftmc.net/discord!").queue((msg) -> {
                                 kickableMember.kick("Failed to agree to rules in time").queue();
                                 Logs.log(member.getUser().getAsTag() + " (" + member.getId() + ") was kicked from the server because they took too long to react to the rules.");
                             })
