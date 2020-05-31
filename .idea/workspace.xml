@@ -1,12 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="">
+    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="Fixed typo">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/XenAPI.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/XenAPI1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Utils/Xenforo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Utils/database/DAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Utils/database/polling/DatabaseEvent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Utils/database/polling/PollingDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Utils/tools/DAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Utils/tools/UUIDUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Utils/tools/Verification.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/AccountCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/Command.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/PingCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/RebootCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/BaseDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Database/BaseDatabase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Database/DatabaseHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Database/DatabaseHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GTM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GTM.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/Config.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/Data.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/Data.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/Rank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/Rank.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/Staff.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/users/Staff.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/Suggestions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/Suggestions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/Users.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/users/GTMUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/tools/CommandsTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/tools/CommandsTools.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/tools/GTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/tools/GTools.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/tools/SuggestionTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/tools/SuggestionTools.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/tools/WelcomeTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/tools/WelcomeTools.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/Commands.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/HelpCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/HelpCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/PlayerCountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/PlayerCountCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/RaidModeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/RaidModeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/SeniorsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/SeniorsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/SuggestionCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/SuggestionCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/WelcomeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/WelcomeCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/events/OnJoin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/events/OnJoin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/events/OnReactRules.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/events/OnReactRules.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/selfevents/ConsoleCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/selfevents/ConsoleCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/selfevents/ReadyEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/selfevents/ReadyEvents.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Utils/tools/GTools.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Utils/tools/GTools.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/GTM.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/GTM.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -38,6 +75,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1YplmcKc1xSxFTqjIPBr0wRiY3s" />
@@ -47,12 +89,12 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="extract.method.default.visibility" value="private" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../XenAPI/XenAPI.jar!/" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="MavenSettings" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="ExtractSuperBase.RECENT_KEYS">
@@ -61,13 +103,13 @@
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\resources" />
-      <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\resources\Configuration" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\java" />
       <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\Database" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\resources" />
+      <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\resources\Configuration" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -135,7 +177,17 @@
       <workItem from="1587145409895" duration="598000" />
       <workItem from="1587224523397" duration="653000" />
       <workItem from="1587327936291" duration="1441000" />
-      <workItem from="1587405792849" duration="8955000" />
+      <workItem from="1587405792849" duration="10789000" />
+      <workItem from="1587585839968" duration="616000" />
+      <workItem from="1587606709770" duration="2428000" />
+      <workItem from="1587788173476" duration="1202000" />
+      <workItem from="1587863512382" duration="10000" />
+      <workItem from="1589663073597" duration="3438000" />
+      <workItem from="1589822736455" duration="12137000" />
+      <workItem from="1590133327510" duration="1338000" />
+      <workItem from="1590639144337" duration="22070000" />
+      <workItem from="1590795552383" duration="3074000" />
+      <workItem from="1590883776517" duration="13571000" />
     </task>
     <task id="LOCAL-00001" summary="Init commit">
       <created>1584645971223</created>
@@ -221,7 +273,14 @@
       <option name="project" value="LOCAL" />
       <updated>1587414325667</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Fixed typo">
+      <created>1587414829840</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1587414829840</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -253,6 +312,31 @@
     <MESSAGE value="Updated Jackson" />
     <MESSAGE value="Makes the raidModeTimeToAccept a configurable option in the config" />
     <MESSAGE value="Fixed bugs relating to gtm player count updater" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed bugs relating to gtm player count updater" />
+    <MESSAGE value="Fixed typo" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed typo" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../GTM/gtm/src/main/java/net/grandtheftmc/gtm/listeners/Death.java</url>
+          <line>298</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../GTM/gtm/src/main/java/net/grandtheftmc/gtm/listeners/Interact.java</url>
+          <line>239</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/../GTM/gtm/src/main/java/net/grandtheftmc/gtm/warps/WarpManager.java</url>
+          <line>566</line>
+          <properties class="net.grandtheftmc.gtm.warps.WarpManager">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

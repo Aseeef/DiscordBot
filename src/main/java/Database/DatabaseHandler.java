@@ -35,9 +35,9 @@ public class DatabaseHandler implements Database {
 	// https://github.com/brettwooldridge/HikariCP
 
 	/** How many minimum idle connections should we always have (2) */
-	protected int minIdle = 1;
+	protected int minIdle = 2;
 	/** How many max connections should exist in pool (2) */
-	protected int maxPoolSize = 1;
+	protected int maxPoolSize = 2;
 	/** How long, in millis, we stop waiting for new connection (15 secs) */
 	protected int connectionTimeoutMs = 15 * 1000;
 	/** How long, in millis, before connections timeout (45 secs) */
@@ -115,9 +115,7 @@ public class DatabaseHandler implements Database {
 			hikariSource.setLogWriter(new PrintWriter(System.out));
 		}
 		catch (SQLException e) {
-			log(String.valueOf(e.initCause(e.getCause())), Logs.ERROR);
-			for (StackTraceElement error : e.getStackTrace())
-				log("        at " + error.toString(), Logs.ERROR);
+			GTools.printStackError(e);
 		}
 
 		log("A connection to the database has successfully been established!");
@@ -179,9 +177,7 @@ public class DatabaseHandler implements Database {
 			}
 			catch (Exception e) {
 				log("[DatabaseHandler] Unable to grab a connection from the connection pool!", Logs.ERROR);
-				log(String.valueOf(e.initCause(e.getCause())), Logs.ERROR);
-				for (StackTraceElement error : e.getStackTrace())
-					log("        at " + error.toString(), Logs.ERROR);
+				GTools.printStackError(e);
 			}
 		}
 

@@ -17,8 +17,8 @@ import static Utils.tools.GTools.userById;
 
 public class SuggestionTools {
 
-    public static TextChannel getSuggestionsChannel (GuildMessageReceivedEvent e) {
-        return e.getGuild().getTextChannelById(SelfData.get().getSuggestionChannelId());
+    public static TextChannel getSuggestionsChannel () {
+        return jda.getGuilds().get(0).getTextChannelById(SelfData.get().getSuggestionChannelId());
     }
 
     public static MessageEmbed createSuggestionEmbed (Suggestions s) {

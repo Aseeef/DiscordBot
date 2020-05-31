@@ -1,5 +1,6 @@
 package selfevents;
 
+import Utils.tools.GTools;
 import Utils.tools.Logs;
 
 import java.io.BufferedReader;
@@ -7,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import static Utils.tools.GTools.jda;
+import static Utils.tools.GTools.printStackError;
 import static Utils.tools.Logs.log;
 
 public class ConsoleCommand implements Runnable {
@@ -33,9 +35,7 @@ public class ConsoleCommand implements Runnable {
                 System.exit(0);
 
         } catch (IOException e) {
-            log(String.valueOf(e.initCause(e.getCause())), Logs.ERROR);
-            for (StackTraceElement error : e.getStackTrace())
-                log("        at " + error.toString(), Logs.ERROR);
+            printStackError(e);
         }
     }
 

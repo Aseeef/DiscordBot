@@ -1,14 +1,12 @@
 package Utils;
 
-import Utils.tools.Logs;
+import Utils.tools.GTools;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 import java.io.File;
 import java.io.IOException;
-
-import static Utils.tools.Logs.log;
 
 public class Config {
 
@@ -31,22 +29,22 @@ public class Config {
     private int raidModeTimeToAccept;
     private String raidModePunishType;
     private String raidModeMessage;
-    private String manager;
-    private String developer;
-    private String admin;
-    private String builder;
-    private String srMod;
-    private String mod;
-    private String helper;
-    private String buildTeam;
-    private String youtuber;
-    private String supreme;
-    private String sponsor;
-    private String elite;
-    private String premium;
-    private String vip;
-    private String noRank;
-    private String unverified;
+    private long manager;
+    private long developer;
+    private long admin;
+    private long builder;
+    private long srMod;
+    private long mod;
+    private long helper;
+    private long buildTeam;
+    private long youtuber;
+    private long supreme;
+    private long sponsor;
+    private long elite;
+    private long premium;
+    private long vip;
+    private long noRank;
+    private long unverified;
 
     private static Config config;
 
@@ -58,7 +56,7 @@ public class Config {
                   String sqlHostname, int sqlPort, String sqlUsername, String sqlPassword, String sqlDatabase,
                   String serverIp, int serverPort, int mineStatRefresh,
                   int raidModePlayers, int raidModeTime, int raidModeDisable, int raidModePunishTime, int raidModeTimeToAccept, String raidModePunishType, String raidModeMessage,
-                  String manager, String developer, String admin, String builder, String srMod, String mod, String helper, String buildTeam, String youtuber, String supreme, String sponsor, String elite, String premium, String vip, String noRank, String unverified) {
+                  long manager, long developer, long admin, long builder, long srMod, long mod, long helper, long buildTeam, long youtuber, long supreme, long sponsor, long elite, long premium, long vip, long noRank, long unverified) {
         this.botToken = botToken;
         this.botName = botName;
         this.commandPrefix = commandPrefix;
@@ -109,15 +107,11 @@ public class Config {
             ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
             config = mapper.readValue(file, Config.class);
         } catch (UnrecognizedPropertyException e) {
-            log(String.valueOf(e.initCause(e.getCause())), Logs.ERROR);
-            for (StackTraceElement error : e.getStackTrace())
-                log("        at " + error.toString(), Logs.ERROR);
+            GTools.printStackError(e);
         }
 
         } catch (IOException e) {
-            log(String.valueOf(e.initCause(e.getCause())), Logs.ERROR);
-            for (StackTraceElement error : e.getStackTrace())
-                log("        at " + error.toString(), Logs.ERROR);
+            GTools.printStackError(e);
         }
     }
 
@@ -201,67 +195,67 @@ public class Config {
         return raidModeMessage;
     }
 
-    public String getManager() {
+    public long getManager() {
         return manager;
     }
 
-    public String getDeveloper() {
+    public long getDeveloper() {
         return developer;
     }
 
-    public String getAdmin() {
+    public long getAdmin() {
         return admin;
     }
 
-    public String getBuilder() {
+    public long getBuilder() {
         return builder;
     }
 
-    public String getSrMod() {
+    public long getSrMod() {
         return srMod;
     }
 
-    public String getMod() {
+    public long getMod() {
         return mod;
     }
 
-    public String getHelper() {
+    public long getHelper() {
         return helper;
     }
 
-    public String getBuildTeam() {
+    public long getBuildTeam() {
         return buildTeam;
     }
 
-    public String getYoutuber() {
+    public long getYoutuber() {
         return youtuber;
     }
 
-    public String getSupreme() {
+    public long getSupreme() {
         return supreme;
     }
 
-    public String getSponsor() {
+    public long getSponsor() {
         return sponsor;
     }
 
-    public String getElite() {
+    public long getElite() {
         return elite;
     }
 
-    public String getPremium() {
+    public long getPremium() {
         return premium;
     }
 
-    public String getVip() {
+    public long getVip() {
         return vip;
     }
 
-    public String getNoRank() {
+    public long getNoRank() {
         return noRank;
     }
 
-    public String getUnverified() {
+    public long getUnverified() {
         return unverified;
     }
 

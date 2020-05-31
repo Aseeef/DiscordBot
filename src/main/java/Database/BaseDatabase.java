@@ -1,12 +1,10 @@
 package Database;
 
-import Utils.tools.Logs;
+import Utils.tools.GTools;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
-import static Utils.tools.Logs.log;
 
 /**
  * A generic database handler that acts as a singleton so we can reference it
@@ -48,9 +46,7 @@ public class BaseDatabase extends DatabaseHandler {
 				statement.execute();
 			}
 		} catch (SQLException e) {
-			log(String.valueOf(e.initCause(e.getCause())), Logs.ERROR);
-			for (StackTraceElement error : e.getStackTrace())
-				log("        at " + error.toString(), Logs.ERROR);
+			GTools.printStackError(e);
 			return false;
 		}
 

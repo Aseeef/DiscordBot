@@ -131,7 +131,7 @@ public class WelcomeTools {
                 log(l);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            GTools.printStackError(e);
         }
 
         return lines;

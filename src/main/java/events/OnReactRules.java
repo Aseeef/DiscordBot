@@ -15,7 +15,6 @@ public class OnReactRules extends ListenerAdapter {
 
     public void onGuildMessageReactionAdd (GuildMessageReactionAddEvent e) {
 
-        TextChannel channel = e.getChannel();
         User user = e.getUser();
         Member member = e.getMember();
 
@@ -48,7 +47,7 @@ public class OnReactRules extends ListenerAdapter {
             else if (e.getReactionEmote().getEmote() == gtmDisagree && hasRolePerms(member, Rank.UNVERIFIED)) {
 
                 user.openPrivateChannel().queue( (privateChannel) ->
-                    privateChannel.sendMessage("**You have been kicked from the GTM Discord!** I am sorry but you have to agree to our rules in order to use the GTM discord. If you change your mind, you are free to rejoin us at http://grandtheftmc.net/discord!").queue( (msg) ->
+                    privateChannel.sendMessage("**You have been kicked from the GTM Discord!** I am sorry but you have to agree to our rules in order to use the GTM discord. If you change your mind, you are free to rejoin us at http://grandtheftmc.net/discord.").queue( (msg) ->
                             member.kick("Rejected discord rules").queue()
                     ));
 

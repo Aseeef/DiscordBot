@@ -1,8 +1,7 @@
 package Utils.tools;
 
 import Utils.Config;
-import Utils.tools.GTools;
-import commands.Commands;
+import commands.Command;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -20,8 +19,8 @@ public class CommandsTools extends ListenerAdapter {
 
         // List of all commands
         ArrayList<String> commands = new ArrayList<>();
-        for (Commands command : Commands.values()) {
-            commands.add(command.name().toLowerCase());
+        for (Command command : Command.getCommands()) {
+            commands.add(command.getName().toLowerCase());
         }
 
         // If is any command, delete it

@@ -3,7 +3,6 @@ package Utils.tools;
 import Utils.Config;
 import Utils.Rank;
 import Utils.SelfData;
-import commands.Commands;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -19,9 +18,9 @@ public class GTools {
     public static MineStat gtm;
 
     // Checks if its is a specific command
-    public static boolean isCommand(String msg, User user, Commands command) {
+    public static boolean isCommand(String msg, User user, String command) {
         String[] args = msg.toLowerCase().split(" ");
-        return args[0].equals(Config.get().getCommandPrefix()+command.name().toLowerCase()) &&
+        return args[0].equals(Config.get().getCommandPrefix() + command.toLowerCase()) &&
                 !user.isBot();
     }
 
@@ -101,8 +100,10 @@ public class GTools {
         );
     }
 
-    public static String getNoPermsLang() {
-        return "**Sorry but you don't have permission to use that command! Use `/help` to list all commands you can use.**";
+    public static void printStackError(Throwable e) {
+        log(String.valueOf(e.initCause(e.getCause())), Logs.ERROR);
+        for (StackTraceElement error : e.getStackTrace())
+            log("        at " + error.toString(), Logs.ERROR);
     }
 
 }

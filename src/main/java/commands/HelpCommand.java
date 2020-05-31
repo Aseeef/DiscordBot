@@ -1,67 +1,48 @@
 package commands;
 
-import Utils.tools.GTools;
+import Utils.Rank;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.util.ArrayList;
 
-import static Utils.tools.GTools.*;
+import static Utils.tools.GTools.hasRolePerms;
+import static Utils.tools.GTools.sendThenDelete;
 
-public class HelpCommand extends ListenerAdapter {
+public class HelpCommand extends Command {
 
-    public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
-
-        String msg = e.getMessage().getContentRaw();
-        Member member = e.getMember();
-        User user = e.getAuthor();
-        assert member != null;
-
-        if (GTools.isCommand(msg, user, Commands.HELP)) {
-
-            TextChannel channel = e.getChannel();
-
-            // Check perms
-            if (!hasRolePerms(member, Commands.HELP.rank())) {
-                sendThenDelete(channel, getNoPermsLang());
-                return;
-            }
-
-            sendThenDelete(channel, getCommandEmbed(member));
-
-        }
-
-
+    public HelpCommand() {
+        super("help", "View the help page", Rank.NORANK, Type.ANYWHERE);
     }
 
-    private MessageEmbed getCommandEmbed(Member member) {
-
+    @Override
+    public void onCommandUse(Message message, Member member, TextChannel channel, String[] args) {
         // List of all commands that the member can use
-        ArrayList<Commands> commands = new ArrayList<>();
-        for (Commands command : Commands.values()) {
-            if (hasRolePerms(member, command.rank()))
+        ArrayList<Command> commands = new ArrayList<>();
+        for (Command command : Command.getCommands()) {
+            if (hasRolePerms(member, command.getRank()))
                 commands.add(command);
         }
 
         StringBuilder help = new StringBuilder();
 
-        for (Commands command : commands) {
+        for (Command command : commands) {
             help.append("\n   **/")
-                    .append(command.command())
+                    .append(command.getName())
                     .append("** - *")
-                    .append(command.desc())
+                    .append(command.getDescription())
                     .append("*");
         }
 
-        return new EmbedBuilder()
+        MessageEmbed helpEmbed = new EmbedBuilder()
                 .setTitle("List of All Available Commands:")
                 .setDescription(help.toString())
                 .build();
+
+        // Send help embed and unless this is dms, delete later
+        if (channel instanceof PrivateChannel) channel.sendMessage(helpEmbed).queue();
+        else sendThenDelete(channel, helpEmbed);
     }
 
 }

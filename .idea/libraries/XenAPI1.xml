@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="XenAPI1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../XenAPI/XenAPI.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="jar://$PROJECT_DIR$/../XenAPI/XenAPI.jar!/" recursive="false" />
+  </library>
+</component>

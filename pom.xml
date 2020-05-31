@@ -84,6 +84,11 @@
             <artifactId>XenAPI</artifactId>
             <version>RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20131018</version>
+        </dependency>
     </dependencies>
 
     <repositories>
@@ -99,6 +104,10 @@
         <repository>
             <id>XenAPI Repo</id>
             <url>https://cadox8.github.io/repo/</url>
+        </repository>
+        <repository>
+            <id>json</id>
+            <url>https://mvnrepository.com/artifact/org.json/</url>
         </repository>
     </repositories>
 

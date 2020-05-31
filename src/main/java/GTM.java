@@ -1,14 +1,17 @@
 import Database.BaseDatabase;
-import Utils.tools.CommandsTools;
 import Utils.Config;
-import Utils.tools.MineStat;
 import Utils.SelfData;
+import Utils.Xenforo;
+import Utils.tools.CommandsTools;
+import Utils.tools.GTools;
 import Utils.tools.Logs;
+import Utils.tools.MineStat;
 import commands.*;
 import events.LogCommands;
 import events.OnJoin;
 import events.OnReactRules;
 import events.OnSuggestion;
+import me.cadox8.xenapi.XenAPI;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
@@ -25,10 +28,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import static Utils.tools.GTools.jda;
 import static Utils.tools.GTools.gtm;
+import static Utils.tools.GTools.jda;
 import static Utils.tools.Logs.log;
-import static Utils.tools.WelcomeTools.getPost;
 
 public class GTM extends ListenerAdapter {
 
@@ -36,6 +38,8 @@ public class GTM extends ListenerAdapter {
 
         // Reads input from console for console commands
         new Thread(new ConsoleCommand()).start();
+
+        //TODO Runtime.getRuntime().addShutdownHook();
 
         // Load config
         log("Loading bot configuration....");
@@ -49,12 +53,28 @@ public class GTM extends ListenerAdapter {
         log("Connecting to database...");
         loadMySQL();
 
+        // Load JDA & Xenforo and start bot
+        loadJDA();
+        //loadXen();
+
+
+
+    }
+
+    private static void loadXen() {
+        log("Initializing Xenforo Addon...");
+
+        new XenAPI("c1230035-cf85-4e3d-add8-f4457b641d1e");
+        Xenforo.login();
+    }
+
+    private static void loadJDA() {
+        // Set up JDA & set Settings
+        log("Initializing JDA...");
+
         // Initialize GTM MineStat
         log("Loading MineStat data on GTM...");
         gtm = new MineStat(Config.get().getServerIp(), Config.get().getServerPort());
-
-        // Set up JDA & set Settings
-        log("Initializing JDA...");
 
         try {
             jda = JDABuilder.createDefault(Config.get().getBotToken())
@@ -72,6 +92,11 @@ public class GTM extends ListenerAdapter {
                     )
                     .setMemberCachePolicy(MemberCachePolicy.ONLINE)
                     .build();
+
+            // Make sure bot is only on one server
+            if (!checkGuilds()) {
+                Logs.log("The GTM Discord bot may not be in more then one server at a time!", Logs.ERROR);
+            }
 
             // Set presence
             jda.getPresence().setStatus(OnlineStatus.ONLINE);
@@ -94,6 +119,9 @@ public class GTM extends ListenerAdapter {
             jda.addEventListener(new WelcomeCommand());
             jda.addEventListener(new SeniorsCommand());
             jda.addEventListener(new HelpCommand());
+            jda.addEventListener(new AccountCommand());
+            jda.addEventListener(new RebootCommand());
+            jda.addEventListener(new PingCommand());
 
             // Self user settings functions to check if there was config change to prevent
             // unnecessary calls to the discord api which may result in us getting rate limited
@@ -101,11 +129,12 @@ public class GTM extends ListenerAdapter {
             setAvatar();
 
         } catch (LoginException | IllegalArgumentException e) {
-            log(String.valueOf(e.initCause(e.getCause())), Logs.ERROR);
-            for (StackTraceElement error : e.getStackTrace())
-                log("        at " + error.toString(), Logs.ERROR);
+            GTools.printStackError(e);
         }
+    }
 
+    private static boolean checkGuilds() {
+        return jda.getGuilds().size() == 1;
     }
 
     private static void setAvatar() {
@@ -117,9 +146,7 @@ public class GTM extends ListenerAdapter {
                 jda.getSelfUser().getManager().setAvatar(Icon.from(avatar)).queueAfter(5, TimeUnit.SECONDS);
                 SelfData.get().setPreviousAvatarEdited(avatarLastEdit);
             } catch (IOException e) {
-                log(String.valueOf(e.initCause(e.getCause())), Logs.ERROR);
-                for (StackTraceElement error : e.getStackTrace())
-                    log("        at " + error.toString(), Logs.ERROR);
+                GTools.printStackError(e);
             }
         }
     }

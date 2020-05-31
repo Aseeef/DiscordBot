@@ -1,7 +1,5 @@
 package Utils;
 
-import Utils.Data;
-
 public class Suggestions {
 
     private int number;

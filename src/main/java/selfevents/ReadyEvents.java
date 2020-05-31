@@ -1,11 +1,17 @@
 package selfevents;
 
+import Database.BaseDatabase;
 import Utils.Config;
+import Utils.Rank;
 import Utils.SelfData;
+import Utils.database.polling.PollingDAO;
+import Utils.tools.GTools;
 import Utils.tools.Logs;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -32,70 +38,41 @@ public class ReadyEvents extends ListenerAdapter {
         log("Player count channel updater task initialized!");
 
         // INVALID CONFIG OR DATA WARNINGS
+        checkRaidModeSettings();
+        checkSuggestionsSettings();
 
-        // Invalid raid mode punishment type settings
+        // Start database polling task
+        Timer databasePolling = new Timer();
+        databasePolling.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    try (Connection conn = BaseDatabase.getInstance().getConnection()) {
+                        PollingDAO.poll(conn);
+                    }
+                } catch (SQLException e) {
+                    GTools.printStackError(e);
+                }
+            }
+        }, 5000, 250);
+
+    }
+
+    // Invalid raid mode punishment type settings
+    private void checkRaidModeSettings() {
         String raidModePunishType = Config.get().getRaidModePunishType();
         if (!raidModePunishType.equalsIgnoreCase("BAN") &&
-        !raidModePunishType.equalsIgnoreCase("KICK") &&
-        !raidModePunishType.equalsIgnoreCase("NOTIFY")) {
+                !raidModePunishType.equalsIgnoreCase("KICK") &&
+                !raidModePunishType.equalsIgnoreCase("NOTIFY")) {
             log("Invalid raid mode punishment type configured in the config!" +
                     " Valid punishment types are: NOTIFY, BAN, KICK", Logs.WARNING);
             log("Setting raid punishment type to \"KICK\" for now...", Logs.WARNING);
             Config.get().setRaidModePunishType("KICK");
         }
+    }
 
-        // If any of the entered roles are invalid
-        if (jda.getRolesByName(Config.get().getManager(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getManager() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getDeveloper(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getDeveloper() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getAdmin(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getAdmin() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getBuilder(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getBuilder() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getSrMod(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getManager() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getMod(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getMod() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getHelper(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getHelper() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getBuildTeam(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getBuildTeam() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getYoutuber(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getYoutuber() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getSupreme(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getSupreme() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getSponsor(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getSponsor() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getElite(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getElite() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getPremium(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getPremium() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getVip(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getVip() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getNoRank(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getNoRank() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getNoRank(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getUnverified() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-
-
-        // Suggestions channel not configured
+    // Chec if suggestions channel not configured
+    private void checkSuggestionsSettings() {
         if (jda.getTextChannelById(SelfData.get().getSuggestionChannelId()) == null)
             log("The suggestion channel has not been properly configured yet!",
                     Logs.WARNING);
@@ -107,7 +84,6 @@ public class ReadyEvents extends ListenerAdapter {
         if (jda.getTextChannelById(SelfData.get().getRaidAlertChannelId()) == null)
             log("The raid alerts channel has not been properly configured yet!",
                     Logs.WARNING);
-
     }
 
 }

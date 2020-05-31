@@ -8,22 +8,22 @@ import static Utils.tools.GTools.jda;
 
 public enum Rank {
 
-    MANAGER ("MANAGER", jda.getRolesByName(Config.get().getManager(), true).get(0)),
-    DEV ("DEV", jda.getRolesByName(Config.get().getDeveloper(), true).get(0)),
-    ADMIN ("ADMIN", jda.getRolesByName(Config.get().getAdmin(), true).get(0)),
-    BUILDER ("BUILDER", jda.getRolesByName(Config.get().getBuilder(), true).get(0)),
-    SRMOD ("SRMOD", jda.getRolesByName(Config.get().getSrMod(), true).get(0)),
-    MOD ("MOD", jda.getRolesByName(Config.get().getMod(), true).get(0)),
-    HELPER ("HELPER", jda.getRolesByName(Config.get().getHelper(), true).get(0)),
-    BUILDTEAM ("BUILDTEAM", jda.getRolesByName(Config.get().getBuildTeam(), true).get(0)),
-    YOUTUBER ("YOUTUBE", jda.getRolesByName(Config.get().getYoutuber(), true).get(0)),
-    SUPREME ("SUPREME", jda.getRolesByName(Config.get().getSupreme(), true).get(0)),
-    SPONSOR ("SPONSOR", jda.getRolesByName(Config.get().getSponsor(), true).get(0)),
-    ELITE ("ELITE", jda.getRolesByName(Config.get().getElite(), true).get(0)),
-    PREMIUM ("PREMIUM", jda.getRolesByName(Config.get().getPremium(), true).get(0)),
-    VIP ("VIP", jda.getRolesByName(Config.get().getVip(), true).get(0)),
-    NORANK ("DEFAULT", jda.getRolesByName(Config.get().getNoRank(), true).get(0)),
-    UNVERIFIED (null, jda.getRolesByName(Config.get().getUnverified(), true).get(0))
+    MANAGER ("MANAGER", jda.getRoleById(Config.get().getManager())),
+    DEV ("DEV", jda.getRoleById(Config.get().getDeveloper())),
+    ADMIN ("ADMIN", jda.getRoleById(Config.get().getAdmin())),
+    BUILDER ("BUILDER", jda.getRoleById(Config.get().getBuilder())),
+    SRMOD ("SRMOD", jda.getRoleById(Config.get().getSrMod())),
+    MOD ("MOD", jda.getRoleById(Config.get().getMod())),
+    HELPER ("HELPER", jda.getRoleById(Config.get().getHelper())),
+    BUILDTEAM ("BUILDTEAM", jda.getRoleById(Config.get().getBuildTeam())),
+    YOUTUBER ("YOUTUBE", jda.getRoleById(Config.get().getYoutuber())),
+    SUPREME ("SUPREME", jda.getRoleById(Config.get().getSupreme())),
+    SPONSOR ("SPONSOR", jda.getRoleById(Config.get().getSponsor())),
+    ELITE ("ELITE", jda.getRoleById(Config.get().getElite())),
+    PREMIUM ("PREMIUM", jda.getRoleById(Config.get().getPremium())),
+    VIP ("VIP", jda.getRoleById(Config.get().getVip())),
+    NORANK ("DEFAULT", jda.getRoleById(Config.get().getNoRank())),
+    UNVERIFIED (null, jda.getRoleById(Config.get().getUnverified())),
     ;
 
     private String name;
@@ -127,6 +127,14 @@ public enum Rank {
 
     public Role er() {
         return r;
+    }
+
+    public static Rank getRankFromString(String rString) {
+        for (Rank r : Rank.values()) {
+            if (r.name.equals(rString.toUpperCase()))
+                return r;
+        }
+        return null;
     }
 
 }
