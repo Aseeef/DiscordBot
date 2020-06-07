@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static Utils.tools.GTools.hasRolePerms;
 import static Utils.tools.RaidModeTools.*;
 
 public class OnJoin extends ListenerAdapter {
@@ -29,11 +28,11 @@ public class OnJoin extends ListenerAdapter {
         Member member = e.getMember();
 
         // Set the member's role to unverified
-        e.getGuild().addRoleToMember(member, Rank.UNVERIFIED.er()).queue( (callback) -> {
+        e.getGuild().addRoleToMember(member, Rank.UNVERIFIED.getRole()).queue( (callback) -> {
 
             // Start a timer to kick user if the don't agree to rules with in 15 minutes (by checking if they still have the unverified role)
             e.getGuild().retrieveMember(e.getUser()).queueAfter(Config.get().getRaidModeTimeToAccept(), TimeUnit.MINUTES, (kickableMember) -> {
-                if (hasRolePerms(kickableMember, Rank.UNVERIFIED)) {
+                if (Rank.hasRolePerms(kickableMember, Rank.UNVERIFIED)) {
                     // Note: This is also a bot prevention method that prevents bots from mass DMing members
                     kickableMember.getUser().openPrivateChannel().queue((privateChannel ->
                             privateChannel.sendMessage("**You have been kicked from the GTM Discord!** You took too long to react to the rules. You have to agree to the GTM Discord Rules in order to use your discord. You are free to rejoin at http://grandtheftmc.net/discord.").queue((msg) -> {

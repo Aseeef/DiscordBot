@@ -14,11 +14,19 @@ public class Config {
     private String botName;
     private String commandPrefix;
     private int deleteTime;
-    private String sqlHostname;
-    private int sqlPort;
-    private String sqlUsername;
-    private String sqlPassword;
-    private String sqlDatabase;
+    private String sqlHostnameUsers;
+    private int sqlPortUsers;
+    private String sqlUsernameUsers;
+    private String sqlPasswordUsers;
+    private String sqlDatabaseUsers;
+    private String sqlHostnamePlan;
+    private int sqlPortPlan;
+    private String sqlUsernamePlan;
+    private String sqlPasswordPlan;
+    private String sqlDatabasePlan;
+    private String redisHostname;
+    private String redisPassword;
+    private int redisPort;
     private String serverIp;
     private int serverPort;
     private int mineStatRefresh;
@@ -53,7 +61,9 @@ public class Config {
     }
 
     public Config(String botToken, String botName, String commandPrefix, int deleteTime,
-                  String sqlHostname, int sqlPort, String sqlUsername, String sqlPassword, String sqlDatabase,
+                  String sqlHostnameUsers, int sqlPortUsers, String sqlUsernameUsers, String sqlPasswordUsers, String sqlDatabaseUsers,
+                  String sqlHostnamePlan, int sqlPortPlan, String sqlUsernamePlan, String sqlPasswordPlan, String sqlDatabasePlan,
+                  String redisHostname, String redisPassword, int redisPort,
                   String serverIp, int serverPort, int mineStatRefresh,
                   int raidModePlayers, int raidModeTime, int raidModeDisable, int raidModePunishTime, int raidModeTimeToAccept, String raidModePunishType, String raidModeMessage,
                   long manager, long developer, long admin, long builder, long srMod, long mod, long helper, long buildTeam, long youtuber, long supreme, long sponsor, long elite, long premium, long vip, long noRank, long unverified) {
@@ -61,11 +71,19 @@ public class Config {
         this.botName = botName;
         this.commandPrefix = commandPrefix;
         this.deleteTime = deleteTime;
-        this.sqlHostname = sqlHostname;
-        this.sqlPort = sqlPort;
-        this.sqlUsername = sqlUsername;
-        this.sqlPassword = sqlPassword;
-        this.sqlDatabase = sqlDatabase;
+        this.sqlHostnameUsers = sqlHostnameUsers;
+        this.sqlPortUsers = sqlPortUsers;
+        this.sqlUsernameUsers = sqlUsernameUsers;
+        this.sqlPasswordUsers = sqlPasswordUsers;
+        this.sqlDatabaseUsers = sqlDatabaseUsers;
+        this.sqlHostnamePlan = sqlHostnamePlan;
+        this.sqlPortPlan = sqlPortPlan;
+        this.sqlUsernamePlan = sqlUsernamePlan;
+        this.sqlPasswordPlan = sqlPasswordPlan;
+        this.sqlDatabasePlan = sqlDatabasePlan;
+        this.redisHostname = redisHostname;
+        this.redisPassword = redisPassword;
+        this.redisPort = redisPort;
         this.serverIp = serverIp;
         this.serverPort = serverPort;
         this.mineStatRefresh = mineStatRefresh;
@@ -131,24 +149,56 @@ public class Config {
         return deleteTime;
     }
 
-    public String getSqlHostname() {
-        return sqlHostname;
+    public String getSqlHostnameUsers() {
+        return sqlHostnameUsers;
     }
 
-    public int getSqlPort() {
-        return sqlPort;
+    public int getSqlPortUsers() {
+        return sqlPortUsers;
     }
 
-    public String getSqlUsername() {
-        return sqlUsername;
+    public String getSqlUsernameUsers() {
+        return sqlUsernameUsers;
     }
 
-    public String getSqlPassword() {
-        return sqlPassword;
+    public String getSqlPasswordUsers() {
+        return sqlPasswordUsers;
     }
 
-    public String getSqlDatabase() {
-        return sqlDatabase;
+    public String getSqlDatabaseUsers() {
+        return sqlDatabaseUsers;
+    }
+
+    public String getSqlHostnamePlan() {
+        return sqlHostnamePlan;
+    }
+
+    public int getSqlPortPlan() {
+        return sqlPortPlan;
+    }
+
+    public String getSqlUsernamePlan() {
+        return sqlUsernamePlan;
+    }
+
+    public String getSqlPasswordPlan() {
+        return sqlPasswordPlan;
+    }
+
+    public String getSqlDatabasePlan() {
+        return sqlDatabasePlan;
+    }
+
+    public String getRedisHostname() {
+        return redisHostname;
+    }
+
+    public String getRedisPassword() {
+        return redisPassword;
+    }
+
+    public int getRedisPort() {
+        return redisPort;
     }
 
     public String getServerIp() {

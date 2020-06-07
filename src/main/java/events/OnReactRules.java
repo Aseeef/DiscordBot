@@ -3,11 +3,13 @@ package events;
 import Utils.Rank;
 import Utils.SelfData;
 import Utils.tools.Logs;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Emote;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-import static Utils.tools.GTools.hasRolePerms;
 import static Utils.tools.GTools.jda;
 import static Utils.tools.WelcomeTools.getWelcomeEmbed;
 
@@ -30,13 +32,13 @@ public class OnReactRules extends ListenerAdapter {
             Emote gtmDisagree = jda.getEmotesByName("gtmdisagree", true).get(0);
 
             // If user agrees to rules & is unverified
-            if (e.getReactionEmote().getEmote() == gtmAgree && hasRolePerms(member, Rank.UNVERIFIED)) {
+            if (e.getReactionEmote().getEmote() == gtmAgree && Rank.hasRolePerms(member, Rank.UNVERIFIED)) {
 
                 user.openPrivateChannel().queue( (privateChannel) ->
                         privateChannel.sendMessage(getWelcomeEmbed(user)).queue()
                 );
 
-                e.getGuild().removeRoleFromMember(member, Rank.UNVERIFIED.er()).queue();
+                e.getGuild().removeRoleFromMember(member, Rank.UNVERIFIED.getRole()).queue();
 
                 // Log
                 Logs.log(user.getAsTag() + " (" + user.getId() + ") has agreed to rules and is now verified!");
@@ -44,7 +46,7 @@ public class OnReactRules extends ListenerAdapter {
             }
 
             // If user doesn't agree to rules & is unverified, msg them and kick
-            else if (e.getReactionEmote().getEmote() == gtmDisagree && hasRolePerms(member, Rank.UNVERIFIED)) {
+            else if (e.getReactionEmote().getEmote() == gtmDisagree && Rank.hasRolePerms(member, Rank.UNVERIFIED)) {
 
                 user.openPrivateChannel().queue( (privateChannel) ->
                     privateChannel.sendMessage("**You have been kicked from the GTM Discord!** I am sorry but you have to agree to our rules in order to use the GTM discord. If you change your mind, you are free to rejoin us at http://grandtheftmc.net/discord.").queue( (msg) ->

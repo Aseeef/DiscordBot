@@ -1,7 +1,6 @@
 package events;
 
 import Utils.Data;
-import Utils.SelfData;
 import Utils.Suggestions;
 import Utils.tools.GTools;
 import Utils.tools.SuggestionTools;
@@ -26,7 +25,7 @@ public class OnSuggestion extends ListenerAdapter {
         User user = e.getAuthor();
 
         // If it is a suggestion and not a command
-        if (getSuggestionsChannel(e) == channel
+        if (getSuggestionsChannel() == channel
                 && !user.isBot()
                 && !GTools.isCommand(e.getMessage().getContentRaw(), e.getAuthor())) {
 

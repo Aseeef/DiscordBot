@@ -3,17 +3,15 @@ package commands;
 import Utils.Rank;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.ArrayList;
 
-import static Utils.tools.GTools.hasRolePerms;
 import static Utils.tools.GTools.sendThenDelete;
 
 public class HelpCommand extends Command {
 
     public HelpCommand() {
-        super("help", "View the help page", Rank.NORANK, Type.ANYWHERE);
+        super("help", "View the help page", Rank.NONE, Type.ANYWHERE);
     }
 
     @Override
@@ -21,7 +19,7 @@ public class HelpCommand extends Command {
         // List of all commands that the member can use
         ArrayList<Command> commands = new ArrayList<>();
         for (Command command : Command.getCommands()) {
-            if (hasRolePerms(member, command.getRank()))
+            if (Rank.hasRolePerms(member, command.getRank()))
                 commands.add(command);
         }
 

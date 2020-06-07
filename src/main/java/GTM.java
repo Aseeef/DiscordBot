@@ -1,4 +1,5 @@
-import Database.BaseDatabase;
+import Utils.database.redis.RedisEvent;
+import Utils.database.BaseDatabase;
 import Utils.Config;
 import Utils.SelfData;
 import Utils.Xenforo;
@@ -19,6 +20,9 @@ import net.dv8tion.jda.api.entities.Icon;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 import selfevents.CloseEvent;
 import selfevents.ConsoleCommand;
 import selfevents.ReadyEvents;
@@ -49,9 +53,10 @@ public class GTM extends ListenerAdapter {
         log("Loading bot data....");
         SelfData.load();
 
-        // Load SQL Database
-        log("Connecting to database...");
+        // Load Databases
+        log("Connecting to databases...");
         loadMySQL();
+        loadJedis();
 
         // Load JDA & Xenforo and start bot
         loadJDA();
@@ -93,11 +98,6 @@ public class GTM extends ListenerAdapter {
                     .setMemberCachePolicy(MemberCachePolicy.ONLINE)
                     .build();
 
-            // Make sure bot is only on one server
-            if (!checkGuilds()) {
-                Logs.log("The GTM Discord bot may not be in more then one server at a time!", Logs.ERROR);
-            }
-
             // Set presence
             jda.getPresence().setStatus(OnlineStatus.ONLINE);
             jda.getPresence().setActivity(Activity.playing("mc-gtm.net"));
@@ -128,13 +128,19 @@ public class GTM extends ListenerAdapter {
             setBotName();
             setAvatar();
 
+            // Make sure bot is only on one server
+            if (!inOnlyOneGuild()) {
+                Logs.log("The GTM Discord bot may not be in more then one server at a time!", Logs.ERROR);
+                jda.shutdownNow();
+            }
+
         } catch (LoginException | IllegalArgumentException e) {
             GTools.printStackError(e);
         }
     }
 
-    private static boolean checkGuilds() {
-        return jda.getGuilds().size() == 1;
+    private static boolean inOnlyOneGuild() {
+        return jda.getGuilds().size() <= 1;
     }
 
     private static void setAvatar() {
@@ -161,13 +167,45 @@ public class GTM extends ListenerAdapter {
     }
 
     private static void loadMySQL() {
-        BaseDatabase.getInstance().init(
-                Config.get().getSqlHostname(),
-                Config.get().getSqlPort(),
-                Config.get().getSqlDatabase(),
-                Config.get().getSqlUsername(),
-                Config.get().getSqlPassword()
+        BaseDatabase.getInstance(BaseDatabase.Database.USERS).init(
+                Config.get().getSqlHostnameUsers(),
+                Config.get().getSqlPortUsers(),
+                Config.get().getSqlDatabaseUsers(),
+                Config.get().getSqlUsernameUsers(),
+                Config.get().getSqlPasswordUsers()
         );
+        BaseDatabase.getInstance(BaseDatabase.Database.PLAN).init(
+                Config.get().getSqlHostnamePlan(),
+                Config.get().getSqlPortPlan(),
+                Config.get().getSqlDatabasePlan(),
+                Config.get().getSqlUsernamePlan(),
+                Config.get().getSqlPasswordPlan()
+        );
+    }
+
+    private static void loadJedis() {
+        JedisPool pool = new JedisPool(
+                new JedisPoolConfig(),
+                Config.get().getRedisHostname(),
+                Config.get().getRedisPort(),
+                0 ,
+                Config.get().getRedisPassword()
+        );
+        BaseDatabase.setRedisPool(pool);
+
+        Logs.log("Established connection to Redis!");
+
+        // call async because subcribe() is a blocking method
+        new Thread(() -> {
+            try {
+                pool.getResource().subscribe(new RedisEvent(), "gtm_to_discord");
+            } catch (Exception e) {
+                e.printStackTrace();
+                Logs.log("Unable to connect to Redis server", Logs.ERROR);
+                pool.close();
+            }
+            pool.close();
+        }).start();
     }
 
 }

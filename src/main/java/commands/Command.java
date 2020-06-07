@@ -69,7 +69,7 @@ public abstract class Command extends ListenerAdapter {
         if (member != null && GTools.isCommand(msg, member.getUser(), name)) {
 
             // Check perms
-            if (!hasRolePerms(member, rank)) {
+            if (!Rank.hasRolePerms(member, rank)) {
                 sendThenDelete(channel, "**Sorry but you don't have permission to use that command! Use `/help` to list all commands you can use.**");
                 return;
             }
@@ -95,7 +95,7 @@ public abstract class Command extends ListenerAdapter {
             if (GTools.isCommand(msg, user, name)) {
 
                 // Check perms
-                if (!hasRolePerms(member, rank)) {
+                if (!Rank.hasRolePerms(member, rank)) {
                     sendThenDelete(channel, "**Sorry but you don't have permission to use that command! Use `/help` to list all commands you can use.**");
                     return;
                 }

@@ -1,17 +1,20 @@
 package selfevents;
 
-import Database.BaseDatabase;
 import Utils.Config;
-import Utils.Rank;
 import Utils.SelfData;
-import Utils.database.polling.PollingDAO;
-import Utils.tools.GTools;
+import Utils.database.BaseDatabase;
+import Utils.database.redis.RedisDAO;
+import Utils.tools.CommandsTools;
 import Utils.tools.Logs;
+import commands.*;
+import events.LogCommands;
+import events.OnJoin;
+import events.OnReactRules;
+import events.OnSuggestion;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -40,21 +43,6 @@ public class ReadyEvents extends ListenerAdapter {
         // INVALID CONFIG OR DATA WARNINGS
         checkRaidModeSettings();
         checkSuggestionsSettings();
-
-        // Start database polling task
-        Timer databasePolling = new Timer();
-        databasePolling.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    try (Connection conn = BaseDatabase.getInstance().getConnection()) {
-                        PollingDAO.poll(conn);
-                    }
-                } catch (SQLException e) {
-                    GTools.printStackError(e);
-                }
-            }
-        }, 5000, 250);
 
     }
 

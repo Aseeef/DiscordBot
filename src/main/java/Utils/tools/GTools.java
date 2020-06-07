@@ -32,21 +32,6 @@ public class GTools {
         else return msg.toLowerCase().startsWith(Config.get().getCommandPrefix());
     }
 
-    public static boolean hasRolePerms(Member member, Rank role) {
-        // Check perms
-        boolean roleMatch = false;
-        List<Role> memberRoles = member.getRoles();
-
-        for (Role r : role.r()) {
-            if (memberRoles.contains(r)) {
-                roleMatch = true;
-                break;
-            }
-        }
-
-        return roleMatch;
-    }
-
     public static String[] getArgs(String msg) {
         return msg.replaceFirst(Config.get().getCommandPrefix() + "[^ ]+ ", "").split(" ");
     }
