@@ -8,8 +8,7 @@ import Utils.users.GTMUser;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.entities.MessageChannel;
 
 public class AccountCommand extends Command {
 
@@ -18,14 +17,20 @@ public class AccountCommand extends Command {
     }
 
     @Override
-    public void onCommandUse(Message message, Member member, TextChannel channel, String[] args) {
+    public void onCommandUse(Message message, Member member, MessageChannel channel, String[] args) {
 
         if (args.length < 1) {
             GTools.sendThenDelete(channel, getAccountHelpMsg());
+            return;
         }
 
-        switch (args[1].toLowerCase()) {
+        switch (args[0].toLowerCase()) {
             case "verify":
+
+                if (args.length < 2) {
+                    GTools.sendThenDelete(channel, "`/Account Verify <Code>` - *Verify your discord account with GTM*");
+                    return;
+                }
 
                 if (Data.exists(Data.USER, member.getIdLong())) {
                     GTMUser user = (GTMUser) Data.obtainData(Data.USER, member.getIdLong());
@@ -33,7 +38,7 @@ public class AccountCommand extends Command {
                     return;
                 }
 
-                boolean success = Verification.verifyMember(member, args[2]);
+                boolean success = Verification.verifyMember(member, args[1]);
 
                 if (success) {
                     GTMUser user = (GTMUser) Data.obtainData(Data.USER, member.getIdLong());
@@ -62,6 +67,7 @@ public class AccountCommand extends Command {
             case "info":
                 //TODO
                 break;
+
             default:
                 GTools.sendThenDelete(channel, getAccountHelpMsg());
         }

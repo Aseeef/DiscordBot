@@ -5,10 +5,10 @@ import Utils.SelfData;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-import static Utils.tools.GTools.*;
+import static Utils.tools.GTools.sendThenDelete;
 import static Utils.tools.RaidModeTools.*;
 
 public class RaidModeCommand extends Command {
@@ -18,7 +18,7 @@ public class RaidModeCommand extends Command {
     }
 
     @Override
-    public void onCommandUse(Message message, Member member, TextChannel channel, String[] args) {
+    public void onCommandUse(Message message, Member member, MessageChannel channel, String[] args) {
         // If there are no command arguments send sub command help list
         if (args.length == 0) {
             sendThenDelete(channel, getRaidModeHelpMsg());
@@ -31,7 +31,7 @@ public class RaidModeCommand extends Command {
             SelfData.get().setRaidAlertChannelId(channel.getIdLong());
 
             // Send success msg
-            sendThenDelete(channel, raidChannelSet(channel));
+            sendThenDelete(channel, raidChannelSet((TextChannel) channel));
 
         }
 

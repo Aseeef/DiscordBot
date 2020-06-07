@@ -3,8 +3,8 @@ package commands;
 import Utils.Rank;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class SeniorsCommand extends Command {
 
@@ -13,7 +13,7 @@ public class SeniorsCommand extends Command {
     }
 
     @Override
-    public void onCommandUse(Message message, Member member, TextChannel channel, String[] args) {
+    public void onCommandUse(Message message, Member member, MessageChannel channel, String[] args) {
         if (args.length == 0) {
 
         }

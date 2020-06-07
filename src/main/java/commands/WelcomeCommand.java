@@ -4,9 +4,9 @@ import Utils.Rank;
 import Utils.SelfData;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-import static Utils.tools.GTools.*;
+import static Utils.tools.GTools.jda;
+import static Utils.tools.GTools.sendThenDelete;
 import static Utils.tools.WelcomeTools.getRuleReactEmbed;
 
 public class WelcomeCommand extends Command {
@@ -16,7 +16,7 @@ public class WelcomeCommand extends Command {
     }
 
     @Override
-    public void onCommandUse(Message message, Member member, TextChannel channel, String[] args) {
+    public void onCommandUse(Message message, Member member, MessageChannel channel, String[] args) {
         if (args[0].toLowerCase().equalsIgnoreCase("setchannel")) {
 
             // Delete previous rule embed (if any)
@@ -33,7 +33,7 @@ public class WelcomeCommand extends Command {
             SelfData.get().setRuleAgreeChannelId(channel.getIdLong());
 
             // Send success msg
-            sendThenDelete(channel, welcomeChannelSet(channel));
+            sendThenDelete(channel, welcomeChannelSet((TextChannel) channel));
 
             // Send rule embed & add reactions & save msg to SelfData
             channel.sendMessage(getRuleReactEmbed()).queue( (embed) -> {

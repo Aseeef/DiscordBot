@@ -32,10 +32,6 @@ public class GTools {
         else return msg.toLowerCase().startsWith(Config.get().getCommandPrefix());
     }
 
-    public static String[] getArgs(String msg) {
-        return msg.replaceFirst(Config.get().getCommandPrefix() + "[^ ]+ ", "").split(" ");
-    }
-
     public static User userById (String id) {
         return jda.retrieveUserById(id).complete();
     }
@@ -67,19 +63,23 @@ public class GTools {
         channel.getManager().setName(msg).queue();
     }
 
-    public static void sendThenDelete(TextChannel channel, Message msg) {
+    public static void sendThenDelete(MessageChannel channel, Message msg) {
+        // dont delete if private channel
+        if (channel instanceof PrivateChannel)
+            channel.sendMessage(msg).queue();
+        else
         channel.sendMessage(msg).queue( (sentMsg) ->
                 sentMsg.delete().queueAfter(Config.get().getDeleteTime(), TimeUnit.SECONDS)
         );
     }
 
-    public static void sendThenDelete(TextChannel channel, String msg) {
+    public static void sendThenDelete(MessageChannel channel, String msg) {
         channel.sendMessage(msg).queue( (sentMsg) ->
                 sentMsg.delete().queueAfter(Config.get().getDeleteTime(), TimeUnit.SECONDS)
         );
     }
 
-    public static void sendThenDelete(TextChannel channel, MessageEmbed embed) {
+    public static void sendThenDelete(MessageChannel channel, MessageEmbed embed) {
         channel.sendMessage(embed).queue( (sentMsg) ->
                 sentMsg.delete().queueAfter(Config.get().getDeleteTime(), TimeUnit.SECONDS)
         );

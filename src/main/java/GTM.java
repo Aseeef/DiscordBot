@@ -86,6 +86,7 @@ public class GTM extends ListenerAdapter {
                     .setEnabledIntents(
                             GatewayIntent.DIRECT_MESSAGE_REACTIONS,
                             GatewayIntent.DIRECT_MESSAGE_TYPING,
+                            GatewayIntent.DIRECT_MESSAGES,
                             GatewayIntent.GUILD_MESSAGES,
                             GatewayIntent.GUILD_MESSAGE_REACTIONS,
                             GatewayIntent.GUILD_EMOJIS,
@@ -128,19 +129,9 @@ public class GTM extends ListenerAdapter {
             setBotName();
             setAvatar();
 
-            // Make sure bot is only on one server
-            if (!inOnlyOneGuild()) {
-                Logs.log("The GTM Discord bot may not be in more then one server at a time!", Logs.ERROR);
-                jda.shutdownNow();
-            }
-
         } catch (LoginException | IllegalArgumentException e) {
             GTools.printStackError(e);
         }
-    }
-
-    private static boolean inOnlyOneGuild() {
-        return jda.getGuilds().size() <= 1;
     }
 
     private static void setAvatar() {

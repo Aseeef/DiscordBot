@@ -26,6 +26,12 @@ public class ReadyEvents extends ListenerAdapter {
 
     public void onReady(ReadyEvent event) {
 
+        // Make sure bot is only on one server
+        if (!inOnlyOneGuild()) {
+            Logs.log("The GTM Discord bot may not be in more then one server at a time!", Logs.ERROR);
+            jda.shutdownNow();
+        }
+
         // Print finished loading msg
         log("Bot is now online!");
 
@@ -59,7 +65,7 @@ public class ReadyEvents extends ListenerAdapter {
         }
     }
 
-    // Chec if suggestions channel not configured
+    // Check if suggestions channel not configured
     private void checkSuggestionsSettings() {
         if (jda.getTextChannelById(SelfData.get().getSuggestionChannelId()) == null)
             log("The suggestion channel has not been properly configured yet!",
@@ -72,6 +78,10 @@ public class ReadyEvents extends ListenerAdapter {
         if (jda.getTextChannelById(SelfData.get().getRaidAlertChannelId()) == null)
             log("The raid alerts channel has not been properly configured yet!",
                     Logs.WARNING);
+    }
+
+    private static boolean inOnlyOneGuild() {
+        return jda.getGuilds().size() <= 1;
     }
 
 }

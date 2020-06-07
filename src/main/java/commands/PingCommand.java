@@ -14,7 +14,7 @@ public class PingCommand extends Command {
     }
 
     @Override
-    public void onCommandUse(Message message, Member member, TextChannel channel, String[] args) {
+    public void onCommandUse(Message message, Member member, MessageChannel channel, String[] args) {
         long receiveTime = System.currentTimeMillis() - message.getTimeCreated().toInstant().toEpochMilli();
 
         channel.sendMessage("**Pong!** Calculating response time data...").queue((sentMsg) -> {
