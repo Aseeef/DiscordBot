@@ -1,10 +1,11 @@
 package selfevents;
 
-import Utils.database.BaseDatabase;
-import Utils.database.redis.RedisEvent;
+import Utils.database.sql.BaseDatabase;
+import Utils.database.redis.OnRedisMessageReceive;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+import static Utils.tools.GTools.jedisManager;
 import static Utils.tools.Logs.log;
 
 public class CloseEvent extends ListenerAdapter {
@@ -14,8 +15,7 @@ public class CloseEvent extends ListenerAdapter {
         log("Closing connections to databases...");
         for (BaseDatabase.Database database : BaseDatabase.Database.values())
             BaseDatabase.getInstance(database).close();
-        BaseDatabase.getRedisInstance().destroy();
-        RedisEvent.getInstance().unsubscribe();
+        jedisManager.close();
         // Log finished
         log("Bot has now been disabled.");
 

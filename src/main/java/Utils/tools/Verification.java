@@ -1,13 +1,12 @@
 package Utils.tools;
 
+import Utils.Config;
 import Utils.Data;
 import Utils.Rank;
 import Utils.users.GTMUser;
 import net.dv8tion.jda.api.entities.Member;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class Verification {
 
@@ -26,6 +25,16 @@ public class Verification {
         dataMap.put("name", name);
         dataMap.put("rank", rank);
         verifyHashMap.put(code, dataMap);
+        // Delete request after 10 minutes
+        new Timer().schedule(
+                new TimerTask() {
+                    @Override
+                    public void run() {
+                        verifyHashMap.remove(code);
+                    }
+                },
+                1000 * 60 * 10
+        );
     }
 
     /** Attempts to verify a discord member with the provided code
@@ -39,6 +48,10 @@ public class Verification {
             Map<String, Object> dataMap = verifyHashMap.get(code);
             GTMUser GTMUser = new GTMUser((UUID) dataMap.get("uuid"), (String) dataMap.get("name"), (Rank) dataMap.get("rank"), m.getIdLong());
             Data.storeData(Data.USER, GTMUser, m.getIdLong());
+            // change discord name to in game name
+            m.modifyNickname(GTMUser.getUsername()).queue();
+            // remove code
+            verifyHashMap.remove(code);
             return true;
         } else return false;
     }

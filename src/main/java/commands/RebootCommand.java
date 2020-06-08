@@ -1,6 +1,7 @@
 package commands;
 
 import Utils.Rank;
+import Utils.users.GTMUser;
 import net.dv8tion.jda.api.entities.*;
 
 import static Utils.tools.GTools.jda;
@@ -12,7 +13,7 @@ public class RebootCommand extends Command {
     }
 
     @Override
-    public void onCommandUse(Message message, Member member, MessageChannel channel, String[] args) {
+    public void onCommandUse(Message message, Member member, GTMUser gtmUser, MessageChannel channel, String[] args) {
         // Only need to open a private channel if this isn't already dms
         if (channel instanceof PrivateChannel)
             channel.sendMessage("**Executed reboot. Please allow up to 30 seconds for the bot to come back up!**").queue();

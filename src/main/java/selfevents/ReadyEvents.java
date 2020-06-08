@@ -2,19 +2,10 @@ package selfevents;
 
 import Utils.Config;
 import Utils.SelfData;
-import Utils.database.BaseDatabase;
-import Utils.database.redis.RedisDAO;
-import Utils.tools.CommandsTools;
 import Utils.tools.Logs;
-import commands.*;
-import events.LogCommands;
-import events.OnJoin;
-import events.OnReactRules;
-import events.OnSuggestion;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 

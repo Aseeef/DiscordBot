@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="Added Redis support">
+    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="Commands bug fixes">
+      <change afterPath="$PROJECT_DIR$/src/main/java/Utils/database/DAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GTM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GTM.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/Data.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/Data.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/Rank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/Rank.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/database/BaseDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/database/sql/BaseDatabase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/database/redis/RedisDAO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/database/redis/RedisEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/database/redis/OnRedisMessageReceive.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/database/sql/SqlDAO.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Utils/tools/GTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/tools/GTools.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/tools/Verification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/tools/Verification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/users/GTMUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/users/GTMUser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/commands/AccountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/AccountCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/commands/Command.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/Command.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/commands/HelpCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/HelpCommand.java" afterDir="false" />
@@ -15,13 +25,17 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/commands/SeniorsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/SeniorsCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/commands/SuggestionCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/SuggestionCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/commands/WelcomeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/WelcomeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/events/LogCommands.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/selfevents/CloseEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/selfevents/CloseEvent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/selfevents/ReadyEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/selfevents/ReadyEvents.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/GTM.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/GTM.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Utils/tools/GTools.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Utils/tools/GTools.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/commands/PlayerCountCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/commands/PlayerCountCommand.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/events/OnSuggestion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/events/OnSuggestion.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/events/LogCommands.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -170,7 +184,9 @@
       <workItem from="1590960030672" duration="801000" />
       <workItem from="1590965530678" duration="2446000" />
       <workItem from="1591127913262" duration="1309000" />
-      <workItem from="1591497093099" duration="15059000" />
+      <workItem from="1591497093099" duration="24741000" />
+      <workItem from="1591568569503" duration="165000" />
+      <workItem from="1591582897811" duration="16548000" />
     </task>
     <task id="LOCAL-00001" summary="Init commit">
       <created>1584645971223</created>
@@ -270,7 +286,14 @@
       <option name="project" value="LOCAL" />
       <updated>1591507861394</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Commands bug fixes">
+      <created>1591512396271</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1591512396271</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -304,7 +327,8 @@
     <MESSAGE value="Fixed bugs relating to gtm player count updater" />
     <MESSAGE value="Fixed typo" />
     <MESSAGE value="Added Redis support" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Redis support" />
+    <MESSAGE value="Commands bug fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Commands bug fixes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

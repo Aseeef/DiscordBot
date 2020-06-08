@@ -3,17 +3,18 @@ package commands;
 import Utils.Config;
 import Utils.Rank;
 import Utils.tools.GTools;
+import Utils.users.GTMUser;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static Utils.tools.GTools.*;
+import static Utils.tools.GTools.jda;
+import static Utils.tools.GTools.sendThenDelete;
+import static Utils.tools.Logs.log;
 
 public abstract class Command extends ListenerAdapter {
 
@@ -69,9 +70,13 @@ public abstract class Command extends ListenerAdapter {
         User user = e.getAuthor();
         String[] args = getArgs(msg);
         PrivateChannel channel = e.getChannel();
+        GTMUser gtmUser = GTMUser.getGTMUser(user.getIdLong()).orElse(null);
 
         jda.getGuilds().get(0).retrieveMember(user).queue( (member -> {
             if (GTools.isCommand(msg, user, name)) {
+
+                log("User "+ e.getAuthor().getAsTag()+
+                        "("+e.getAuthor().getId()+") issued command: " + e.getMessage().getContentRaw());
 
                 // Check perms
                 if (!Rank.hasRolePerms(member, rank)) {
@@ -85,8 +90,7 @@ public abstract class Command extends ListenerAdapter {
                     return;
                 }
 
-
-                onCommandUse(e.getMessage(), member, channel, args);
+                onCommandUse(e.getMessage(), member, gtmUser, channel, args);
 
             }
         }));
@@ -103,6 +107,11 @@ public abstract class Command extends ListenerAdapter {
 
         if (member != null && GTools.isCommand(msg, member.getUser(), name)) {
 
+            log("User "+ e.getAuthor().getAsTag()+
+                    "("+e.getAuthor().getId()+") issued command: " + e.getMessage().getContentRaw());
+
+            GTMUser gtmUser = GTMUser.getGTMUser(member.getIdLong()).orElse(null);
+
             // Check perms
             if (!Rank.hasRolePerms(member, rank)) {
                 sendThenDelete(channel, "**Sorry but you don't have permission to use that command! Use `/help` to list all commands you can use.**");
@@ -115,7 +124,7 @@ public abstract class Command extends ListenerAdapter {
                 return;
             }
 
-            onCommandUse(e.getMessage(), member, channel, args);
+            onCommandUse(e.getMessage(), member, gtmUser, channel, args);
 
         }
 
@@ -124,7 +133,7 @@ public abstract class Command extends ListenerAdapter {
     /** This is the logic that occurs when this command is used
      * Note: To use TextChannel or PrivateChannel methods, use casting
      */
-    public abstract void onCommandUse(Message message, Member member, MessageChannel channel, String[] args);
+    public abstract void onCommandUse(Message message, Member member, GTMUser gtmUser, MessageChannel channel, String[] args);
 
     enum Type {
         /** Commands of this type can be executed anywhere by the user */

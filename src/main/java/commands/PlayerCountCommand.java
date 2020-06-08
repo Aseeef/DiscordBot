@@ -3,6 +3,7 @@ package commands;
 import Utils.Rank;
 import Utils.SelfData;
 import Utils.tools.GTools;
+import Utils.users.GTMUser;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
 
@@ -16,7 +17,7 @@ public class PlayerCountCommand extends Command {
     }
 
     @Override
-    public void onCommandUse(Message message, Member member, MessageChannel channel, String[] args) {
+    public void onCommandUse(Message message, Member member, GTMUser gtmUser, MessageChannel channel, String[] args) {
         // If there are no command arguments send sub command help list
         if (args.length == 0) {
             // Send msg then delete after defined time in config

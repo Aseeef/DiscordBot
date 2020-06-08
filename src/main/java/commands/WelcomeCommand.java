@@ -2,6 +2,7 @@ package commands;
 
 import Utils.Rank;
 import Utils.SelfData;
+import Utils.users.GTMUser;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
 
@@ -16,7 +17,7 @@ public class WelcomeCommand extends Command {
     }
 
     @Override
-    public void onCommandUse(Message message, Member member, MessageChannel channel, String[] args) {
+    public void onCommandUse(Message message, Member member, GTMUser gtmUser, MessageChannel channel, String[] args) {
         if (args[0].toLowerCase().equalsIgnoreCase("setchannel")) {
 
             // Delete previous rule embed (if any)

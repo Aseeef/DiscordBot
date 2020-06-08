@@ -1,14 +1,13 @@
-import Utils.database.redis.RedisEvent;
-import Utils.database.BaseDatabase;
 import Utils.Config;
 import Utils.SelfData;
 import Utils.Xenforo;
+import Utils.database.sql.BaseDatabase;
+import Utils.database.redis.OnRedisMessageReceive;
 import Utils.tools.CommandsTools;
 import Utils.tools.GTools;
 import Utils.tools.Logs;
 import Utils.tools.MineStat;
 import commands.*;
-import events.LogCommands;
 import events.OnJoin;
 import events.OnReactRules;
 import events.OnSuggestion;
@@ -20,9 +19,7 @@ import net.dv8tion.jda.api.entities.Icon;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
+import net.grandtheftmc.jedisnew.NewJedisManager;
 import selfevents.CloseEvent;
 import selfevents.ConsoleCommand;
 import selfevents.ReadyEvents;
@@ -32,8 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import static Utils.tools.GTools.gtm;
-import static Utils.tools.GTools.jda;
+import static Utils.tools.GTools.*;
 import static Utils.tools.Logs.log;
 
 public class GTM extends ListenerAdapter {
@@ -108,7 +104,6 @@ public class GTM extends ListenerAdapter {
             jda.addEventListener(new OnSuggestion());
             jda.addEventListener(new CommandsTools());
             jda.addEventListener(new ReadyEvents());
-            jda.addEventListener(new LogCommands());
             jda.addEventListener(new CloseEvent());
             jda.addEventListener(new OnJoin());
             jda.addEventListener(new OnReactRules());
@@ -175,28 +170,14 @@ public class GTM extends ListenerAdapter {
     }
 
     private static void loadJedis() {
-        JedisPool pool = new JedisPool(
-                new JedisPoolConfig(),
+        jedisManager = new NewJedisManager(
                 Config.get().getRedisHostname(),
                 Config.get().getRedisPort(),
-                0 ,
                 Config.get().getRedisPassword()
-        );
-        BaseDatabase.setRedisPool(pool);
+        ).addRedisEventListener(new OnRedisMessageReceive());
+        jedisManager.init();
 
         Logs.log("Established connection to Redis!");
-
-        // call async because subcribe() is a blocking method
-        new Thread(() -> {
-            try {
-                pool.getResource().subscribe(new RedisEvent(), "gtm_to_discord");
-            } catch (Exception e) {
-                e.printStackTrace();
-                Logs.log("Unable to connect to Redis server", Logs.ERROR);
-                pool.close();
-            }
-            pool.close();
-        }).start();
     }
 
 }

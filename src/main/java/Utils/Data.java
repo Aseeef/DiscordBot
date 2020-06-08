@@ -98,7 +98,7 @@ public enum Data {
         try {
             ObjectMapper mapper = new ObjectMapper();
             return mapper.readValue(file, type.getaClass());
-        } catch (IOException e) {
+        } catch (IllegalStateException | IOException e ) {
             GTools.printStackError(e);
         }
 

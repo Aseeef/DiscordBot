@@ -1,6 +1,7 @@
 package commands;
 
 import Utils.Rank;
+import Utils.users.GTMUser;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -13,7 +14,7 @@ public class SeniorsCommand extends Command {
     }
 
     @Override
-    public void onCommandUse(Message message, Member member, MessageChannel channel, String[] args) {
+    public void onCommandUse(Message message, Member member, GTMUser gtmUser, MessageChannel channel, String[] args) {
         if (args.length == 0) {
 
         }

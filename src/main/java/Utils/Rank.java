@@ -1,8 +1,11 @@
 package Utils;
 
+import Utils.users.GTMUser;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,11 +28,12 @@ public enum Rank {
     PREMIUM ("PREMIUM", Config.get().getPremium()),
     VIP ("VIP", Config.get().getVip()),
     NORANK ("DEFAULT", Config.get().getNoRank()),
-    NONE (null, -1),
     UNVERIFIED (null, Config.get().getUnverified()),
     ;
 
+    /** rank as known in the database */
     private String name;
+    /** role id on discord */
     private long roleId;
 
     Rank(String name, long roleId) {
@@ -37,16 +41,29 @@ public enum Rank {
         this.roleId = roleId;
     }
 
+    public boolean isHigherOrEqualTo(Rank role) {
+        // works because enums are defined in rank order
+        return this.getIndex() <= role.getIndex();
+    }
 
-    public static boolean hasRolePerms(Member member, Rank role) {
-        if (role == Rank.NONE) return true;
+    public int getIndex() {
+        int index = 0;
+        for (Rank r : Rank.values()) {
+            if (this != r) index++;
+            else return index;
+        }
+        return -1;
+    }
+
+    public static boolean hasRolePerms(Member member, @Nullable Rank role) {
+        if (role == null) return true;
 
         // Check perms
         boolean roleMatch = false;
-        List<Role> memberRoles = member.getRoles();
+        List<Role> memberRole = member.getRoles();
 
         for (Role r : role.getRolesAbove()) {
-            if (memberRoles.contains(r)) {
+            if (memberRole.contains(r)) {
                 roleMatch = true;
                 break;
             }

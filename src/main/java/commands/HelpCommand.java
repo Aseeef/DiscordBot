@@ -1,6 +1,7 @@
 package commands;
 
 import Utils.Rank;
+import Utils.users.GTMUser;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 
@@ -13,11 +14,11 @@ import static Utils.tools.GTools.sendThenDelete;
 public class HelpCommand extends Command {
 
     public HelpCommand() {
-        super("help", "View the help page", Rank.NONE, Type.ANYWHERE);
+        super("help", "View the help page", null, Type.ANYWHERE);
     }
 
     @Override
-    public void onCommandUse(Message message, Member member, MessageChannel channel, String[] args) {
+    public void onCommandUse(Message message, Member member, GTMUser gtmUser, MessageChannel channel, String[] args) {
         // List of all commands that the member can use
         List<String> commands = new ArrayList<>();
         for (Command command : Command.getCommands()) {

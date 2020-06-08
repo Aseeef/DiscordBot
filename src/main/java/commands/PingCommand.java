@@ -2,6 +2,7 @@ package commands;
 
 import Utils.Config;
 import Utils.Rank;
+import Utils.users.GTMUser;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 
@@ -14,7 +15,7 @@ public class PingCommand extends Command {
     }
 
     @Override
-    public void onCommandUse(Message message, Member member, MessageChannel channel, String[] args) {
+    public void onCommandUse(Message message, Member member, GTMUser gtmUser, MessageChannel channel, String[] args) {
         long receiveTime = System.currentTimeMillis() - message.getTimeCreated().toInstant().toEpochMilli();
 
         channel.sendMessage("**Pong!** Calculating response time data...").queue((sentMsg) -> {

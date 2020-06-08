@@ -6,6 +6,7 @@ import Utils.SelfData;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
+import net.grandtheftmc.jedisnew.NewJedisManager;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -16,6 +17,7 @@ public class GTools {
 
     public static JDA jda;
     public static MineStat gtm;
+    public static NewJedisManager jedisManager;
 
     // Checks if its is a specific command
     public static boolean isCommand(String msg, User user, String command) {
@@ -74,12 +76,20 @@ public class GTools {
     }
 
     public static void sendThenDelete(MessageChannel channel, String msg) {
+        // dont delete if private channel
+        if (channel instanceof PrivateChannel)
+            channel.sendMessage(msg).queue();
+        else
         channel.sendMessage(msg).queue( (sentMsg) ->
                 sentMsg.delete().queueAfter(Config.get().getDeleteTime(), TimeUnit.SECONDS)
         );
     }
 
     public static void sendThenDelete(MessageChannel channel, MessageEmbed embed) {
+        // dont delete if private channel
+        if (channel instanceof PrivateChannel)
+            channel.sendMessage(embed).queue();
+        else
         channel.sendMessage(embed).queue( (sentMsg) ->
                 sentMsg.delete().queueAfter(Config.get().getDeleteTime(), TimeUnit.SECONDS)
         );
