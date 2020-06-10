@@ -1,5 +1,6 @@
 package commands;
 
+import Utils.Config;
 import Utils.Rank;
 import Utils.users.GTMUser;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -33,7 +34,8 @@ public class HelpCommand extends Command {
 
         for (String commandName : commands) {
             Command command = Command.getByName(commandName);
-            help.append("\n   **/")
+            help.append("\n   **")
+                    .append(Config.get().getCommandPrefix())
                     .append(commandName)
                     .append("** - *").append(command.getDescription())
                     .append("* ")

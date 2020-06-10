@@ -5,6 +5,7 @@ import Utils.Data;
 import Utils.Rank;
 import Utils.users.GTMUser;
 import net.dv8tion.jda.api.entities.Member;
+import static Utils.database.DAO.createDiscordProfile;
 
 import java.util.*;
 
@@ -25,7 +26,7 @@ public class Verification {
         dataMap.put("name", name);
         dataMap.put("rank", rank);
         verifyHashMap.put(code, dataMap);
-        // Delete request after 10 minutes
+        // Delete request after 15 minutes
         new Timer().schedule(
                 new TimerTask() {
                     @Override
@@ -33,7 +34,7 @@ public class Verification {
                         verifyHashMap.remove(code);
                     }
                 },
-                1000 * 60 * 10
+                1000 * 60 * 15
         );
     }
 
@@ -46,10 +47,11 @@ public class Verification {
     public static boolean verifyMember(Member m, String code) {
         if (verifyHashMap.containsKey(code)) {
             Map<String, Object> dataMap = verifyHashMap.get(code);
-            GTMUser GTMUser = new GTMUser((UUID) dataMap.get("uuid"), (String) dataMap.get("name"), (Rank) dataMap.get("rank"), m.getIdLong());
-            Data.storeData(Data.USER, GTMUser, m.getIdLong());
-            // change discord name to in game name
-            m.modifyNickname(GTMUser.getUsername()).queue();
+            GTMUser gtmUser = new GTMUser((UUID) dataMap.get("uuid"), (String) dataMap.get("name"), (Rank) dataMap.get("rank"), m.getIdLong());
+            gtmUser.updateUserDataNow();
+            // save to sql database
+            createDiscordProfile(gtmUser);
+            Data.storeData(Data.USER, gtmUser, m.getIdLong());
             // remove code
             verifyHashMap.remove(code);
             return true;

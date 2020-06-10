@@ -56,7 +56,15 @@ public class GTMUser {
             return Optional.of(userCache.get(discordId));
         }
         else if (Data.exists(Data.USER, discordId)) {
+
             GTMUser gtmUser = (GTMUser) Data.obtainData(Data.USER, discordId);
+
+            // ensure user also exists in database
+            if (!DAO.discordProfileExists(discordId)) {
+                GTMUser.removeGTMUser(discordId);
+                return Optional.empty();
+            }
+
             if (gtmUser != null) gtmUser.updateUserDataIfTime();;
             return Optional.ofNullable(gtmUser);
         }
@@ -67,7 +75,7 @@ public class GTMUser {
     public static boolean removeGTMUser(long discordId) {
         if (userCache.containsKey(discordId)) {
             userCache.remove(discordId);
-            return true;
+            return Data.deleteData(Data.USER, discordId);
         }
         else return false;
     }
@@ -91,6 +99,29 @@ public class GTMUser {
         if (newUsername != null && !newUsername.equals(this.username)) {
             this.setUsername(newUsername);
             saveUser(this);
+        }
+
+        if (!this.getDiscordMember().getRoles().contains(this.rank.getRole())) {
+            if (this.rank.isHigherOrEqualTo(Rank.HELPER)) {
+                System.out.println("High");
+                // msg admins TODO
+            } else {
+                // set new role on discord
+                this.getDiscordMember().getGuild().addRoleToMember(this.getDiscordId(), rank.getRole()).queue();
+                // remove old role(s)
+                for (Rank r : Rank.values()) {
+                    if (r != rank && this.getDiscordMember().getRoles().contains(r.getRole())) {
+                        if (rank.isHigherOrEqualTo(Rank.HELPER)) {
+                            System.out.println("High 2");
+                            // msg admins TODO
+                        } else this.getDiscordMember().getGuild().removeRoleFromMember(this.getDiscordId(), r.getRole()).queue();
+                    }
+                }
+            }
+        }
+
+        if (!this.getDiscordMember().getEffectiveName().equals(this.username)) {
+            this.getDiscordMember().modifyNickname(username).queue();
         }
     }
 
@@ -126,10 +157,6 @@ public class GTMUser {
 
     @JsonSetter
     public void setUsername(String username) {
-        if (!rank.isHigherOrEqualTo(Rank.HELPER)) {
-            // update nick on discord
-            this.getDiscordMember().modifyNickname(username).queue();
-        }
         this.username = username;
     }
 
@@ -140,16 +167,6 @@ public class GTMUser {
 
     @JsonSetter
     public void setRank(Rank rank) {
-        if (!rank.isHigherOrEqualTo(Rank.HELPER)) {
-            // set new role on discord
-            this.getDiscordMember().getGuild().addRoleToMember(this.getDiscordId(), rank.getRole()).queue();
-            // remove old role(s)
-            for (Rank r : Rank.values()) {
-                if (r != rank)
-                    this.getDiscordMember().getGuild().removeRoleFromMember(this.getDiscordId(), r.getRole()).queue();
-            }
-        }
-
         this.rank = rank;
     }
 

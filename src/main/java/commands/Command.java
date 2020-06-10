@@ -80,7 +80,7 @@ public abstract class Command extends ListenerAdapter {
 
                 // Check perms
                 if (!Rank.hasRolePerms(member, rank)) {
-                    sendThenDelete(channel, "**Sorry but you don't have permission to use that command! Use `/help` to list all commands you can use.**");
+                    sendThenDelete(channel, "**Sorry but you must be " + getRank().name() + " or higher to use this command! Use `/help` to list all commands you can use.**");
                     return;
                 }
 

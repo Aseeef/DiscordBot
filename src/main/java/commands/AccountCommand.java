@@ -14,11 +14,12 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
 import java.awt.*;
+import java.util.Timer;
 
 public class AccountCommand extends Command {
 
     public AccountCommand() {
-        super("account", "Manage your gtm-discord account link", Rank.NORANK, Type.DMS_ONLY);
+        super("account", "Manage your gtm-discord account link", null, Type.DMS_ONLY);
     }
 
     @Override
@@ -43,14 +44,16 @@ public class AccountCommand extends Command {
                     return;
                 }
 
-                boolean success = Verification.verifyMember(member, args[1]);
+                GTools.runAsync( () -> {
+                    boolean success = Verification.verifyMember(member, args[1]);
 
-                if (success) {
-                    GTMUser user = (GTMUser) Data.obtainData(Data.USER, member.getIdLong());
-                    channel.sendMessage("**Verification successful! Your discord account has now been linked to `" + user.getUsername() + "`!").queue();
-                } else {
-                    channel.sendMessage("**Verification failed!** Please make sure you provided to correct verification code.").queue();
-                }
+                    if (success) {
+                        GTMUser user = (GTMUser) Data.obtainData(Data.USER, member.getIdLong());
+                        channel.sendMessage("**Verification successful! Your discord account has now been linked to `" + user.getUsername() + "`!**").queue();
+                    } else {
+                        channel.sendMessage("**Verification failed!** Please make sure you provided to correct verification code.").queue();
+                    }
+                });
 
                 break;
 
@@ -62,8 +65,11 @@ public class AccountCommand extends Command {
                 }
 
                 GTMUser user = (GTMUser) Data.obtainData(Data.USER, member.getIdLong());
-                GTMUser.removeGTMUser(member.getIdLong());
-                boolean deleted = Data.deleteData(Data.USER, member.getIdLong());
+                boolean deleted = GTMUser.removeGTMUser(member.getIdLong());
+
+                GTools.runAsync( () -> {
+                    DAO.deleteDiscordProfile(user.getUuid());
+                });
 
                 channel.sendMessage(deleted ? "**You have successfully unlinked your account from the player `" + user.getUsername() + "`!**" : "**Unable to proccess request. It appears something went wrong...!**").queue();
 
@@ -93,7 +99,7 @@ public class AccountCommand extends Command {
         return new EmbedBuilder()
                 .setThumbnail(DAO.getSkullSkin(gtmUser.getUuid()))
                 .setTitle("**Discord Account Information**")
-                .setDescription("You discord account is linked to the follow GTM player...")
+                .setDescription("You discord account is linked to the following GTM player...")
                 .addField("**UUID:**", gtmUser.getUuid().toString(), false)
                 .addField("**Username:**", gtmUser.getUsername(), false)
                 .addField("**Rank:**", gtmUser.getRank().n(), false)

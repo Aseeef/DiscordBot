@@ -101,4 +101,8 @@ public class GTools {
             log("        at " + error.toString(), Logs.ERROR);
     }
 
+    public static void runAsync(Runnable target) {
+        new Thread(target).start();
+    }
+
 }

@@ -1,9 +1,11 @@
 package Utils.database.redis;
 
+import Utils.Data;
 import Utils.Rank;
 import Utils.tools.GTools;
 import Utils.tools.Logs;
 import Utils.tools.Verification;
+import Utils.users.GTMUser;
 import net.grandtheftmc.jedisnew.RedisEventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,6 +37,11 @@ public class OnRedisMessageReceive implements RedisEventListener {
                     String verifyCode = jsonObject.getString("code");
                     if (rank == null) return;
                     Verification.createVerifyRequest(verifyCode, uuid, name, rank);
+                    break;
+
+                case "unverify":
+                    long discordId = jsonObject.getLong("discordId");
+                    GTMUser.removeGTMUser(discordId);
                     break;
 
                 case "disconnect":

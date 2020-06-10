@@ -118,6 +118,7 @@ public class GTM extends ListenerAdapter {
             jda.addEventListener(new AccountCommand());
             jda.addEventListener(new RebootCommand());
             jda.addEventListener(new PingCommand());
+            jda.addEventListener(new HarryCommand());
 
             // Self user settings functions to check if there was config change to prevent
             // unnecessary calls to the discord api which may result in us getting rate limited

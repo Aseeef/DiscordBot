@@ -3,6 +3,8 @@ package Utils.database;
 import Utils.Rank;
 import Utils.database.sql.BaseDatabase;
 import Utils.tools.GTools;
+import Utils.users.GTMUser;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import me.kbrewster.exceptions.APIException;
 import me.kbrewster.mojangapi.MojangAPI;
 import net.grandtheftmc.jedis.JedisManager;
@@ -63,6 +65,70 @@ public class DAO {
         }
 
         return null;
+    }
+
+    public static void createDiscordProfile(GTMUser gtmUser) {
+
+        try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
+
+            String query = "INSERT INTO `discord_users` (`uuid`, `discord_tag`, `discord_id`) VALUES (UNHEX(?),?,?);";
+
+            try (PreparedStatement ps = conn.prepareStatement(query)) {
+                ps.setString(1, gtmUser.getUuid().toString().replace("-", ""));
+                ps.setString(2, gtmUser.getDiscordMember().getUser().getAsTag().replaceFirst("@", ""));
+                ps.setLong(3, gtmUser.getDiscordId());
+
+                ps.executeUpdate();
+            }
+
+        } catch (Exception e) {
+            GTools.printStackError(e);
+        }
+
+    }
+
+    public static void deleteDiscordProfile(UUID uuid) {
+
+        try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
+
+            String query = "SELECT * FROM discord_users WHERE uuid=UNHEX(?);";
+
+            try (PreparedStatement statement = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
+                statement.setString(1, uuid.toString().replaceAll("-", ""));
+                try (ResultSet result = statement.executeQuery()) {
+                    if (result.next()) {
+                        result.deleteRow();
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            GTools.printStackError(e);
+        }
+
+    }
+
+    public static boolean discordProfileExists(long discordId) {
+
+        try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
+
+            String query = "SELECT * FROM discord_users WHERE discord_id=?;";
+
+            try (PreparedStatement statement = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
+                statement.setLong(1, discordId);
+                try (ResultSet result = statement.executeQuery()) {
+                    if (result.next()) {
+                        return true;
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            GTools.printStackError(e);
+        }
+
+        return false;
+
     }
 
 }
