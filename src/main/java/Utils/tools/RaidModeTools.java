@@ -2,6 +2,7 @@ package Utils.tools;
 
 import Utils.Config;
 import Utils.SelfData;
+import Utils.console.Logs;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -12,7 +13,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static Utils.tools.GTools.jda;
-import static Utils.tools.Logs.log;
+import static Utils.console.Logs.log;
 
 public class RaidModeTools {
 

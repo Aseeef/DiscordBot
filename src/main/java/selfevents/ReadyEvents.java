@@ -2,7 +2,7 @@ package selfevents;
 
 import Utils.Config;
 import Utils.SelfData;
-import Utils.tools.Logs;
+import Utils.console.Logs;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -11,7 +11,7 @@ import java.util.TimerTask;
 
 import static Utils.tools.GTools.jda;
 import static Utils.tools.GTools.updateOnlinePlayers;
-import static Utils.tools.Logs.log;
+import static Utils.console.Logs.log;
 
 public class ReadyEvents extends ListenerAdapter {
 

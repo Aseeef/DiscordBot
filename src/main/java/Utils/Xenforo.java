@@ -1,7 +1,7 @@
 package Utils;
 
 import Utils.tools.GTools;
-import Utils.tools.Logs;
+import Utils.console.Logs;
 import me.cadox8.xenapi.XenAPI;
 import me.cadox8.xenapi.exceptions.ArgsErrorException;
 import me.cadox8.xenapi.reply.AuthenticateReply;

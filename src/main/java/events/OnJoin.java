@@ -2,7 +2,7 @@ package events;
 
 import Utils.Config;
 import Utils.Rank;
-import Utils.tools.Logs;
+import Utils.console.Logs;
 import Utils.tools.RaidModeTools;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;

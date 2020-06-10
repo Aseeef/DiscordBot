@@ -2,7 +2,7 @@ package events;
 
 import Utils.Rank;
 import Utils.SelfData;
-import Utils.tools.Logs;
+import Utils.console.Logs;
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;

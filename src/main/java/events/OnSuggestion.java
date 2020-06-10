@@ -14,7 +14,7 @@ import java.util.Objects;
 
 import static Utils.tools.GTools.jda;
 import static Utils.tools.GTools.sendThenDelete;
-import static Utils.tools.Logs.log;
+import static Utils.console.Logs.log;
 import static Utils.tools.SuggestionTools.*;
 
 public class OnSuggestion extends ListenerAdapter {

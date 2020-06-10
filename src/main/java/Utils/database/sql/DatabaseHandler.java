@@ -3,14 +3,14 @@ package Utils.database.sql;
 import Utils.database.sql.component.Database;
 import Utils.database.sql.component.DatabaseCredentials;
 import Utils.tools.GTools;
-import Utils.tools.Logs;
+import Utils.console.Logs;
 import com.zaxxer.hikari.HikariDataSource;
 
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import static Utils.tools.Logs.log;
+import static Utils.console.Logs.log;
 
 /**
  * A generic database handler that holds a HikariCP data source so we can have

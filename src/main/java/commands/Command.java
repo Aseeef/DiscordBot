@@ -14,7 +14,7 @@ import java.util.List;
 
 import static Utils.tools.GTools.jda;
 import static Utils.tools.GTools.sendThenDelete;
-import static Utils.tools.Logs.log;
+import static Utils.console.Logs.log;
 
 public abstract class Command extends ListenerAdapter {
 
@@ -144,7 +144,7 @@ public abstract class Command extends ListenerAdapter {
         DISCORD_ONLY,
     }
 
-    private static String[] getArgs(String msg) {
+    public static String[] getArgs(String msg) {
         if (msg.split(" ").length == 1) return new String[0];
         else return msg.replaceFirst(Config.get().getCommandPrefix() + "[^ ]+ ", "").split(" ");
     }

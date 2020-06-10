@@ -1,11 +1,12 @@
 import Utils.Config;
 import Utils.SelfData;
 import Utils.Xenforo;
-import Utils.database.sql.BaseDatabase;
+import Utils.console.Console;
+import Utils.console.Logs;
 import Utils.database.redis.OnRedisMessageReceive;
+import Utils.database.sql.BaseDatabase;
 import Utils.tools.CommandsTools;
 import Utils.tools.GTools;
-import Utils.tools.Logs;
 import Utils.tools.MineStat;
 import commands.*;
 import events.OnJoin;
@@ -21,25 +22,24 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.grandtheftmc.jedisnew.NewJedisManager;
 import selfevents.CloseEvent;
-import selfevents.ConsoleCommand;
 import selfevents.ReadyEvents;
 
 import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.io.IOException;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
+import static Utils.console.Logs.log;
 import static Utils.tools.GTools.*;
-import static Utils.tools.Logs.log;
 
 public class GTM extends ListenerAdapter {
 
     public static void main (String[] args) {
 
-        // Reads input from console for console commands
-        new Thread(new ConsoleCommand()).start();
-
-        //TODO Runtime.getRuntime().addShutdownHook();
+        // System/Console settings
+        Console.loadShutdownHood();
+        Console.loadConsoleCommands();
 
         // Load config
         log("Loading bot configuration....");

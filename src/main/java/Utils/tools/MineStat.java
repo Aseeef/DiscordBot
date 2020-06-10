@@ -24,13 +24,12 @@ package Utils.tools;
  * @author Lloyd Dilley, Arne Sacnussem
  */
 
-import Utils.tools.GTools;
-import Utils.tools.Logs;
+import Utils.console.Logs;
 
 import java.io.*;
 import java.net.*;
 
-import static Utils.tools.Logs.log;
+import static Utils.console.Logs.log;
 
 public class MineStat
 {

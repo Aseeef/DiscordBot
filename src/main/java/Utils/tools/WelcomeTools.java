@@ -1,9 +1,7 @@
 package Utils.tools;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -16,7 +14,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import static Utils.tools.GTools.jda;
-import static Utils.tools.Logs.log;
+import static Utils.console.Logs.log;
 
 public class WelcomeTools {
 

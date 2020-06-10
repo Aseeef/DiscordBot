@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 
-import static Utils.tools.Logs.log;
+import static Utils.console.Logs.log;
 
 public enum Data {
     SELFDATA("SELFDATA", SelfData.class),

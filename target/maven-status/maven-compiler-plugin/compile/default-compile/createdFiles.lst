@@ -3,6 +3,8 @@ Utils\tools\RaidModeTools.class
 Utils\tools\RaidModeTools$1.class
 Utils\tools\Verification.class
 Utils\tools\UUIDUtil.class
+Utils\console\Logs.class
+commands\HarryCommand.class
 commands\Command.class
 commands\HelpCommand.class
 commands\SuggestionCommand.class
@@ -14,11 +16,13 @@ Utils\database\sql\BaseDatabase.class
 Utils\Rank.class
 Utils\database\sql\component\Database.class
 commands\PingCommand.class
+Utils\console\commands\ConsoleStopCommand.class
 Utils\tools\DAO.class
 Utils\Xenforo.class
 Utils\SelfData.class
 commands\Command$Type.class
 events\OnJoin.class
+Utils\console\Console.class
 Utils\users\Staff.class
 Utils\database\sql\BaseDatabase$1.class
 selfevents\ReadyEvents.class
@@ -30,9 +34,9 @@ Utils\tools\Verification$1.class
 selfevents\CloseEvent.class
 Utils\database\DAO.class
 Utils\database\sql\DatabaseHandler.class
-selfevents\ConsoleCommand.class
+Utils\console\commands\ConsoleCommand.class
+Utils\console\commands\ConsoleHelpCommand.class
 commands\AccountCommand.class
 Utils\database\sql\BaseDatabase$Database.class
 Utils\tools\MineStat.class
-Utils\tools\Logs.class
 Utils\tools\CommandsTools.class

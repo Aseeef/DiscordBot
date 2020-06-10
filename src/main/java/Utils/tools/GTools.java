@@ -1,17 +1,16 @@
 package Utils.tools;
 
 import Utils.Config;
-import Utils.Rank;
 import Utils.SelfData;
+import Utils.console.Logs;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.grandtheftmc.jedisnew.NewJedisManager;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static Utils.tools.Logs.log;
+import static Utils.console.Logs.log;
 
 public class GTools {
 

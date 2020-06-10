@@ -1,9 +1,8 @@
 package Utils.database.redis;
 
-import Utils.Data;
 import Utils.Rank;
 import Utils.tools.GTools;
-import Utils.tools.Logs;
+import Utils.console.Logs;
 import Utils.tools.Verification;
 import Utils.users.GTMUser;
 import net.grandtheftmc.jedisnew.RedisEventListener;
