@@ -21,13 +21,13 @@ public class TicketEvent {
 
     public void onTicketEvent(Alert alert) {
         if (!alert.getAction().equals("new_ticket")) return;
+        Department department = Department.getDepartment(alert.getSupportTicket().getDepartmentId());
+        if (department == null) return;
 
-        Logs.log("[DEBUG] [TicketEvent] Received a new support ticket with title '" + alert.getSupportTicket().getTitle() + "'!");
+        Logs.log("[DEBUG] [TicketEvent] Received a new support ticket with title '" + alert.getSupportTicket().getTitle() + "' in " + department.getDepartmentName() + "!");
 
         TextChannel channel = jda.getGuilds().get(0).getTextChannelById(SelfData.get().getModChannelId());
         if (channel == null) return;
-        Department department = Department.getDepartment(alert.getSupportTicket().getDepartmentId());
-        if (department == null) return;
 
         switch (department) {
 

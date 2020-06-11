@@ -2,26 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/xenforo/events/TicketEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/xenforo/objects/Alert.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/xenforo/objects/tickets/Department.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/xenforo/objects/tickets/SupportTicket.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GTM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GTM.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/Data.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/Data.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/SelfData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/SelfData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/Xenforo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xenforo/Xenforo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Utils/database/DAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/database/DAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/tools/GTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/tools/GTools.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Utils/users/GTMUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utils/users/GTMUser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/AccountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/AccountCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/SuggestionCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/SuggestionCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/events/TicketEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xenforo/events/TicketEvent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/GTM.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/GTM.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Utils/Data.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Utils/Data.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Utils/tools/GTools.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Utils/tools/GTools.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" afterDir="false" />
     </list>
@@ -297,7 +282,14 @@
       <option name="project" value="LOCAL" />
       <updated>1591767628643</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Adds Xenforo integration">
+      <created>1591863917164</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1591863917164</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -334,7 +326,8 @@
     <MESSAGE value="Commands bug fixes" />
     <MESSAGE value="Discord verification system completed!" />
     <MESSAGE value="Improvements to verification system" />
-    <option name="LAST_COMMIT_MESSAGE" value="Improvements to verification system" />
+    <MESSAGE value="Adds Xenforo integration" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adds Xenforo integration" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

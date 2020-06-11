@@ -5,13 +5,10 @@ import Utils.database.sql.BaseDatabase;
 import Utils.tools.GTools;
 import Utils.tools.UUIDUtil;
 import Utils.users.GTMUser;
-import com.fasterxml.jackson.databind.ser.Serializers;
 import me.kbrewster.exceptions.APIException;
 import me.kbrewster.mojangapi.MojangAPI;
-import net.grandtheftmc.jedis.JedisManager;
 import net.grandtheftmc.jedisnew.NewJedisManager;
 import org.json.JSONObject;
-import redis.clients.jedis.Jedis;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -132,13 +129,14 @@ public class DAO {
 
         try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
 
-            String query = "SELECT * FROM users_profile WHERE rank=?;";
+            String query = "SELECT HEX(uuid) FROM user_profile WHERE rank=?;";
 
             try (PreparedStatement statement = conn.prepareStatement(query)) {
                 statement.setString(1, rank.n());
                 try (ResultSet result = statement.executeQuery()) {
                     while (result.next()) {
-                        UUID uuid = UUIDUtil.createUUID(result.getString("uuid")).orElse(null);
+                        String hexStringUUID = result.getString("HEX(uuid)");
+                        UUID uuid = UUIDUtil.createUUID(hexStringUUID).orElse(null);
                         if (uuid != null) {
                             GTMUser gtmUser = GTMUser.getGTMUser(DAO.getDiscordIdFromUUID(uuid)).orElse(null);
                             if (gtmUser != null) gtmUsersWithRank.add(gtmUser);
