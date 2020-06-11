@@ -1,7 +1,6 @@
 package commands;
 
 import Utils.Data;
-import Utils.Rank;
 import Utils.database.DAO;
 import Utils.tools.GTools;
 import Utils.tools.Verification;
@@ -12,9 +11,9 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import org.json.JSONObject;
 
 import java.awt.*;
-import java.util.Timer;
 
 public class AccountCommand extends Command {
 
@@ -70,6 +69,8 @@ public class AccountCommand extends Command {
                 GTools.runAsync( () -> {
                     DAO.deleteDiscordProfile(user.getUuid());
                 });
+
+                DAO.sendToGTM("unverify", new JSONObject().put("uuid", user.getUuid()));
 
                 channel.sendMessage(deleted ? "**You have successfully unlinked your account from the player `" + user.getUsername() + "`!**" : "**Unable to proccess request. It appears something went wrong...!**").queue();
 

@@ -87,7 +87,7 @@ public enum Data {
             GTools.printStackError(e);
         }
 
-        log("Edited " + type.getDataName() + " data in " + number + ".json");
+        //log("Edited " + type.getDataName() + " data in " + number + ".json");
 
     }
 

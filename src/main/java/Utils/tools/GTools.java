@@ -7,7 +7,17 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.grandtheftmc.jedisnew.NewJedisManager;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.json.JSONObject;
 
+import java.io.*;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import static Utils.console.Logs.log;
@@ -102,6 +112,21 @@ public class GTools {
 
     public static void runAsync(Runnable target) {
         new Thread(target).start();
+    }
+
+    public static JSONObject getJsonFromApi(String url) {
+        try (InputStream is = new URL(url).openStream()) {
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder();
+            int cp;
+            while ((cp = rd.read()) != -1) {
+                sb.append((char) cp);
+            }
+            return new JSONObject(sb.toString());
+        } catch (IOException e) {
+            GTools.printStackError(e);
+            return null;
+        }
     }
 
 }

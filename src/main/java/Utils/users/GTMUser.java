@@ -15,7 +15,7 @@ import static Utils.tools.GTools.jda;
 public class GTMUser {
 
     /** A maximum of how often should the player's information be updated in minutes */
-    private static final int UPDATE_TIME = 15;
+    private static final int UPDATE_TIME = 30;
 
     private UUID uuid;
     private String username;
@@ -102,7 +102,7 @@ public class GTMUser {
         }
 
         if (!this.getDiscordMember().getRoles().contains(this.rank.getRole())) {
-            if (this.rank.isHigherOrEqualTo(Rank.HELPER)) {
+            if (this.rank.isHigherOrEqualTo(Rank.HELPER) || this.getDiscordMember().isOwner()) {
                 System.out.println("High");
                 // msg admins TODO
             } else {
@@ -111,7 +111,7 @@ public class GTMUser {
                 // remove old role(s)
                 for (Rank r : Rank.values()) {
                     if (r != rank && this.getDiscordMember().getRoles().contains(r.getRole())) {
-                        if (rank.isHigherOrEqualTo(Rank.HELPER)) {
+                        if (rank.isHigherOrEqualTo(Rank.HELPER) || this.getDiscordMember().isOwner()) {
                             System.out.println("High 2");
                             // msg admins TODO
                         } else this.getDiscordMember().getGuild().removeRoleFromMember(this.getDiscordId(), r.getRole()).queue();
@@ -121,7 +121,9 @@ public class GTMUser {
         }
 
         if (!this.getDiscordMember().getEffectiveName().equals(this.username)) {
-            this.getDiscordMember().modifyNickname(username).queue();
+            if (!this.rank.isHigherOrEqualTo(Rank.HELPER) && !this.getDiscordMember().isOwner()) {
+                this.getDiscordMember().modifyNickname(username).queue();
+            }
         }
     }
 

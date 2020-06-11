@@ -12,6 +12,8 @@ public class SelfData {
     private long raidAlertChannelId;
     private long ruleAgreeChannelId;
     private long ruleAgreeMessageId;
+    private long modChannelId;
+    private long lastTicketRefreshTime;
 
     private static SelfData data;
 
@@ -22,7 +24,9 @@ public class SelfData {
     SelfData (long suggestionChannelId, long playerCountChannelId, String previousBotName, long previousAvatarEdited,
               long prevSuggestHelpMsgId, long prevSuggestEmbedId, long prevSuggestHelpChannelId,
               long raidAlertChannelId,
-              long ruleAgreeChannelId, long ruleAgreeMessageId) {
+              long ruleAgreeChannelId, long ruleAgreeMessageId,
+              long modChannelId,
+              long lastTicketRefreshTime) {
 
         this.suggestionChannelId = suggestionChannelId;
         this.playerCountChannelId = playerCountChannelId;
@@ -34,6 +38,8 @@ public class SelfData {
         this.raidAlertChannelId = raidAlertChannelId;
         this.ruleAgreeChannelId = ruleAgreeChannelId;
         this.ruleAgreeMessageId = ruleAgreeMessageId;
+        this.modChannelId = modChannelId;
+        this.lastTicketRefreshTime = lastTicketRefreshTime;
 
     }
 
@@ -135,4 +141,21 @@ public class SelfData {
         Data.storeData(Data.SELFDATA, this);
     }
 
+    public long getModChannelId() {
+        return modChannelId;
+    }
+
+    public void setModChannelId(long modChannelId) {
+        this.modChannelId = modChannelId;
+        Data.storeData(Data.SELFDATA, this);
+    }
+
+    public long getLastTicketRefreshTime() {
+        return lastTicketRefreshTime;
+    }
+
+    public void setLastTicketRefreshTime(long lastTicketRefreshTime) {
+        this.lastTicketRefreshTime = lastTicketRefreshTime;
+        Data.storeData(Data.SELFDATA, this);
+    }
 }

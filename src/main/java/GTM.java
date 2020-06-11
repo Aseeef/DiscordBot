@@ -1,6 +1,6 @@
 import Utils.Config;
 import Utils.SelfData;
-import Utils.Xenforo;
+import xenforo.Xenforo;
 import Utils.console.Console;
 import Utils.console.Logs;
 import Utils.database.redis.OnRedisMessageReceive;
@@ -27,7 +27,6 @@ import selfevents.ReadyEvents;
 import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.io.IOException;
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import static Utils.console.Logs.log;
@@ -56,17 +55,17 @@ public class GTM extends ListenerAdapter {
 
         // Load JDA & Xenforo and start bot
         loadJDA();
-        //loadXen();
+        loadXen();
 
 
 
     }
 
     private static void loadXen() {
-        log("Initializing Xenforo Addon...");
-
-        new XenAPI("c1230035-cf85-4e3d-add8-f4457b641d1e");
-        Xenforo.login();
+        log("Initializing Xenforo API...");
+        new XenAPI("c1230035-cf85-4e3d-add8-f4457b641d1e", "https://grandtheftmc.net/");
+        //Xenforo.login();
+        Xenforo.startTicketPolling();
     }
 
     private static void loadJDA() {
@@ -119,6 +118,7 @@ public class GTM extends ListenerAdapter {
             jda.addEventListener(new RebootCommand());
             jda.addEventListener(new PingCommand());
             jda.addEventListener(new HarryCommand());
+            jda.addEventListener(new ModCommand());
 
             // Self user settings functions to check if there was config change to prevent
             // unnecessary calls to the discord api which may result in us getting rate limited

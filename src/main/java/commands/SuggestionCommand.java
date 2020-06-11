@@ -46,6 +46,7 @@ public class SuggestionCommand extends Command {
                 Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(args[1]));
                 getSuggestionsChannel().deleteMessageById(suggestion.getId()).queue();
                 Data.deleteData(Data.SUGGESTIONS, Integer.parseInt(args[1]));
+                sendThenDelete(channel, "**Suggestion #" + Integer.parseInt(args[1]) + " has been deleted!**");
             }
             else {
                 sendThenDelete(channel, "**Suggestion not found. Please check your command!**");
