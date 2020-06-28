@@ -1,8 +1,8 @@
-package Utils.tools;
+package utils.tools;
 
-import Utils.Config;
-import Utils.SelfData;
-import Utils.console.Logs;
+import utils.confighelpers.Config;
+import utils.SelfData;
+import utils.console.Logs;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -12,8 +12,8 @@ import javax.annotation.Nullable;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static Utils.tools.GTools.jda;
-import static Utils.console.Logs.log;
+import static utils.tools.GTools.jda;
+import static utils.console.Logs.log;
 
 public class RaidModeTools {
 
@@ -21,8 +21,8 @@ public class RaidModeTools {
     // raidMode[1] - Whether it was manually triggered (true = yes)
     public static boolean[] raidMode = {false, false};
 
-    private static final String raidModePunishType = Config.get().getRaidModePunishType();
-    private static final String raidModeMessage = Config.get().getRaidModeMessage();
+    private static final String raidModePunishType = Config.get().getRaidmodeSettings().getRaidModePunishType();
+    private static final String raidModeMessage = Config.get().getRaidmodeSettings().getRaidModeMessage();
 
     // Timer task to disable raid mode once it begins
     private static Timer task;
@@ -179,7 +179,7 @@ public class RaidModeTools {
                         disableRaidMode(null);
                     }
                 },
-                1000 * 60 * Config.get().getRaidModeDisable()
+                1000 * 60 * Config.get().getRaidmodeSettings().getRaidModeDisable()
         );
     }
 

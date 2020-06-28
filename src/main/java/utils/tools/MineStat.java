@@ -1,4 +1,4 @@
-package Utils.tools;
+package utils.tools;
 
 /*
  * MineStat.java - A Minecraft server status checker
@@ -24,12 +24,12 @@ package Utils.tools;
  * @author Lloyd Dilley, Arne Sacnussem
  */
 
-import Utils.console.Logs;
+import utils.console.Logs;
 
 import java.io.*;
 import java.net.*;
 
-import static Utils.console.Logs.log;
+import static utils.console.Logs.log;
 
 public class MineStat
 {

@@ -1,4 +1,4 @@
-package Utils.tools;
+package utils.tools;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -13,8 +13,8 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 
-import static Utils.tools.GTools.jda;
-import static Utils.console.Logs.log;
+import static utils.tools.GTools.jda;
+import static utils.console.Logs.log;
 
 public class WelcomeTools {
 

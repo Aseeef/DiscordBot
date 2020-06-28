@@ -1,14 +1,5 @@
-import Utils.Config;
-import Utils.SelfData;
-import xenforo.Xenforo;
-import Utils.console.Console;
-import Utils.console.Logs;
-import Utils.database.redis.OnRedisMessageReceive;
-import Utils.database.sql.BaseDatabase;
-import Utils.tools.CommandsTools;
-import Utils.tools.GTools;
-import Utils.tools.MineStat;
 import commands.*;
+import events.OnGuildMessage;
 import events.OnJoin;
 import events.OnReactRules;
 import events.OnSuggestion;
@@ -23,24 +14,33 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.grandtheftmc.jedisnew.NewJedisManager;
 import selfevents.CloseEvent;
 import selfevents.ReadyEvents;
+import utils.SelfData;
+import utils.confighelpers.Config;
+import utils.console.Console;
+import utils.database.redis.OnRedisMessageReceive;
+import utils.database.sql.BaseDatabase;
+import utils.tools.CommandsTools;
+import utils.tools.GTools;
+import utils.tools.MineStat;
+import xenforo.Xenforo;
 
 import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import static Utils.console.Logs.log;
-import static Utils.tools.GTools.*;
+import static utils.console.Logs.log;
+import static utils.tools.GTools.*;
 
 public class GTM extends ListenerAdapter {
 
     public static void main (String[] args) {
 
         // System/Console settings
-        Console.loadShutdownHood();
+        Console.loadShutdownHook();
         Console.loadConsoleCommands();
 
-        // Load config
+        // Load utils.config
         log("Loading bot configuration....");
         Config.load();
 
@@ -57,9 +57,8 @@ public class GTM extends ListenerAdapter {
         loadJDA();
         loadXen();
 
-
-
     }
+
 
     private static void loadXen() {
         log("Initializing Xenforo API...");
@@ -74,7 +73,7 @@ public class GTM extends ListenerAdapter {
 
         // Initialize GTM MineStat
         log("Loading MineStat data on GTM...");
-        gtm = new MineStat(Config.get().getServerIp(), Config.get().getServerPort());
+        gtm = new MineStat(Config.get().getMineStatSettings().getServerIp(), Config.get().getMineStatSettings().getServerPort());
 
         try {
             jda = JDABuilder.createDefault(Config.get().getBotToken())
@@ -106,6 +105,7 @@ public class GTM extends ListenerAdapter {
             jda.addEventListener(new CloseEvent());
             jda.addEventListener(new OnJoin());
             jda.addEventListener(new OnReactRules());
+            jda.addEventListener(new OnGuildMessage());
 
             // JDA Commands
             jda.addEventListener(new SuggestionCommand());
@@ -119,8 +119,9 @@ public class GTM extends ListenerAdapter {
             jda.addEventListener(new PingCommand());
             jda.addEventListener(new HarryCommand());
             jda.addEventListener(new ModCommand());
+            jda.addEventListener(new AnnoyCommand());
 
-            // Self user settings functions to check if there was config change to prevent
+            // Self user settings functions to check if there was utils.config change to prevent
             // unnecessary calls to the discord api which may result in us getting rate limited
             setBotName();
             setAvatar();
@@ -145,9 +146,9 @@ public class GTM extends ListenerAdapter {
     }
 
     private static void setBotName() {
-        // If previous bot name doesn't match config bot name, update bot name
+        // If previous bot name doesn't match utils.config bot name, update bot name
         if (!Config.get().getBotName().equals(SelfData.get().getPreviousBotName())) {
-            log("Detected config name change! Updating bot name...");
+            log("Detected utils.config name change! Updating bot name...");
             jda.getSelfUser().getManager().setName(Config.get().getBotName()).queueAfter(5, TimeUnit.SECONDS);
             SelfData.get().setPreviousBotName(Config.get().getBotName());
         }
@@ -155,30 +156,44 @@ public class GTM extends ListenerAdapter {
 
     private static void loadMySQL() {
         BaseDatabase.getInstance(BaseDatabase.Database.USERS).init(
-                Config.get().getSqlHostnameUsers(),
-                Config.get().getSqlPortUsers(),
-                Config.get().getSqlDatabaseUsers(),
-                Config.get().getSqlUsernameUsers(),
-                Config.get().getSqlPasswordUsers()
+                Config.get().getUsersDatabase().getHostname(),
+                Config.get().getUsersDatabase().getPort(),
+                Config.get().getUsersDatabase().getDatabase(),
+                Config.get().getUsersDatabase().getUsername(),
+                Config.get().getUsersDatabase().getPassword()
         );
         BaseDatabase.getInstance(BaseDatabase.Database.PLAN).init(
-                Config.get().getSqlHostnamePlan(),
-                Config.get().getSqlPortPlan(),
-                Config.get().getSqlDatabasePlan(),
-                Config.get().getSqlUsernamePlan(),
-                Config.get().getSqlPasswordPlan()
+                Config.get().getPlanDatabase().getHostname(),
+                Config.get().getPlanDatabase().getPort(),
+                Config.get().getPlanDatabase().getDatabase(),
+                Config.get().getPlanDatabase().getUsername(),
+                Config.get().getPlanDatabase().getPassword()
+        );
+        BaseDatabase.getInstance(BaseDatabase.Database.BANS).init(
+                Config.get().getBansDatabase().getHostname(),
+                Config.get().getBansDatabase().getPort(),
+                Config.get().getBansDatabase().getDatabase(),
+                Config.get().getBansDatabase().getUsername(),
+                Config.get().getBansDatabase().getPassword()
+        );
+        BaseDatabase.getInstance(BaseDatabase.Database.XEN).init(
+                Config.get().getXenDatabase().getHostname(),
+                Config.get().getXenDatabase().getPort(),
+                Config.get().getXenDatabase().getDatabase(),
+                Config.get().getXenDatabase().getUsername(),
+                Config.get().getXenDatabase().getPassword()
         );
     }
 
     private static void loadJedis() {
         jedisManager = new NewJedisManager(
-                Config.get().getRedisHostname(),
-                Config.get().getRedisPort(),
-                Config.get().getRedisPassword()
+                Config.get().getRedisDatabase().getHostname(),
+                Config.get().getRedisDatabase().getPort(),
+                Config.get().getRedisDatabase().getPassword()
         ).addRedisEventListener(new OnRedisMessageReceive());
         jedisManager.init();
 
-        Logs.log("Established connection to Redis!");
+        log("Established connection to Redis!");
     }
 
 }

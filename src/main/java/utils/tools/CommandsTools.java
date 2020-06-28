@@ -1,6 +1,6 @@
-package Utils.tools;
+package utils.tools;
 
-import Utils.Config;
+import utils.confighelpers.Config;
 import commands.Command;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;

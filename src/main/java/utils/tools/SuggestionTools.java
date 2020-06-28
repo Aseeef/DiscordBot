@@ -1,19 +1,18 @@
-package Utils.tools;
+package utils.tools;
 
-import Utils.SelfData;
-import Utils.Suggestions;
+import utils.SelfData;
+import utils.Suggestions;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
 import java.util.concurrent.TimeUnit;
 
-import static Utils.tools.GTools.jda;
-import static Utils.tools.GTools.userById;
+import static utils.tools.GTools.jda;
+import static utils.tools.GTools.userById;
 
 public class SuggestionTools {
 

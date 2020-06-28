@@ -1,34 +1,33 @@
-package Utils;
+package utils;
 
-import Utils.users.GTMUser;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+import utils.confighelpers.Config;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static Utils.tools.GTools.jda;
+import static utils.tools.GTools.jda;
 
 public enum Rank {
 
-    MANAGER ("MANAGER", Config.get().getManager()),
-    DEV ("DEV", Config.get().getDeveloper()),
-    ADMIN ("ADMIN", Config.get().getAdmin()),
-    BUILDER ("BUILDER", Config.get().getBuilder()),
-    SRMOD ("SRMOD", Config.get().getSrMod()),
-    MOD ("MOD", Config.get().getMod()),
-    HELPER ("HELPER", Config.get().getHelper()),
-    BUILDTEAM ("BUILDTEAM", Config.get().getBuildTeam()),
-    YOUTUBER ("YOUTUBE", Config.get().getYoutuber()),
-    SUPREME ("SUPREME", Config.get().getSupreme()),
-    SPONSOR ("SPONSOR", Config.get().getSponsor()),
-    ELITE ("ELITE", Config.get().getElite()),
-    PREMIUM ("PREMIUM", Config.get().getPremium()),
-    VIP ("VIP", Config.get().getVip()),
-    NORANK ("DEFAULT", Config.get().getNoRank()),
-    UNVERIFIED (null, Config.get().getUnverified()),
+    MANAGER ("MANAGER", Config.get().getRankSettings().getManager()),
+    DEV ("DEV", Config.get().getRankSettings().getDeveloper()),
+    ADMIN ("ADMIN", Config.get().getRankSettings().getAdmin()),
+    BUILDER ("BUILDER", Config.get().getRankSettings().getBuilder()),
+    SRMOD ("SRMOD", Config.get().getRankSettings().getSrMod()),
+    MOD ("MOD", Config.get().getRankSettings().getMod()),
+    HELPER ("HELPER", Config.get().getRankSettings().getHelper()),
+    BUILDTEAM ("BUILDTEAM", Config.get().getRankSettings().getBuildTeam()),
+    YOUTUBER ("YOUTUBE", Config.get().getRankSettings().getYoutuber()),
+    SUPREME ("SUPREME", Config.get().getRankSettings().getSupreme()),
+    SPONSOR ("SPONSOR", Config.get().getRankSettings().getSponsor()),
+    ELITE ("ELITE", Config.get().getRankSettings().getElite()),
+    PREMIUM ("PREMIUM", Config.get().getRankSettings().getPremium()),
+    VIP ("VIP", Config.get().getRankSettings().getVip()),
+    NORANK ("DEFAULT", Config.get().getRankSettings().getNoRank()),
+    UNVERIFIED (null, Config.get().getRankSettings().getUnverified()),
     ;
 
     /** rank as known in the database */

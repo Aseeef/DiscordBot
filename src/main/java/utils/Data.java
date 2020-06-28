@@ -1,20 +1,20 @@
-package Utils;
+package utils;
 
-import Utils.tools.GTools;
-import Utils.users.Staff;
-import Utils.users.GTMUser;
+import utils.tools.GTools;
+import utils.users.GTMUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-import static Utils.console.Logs.log;
+import static utils.console.Logs.log;
 
 public enum Data {
     SELFDATA("SELFDATA", SelfData.class),
     SUGGESTIONS("SUGGESTIONS", Suggestions.class),
     USER("USER", GTMUser.class),
-    STAFF("STAFF", Staff.class),
     ;
 
     private String dataName;
@@ -103,6 +103,19 @@ public enum Data {
         }
 
         return null;
+    }
+
+    public static List<Long> getDataList(Data type) {
+        File dir = new File("data");
+        String[] dirArray = dir.list();
+        if (dirArray == null || dirArray.length == 0) return null;
+
+        List<Long> list = new ArrayList<>();
+        for (String fileName : dirArray) {
+            fileName = fileName.replace(".json", "");
+            list.add(Long.parseLong(fileName));
+        }
+        return list;
     }
 
     public static Object obtainData(Data type) {
