@@ -1,10 +1,15 @@
 package xenforo.events;
 
-import Utils.Rank;
-import Utils.SelfData;
-import Utils.console.Logs;
-import Utils.database.DAO;
-import Utils.users.GTMUser;
+import utils.Rank;
+import utils.SelfData;
+import utils.console.Logs;
+import utils.database.DiscordDAO;
+import utils.database.LitebansDAO;
+import utils.database.XenforoDAO;
+import utils.database.sql.BaseDatabase;
+import utils.litebans.Ban;
+import utils.tools.GTools;
+import utils.users.GTMUser;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -13,66 +18,96 @@ import xenforo.objects.tickets.SupportTicket;
 import xenforo.objects.tickets.Department;
 
 import java.awt.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import static Utils.tools.GTools.jda;
+import static utils.tools.GTools.jda;
 
 public class TicketEvent {
 
+    // run async
     public void onTicketEvent(Alert alert) {
-        if (!alert.getAction().equals("new_ticket")) return;
-        Department department = Department.getDepartment(alert.getSupportTicket().getDepartmentId());
-        if (department == null) return;
+        GTools.runAsync( () -> {
 
-        Logs.log("[DEBUG] [TicketEvent] Received a new support ticket with title '" + alert.getSupportTicket().getTitle() + "' in " + department.getDepartmentName() + "!");
+            if (!alert.getAction().equals("new_ticket")) return;
 
-        TextChannel channel = jda.getGuilds().get(0).getTextChannelById(SelfData.get().getModChannelId());
-        if (channel == null) return;
+            Department department = alert.getSupportTicket().getDepartment();
+            if (department == null) return;
 
-        switch (department) {
+            Logs.log("[DEBUG] [TicketEvent] Received a new support ticket with title '" + alert.getSupportTicket().getTitle() + "' in " + department.getDepartmentName() + "!");
 
-            case PUNISHMENT_APPEALS: {
-                // TODO: Directly use litebans to get banning staff
-                String banStaff = alert.getSupportTicket().getTicketFields().getString("staffban");
-                GTMUser gtmUser = GTMUser.getGTMUser(DAO.getDiscordIdFromName(banStaff)).orElse(null);
-                MessageEmbed embed = generateAppealsEmbed(gtmUser, alert.getSupportTicket());
-                channel.sendMessage(embed).queue();
-                if (gtmUser != null && gtmUser.getRank().isHigherOrEqualTo(Rank.MOD))
-                    gtmUser.getDiscordMember().getUser().openPrivateChannel().queue( (privateChannel) ->
-                        privateChannel.sendMessage(embed).queue()
-                    );
-                break;
-            }
+            TextChannel channel = jda.getGuilds().get(0).getTextChannelById(SelfData.get().getModChannelId());
+            if (channel == null) return;
 
-            case STAFF_REPORTS: {
-                // TODO: Alternative for get a list of staff - Staff.class?
-                List<GTMUser> managers = DAO.getAllWithRank(Rank.MANAGER);
-                if (managers == null || managers.size() == 0) return;
+            switch (department) {
 
-                for (GTMUser manager : managers) {
-                    manager.getDiscordMember().getUser().openPrivateChannel().queue( (privateChannel) -> {
-                        privateChannel.sendMessage(generateStaffReportEmbed(alert.getSupportTicket())).queue();
-                    });
+                case PUNISHMENT_APPEALS: {
+                    try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
+
+                            String username = alert.getSupportTicket().getTicketFields().getString("username");
+                            Ban ban = null;
+                            try (Connection conn2 = BaseDatabase.getInstance(BaseDatabase.Database.BANS).getConnection()) {
+                                ban = LitebansDAO.getBanByPlayer(conn2, username);
+                            } catch (SQLException e) {
+                                GTools.printStackError(e);
+                            }
+
+                            String banStaff;
+                            if (ban == null || !ban.isActive()) {
+                                banStaff = alert.getSupportTicket().getTicketFields().getString("staffban");
+                            } else banStaff = ban.getBanName();
+
+                            GTMUser gtmUser = GTMUser.getGTMUser(DiscordDAO.getDiscordIdFromName(conn, banStaff)).orElse(null);
+                            MessageEmbed embed = generateAppealsEmbed(gtmUser, alert.getSupportTicket(), ban);
+                            channel.sendMessage(embed).queue();
+                            if (gtmUser != null && gtmUser.getRank().isHigherOrEqualTo(Rank.MOD))
+                                gtmUser.getDiscordMember().getUser().openPrivateChannel().queue((privateChannel) ->
+                                        privateChannel.sendMessage(embed).queue()
+                                );
+                    } catch (SQLException e) {
+                        GTools.printStackError(e);
+                    }
+                    break;
                 }
+
+                case STAFF_REPORTS: {
+                    try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
+                        // TODO: Alternative for get a list of staff - Staff.class?
+                        List<GTMUser> managers = DiscordDAO.getAllWithRank(conn, Rank.MANAGER);
+                        if (managers == null || managers.size() == 0) return;
+
+                        for (GTMUser manager : managers) {
+                            manager.getDiscordMember().getUser().openPrivateChannel().queue((privateChannel) -> {
+                                privateChannel.sendMessage(generateStaffReportEmbed(conn, alert.getSupportTicket())).queue();
+                            });
+                        }
+                    } catch (SQLException e) {
+                        GTools.printStackError(e);
+                    }
+                }
+
+                case PURCHASES:
+
+                case OTHER_SUPPORT:
+
+                case PLAYER_REPORTS:
+
+                case BUY_AN_UNBAN: {
+                    break;
+                }
+
             }
 
-            case PURCHASES:
-
-            case OTHER_SUPPORT:
-
-            case PLAYER_REPORTS:
-
-            case BUY_AN_UNBAN: {
-                break;
-            }
-
-        }
-
+        });
     }
 
-    public MessageEmbed generateStaffReportEmbed(SupportTicket ticket) {
+    private MessageEmbed generateStaffReportEmbed(Connection conn, SupportTicket ticket) {
         String reportedStaff = ticket.getTicketFields().getString("i:1993");
-        GTMUser gtmUser = GTMUser.getGTMUser(DAO.getDiscordIdFromName(reportedStaff)).orElse(null);
+        GTMUser gtmUser = GTMUser.getGTMUser(DiscordDAO.getDiscordIdFromName(conn, reportedStaff)).orElse(null);
 
         EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("Support Ticket Notification")
@@ -81,7 +116,7 @@ public class TicketEvent {
                 .addField("**Ticket Title:**", ticket.getTitle(), false)
                 .addField("**Username:**", ticket.getTicketFields().getString("username"), false)
                 .addField("**Reported Staff:**", reportedStaff, false)
-                .addField("**Ticket Link**", generateTicketLink(ticket), false);
+                .addField("**Ticket Link**", ticket.getTicketLink(), false);
         if (gtmUser != null)
             embed.setThumbnail(gtmUser.getDiscordMember().getUser().getAvatarUrl());
 
@@ -89,13 +124,13 @@ public class TicketEvent {
     }
 
 
-    public MessageEmbed generateAppealsEmbed(GTMUser gtmUser, SupportTicket ticket) {
+    private MessageEmbed generateAppealsEmbed(GTMUser gtmUser, SupportTicket ticket, Ban ban) {
         String staff;
         if (gtmUser == null)
             staff = "an unknown staff member";
 
         else if (!gtmUser.getRank().isHigherOrEqualTo(Rank.MOD))
-            staff = gtmUser.getUsername() + " however they are no longer a moderator";
+            staff = gtmUser.getUsername() + ", however they are no longer a moderator+";
 
         else staff = gtmUser.getDiscordMember().getAsMention();
 
@@ -105,23 +140,45 @@ public class TicketEvent {
                 .setDescription("Received a new support ticket for " + staff + "!")
                 .addField("**Ticket Title:**", ticket.getTitle(), false)
                 .addField("**Username:**", ticket.getTicketFields().getString("username"), false)
-                .addField("**Ban Reason:**", ticket.getTicketFields().getString("banReason"), false)
-                .addField("**Banning Staff Member**", ticket.getTicketFields().getString("staffban"), false)
-                .addField("**Ticket Link**", generateTicketLink(ticket), false);
+                .addField("**Ban Reason:**", ticket.getTicketFields().getString("banReason"), false);
+
+        if (ban != null) {
+            embed.addField("**Ban Timestamp:**", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(ban.getBanTime())), false)
+                    .addField("**Banning Staff Member:**", ban.getBanName(), false);
+        } else embed.addField("**Banning Staff Member:**", ticket.getTicketFields().getString("staffban"), false);
+        embed.addField("**Ticket Link**", ticket.getTicketLink(), false);
+
+        String prevAppealLinks = getPreviousAppeals(ticket.getTicketFields().getString("username"), ticket.getSupportTicketId());
+        if (prevAppealLinks != null) embed.addField("**Previous Appeals**", prevAppealLinks, false);
         if (gtmUser != null)
             embed.setThumbnail(gtmUser.getDiscordMember().getUser().getAvatarUrl());
 
         return embed.build();
     }
 
-    public String generateTicketLink(SupportTicket ticket) {
-        return new StringBuilder()
-                .append("https://grandtheftmc.net/support-tickets/")
-                .append(ticket.getTitle().replace(" ", "-").replaceAll("[^a-zA-Z0-9\\-]", ""))
-                .append(".")
-                .append(ticket.getSupportTicketId())
-                .append("/")
-                .toString();
+    private String getPreviousAppeals(String username, int currentTicketId) {
+        List<String> links = new ArrayList<>();
+
+        List<String> names = DiscordDAO.getAllUsernames(username);
+        if (names == null || names.size() == 0) return null;
+        try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.XEN).getConnection()) {
+            for (String u : names) {
+                XenforoDAO.getAllTicketsFrom(conn, u).forEach((ticket) -> {
+                    if (ticket.getDepartment() == Department.PUNISHMENT_APPEALS && ticket.getSupportTicketId() != currentTicketId)
+                        links.add(ticket.getTicketLink());
+                });
+            }
+        } catch (SQLException e) {
+            GTools.printStackError(e);
+        }
+
+        // return links
+        if (links.size() == 0) return null;
+        StringBuilder sb = new StringBuilder();
+        for (String link : links) {
+            sb.append(link).append("\n");
+        }
+        return sb.toString();
     }
 
 }

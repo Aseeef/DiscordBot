@@ -1,9 +1,14 @@
 package xenforo.objects.tickets;
 
-import Utils.console.Logs;
 import com.fasterxml.jackson.annotation.*;
 import org.json.JSONObject;
+import utils.console.Logs;
+import utils.database.XenforoDAO;
+import utils.database.sql.BaseDatabase;
+import utils.tools.GTools;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -132,6 +137,11 @@ public class SupportTicket {
         return departmentId;
     }
 
+    @JsonIgnore
+    public Department getDepartment() {
+        return Department.getDepartment(this.departmentId);
+    }
+
     public int getAssignedUserId() {
         return assignedUserId;
     }
@@ -146,6 +156,16 @@ public class SupportTicket {
 
     public long getLastUpdate() {
         return lastUpdate;
+    }
+
+    @JsonIgnore
+    public String getMessage(int messageId) {
+        try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.XEN).getConnection()) {
+            return XenforoDAO.getTicketMessage(conn, this.supportTicketId, messageId);
+        } catch (SQLException e) {
+            GTools.printStackError(e);
+        }
+        return null;
     }
 
     public long getLastMessageDate() {
@@ -166,7 +186,7 @@ public class SupportTicket {
 
     @JsonIgnore
     // have to convert because this is the format we get for ticket fields...
-    // a:3:{"username";"777kayoh";"servers";a:3:{"minesantos";"minesantos";"sanktburg";"sanktburg";"new_mineport";"new_mineport";}"transactionID";"N/A";}
+    // a:3:{s:8:"username";s:8:"777kayoh";s:7:"servers";a:3:{s:10:"minesantos";s:10:"minesantos";s:9:"sanktburg";s:9:"sanktburg";s:12:"new_mineport";s:12:"new_mineport";}s:13:"transactionID";s:3:"N/A";}
     // a:4:{s:11:"insertproof";s:3:"Yes";s:5:"Abuse";s:3:"Yes";s:8:"username";s:12:"JustSkilz_NL";i:1993;s:6:"Snowwe";}
     private static JSONObject convertToMap(String string) {
         JSONObject fieldMap = new JSONObject();
@@ -203,5 +223,16 @@ public class SupportTicket {
         }
 
         return fieldMap;
+    }
+
+    @JsonIgnore
+    public String getTicketLink() {
+        return new StringBuilder()
+                .append("https://grandtheftmc.net/support-tickets/")
+                .append(this.getTitle().replace(" ", "-").replaceAll("[^a-zA-Z0-9\\-]", ""))
+                .append(".")
+                .append(this.getSupportTicketId())
+                .append("/")
+                .toString();
     }
 }

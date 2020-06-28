@@ -1,8 +1,8 @@
 package xenforo;
 
-import Utils.SelfData;
-import Utils.console.Logs;
-import Utils.tools.GTools;
+import utils.SelfData;
+import utils.console.Logs;
+import utils.tools.GTools;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.cadox8.xenapi.XenAPI;
@@ -14,11 +14,9 @@ import me.cadox8.xenapi.request.RequestParam;
 import me.cadox8.xenapi.request.RequestType;
 import me.cadox8.xenapi.utils.Callback;
 import org.json.JSONObject;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import xenforo.events.TicketEvent;
 import xenforo.objects.Alert;
 
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Xenforo {
@@ -40,12 +38,13 @@ public class Xenforo {
                     Logs.log(result.toString());
                 }
             } catch (ArgsErrorException e) {
-                e.printStackTrace();
+                GTools.printStackError(e);
             }
         });
     }
 
     public static void startTicketPolling() {
+
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
