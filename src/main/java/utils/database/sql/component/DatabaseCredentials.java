@@ -1,4 +1,4 @@
-package Utils.database.sql.component;
+package utils.database.sql.component;
 
 /**
  * Represents an immutable data object containing information about a connection

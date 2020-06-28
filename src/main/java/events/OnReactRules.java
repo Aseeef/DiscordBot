@@ -1,8 +1,8 @@
 package events;
 
-import Utils.Rank;
-import Utils.SelfData;
-import Utils.console.Logs;
+import utils.Rank;
+import utils.SelfData;
+import utils.console.Logs;
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -10,8 +10,8 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-import static Utils.tools.GTools.jda;
-import static Utils.tools.WelcomeTools.getWelcomeEmbed;
+import static utils.tools.GTools.jda;
+import static utils.tools.WelcomeTools.getWelcomeEmbed;
 
 public class OnReactRules extends ListenerAdapter {
 

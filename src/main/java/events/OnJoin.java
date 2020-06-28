@@ -1,9 +1,9 @@
 package events;
 
-import Utils.Config;
-import Utils.Rank;
-import Utils.console.Logs;
-import Utils.tools.RaidModeTools;
+import utils.confighelpers.Config;
+import utils.Rank;
+import utils.console.Logs;
+import utils.tools.RaidModeTools;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -12,16 +12,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static Utils.tools.RaidModeTools.*;
+import static utils.tools.RaidModeTools.*;
 
 public class OnJoin extends ListenerAdapter {
 
     private static HashMap<Member, Long> newJoins = new HashMap<>();
     private static Member previousJoin;
 
-    private int raidModeTime = Config.get().getRaidModeTime();
-    private int raidModePlayers = Config.get().getRaidModePlayers();
-    private int raidModePunishTime = Config.get().getRaidModePunishTime();
+    private int raidModeTime = Config.get().getRaidmodeSettings().getRaidModeTime();
+    private int raidModePlayers = Config.get().getRaidmodeSettings().getRaidModePlayers();
+    private int raidModePunishTime = Config.get().getRaidmodeSettings().getRaidModePunishTime();
 
     public void onGuildMemberJoin (GuildMemberJoinEvent e) {
 
@@ -31,7 +31,7 @@ public class OnJoin extends ListenerAdapter {
         e.getGuild().addRoleToMember(member, Rank.UNVERIFIED.getRole()).queue( (callback) -> {
 
             // Start a timer to kick user if the don't agree to rules with in 15 minutes (by checking if they still have the unverified role)
-            e.getGuild().retrieveMember(e.getUser()).queueAfter(Config.get().getRaidModeTimeToAccept(), TimeUnit.MINUTES, (kickableMember) -> {
+            e.getGuild().retrieveMember(e.getUser()).queueAfter(Config.get().getRaidmodeSettings().getRaidModeTimeToAccept(), TimeUnit.MINUTES, (kickableMember) -> {
                 if (Rank.hasRolePerms(kickableMember, Rank.UNVERIFIED)) {
                     // Note: This is also a bot prevention method that prevents bots from mass DMing members
                     kickableMember.getUser().openPrivateChannel().queue((privateChannel ->

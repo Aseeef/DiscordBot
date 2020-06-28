@@ -1,16 +1,16 @@
-package Utils.database.sql;
+package utils.database.sql;
 
-import Utils.database.sql.component.Database;
-import Utils.database.sql.component.DatabaseCredentials;
-import Utils.tools.GTools;
-import Utils.console.Logs;
+import utils.database.sql.component.Database;
+import utils.database.sql.component.DatabaseCredentials;
+import utils.tools.GTools;
+import utils.console.Logs;
 import com.zaxxer.hikari.HikariDataSource;
 
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import static Utils.console.Logs.log;
+import static utils.console.Logs.log;
 
 /**
  * A generic database handler that holds a HikariCP data source so we can have
@@ -35,9 +35,9 @@ public class DatabaseHandler implements Database {
 	// https://github.com/brettwooldridge/HikariCP
 
 	/** How many minimum idle connections should we always have (2) */
-	protected int minIdle = 2;
+	protected int minIdle;
 	/** How many max connections should exist in pool (2) */
-	protected int maxPoolSize = 2;
+	protected int maxPoolSize;
 	/** How long, in millis, we stop waiting for new connection (15 secs) */
 	protected int connectionTimeoutMs = 15 * 1000;
 	/** How long, in millis, before connections timeout (45 secs) */
@@ -56,6 +56,11 @@ public class DatabaseHandler implements Database {
 	protected int maxPreparedStatementCache = 2048;
 	/** The log writer for Hikari */
 	protected PrintWriter logWriter = new PrintWriter(System.out);
+
+	public DatabaseHandler(int poolSize) {
+		this.maxPoolSize = poolSize;
+		this.minIdle = poolSize;
+	}
 
 	/**
 	 * Initialize the handler with the specified database credentials.
@@ -132,7 +137,7 @@ public class DatabaseHandler implements Database {
 	}
 
 	/**
-	 * Load the settings for HikariCP from the yaml config and stores them
+	 * Load the settings for HikariCP from the yaml utils.config and stores them
 	 * locally in the object, then initializes the database handler.
 	 */
 	public void init(String host, int port, String dbName, String user, String pass) {

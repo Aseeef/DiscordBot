@@ -1,32 +1,29 @@
-package Utils.tools;
+package utils.tools;
 
-import Utils.Config;
-import Utils.SelfData;
-import Utils.console.Logs;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import net.grandtheftmc.jedisnew.NewJedisManager;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.json.JSONObject;
+import utils.SelfData;
+import utils.confighelpers.Config;
+import utils.console.Logs;
 
 import java.io.*;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import static Utils.console.Logs.log;
+import static utils.console.Logs.log;
 
 public class GTools {
 
     public static JDA jda;
     public static MineStat gtm;
     public static NewJedisManager jedisManager;
+    public static final Random RANDOM = new Random();
 
     // Checks if its is a specific command
     public static boolean isCommand(String msg, User user, String command) {
@@ -74,24 +71,32 @@ public class GTools {
         channel.getManager().setName(msg).queue();
     }
 
-    public static void sendThenDelete(MessageChannel channel, Message msg) {
+    public static void sendThenDelete(MessageChannel channel, Message msg, File attachment) {
         // dont delete if private channel
-        if (channel instanceof PrivateChannel)
-            channel.sendMessage(msg).queue();
-        else
-        channel.sendMessage(msg).queue( (sentMsg) ->
-                sentMsg.delete().queueAfter(Config.get().getDeleteTime(), TimeUnit.SECONDS)
-        );
+        if (channel instanceof PrivateChannel) {
+            MessageAction ma = channel.sendMessage(msg);
+            if (attachment != null) ma = ma.addFile(attachment);
+            ma.queue();
+        }
+        else {
+            MessageAction ma = channel.sendMessage(msg);
+            if (attachment != null) ma = ma.addFile(attachment);
+            ma.queue((sentMsg) ->
+                    sentMsg.delete().queueAfter(Config.get().getDeleteTime(), TimeUnit.SECONDS)
+            );
+        }
+    }
+
+    public static void sendThenDelete(MessageChannel channel, String msg, File file) {
+        sendThenDelete(channel, new MessageBuilder(msg).build(), file);
+    }
+
+    public static void sendThenDelete(MessageChannel channel, Message msg) {
+        sendThenDelete(channel, msg, null);
     }
 
     public static void sendThenDelete(MessageChannel channel, String msg) {
-        // dont delete if private channel
-        if (channel instanceof PrivateChannel)
-            channel.sendMessage(msg).queue();
-        else
-        channel.sendMessage(msg).queue( (sentMsg) ->
-                sentMsg.delete().queueAfter(Config.get().getDeleteTime(), TimeUnit.SECONDS)
-        );
+        sendThenDelete(channel, new MessageBuilder(msg).build());
     }
 
     public static void sendThenDelete(MessageChannel channel, MessageEmbed embed) {
@@ -104,6 +109,10 @@ public class GTools {
         );
     }
 
+    public static int randomNumber(int start, int end) {
+        return RANDOM.nextInt(end - start + 1) + start;
+    }
+
     public static void printStackError(Throwable e) {
         log(String.valueOf(e.initCause(e.getCause())), Logs.ERROR);
         for (StackTraceElement error : e.getStackTrace())
@@ -112,6 +121,10 @@ public class GTools {
 
     public static void runAsync(Runnable target) {
         new Thread(target).start();
+    }
+
+    public static File getAsset(String name) {
+        return new File("assets", name);
     }
 
     public static JSONObject getJsonFromApi(String url) {
@@ -128,5 +141,6 @@ public class GTools {
             return null;
         }
     }
+
 
 }

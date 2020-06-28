@@ -1,12 +1,14 @@
-package Utils.tools;
+package utils.tools;
 
-import Utils.Config;
-import Utils.Data;
-import Utils.Rank;
-import Utils.users.GTMUser;
+import utils.Data;
+import utils.Rank;
+import utils.database.sql.BaseDatabase;
+import utils.users.GTMUser;
 import net.dv8tion.jda.api.entities.Member;
-import static Utils.database.DAO.createDiscordProfile;
+import static utils.database.DiscordDAO.createDiscordProfile;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.*;
 
 public class Verification {
@@ -50,7 +52,12 @@ public class Verification {
             GTMUser gtmUser = new GTMUser((UUID) dataMap.get("uuid"), (String) dataMap.get("name"), (Rank) dataMap.get("rank"), m.getIdLong());
             gtmUser.updateUserDataNow();
             // save to sql database
-            createDiscordProfile(gtmUser);
+            try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
+                createDiscordProfile(conn, gtmUser);
+            } catch (SQLException e) {
+                GTools.printStackError(e);
+                return false;
+            }
             Data.storeData(Data.USER, gtmUser, m.getIdLong());
             // remove code
             verifyHashMap.remove(code);

@@ -1,16 +1,20 @@
-package Utils.users;
+package utils.users;
 
-import Utils.Data;
-import Utils.Rank;
-import Utils.database.DAO;
 import com.fasterxml.jackson.annotation.*;
 import net.dv8tion.jda.api.entities.Member;
+import utils.Data;
+import utils.Rank;
+import utils.database.DiscordDAO;
+import utils.database.sql.BaseDatabase;
+import utils.tools.GTools;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 
-import static Utils.tools.GTools.jda;
+import static utils.tools.GTools.jda;
 
 public class GTMUser {
 
@@ -60,9 +64,13 @@ public class GTMUser {
             GTMUser gtmUser = (GTMUser) Data.obtainData(Data.USER, discordId);
 
             // ensure user also exists in database
-            if (!DAO.discordProfileExists(discordId)) {
-                GTMUser.removeGTMUser(discordId);
-                return Optional.empty();
+            try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
+                if (!DiscordDAO.discordProfileExists(conn, discordId)) {
+                    GTMUser.removeGTMUser(discordId);
+                    return Optional.empty();
+                }
+            } catch (SQLException e) {
+                GTools.printStackError(e);
             }
 
             if (gtmUser != null) gtmUser.updateUserDataIfTime();;
@@ -87,43 +95,48 @@ public class GTMUser {
 
     @JsonIgnore
     public void updateUserDataNow() {
-        String newUsername = DAO.getUsername(this.getUuid()).orElse(null);
-        Rank newRank = DAO.getRank(this.getUuid());
-        this.setLastUpdated(System.currentTimeMillis());
+        try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
+            String newUsername = DiscordDAO.getUsername(this.getUuid()).orElse(null);
+            Rank newRank = DiscordDAO.getRank(conn, this.getUuid());
+            this.setLastUpdated(System.currentTimeMillis());
 
-        if (newRank != null && newRank != this.getRank()) {
-            this.setRank(newRank);
-            saveUser(this);
-        }
+            DiscordDAO.updateDiscordTag(conn, this.discordId, this.getDiscordMember().getUser().getAsTag());
 
-        if (newUsername != null && !newUsername.equals(this.username)) {
-            this.setUsername(newUsername);
-            saveUser(this);
-        }
+            if (newRank != null && newRank != this.getRank()) {
+                this.setRank(newRank);
+                saveUser(this);
+            }
 
-        if (!this.getDiscordMember().getRoles().contains(this.rank.getRole())) {
-            if (this.rank.isHigherOrEqualTo(Rank.HELPER) || this.getDiscordMember().isOwner()) {
-                System.out.println("High");
-                // msg admins TODO
-            } else {
-                // set new role on discord
-                this.getDiscordMember().getGuild().addRoleToMember(this.getDiscordId(), rank.getRole()).queue();
-                // remove old role(s)
-                for (Rank r : Rank.values()) {
-                    if (r != rank && this.getDiscordMember().getRoles().contains(r.getRole())) {
-                        if (rank.isHigherOrEqualTo(Rank.HELPER) || this.getDiscordMember().isOwner()) {
-                            System.out.println("High 2");
-                            // msg admins TODO
-                        } else this.getDiscordMember().getGuild().removeRoleFromMember(this.getDiscordId(), r.getRole()).queue();
+            if (newUsername != null && !newUsername.equals(this.username)) {
+                this.setUsername(newUsername);
+                saveUser(this);
+            }
+
+            if (!this.getDiscordMember().getRoles().contains(this.rank.getRole())) {
+                if (this.rank.isHigherOrEqualTo(Rank.HELPER) || this.getDiscordMember().isOwner()) {
+                    // msg admins TODO
+                } else {
+                    // set new role on discord
+                    this.getDiscordMember().getGuild().addRoleToMember(this.getDiscordId(), rank.getRole()).queue();
+                    // remove old role(s)
+                    for (Rank r : Rank.values()) {
+                        if (r != rank && this.getDiscordMember().getRoles().contains(r.getRole())) {
+                            if (rank.isHigherOrEqualTo(Rank.HELPER) || this.getDiscordMember().isOwner()) {
+                                // msg admins TODO
+                            } else
+                                this.getDiscordMember().getGuild().removeRoleFromMember(this.getDiscordId(), r.getRole()).queue();
+                        }
                     }
                 }
             }
-        }
 
-        if (!this.getDiscordMember().getEffectiveName().equals(this.username)) {
-            if (!this.rank.isHigherOrEqualTo(Rank.HELPER) && !this.getDiscordMember().isOwner()) {
-                this.getDiscordMember().modifyNickname(username).queue();
+            if (!this.getDiscordMember().getEffectiveName().equals(this.username)) {
+                if (!this.rank.isHigherOrEqualTo(Rank.HELPER) && !this.getDiscordMember().isOwner()) {
+                    this.getDiscordMember().modifyNickname(username).queue();
+                }
             }
+        } catch (SQLException e) {
+            GTools.printStackError(e);
         }
     }
 

@@ -1,6 +1,4 @@
-package Utils.database.sql;
-
-import redis.clients.jedis.JedisPool;
+package utils.database.sql;
 
 /**
  * A generic database handler that acts as a singleton so we can reference it
@@ -13,7 +11,8 @@ public class BaseDatabase extends DatabaseHandler {
 	/**
 	 * Private constructor as singleton's cannot be instantiated.
 	 */
-	private BaseDatabase() {
+	private BaseDatabase(int poolSize) {
+		super(poolSize);
 		// Note: DatabaseHandler doesn't have a constructor for a reason
 	}
 
@@ -22,8 +21,14 @@ public class BaseDatabase extends DatabaseHandler {
 	}
 
 	public enum Database {
-		PLAN (new BaseDatabase()),
-		USERS (new BaseDatabase()),
+		/** Database for Plan */
+		PLAN (new BaseDatabase(1)),
+		/** Main GTM Database */
+		USERS (new BaseDatabase(2)),
+		/** Litebans database */
+		BANS (new BaseDatabase(1)),
+		/** Xenforo Database */
+		XEN (new BaseDatabase(1))
 		;
 
 		BaseDatabase instance;

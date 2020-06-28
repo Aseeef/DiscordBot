@@ -1,9 +1,9 @@
 package events;
 
-import Utils.Data;
-import Utils.Suggestions;
-import Utils.tools.GTools;
-import Utils.tools.SuggestionTools;
+import utils.Data;
+import utils.Suggestions;
+import utils.tools.GTools;
+import utils.tools.SuggestionTools;
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -12,10 +12,10 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.util.Objects;
 
-import static Utils.tools.GTools.jda;
-import static Utils.tools.GTools.sendThenDelete;
-import static Utils.console.Logs.log;
-import static Utils.tools.SuggestionTools.*;
+import static utils.tools.GTools.jda;
+import static utils.tools.GTools.sendThenDelete;
+import static utils.console.Logs.log;
+import static utils.tools.SuggestionTools.*;
 
 public class OnSuggestion extends ListenerAdapter {
 
@@ -39,11 +39,12 @@ public class OnSuggestion extends ListenerAdapter {
                         "Please follow the above given instructions and repost your suggestion.");
 
                 // DM user their deleted suggestion so it can be reposted
-                user.openPrivateChannel().queue((userChannel) ->
+                user.openPrivateChannel().queue(
+
+                        userChannel ->
                     userChannel.sendMessage("**Your suggestion was deleted because it did not follow the suggestion format:**\n```" + e.getMessage().getContentRaw() + "```\n" + "**Please copy paste this exact format in to your message and repost your suggestion:**\n")
                             .queue( (success) ->
-                            userChannel.sendMessage(suggestionMessage()).queue())
-                        );
+                            userChannel.sendMessage(suggestionMessage()).queue()));
 
                 // Log failure
                 log("Incorrect Format: Deleted the following suggestion from user "+user.getAsTag()+" ("+user.getId()+"):"+
