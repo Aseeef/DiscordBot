@@ -184,11 +184,108 @@ public class SupportTicket {
         return participants;
     }
 
+    private static JSONObject convertToMap(String pattern) {
+
+        pattern = pattern.replaceFirst("a:.:\\{", "");
+        pattern = pattern.substring(0, pattern.length()-2);
+        pattern = pattern.replaceAll("a:.:\\{.+;}", "s:4:\"null\";");
+
+        JSONObject data = new JSONObject();
+        char[] chars = pattern.toCharArray();
+
+        ReaderMode mode = ReaderMode.OUT_TYPE;
+        KeyType keyType = KeyType.KEY;
+        String dataSizeType = "";
+        StringBuilder dstBuilder = new StringBuilder();
+        int dataSizeLength = 0;
+        StringBuilder dslBuilder = new StringBuilder();
+        String key = "";
+        String value;
+        StringBuilder keyValueBuilder = new StringBuilder();
+        for (int i = 0; i < chars.length; i++) {
+
+            if (mode == ReaderMode.OUT_TYPE) {
+                if (chars[i] == ":".charAt(0)) {
+                    dataSizeType = dstBuilder.toString();
+                    dstBuilder = new StringBuilder();
+                    mode = ReaderMode.OUT_SIZE;
+                    continue;
+                }
+                dstBuilder.append(chars[i]);
+            } else if (mode == ReaderMode.OUT_SIZE) {
+                if (chars[i] == ":".charAt(0) || chars[i] == ";".charAt(0) || chars.length == i + 1) {
+
+                    if (chars.length == i + 1) dslBuilder.append(chars[i]);
+
+                    dataSizeLength = Integer.parseInt(dslBuilder.toString());
+                    dslBuilder = new StringBuilder();
+                    if (dataSizeType.equals("s")) {
+                        mode = ReaderMode.STRING_READING;
+                        dataSizeType = "";
+                        i++; //to skip quote
+                    }
+                    else if (dataSizeType.equals("i")) {
+                        if (keyType == KeyType.KEY) {
+                            key = String.valueOf(dataSizeLength);
+                            keyType = KeyType.VALUE;
+                        } else if (keyType == KeyType.VALUE) {
+                            value = String.valueOf(dataSizeLength);
+                            data.put(key, value);
+                            keyType = KeyType.KEY;
+                        }
+                        mode = ReaderMode.OUT_TYPE;
+                        dataSizeType = "";
+                    }
+                    else {
+                        System.out.println("Unsupported data type!");
+                        //TODO: KEY_ARRAY_READING
+                    }
+                    continue;
+                }
+                dslBuilder.append(chars[i]);
+
+            } else if (mode == ReaderMode.STRING_READING) {
+                if (keyValueBuilder.length() != dataSizeLength)
+                    keyValueBuilder.append(chars[i]);
+                else {
+                    if (keyType == KeyType.KEY) {
+                        key = keyValueBuilder.toString();
+                        keyType = KeyType.VALUE;
+                    } else if (keyType == KeyType.VALUE) {
+                        value = keyValueBuilder.toString();
+                        keyType = KeyType.KEY;
+                        data.put(key, value);
+                    }
+                    keyValueBuilder = new StringBuilder();
+                    i++;
+                    mode = ReaderMode.OUT_TYPE;
+                }
+            }
+
+        }
+        return data;
+    }
+
+    private enum ReaderMode {
+        OUT_TYPE,
+        OUT_SIZE,
+        STRING_READING,
+        ;
+    }
+
+    private enum KeyType {
+        KEY,
+        VALUE
+        ;
+    }
+
     @JsonIgnore
+    @Deprecated
+    // Replaced with convertToMap which is a bit more stable
     // have to convert because this is the format we get for ticket fields...
     // a:3:{s:8:"username";s:8:"777kayoh";s:7:"servers";a:3:{s:10:"minesantos";s:10:"minesantos";s:9:"sanktburg";s:9:"sanktburg";s:12:"new_mineport";s:12:"new_mineport";}s:13:"transactionID";s:3:"N/A";}
     // a:4:{s:11:"insertproof";s:3:"Yes";s:5:"Abuse";s:3:"Yes";s:8:"username";s:12:"JustSkilz_NL";i:1993;s:6:"Snowwe";}
-    private static JSONObject convertToMap(String string) {
+    private static JSONObject convertToMapOld(String string) {
         JSONObject fieldMap = new JSONObject();
 
         string = string.replaceFirst("a:[0-9]{1,2}:\\{", "")

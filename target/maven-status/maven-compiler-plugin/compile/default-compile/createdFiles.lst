@@ -34,11 +34,13 @@ utils\litebans\Ban.class
 xenforo\objects\XenforoUser.class
 xenforo\Xenforo.class
 utils\tools\CommandsTools.class
+xenforo\objects\tickets\SupportTicket$KeyType.class
 utils\tools\WelcomeTools.class
 xenforo\events\TicketEvent.class
 commands\Command$Type.class
 utils\console\commands\listeners\ConsoleStopCommand.class
 events\OnJoin.class
+xenforo\objects\tickets\SupportTicket$ReaderMode.class
 utils\console\Console.class
 utils\database\XenforoDAO.class
 utils\SelfData.class

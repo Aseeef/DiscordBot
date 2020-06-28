@@ -38,21 +38,20 @@ public class AnnoyCommand extends Command {
                     GTools.sendThenDelete(channel, "**User not found!**");
                     return;
                 }
-                if (target.getRoles().contains(Rank.MANAGER.getRole())) {
-                    GTools.sendThenDelete(channel, "**Sorry but I know better then to mess with managers :p!**");
-                    return;
-                }
 
                 List<Emote> emojis = message.getEmotes();
                 String emoji;
+                String emojiTag;
 
-                if (emojis.size() > 1) {
-                    emoji = emojis.get(0).getAsMention();
+                if (emojis.size() >= 1) {
+                    emoji = emojis.get(0).getId();
+                    emojiTag = emojis.get(0).getAsMention();
                 } else {
                     emoji = args[2];
+                    emojiTag = emoji;
                 }
 
-                GTools.sendThenDelete(channel, "**I will now give " + target.getEffectiveName() + " the care they deserve by reacting to all of their messages with a " + emoji + "!**");
+                GTools.sendThenDelete(channel, "**I will now give " + target.getEffectiveName() + " the care they deserve by reacting to all of their messages with a " + emojiTag + "!**");
                 SelfData.get().getEmojiAnnoyMap().put(target.getIdLong(), emoji);
                 SelfData.get().update();
 
@@ -69,10 +68,6 @@ public class AnnoyCommand extends Command {
                 Member target = message.getMentionedMembers().get(0);
                 if (target == null) {
                     GTools.sendThenDelete(channel, "**User not found!**");
-                    return;
-                }
-                if (target.getRoles().contains(Rank.MANAGER.getRole())) {
-                    GTools.sendThenDelete(channel, "**Sorry but I know better then to mess with managers :p!**");
                     return;
                 }
                 try {
@@ -175,7 +170,7 @@ public class AnnoyCommand extends Command {
                 // find appropriate webhook based on channel
                 WebhookUtils.retrieveWebhookUrl((TextChannel) channel).thenAcceptAsync((hookUrl) -> {
                     if (hookUrl == null) {
-                        GTools.sendThenDelete(channel, "**Sorry, but I can't find a webhooks for this channel. Please create a new webhook for this channel or try this command in another channel!**");
+                        GTools.sendThenDelete(channel, "**Sorry, but I can't find a webhooks for this channel. Please create a new webhook for this channel and try again.**");
                         return;
                     }
                     WebhookUtils.sendMessageAs(sb.toString(), target, hookUrl);

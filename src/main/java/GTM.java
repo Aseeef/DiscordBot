@@ -112,7 +112,7 @@ public class GTM extends ListenerAdapter {
             jda.addEventListener(new PlayerCountCommand());
             jda.addEventListener(new RaidModeCommand());
             jda.addEventListener(new WelcomeCommand());
-            jda.addEventListener(new SeniorsCommand());
+            //jda.addEventListener(new SeniorsCommand());
             jda.addEventListener(new HelpCommand());
             jda.addEventListener(new AccountCommand());
             jda.addEventListener(new RebootCommand());

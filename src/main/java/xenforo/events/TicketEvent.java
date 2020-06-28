@@ -1,5 +1,8 @@
 package xenforo.events;
 
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.TextChannel;
 import utils.Rank;
 import utils.SelfData;
 import utils.console.Logs;
@@ -10,12 +13,9 @@ import utils.database.sql.BaseDatabase;
 import utils.litebans.Ban;
 import utils.tools.GTools;
 import utils.users.GTMUser;
-import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.TextChannel;
 import xenforo.objects.Alert;
-import xenforo.objects.tickets.SupportTicket;
 import xenforo.objects.tickets.Department;
+import xenforo.objects.tickets.SupportTicket;
 
 import java.awt.*;
 import java.sql.Connection;

@@ -1,9 +1,6 @@
 package events;
 
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import utils.SelfData;
@@ -28,11 +25,18 @@ public class OnGuildMessage extends ListenerAdapter {
         final List<Long> botMap = SelfData.get().getBotAnnoyList();
 
         if (annoyMap.containsKey(user.getIdLong())) {
-            String emoji = annoyMap.get(user.getIdLong());
-            message.addReaction(emoji).queue(null, error -> {
-                annoyMap.remove(user.getIdLong());
-                SelfData.get().update();
-            });
+            String emojiString = annoyMap.get(user.getIdLong());
+            Emote emoji = e.getGuild().getEmoteById(emojiString);
+            if (emoji != null)
+                message.addReaction(emoji).queue(null, error -> {
+                    annoyMap.remove(user.getIdLong());
+                    SelfData.get().update();
+                });
+            else
+                message.addReaction(emojiString).queue(null, error -> {
+                    annoyMap.remove(user.getIdLong());
+                    SelfData.get().update();
+                });
         }
 
         else if (scrabbleMap.containsKey(user.getIdLong())) {

@@ -2,6 +2,7 @@ package utils.webhooks;
 
 import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
+import club.minnced.discord.webhook.WebhookCluster;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -19,7 +20,8 @@ public class WebhookUtils {
             Webhook hook = webhooks.stream().filter((webhook -> webhook.getChannel().getIdLong() == channel.getIdLong())).findFirst().orElse(null);
             if (hook != null)
                 futureHookUrl.complete(hook.getUrl());
-            else futureHookUrl.complete(null);
+            else channel.createWebhook(channel.getAsMention() + " (GTM Bot)").queue( (hook2) ->
+                    futureHookUrl.complete(hook2.getUrl()));
         }));
         return futureHookUrl;
     }

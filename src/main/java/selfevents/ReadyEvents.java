@@ -23,7 +23,8 @@ public class ReadyEvents extends ListenerAdapter {
         // Make sure bot is only on one server
         if (!inOnlyOneGuild()) {
             Logs.log("The GTM Discord bot may not be in more then one server at a time!", Logs.ERROR);
-            jda.shutdownNow();
+            Logs.log(jda.getGuilds().toString(), Logs.ERROR);
+            System.exit(0);
         }
 
         // Print finished loading msg
