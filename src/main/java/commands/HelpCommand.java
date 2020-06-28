@@ -1,8 +1,8 @@
 package commands;
 
-import Utils.Config;
-import Utils.Rank;
-import Utils.users.GTMUser;
+import utils.confighelpers.Config;
+import utils.Rank;
+import utils.users.GTMUser;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static Utils.tools.GTools.sendThenDelete;
+import static utils.tools.GTools.sendThenDelete;
 
 public class HelpCommand extends Command {
 

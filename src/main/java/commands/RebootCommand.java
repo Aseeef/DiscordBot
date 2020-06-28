@@ -1,10 +1,10 @@
 package commands;
 
-import Utils.Rank;
-import Utils.users.GTMUser;
+import utils.Rank;
+import utils.users.GTMUser;
 import net.dv8tion.jda.api.entities.*;
 
-import static Utils.tools.GTools.jda;
+import static utils.tools.GTools.jda;
 
 public class RebootCommand extends Command {
 
@@ -20,7 +20,7 @@ public class RebootCommand extends Command {
         else
         member.getUser().openPrivateChannel().queue( (privateChannel) ->
             privateChannel.sendMessage("**Executed reboot. Please allow up to 30 seconds for the bot to come back up!**")
-                    .queue( (m) -> jda.shutdownNow()));
+                    .queue( (m) -> System.exit(1)));
     }
 
 }

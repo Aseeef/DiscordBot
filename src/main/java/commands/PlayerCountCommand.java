@@ -1,14 +1,14 @@
 package commands;
 
-import Utils.Rank;
-import Utils.SelfData;
-import Utils.tools.GTools;
-import Utils.users.GTMUser;
+import utils.Rank;
+import utils.SelfData;
+import utils.tools.GTools;
+import utils.users.GTMUser;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
 
-import static Utils.tools.GTools.sendThenDelete;
-import static Utils.tools.GTools.updateOnlinePlayers;
+import static utils.tools.GTools.sendThenDelete;
+import static utils.tools.GTools.updateOnlinePlayers;
 
 public class PlayerCountCommand extends Command {
 
@@ -20,7 +20,7 @@ public class PlayerCountCommand extends Command {
     public void onCommandUse(Message message, Member member, GTMUser gtmUser, MessageChannel channel, String[] args) {
         // If there are no command arguments send sub command help list
         if (args.length == 0) {
-            // Send msg then delete after defined time in config
+            // Send msg then delete after defined time in utils.config
             sendThenDelete(channel, getPlayerCountHelpMsg());
         }
 
@@ -53,7 +53,7 @@ public class PlayerCountCommand extends Command {
 
         // If none of the sub arguments match
         else {
-            // Send msg then delete after defined time in config
+            // Send msg then delete after defined time in utils.config
             sendThenDelete(channel, getPlayerCountHelpMsg());
         }
     }

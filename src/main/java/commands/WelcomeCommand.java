@@ -1,14 +1,14 @@
 package commands;
 
-import Utils.Rank;
-import Utils.SelfData;
-import Utils.users.GTMUser;
+import utils.Rank;
+import utils.SelfData;
+import utils.users.GTMUser;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
 
-import static Utils.tools.GTools.jda;
-import static Utils.tools.GTools.sendThenDelete;
-import static Utils.tools.WelcomeTools.getRuleReactEmbed;
+import static utils.tools.GTools.jda;
+import static utils.tools.GTools.sendThenDelete;
+import static utils.tools.WelcomeTools.getRuleReactEmbed;
 
 public class WelcomeCommand extends Command {
 

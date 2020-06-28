@@ -1,4 +1,9 @@
-package Utils;
+package utils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SelfData {
 
@@ -14,6 +19,14 @@ public class SelfData {
     private long ruleAgreeMessageId;
     private long modChannelId;
     private long lastTicketRefreshTime;
+    private long lastPostRefreshTime;
+    // The first long is the user id, the second is the emoji id
+    private Map<Long, String> emojiAnnoyMap = new HashMap<>();
+    // The first long is the user id, and the array stores: long[0] = how often to send msg; long[1] = last annoyed time
+    private Map<Long, Long[]> quoteAnnoyMap = new HashMap<>();
+    // The first long is the user id, and the character is the character to replace their words with
+    private Map<Long, Character> scrabbleAnnoyMap = new HashMap<>();
+    private List<Long> botAnnoyList = new ArrayList<>();
 
     private static SelfData data;
 
@@ -26,7 +39,8 @@ public class SelfData {
               long raidAlertChannelId,
               long ruleAgreeChannelId, long ruleAgreeMessageId,
               long modChannelId,
-              long lastTicketRefreshTime) {
+              long lastTicketRefreshTime, long lastPostRefreshTime,
+              Map<Long, String> emojiAnnoyMap, Map<Long, Long[]> quoteAnnoyMap, Map<Long, Character> scrabbleAnnoyMap, List<Long> botAnnoyList) {
 
         this.suggestionChannelId = suggestionChannelId;
         this.playerCountChannelId = playerCountChannelId;
@@ -40,7 +54,11 @@ public class SelfData {
         this.ruleAgreeMessageId = ruleAgreeMessageId;
         this.modChannelId = modChannelId;
         this.lastTicketRefreshTime = lastTicketRefreshTime;
-
+        this.lastPostRefreshTime = lastPostRefreshTime;
+        this.emojiAnnoyMap = emojiAnnoyMap;
+        this.quoteAnnoyMap = quoteAnnoyMap;
+        this.scrabbleAnnoyMap = scrabbleAnnoyMap;
+        this.botAnnoyList = botAnnoyList;
     }
 
     public static void load() {
@@ -156,6 +174,35 @@ public class SelfData {
 
     public void setLastTicketRefreshTime(long lastTicketRefreshTime) {
         this.lastTicketRefreshTime = lastTicketRefreshTime;
+        Data.storeData(Data.SELFDATA, this);
+    }
+
+    public long getLastPostRefreshTime() {
+        return lastPostRefreshTime;
+    }
+
+    public void setLastPostRefreshTime(long lastPostRefreshTime) {
+        this.lastPostRefreshTime = lastPostRefreshTime;
+        Data.storeData(Data.SELFDATA, this);
+    }
+
+    public Map<Long, String> getEmojiAnnoyMap() {
+        return emojiAnnoyMap;
+    }
+
+    public Map<Long, Long[]> getQuoteAnnoyMap() {
+        return quoteAnnoyMap;
+    }
+
+    public Map<Long, Character> getScrabbleAnnoyMap() {
+        return scrabbleAnnoyMap;
+    }
+
+    public List<Long> getBotAnnoyList() {
+        return botAnnoyList;
+    }
+
+    public void update() {
         Data.storeData(Data.SELFDATA, this);
     }
 }

@@ -1,11 +1,10 @@
 package commands;
 
-import Utils.Rank;
-import Utils.users.GTMUser;
+import utils.Rank;
+import utils.users.GTMUser;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.TextChannel;
 
 public class SeniorsCommand extends Command {
 

@@ -1,9 +1,9 @@
 package commands;
 
-import Utils.Config;
-import Utils.Rank;
-import Utils.tools.GTools;
-import Utils.users.GTMUser;
+import utils.confighelpers.Config;
+import utils.Rank;
+import utils.tools.GTools;
+import utils.users.GTMUser;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
@@ -12,9 +12,9 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static Utils.tools.GTools.jda;
-import static Utils.tools.GTools.sendThenDelete;
-import static Utils.console.Logs.log;
+import static utils.tools.GTools.jda;
+import static utils.tools.GTools.sendThenDelete;
+import static utils.console.Logs.log;
 
 public abstract class Command extends ListenerAdapter {
 

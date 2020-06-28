@@ -1,10 +1,11 @@
 package commands;
 
-import Utils.Data;
-import Utils.database.DAO;
-import Utils.tools.GTools;
-import Utils.tools.Verification;
-import Utils.users.GTMUser;
+import utils.Data;
+import utils.database.DiscordDAO;
+import utils.database.sql.BaseDatabase;
+import utils.tools.GTools;
+import utils.tools.Verification;
+import utils.users.GTMUser;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -14,6 +15,8 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import org.json.JSONObject;
 
 import java.awt.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class AccountCommand extends Command {
 
@@ -63,16 +66,19 @@ public class AccountCommand extends Command {
                     return;
                 }
 
-                GTMUser user = (GTMUser) Data.obtainData(Data.USER, member.getIdLong());
                 boolean deleted = GTMUser.removeGTMUser(member.getIdLong());
 
                 GTools.runAsync( () -> {
-                    DAO.deleteDiscordProfile(user.getUuid());
+                    try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
+                        DiscordDAO.deleteDiscordProfile(conn, gtmUser.getUuid());
+                    } catch (SQLException e) {
+                        GTools.printStackError(e);
+                    }
                 });
 
-                DAO.sendToGTM("unverify", new JSONObject().put("uuid", user.getUuid()));
+                DiscordDAO.sendToGTM("unverify", new JSONObject().put("uuid", gtmUser.getUuid()));
 
-                channel.sendMessage(deleted ? "**You have successfully unlinked your account from the player `" + user.getUsername() + "`!**" : "**Unable to proccess request. It appears something went wrong...!**").queue();
+                channel.sendMessage(deleted ? "**You have successfully unlinked your account from the player `" + gtmUser.getUsername() + "`!**" : "**Unable to proccess request. It appears something went wrong...!**").queue();
 
                 break;
 
@@ -87,7 +93,6 @@ public class AccountCommand extends Command {
                     gtmUser.updateUserDataNow();
                     GTools.sendThenDelete(channel, "**Your account information has been updated!**");
                 }
-
                 break;
 
             default:
@@ -98,7 +103,7 @@ public class AccountCommand extends Command {
 
     private MessageEmbed getInfo(GTMUser gtmUser) {
         return new EmbedBuilder()
-                .setThumbnail(DAO.getSkullSkin(gtmUser.getUuid()))
+                .setThumbnail(DiscordDAO.getSkullSkin(gtmUser.getUuid()))
                 .setTitle("**Discord Account Information**")
                 .setDescription("You discord account is linked to the following GTM player...")
                 .addField("**UUID:**", gtmUser.getUuid().toString(), false)

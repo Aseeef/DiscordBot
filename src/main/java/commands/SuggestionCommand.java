@@ -1,19 +1,19 @@
 package commands;
 
-import Utils.Data;
-import Utils.Rank;
-import Utils.SelfData;
-import Utils.Suggestions;
-import Utils.users.GTMUser;
+import utils.Data;
+import utils.Rank;
+import utils.SelfData;
+import utils.Suggestions;
+import utils.users.GTMUser;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-import static Utils.tools.GTools.sendThenDelete;
-import static Utils.tools.GTools.userById;
-import static Utils.tools.SuggestionTools.*;
+import static utils.tools.GTools.sendThenDelete;
+import static utils.tools.GTools.userById;
+import static utils.tools.SuggestionTools.*;
 
 public class SuggestionCommand extends Command {
 

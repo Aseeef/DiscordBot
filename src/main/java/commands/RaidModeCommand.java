@@ -1,16 +1,16 @@
 package commands;
 
-import Utils.Rank;
-import Utils.SelfData;
-import Utils.users.GTMUser;
+import utils.Rank;
+import utils.SelfData;
+import utils.users.GTMUser;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-import static Utils.tools.GTools.sendThenDelete;
-import static Utils.tools.RaidModeTools.*;
+import static utils.tools.GTools.sendThenDelete;
+import static utils.tools.RaidModeTools.*;
 
 public class RaidModeCommand extends Command {
 
