@@ -1,10 +1,9 @@
 package events;
 
-import Utils.Data;
-import Utils.SelfData;
-import Utils.Suggestions;
-import Utils.tools.GTools;
-import Utils.tools.SuggestionTools;
+import utils.Data;
+import utils.Suggestions;
+import utils.tools.GTools;
+import utils.tools.SuggestionTools;
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
@@ -12,11 +11,12 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.util.Objects;
+import java.util.regex.Pattern;
 
-import static Utils.tools.GTools.jda;
-import static Utils.tools.GTools.sendThenDelete;
-import static Utils.tools.Logs.log;
-import static Utils.tools.SuggestionTools.*;
+import static utils.tools.GTools.jda;
+import static utils.tools.GTools.sendThenDelete;
+import static utils.console.Logs.log;
+import static utils.tools.SuggestionTools.*;
 
 public class OnSuggestion extends ListenerAdapter {
 
@@ -25,26 +25,30 @@ public class OnSuggestion extends ListenerAdapter {
         TextChannel channel = e.getChannel();
         User user = e.getAuthor();
 
+
         // If it is a suggestion and not a command
-        if (getSuggestionsChannel(e) == channel
+        if (getSuggestionsChannel() == channel
                 && !user.isBot()
                 && !GTools.isCommand(e.getMessage().getContentRaw(), e.getAuthor())) {
 
             // Delete original message
             e.getMessage().delete().queue();
 
+            String message = SuggestionTools.formatSuggestion(e.getMessage().getContentRaw());
+
             // If user didn't use suggestion format, delete their msg
-            if (!ifUsedFormat(e.getMessage().getContentRaw())) {
+            if (!ifUsedFormat(message)) {
 
                 sendThenDelete(channel, user.getAsMention() + " your message does not follow the suggestion format! " +
                         "Please follow the above given instructions and repost your suggestion.");
 
                 // DM user their deleted suggestion so it can be reposted
-                user.openPrivateChannel().queue((userChannel) ->
+                user.openPrivateChannel().queue(
+
+                        userChannel ->
                     userChannel.sendMessage("**Your suggestion was deleted because it did not follow the suggestion format:**\n```" + e.getMessage().getContentRaw() + "```\n" + "**Please copy paste this exact format in to your message and repost your suggestion:**\n")
                             .queue( (success) ->
-                            userChannel.sendMessage(suggestionMessage()).queue())
-                        );
+                            userChannel.sendMessage(suggestionMessage()).queue()));
 
                 // Log failure
                 log("Incorrect Format: Deleted the following suggestion from user "+user.getAsTag()+" ("+user.getId()+"):"+
@@ -55,7 +59,7 @@ public class OnSuggestion extends ListenerAdapter {
             }
 
             // Create new suggestion object
-            Suggestions suggestion = new Suggestions(Data.getNextNumber(Data.SUGGESTIONS), e.getMessage().getContentRaw(), Objects.requireNonNull(e.getMember()).getId(), "PENDING", "Awaiting response from staff.");
+            Suggestions suggestion = new Suggestions(Data.getNextNumber(Data.SUGGESTIONS), message, Objects.requireNonNull(e.getMember()).getId(), "PENDING", "Awaiting response from staff.");
 
             // Create and send suggestion embed then use the callback to save msg id into suggestion object & add reaction
                 e.getChannel().sendMessage(createSuggestionEmbed(suggestion)).queue( (msg) -> {
@@ -89,9 +93,9 @@ public class OnSuggestion extends ListenerAdapter {
     }
 
     private boolean ifUsedFormat(String msg) {
-        return msg.toLowerCase().contains("what server is your suggestion for") &&
-                msg.toLowerCase().contains("what is your suggestion") &&
-                msg.toLowerCase().contains("why do you suggestion this");
+        return msg.toLowerCase().contains("**What server is your suggestion for?**") &&
+                msg.toLowerCase().contains("**What is your Suggestion? Be concise!**") &&
+                msg.toLowerCase().contains("**Why do you Suggestion this?**");
     }
 
 }

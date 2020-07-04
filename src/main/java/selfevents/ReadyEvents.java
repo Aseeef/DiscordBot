@@ -1,25 +1,46 @@
 package selfevents;
 
-import Utils.Config;
-import Utils.SelfData;
-import Utils.tools.Logs;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import utils.SelfData;
+import utils.confighelpers.Config;
+import utils.console.Logs;
+import utils.tools.GTools;
 
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static Utils.tools.GTools.jda;
-import static Utils.tools.GTools.updateOnlinePlayers;
-import static Utils.tools.Logs.log;
+import static utils.console.Logs.log;
+import static utils.tools.GTools.jda;
+import static utils.tools.GTools.updateOnlinePlayers;
 
 public class ReadyEvents extends ListenerAdapter {
 
     public void onReady(ReadyEvent event) {
 
+        // Make sure bot is only on one server
+        if (!inOnlyOneGuild()) {
+            Logs.log("The GTM Discord bot may not be in more then one server at a time!", Logs.ERROR);
+            Logs.log(jda.getGuilds().toString(), Logs.ERROR);
+            System.exit(0);
+        }
+
         // Print finished loading msg
         log("Bot is now online!");
 
+        startTasks();
+
+        log("Player count channel updater task initialized!");
+
+        // INVALID CONFIG OR DATA WARNINGS
+        checkRaidModeSettings();
+        checkSuggestionsSettings();
+
+    }
+
+    private void startTasks() {
         // Start updater repeating task to update player count
         Timer playerCountUpdater = new Timer();
         playerCountUpdater.scheduleAtFixedRate(new TimerTask() {
@@ -27,75 +48,80 @@ public class ReadyEvents extends ListenerAdapter {
             public void run() {
                 updateOnlinePlayers();
             }
-        }, 5000, 1000 * Config.get().getMineStatRefresh());
+        }, 5000, 1000 * Config.get().getMineStatSettings().getRefreshFrequency());
 
-        log("Player count channel updater task initialized!");
 
-        // INVALID CONFIG OR DATA WARNINGS
+        // Start wisdom annoy task
+        final String[] wiseQuotes = {
+                "If we all work together we can make poor people come!",
+                "If we all wash our hands, we can make nuclear missiles collapse under its own weight.",
+                "Betrayal is in opposition to the World Health Organization.",
+                "Civilization is a movie where the villain is insanity.",
+                "When you're pretending to be somebody you're not, remember that you too will become an eternal flower.",
+                "Aim lower. It's never too late to do it.",
+                "A tattoo is all you need.",
+                "Creating art can be like a fantastic commute that's hard to get around.",
+                "Work in an office. Brush your teeth. Keep reminding yourself that everything happens for a reason. Ignore the inevitable.",
+                "Boredom is a young woman dancing alone.",
+                "Relying on an unemployed person to live like an arms dealer is pretty much as immortal as you get.",
+                "How can you ensure yourself that an astronaut isn't a wife? A wife never picks up the check.",
+                "Remember that you are hurting inside and remember to close your eyes when you get a turtle.",
+                "Life is not a fairy tale. If you loose a shoe at midnight, you're drunk...",
+                "Always be yourself. Unless you can be a unicorn in which case you should probably go ahead and be that.",
+                "Use the strobe function to disorientate your attacker.",
+                "Don't you think that a sperm whale can alter the way you see fear itself someday? Think about that one.",
+                "If we pull ourselves together we can make stock photos mainstream! So what are you waiting for? Apply to your local McDonalds now!",
+                "Always let the things you question get in the way of the things you hate.",
+                "Before a donkey, comes a cake.",
+                "Never let an whale tell you what to do.",
+                "Understand that tomorrow is the first day of the rest of your life.",
+                "If burger king burger, then is it not somebody else's foot fungus?",
+                "How can mirrors be real if our eyes aren't real? Make sure to think about that one when you go to bed tonight.",
+                "Between happiness and a finger is an insect.",
+                "Psychology defines fearlessness as hurting oneself on purpose and still managing to surprise.",
+                "It isn’t pollution that is hurting the environment, it’s the impurities in our air and water that are doing it.",
+                "If a cricketer, for example, suddenly decided to go into a school and batter a lot of people to death with a cricket bat, which he could do very easily, I mean, are you going to ban cricket bats?",
+                "Will the communist prevent the golden age of television? Think about that one before you eat.",
+                "What criminalization that you bring when you actualize the sheep in the vicinity of the bisector?"
+        };
+        Timer wisdomAnnoyTask = new Timer();
+        wisdomAnnoyTask.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Map<Long, Long[]> map = SelfData.get().getQuoteAnnoyMap();
+                map.forEach( (key, value) -> {
+                    long hours = value[0];
+                    long lastUpdated = value[1];
+                    if (lastUpdated < System.currentTimeMillis() - 1000 * 60 * 60 * hours) {
+                        int index = GTools.randomNumber(0, wiseQuotes.length - 1);
+                        jda.retrieveUserById(key)
+                                .flatMap(User::openPrivateChannel)
+                                .flatMap(privateChannel -> privateChannel.sendMessage(wiseQuotes[index]))
+                                .queue();
+                        map.put(key, new Long[] {hours, System.currentTimeMillis()});
+                        SelfData.get().update();
+                    }
 
-        // Invalid raid mode punishment type settings
-        String raidModePunishType = Config.get().getRaidModePunishType();
+                });
+            }
+        }, 5000, 1000 * 60);
+    }
+
+    // Invalid raid mode punishment type settings
+    private void checkRaidModeSettings() {
+        String raidModePunishType = Config.get().getRaidmodeSettings().getRaidModePunishType();
         if (!raidModePunishType.equalsIgnoreCase("BAN") &&
-        !raidModePunishType.equalsIgnoreCase("KICK") &&
-        !raidModePunishType.equalsIgnoreCase("NOTIFY")) {
-            log("Invalid raid mode punishment type configured in the config!" +
+                !raidModePunishType.equalsIgnoreCase("KICK") &&
+                !raidModePunishType.equalsIgnoreCase("NOTIFY")) {
+            log("Invalid raid mode punishment type configured in the utils.config!" +
                     " Valid punishment types are: NOTIFY, BAN, KICK", Logs.WARNING);
             log("Setting raid punishment type to \"KICK\" for now...", Logs.WARNING);
-            Config.get().setRaidModePunishType("KICK");
+            Config.get().getRaidmodeSettings().setRaidModePunishType("KICK");
         }
+    }
 
-        // If any of the entered roles are invalid
-        if (jda.getRolesByName(Config.get().getManager(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getManager() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getDeveloper(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getDeveloper() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getAdmin(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getAdmin() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getBuilder(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getBuilder() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getSrMod(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getManager() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getMod(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getMod() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getHelper(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getHelper() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getBuildTeam(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getBuildTeam() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getYoutuber(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getYoutuber() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getSupreme(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getSupreme() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getSponsor(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getSponsor() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getElite(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getElite() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getPremium(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getPremium() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getVip(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getVip() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getNoRank(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getNoRank() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-        else if (jda.getRolesByName(Config.get().getNoRank(), true).size() == 0)
-            log("No role by the name of '" + Config.get().getUnverified() + "' was found!" +
-                    " This will cause errors...", Logs.WARNING);
-
-
-        // Suggestions channel not configured
+    // Check if suggestions channel not configured
+    private void checkSuggestionsSettings() {
         if (jda.getTextChannelById(SelfData.get().getSuggestionChannelId()) == null)
             log("The suggestion channel has not been properly configured yet!",
                     Logs.WARNING);
@@ -107,7 +133,10 @@ public class ReadyEvents extends ListenerAdapter {
         if (jda.getTextChannelById(SelfData.get().getRaidAlertChannelId()) == null)
             log("The raid alerts channel has not been properly configured yet!",
                     Logs.WARNING);
+    }
 
+    private static boolean inOnlyOneGuild() {
+        return jda.getGuilds().size() <= 1;
     }
 
 }

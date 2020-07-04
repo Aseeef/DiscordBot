@@ -1,74 +1,57 @@
 package commands;
 
-import Utils.SelfData;
-import Utils.tools.GTools;
+import utils.Rank;
+import utils.SelfData;
+import utils.users.GTMUser;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-import static Utils.tools.GTools.*;
-import static Utils.tools.RaidModeTools.*;
+import static utils.tools.GTools.sendThenDelete;
+import static utils.tools.RaidModeTools.*;
 
-public class RaidModeCommand extends ListenerAdapter {
+public class RaidModeCommand extends Command {
 
-    public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
+    public RaidModeCommand() {
+        super("raidmode", "Manage raid mode settings", Rank.ADMIN, Type.DISCORD_ONLY);
+    }
 
-        String msg = e.getMessage().getContentRaw();
-        Member member = e.getMember();
-        User user = e.getAuthor();
-        assert member != null;
+    @Override
+    public void onCommandUse(Message message, Member member, GTMUser gtmUser, MessageChannel channel, String[] args) {
+        // If there are no command arguments send sub command help list
+        if (args.length == 0) {
+            sendThenDelete(channel, getRaidModeHelpMsg());
+        }
 
-        if (GTools.isCommand(msg, user, Commands.RAIDMODE)) {
+        // RaidMode SetChannel Command
+        else if (args[0].equalsIgnoreCase("setchannel")) {
 
-            String[] args = getArgs(msg);
-            TextChannel channel = e.getChannel();
+            // Set as raid mode channel
+            SelfData.get().setRaidAlertChannelId(channel.getIdLong());
 
-            // Check perms
-            if (!hasRolePerms(member, Commands.RAIDMODE.rank())) {
-                sendThenDelete(channel, getNoPermsLang());
-                return;
-            }
-
-            // If there are no command arguments send sub command help list
-            if (args.length == 0) {
-                sendThenDelete(channel, getRaidModeHelpMsg());
-            }
-
-            // RaidMode SetChannel Command
-            else if (args[0].equalsIgnoreCase("setchannel")) {
-
-                // Set as raid mode channel
-                SelfData.get().setRaidAlertChannelId(channel.getIdLong());
-
-                // Send success msg
-                sendThenDelete(channel, raidChannelSet(channel));
-
-            }
-
-            else if (args[0].equalsIgnoreCase("enable")) {
-                if (!raidMode[0])
-                activateRaidMode(e.getAuthor());
-                else sendThenDelete(channel, "**Raid mode is already enabled!**");
-            }
-
-            else if (args[0].equalsIgnoreCase("disable")) {
-                if (raidMode[0])
-                    disableRaidMode(e.getAuthor());
-                else sendThenDelete(channel, "**Raid mode is already disabled!**");
-            }
-
-            // If no sub commands match
-            else {
-                sendThenDelete(channel, getRaidModeHelpMsg());
-            }
+            // Send success msg
+            sendThenDelete(channel, raidChannelSet((TextChannel) channel));
 
         }
 
+        else if (args[0].equalsIgnoreCase("enable")) {
+            if (!raidMode[0])
+                activateRaidMode(member.getUser());
+            else sendThenDelete(channel, "**Raid mode is already enabled!**");
+        }
 
+        else if (args[0].equalsIgnoreCase("disable")) {
+            if (raidMode[0])
+                disableRaidMode(member.getUser());
+            else sendThenDelete(channel, "**Raid mode is already disabled!**");
+        }
+
+        // If no sub commands match
+        else {
+            sendThenDelete(channel, getRaidModeHelpMsg());
+        }
     }
 
     private static Message raidChannelSet(TextChannel channel) {

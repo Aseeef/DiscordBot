@@ -1,9 +1,9 @@
 package events;
 
-import Utils.Config;
-import Utils.Rank;
-import Utils.tools.Logs;
-import Utils.tools.RaidModeTools;
+import utils.confighelpers.Config;
+import utils.Rank;
+import utils.console.Logs;
+import utils.tools.RaidModeTools;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -12,31 +12,30 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static Utils.tools.GTools.hasRolePerms;
-import static Utils.tools.RaidModeTools.*;
+import static utils.tools.RaidModeTools.*;
 
 public class OnJoin extends ListenerAdapter {
 
     private static HashMap<Member, Long> newJoins = new HashMap<>();
     private static Member previousJoin;
 
-    private int raidModeTime = Config.get().getRaidModeTime();
-    private int raidModePlayers = Config.get().getRaidModePlayers();
-    private int raidModePunishTime = Config.get().getRaidModePunishTime();
+    private int raidModeTime = Config.get().getRaidmodeSettings().getRaidModeTime();
+    private int raidModePlayers = Config.get().getRaidmodeSettings().getRaidModePlayers();
+    private int raidModePunishTime = Config.get().getRaidmodeSettings().getRaidModePunishTime();
 
     public void onGuildMemberJoin (GuildMemberJoinEvent e) {
 
         Member member = e.getMember();
 
         // Set the member's role to unverified
-        e.getGuild().addRoleToMember(member, Rank.UNVERIFIED.er()).queue( (callback) -> {
+        e.getGuild().addRoleToMember(member, Rank.UNVERIFIED.getRole()).queue( (callback) -> {
 
             // Start a timer to kick user if the don't agree to rules with in 15 minutes (by checking if they still have the unverified role)
-            e.getGuild().retrieveMember(e.getUser()).queueAfter(Config.get().getRaidModeTimeToAccept(), TimeUnit.MINUTES, (kickableMember) -> {
-                if (hasRolePerms(kickableMember, Rank.UNVERIFIED)) {
+            e.getGuild().retrieveMember(e.getUser()).queueAfter(Config.get().getRaidmodeSettings().getRaidModeTimeToAccept(), TimeUnit.MINUTES, (kickableMember) -> {
+                if (Rank.hasRolePerms(kickableMember, Rank.UNVERIFIED)) {
                     // Note: This is also a bot prevention method that prevents bots from mass DMing members
                     kickableMember.getUser().openPrivateChannel().queue((privateChannel ->
-                            privateChannel.sendMessage("**You have been kicked from the GTM Discord!** You took too long to react to the rules. You have to agree to the GTM Discord Rules in order to use your discord. You are free to rejoin at http://grandtheftmc.net/discord!").queue((msg) -> {
+                            privateChannel.sendMessage("**You have been kicked from the GTM Discord!** You took too long to react to the rules. You have to agree to the GTM Discord Rules in order to use your discord. You are free to rejoin at http://grandtheftmc.net/discord.").queue((msg) -> {
                                 kickableMember.kick("Failed to agree to rules in time").queue();
                                 Logs.log(member.getUser().getAsTag() + " (" + member.getId() + ") was kicked from the server because they took too long to react to the rules.");
                             })

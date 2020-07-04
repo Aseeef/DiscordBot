@@ -1,12 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="">
+    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="Added a new parser to support ticket fields">
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/ChannelCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/tools/PrivateChannel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/events/OnJoin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/events/OnJoin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GTM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GTM.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/AccountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/AccountCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/SeniorsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/SeniorsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/events/OnGuildMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/events/OnGuildMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/events/OnSuggestion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/events/OnSuggestion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/SelfData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/SelfData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/LitebansDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/LitebansDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/XenforoDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/XenforoDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnRedisMessageReceive.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnRedisMessageReceive.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/GTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/tools/GTools.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/SuggestionTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/tools/SuggestionTools.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/webhooks/WebhookUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/webhooks/WebhookUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/events/TicketEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xenforo/events/TicketEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/objects/tickets/SupportTicket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xenforo/objects/tickets/SupportTicket.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/GTM.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/GTM.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Utils/Data.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Utils/tools/GTools.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Utils/tools/GTools.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Utils/tools/SuggestionTools.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Utils/tools/SuggestionTools.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/events/OnSuggestion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/events/OnSuggestion.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -14,6 +34,14 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution>
+      <executable />
+    </execution>
+  </component>
+  <component name="CoverageViewManager">
+    <option name="myElementSize" value="82" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -26,7 +54,23 @@
     <option name="HIDDEN_KINDS">
       <set />
     </option>
-    <expand />
+    <expand>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="users@dev1-ash.gtm.clients.prodity.net" type="feb32156:DbDataSourceImpl" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="users@dev1-ash.gtm.clients.prodity.net" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="users@dev1-ash.gtm.clients.prodity.net" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="users: schema" type="ebfa3cd1:MariaImplModel$Schema" />
+      </path>
+    </expand>
     <select />
   </component>
   <component name="FileTemplateManagerImpl">
@@ -38,30 +82,39 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1YplmcKc1xSxFTqjIPBr0wRiY3s" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="mysql" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="extract.method.default.visibility" value="private" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../XenAPI/XenAPI.jar!/" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="MavenSettings" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="ExtractSuperBase.RECENT_KEYS">
       <recent name="events" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="config" />
       <recent name="" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\java" />
+      <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\config" />
       <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\resources" />
       <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\resources\Configuration" />
     </key>
@@ -84,6 +137,8 @@
   </component>
   <component name="RunManager">
     <configuration name="GTM" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="GTM" />
       <module name="GTMBot" />
       <method v="2">
@@ -95,6 +150,16 @@
         <item itemvalue="Application.GTM" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="allServicesViewState">
+      <serviceView>
+        <treeState>
+          <expand />
+          <select />
+        </treeState>
+      </serviceView>
+    </option>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -135,7 +200,41 @@
       <workItem from="1587145409895" duration="598000" />
       <workItem from="1587224523397" duration="653000" />
       <workItem from="1587327936291" duration="1441000" />
-      <workItem from="1587405792849" duration="8955000" />
+      <workItem from="1587405792849" duration="10789000" />
+      <workItem from="1587585839968" duration="616000" />
+      <workItem from="1587606709770" duration="2428000" />
+      <workItem from="1587788173476" duration="1202000" />
+      <workItem from="1587863512382" duration="10000" />
+      <workItem from="1589663073597" duration="3438000" />
+      <workItem from="1589822736455" duration="12137000" />
+      <workItem from="1590133327510" duration="1338000" />
+      <workItem from="1590639144337" duration="22070000" />
+      <workItem from="1590795552383" duration="3074000" />
+      <workItem from="1590883776517" duration="13571000" />
+      <workItem from="1590942196411" duration="594000" />
+      <workItem from="1590960030672" duration="801000" />
+      <workItem from="1590965530678" duration="2446000" />
+      <workItem from="1591127913262" duration="1309000" />
+      <workItem from="1591497093099" duration="24741000" />
+      <workItem from="1591568569503" duration="165000" />
+      <workItem from="1591582897811" duration="18387000" />
+      <workItem from="1591678702398" duration="3763000" />
+      <workItem from="1591754989147" duration="9255000" />
+      <workItem from="1591808424686" duration="6293000" />
+      <workItem from="1591895750030" duration="6538000" />
+      <workItem from="1591925015905" duration="6298000" />
+      <workItem from="1591932880140" duration="9936000" />
+      <workItem from="1591996216553" duration="16689000" />
+      <workItem from="1592423499470" duration="710000" />
+      <workItem from="1593105660871" duration="11842000" />
+      <workItem from="1593196617027" duration="41190000" />
+      <workItem from="1593324685267" duration="9427000" />
+      <workItem from="1593394999795" duration="1343000" />
+      <workItem from="1593552814701" duration="7262000" />
+      <workItem from="1593632934158" duration="2886000" />
+      <workItem from="1593762932191" duration="2706000" />
+      <workItem from="1593812118140" duration="63000" />
+      <workItem from="1593825638126" duration="1381000" />
     </task>
     <task id="LOCAL-00001" summary="Init commit">
       <created>1584645971223</created>
@@ -221,7 +320,98 @@
       <option name="project" value="LOCAL" />
       <updated>1587414325667</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Fixed typo">
+      <created>1587414829840</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1587414829840</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Added Redis support">
+      <created>1591507861394</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1591507861394</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Commands bug fixes">
+      <created>1591512396271</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1591512396271</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Discord verification system completed!">
+      <created>1591603033630</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1591603033630</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Improvements to verification system">
+      <created>1591767628643</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1591767628643</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Adds Xenforo integration">
+      <created>1591863917164</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1591863917164</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Bug fixes with xenforo">
+      <created>1591865784877</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1591865784877</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Added console commands">
+      <created>1593307978716</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1593307978716</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Package rename &amp; config reorganization">
+      <created>1593308182005</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1593308182005</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Xenforo integration expansion">
+      <created>1593308240004</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1593308240004</updated>
+    </task>
+    <task id="LOCAL-00023" summary="More GTM integrations:&#10;- Managers get notified is staff may be cheating&#10;- Discord ticket detection improvements with DAO">
+      <created>1593308335584</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1593308335584</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Added an &quot;annoy&quot; command and tools to utilize discord webhooks">
+      <created>1593308370374</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1593308370374</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Added a new parser to support ticket fields">
+      <created>1593372492918</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1593372492918</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -253,6 +443,46 @@
     <MESSAGE value="Updated Jackson" />
     <MESSAGE value="Makes the raidModeTimeToAccept a configurable option in the config" />
     <MESSAGE value="Fixed bugs relating to gtm player count updater" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed bugs relating to gtm player count updater" />
+    <MESSAGE value="Fixed typo" />
+    <MESSAGE value="Added Redis support" />
+    <MESSAGE value="Commands bug fixes" />
+    <MESSAGE value="Discord verification system completed!" />
+    <MESSAGE value="Improvements to verification system" />
+    <MESSAGE value="Adds Xenforo integration" />
+    <MESSAGE value="Bug fixes with xenforo" />
+    <MESSAGE value="Added console commands" />
+    <MESSAGE value="Package rename &amp; config reorganization" />
+    <MESSAGE value="Xenforo integration expansion" />
+    <MESSAGE value="More GTM integrations:&#10;- Managers get notified is staff may be cheating&#10;- Discord ticket detection improvements with DAO" />
+    <MESSAGE value="Added an &quot;annoy&quot; command and tools to utilize discord webhooks" />
+    <MESSAGE value="Added a new parser to support ticket fields" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added a new parser to support ticket fields" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../GTM/gtm/src/main/java/net/grandtheftmc/gtm/listeners/Death.java</url>
+          <line>298</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../GTM/gtm/src/main/java/net/grandtheftmc/gtm/listeners/Interact.java</url>
+          <line>239</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/../GTM/gtm/src/main/java/net/grandtheftmc/gtm/warps/WarpManager.java</url>
+          <line>564</line>
+          <properties class="net.grandtheftmc.gtm.warps.WarpManager">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/GTM$GTM.ic" NAME="GTM Coverage Results" MODIFIED="1591933950470" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

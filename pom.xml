@@ -55,6 +55,11 @@
             <version>4.1.1_121</version>
         </dependency>
         <dependency>
+            <groupId>org.kefirsf</groupId>
+            <artifactId>kefirbb</artifactId>
+            <version>1.5</version>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
             <version>2.10.0</version>
@@ -84,9 +89,29 @@
             <artifactId>XenAPI</artifactId>
             <version>RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.KevinPriv</groupId>
+            <artifactId>MojangAPI</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.grandtheftmc</groupId>
+            <artifactId>common</artifactId>
+            <version>1.1.7</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>club.minnced</groupId>
+            <artifactId>discord-webhooks</artifactId>
+            <version>0.3.1</version>
+        </dependency>
     </dependencies>
 
     <repositories>
+        <repository>
+            <id>nexus-release</id>
+            <url>https://nexus.grandtheftmc.net/content/repositories/releases</url>
+        </repository>
         <repository>
             <id>jitpack</id>
             <url>https://jitpack.io</url>
@@ -99,6 +124,10 @@
         <repository>
             <id>XenAPI Repo</id>
             <url>https://cadox8.github.io/repo/</url>
+        </repository>
+        <repository>
+            <id>json</id>
+            <url>https://mvnrepository.com/artifact/org.json/</url>
         </repository>
     </repositories>
 
