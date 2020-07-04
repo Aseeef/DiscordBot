@@ -116,10 +116,10 @@ public class AccountCommand extends Command {
     private Message getAccountHelpMsg() {
         return new MessageBuilder()
                 .append("> **Please enter a valid command argument:**\n")
-                .append("> `/Account Verify <Code>` - *Verify your discord account with GTM*\n")
-                .append("> `/Account UnVerify` - *Un-link your discord account with GTM*\n")
-                .append("> `/Account Info` - *Displays your current account information*\n")
-                .append("> `/Account Update` - *Force update your account data*\n")
+                .append("> `/Discord Verify <Code>` - *Verify your discord account with GTM*\n")
+                .append("> `/Discord UnVerify` - *Un-link your discord account with GTM*\n")
+                .append("> `/Discord Info` - *Displays your current account information*\n")
+                .append("> `/Discord Update` - *Force update your account data*\n")
                 .build();
     }
 
