@@ -188,7 +188,6 @@ public class SupportTicket {
 
         pattern = pattern.replaceFirst("a:.:\\{", "");
         pattern = pattern.substring(0, pattern.length()-2);
-        pattern = pattern.replaceAll("a:.:\\{.+;}", "s:4:\"null\";");
 
         JSONObject data = new JSONObject();
         char[] chars = pattern.toCharArray();
@@ -200,7 +199,7 @@ public class SupportTicket {
         int dataSizeLength = 0;
         StringBuilder dslBuilder = new StringBuilder();
         String key = "";
-        String value;
+        Object value;
         StringBuilder keyValueBuilder = new StringBuilder();
         for (int i = 0; i < chars.length; i++) {
 
@@ -208,6 +207,24 @@ public class SupportTicket {
                 if (chars[i] == ":".charAt(0)) {
                     dataSizeType = dstBuilder.toString();
                     dstBuilder = new StringBuilder();
+
+                    if (dataSizeType.equals("a") && keyType == KeyType.VALUE) {
+                        StringBuilder arrayData = new StringBuilder();
+                        int exitIndex = i;
+                        for (int k = (i - 1); k < chars.length; k++) {
+                            arrayData.append(chars[k]);
+                            if (chars[k] == '}' && chars[k - 1] == ';') {
+                                exitIndex = k;
+                                break;
+                            }
+                        }
+                        value = convertToMap(arrayData.toString());
+                        data.put(key, value);
+                        keyType = KeyType.KEY;
+                        i = exitIndex;
+                        continue;
+                    }
+
                     mode = ReaderMode.OUT_SIZE;
                     continue;
                 }
@@ -237,8 +254,7 @@ public class SupportTicket {
                         dataSizeType = "";
                     }
                     else {
-                        System.out.println("Unsupported data type!");
-                        //TODO: KEY_ARRAY_READING
+                        Logs.log("Unsupported data type sent through custom support ticket fields!");
                     }
                     continue;
                 }
@@ -281,7 +297,7 @@ public class SupportTicket {
 
     @JsonIgnore
     @Deprecated
-    // Replaced with convertToMap which is a bit more stable
+    // Replaced with convertToMap which is much more stable and has array implementations
     // have to convert because this is the format we get for ticket fields...
     // a:3:{s:8:"username";s:8:"777kayoh";s:7:"servers";a:3:{s:10:"minesantos";s:10:"minesantos";s:9:"sanktburg";s:9:"sanktburg";s:12:"new_mineport";s:12:"new_mineport";}s:13:"transactionID";s:3:"N/A";}
     // a:4:{s:11:"insertproof";s:3:"Yes";s:5:"Abuse";s:3:"Yes";s:8:"username";s:12:"JustSkilz_NL";i:1993;s:6:"Snowwe";}

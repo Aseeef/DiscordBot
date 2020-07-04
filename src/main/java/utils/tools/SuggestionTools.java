@@ -51,17 +51,17 @@ public class SuggestionTools {
     public static Message suggestionMessage() {
         MessageBuilder msg = new MessageBuilder()
                 .append("```")
-                .append("**What Server is your Suggestion for?**")
+                .append("What Server is your Suggestion for?")
                 .append("\n")
                 .append("[Type what server here]")
                 .append("\n\u200E\n")
-                .append("**What is your Suggestion? Be concise!**")
+                .append("What is your Suggestion? Be concise!")
                 .append("\n")
-                .append("[Explain suggestion here]")
+                .append("[Explain suggestion here (10+ words)]")
                 .append("\n\u200E\n")
-                .append("**Why do you Suggestion this?**")
+                .append("Why do you Suggestion this?")
                 .append("\n")
-                .append("[Explain reason here]")
+                .append("[Explain reason here (16+ words)]")
                 .append("```");
         return msg.build();
     }
@@ -98,6 +98,15 @@ public class SuggestionTools {
 
         });
 
+    }
+
+    public static String formatSuggestion(String msg) {
+        if (msg.startsWith("```")) msg = msg.replaceFirst("```", "");
+        if (msg.endsWith("```")) msg = GTools.replaceLast(msg, "```", "");
+        msg = msg.replaceFirst(".*What Server is your Suggestion for\\?.*\n", "**What Server is your Suggestion for?**\n");
+        msg = msg.replaceFirst(".*What is your Suggestion\\? Be concise!.*\n", "**What is your Suggestion? Be concise!**\n");
+        msg = msg.replaceFirst(".*Why do you Suggestion this\\?.*\n", "**Why do you Suggestion this?**\n");
+        return msg;
     }
 
 }

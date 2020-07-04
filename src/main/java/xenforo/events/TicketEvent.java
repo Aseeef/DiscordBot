@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import static utils.tools.GTools.jda;
 
@@ -143,8 +144,11 @@ public class TicketEvent {
                 .addField("**Ban Reason:**", ticket.getTicketFields().getString("banReason"), false);
 
         if (ban != null) {
-            embed.addField("**Ban Timestamp:**", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(ban.getBanTime())), false)
-                    .addField("**Banning Staff Member:**", ban.getBanName(), false);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd @ hh:mm a EST");
+            sdf.setTimeZone(TimeZone.getTimeZone("America/New_York"));
+            embed.addField("**Banning Staff Member:**", ban.getBanName(), false)
+                .addField("**Ban Timestamp:**", sdf.format(new Date(ban.getBanTime())), false);
+
         } else embed.addField("**Banning Staff Member:**", ticket.getTicketFields().getString("staffban"), false);
         embed.addField("**Ticket Link**", ticket.getTicketLink(), false);
 

@@ -1,5 +1,7 @@
 package utils;
 
+import net.dv8tion.jda.api.entities.Category;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +30,8 @@ public class SelfData {
     private Map<Long, Character> scrabbleAnnoyMap = new HashMap<>();
     private List<Long> botAnnoyList = new ArrayList<>();
 
+    private Category privateChannelsCategory;
+
     private static SelfData data;
 
 
@@ -40,7 +44,8 @@ public class SelfData {
               long ruleAgreeChannelId, long ruleAgreeMessageId,
               long modChannelId,
               long lastTicketRefreshTime, long lastPostRefreshTime,
-              Map<Long, String> emojiAnnoyMap, Map<Long, Long[]> quoteAnnoyMap, Map<Long, Character> scrabbleAnnoyMap, List<Long> botAnnoyList) {
+              Map<Long, String> emojiAnnoyMap, Map<Long, Long[]> quoteAnnoyMap, Map<Long, Character> scrabbleAnnoyMap, List<Long> botAnnoyList,
+              Category privateChannelsCategory) {
 
         this.suggestionChannelId = suggestionChannelId;
         this.playerCountChannelId = playerCountChannelId;
@@ -59,6 +64,7 @@ public class SelfData {
         this.quoteAnnoyMap = quoteAnnoyMap;
         this.scrabbleAnnoyMap = scrabbleAnnoyMap;
         this.botAnnoyList = botAnnoyList;
+        this.privateChannelsCategory = privateChannelsCategory;
     }
 
     public static void load() {
@@ -200,6 +206,15 @@ public class SelfData {
 
     public List<Long> getBotAnnoyList() {
         return botAnnoyList;
+    }
+
+    public Category getPrivateChannelsCategory() {
+        return privateChannelsCategory;
+    }
+
+    public void setPrivateChannelsCategory(Category privateChannelsCategory) {
+        this.privateChannelsCategory = privateChannelsCategory;
+        Data.storeData(Data.SELFDATA, this);
     }
 
     public void update() {

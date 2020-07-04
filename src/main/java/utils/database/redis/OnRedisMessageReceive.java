@@ -37,8 +37,8 @@ public class OnRedisMessageReceive implements RedisEventListener {
 
                 String action = jsonObject.getString("action");
 
-                Logs.log("[DEBUG] [DatabaseEvent] Received the following data from type " + action + " from GTM!");
-                Logs.log("[DEBUG] [DatabaseEvent] " + jsonObject.toString());
+                Logs.log("[DEBUG] [OnRedisMessageReceive] Received the following data from type " + action + " from GTM!");
+                Logs.log("[DEBUG] [OnRedisMessageReceive] " + jsonObject.toString());
 
                 switch (action.toLowerCase()) {
 
@@ -85,7 +85,7 @@ public class OnRedisMessageReceive implements RedisEventListener {
                     }
 
                     default:
-                        Logs.log("[DEBUG] [DatabaseEvent] '" + action + "' is an unknown action!", Logs.WARNING);
+                        Logs.log("[DEBUG] [OnRedisMessageReceive] '" + action + "' is an unknown action!", Logs.WARNING);
                         break;
 
 

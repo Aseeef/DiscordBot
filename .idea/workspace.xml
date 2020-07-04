@@ -1,19 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="">
+    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="Added a new parser to support ticket fields">
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/ChannelCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/tools/PrivateChannel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GTM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GTM.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/AnnoyCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/AnnoyCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/AccountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/AccountCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/SeniorsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/SeniorsCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/events/OnGuildMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/events/OnGuildMessage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/selfevents/ReadyEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/selfevents/ReadyEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/events/OnSuggestion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/events/OnSuggestion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/SelfData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/SelfData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/LitebansDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/LitebansDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/XenforoDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/XenforoDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnRedisMessageReceive.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnRedisMessageReceive.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/GTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/tools/GTools.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/SuggestionTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/tools/SuggestionTools.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/utils/webhooks/WebhookUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/webhooks/WebhookUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/events/TicketEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xenforo/events/TicketEvent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/objects/tickets/SupportTicket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xenforo/objects/tickets/SupportTicket.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/GTM.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/GTM.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Utils/Data.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Utils/tools/GTools.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Utils/tools/GTools.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Utils/tools/SuggestionTools.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Utils/tools/SuggestionTools.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/events/OnSuggestion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/events/OnSuggestion.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" afterDir="false" />
     </list>
@@ -64,8 +76,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -216,7 +228,13 @@
       <workItem from="1592423499470" duration="710000" />
       <workItem from="1593105660871" duration="11842000" />
       <workItem from="1593196617027" duration="41190000" />
-      <workItem from="1593324685267" duration="3374000" />
+      <workItem from="1593324685267" duration="9427000" />
+      <workItem from="1593394999795" duration="1343000" />
+      <workItem from="1593552814701" duration="7262000" />
+      <workItem from="1593632934158" duration="2886000" />
+      <workItem from="1593762932191" duration="2706000" />
+      <workItem from="1593812118140" duration="63000" />
+      <workItem from="1593825638126" duration="1381000" />
     </task>
     <task id="LOCAL-00001" summary="Init commit">
       <created>1584645971223</created>
@@ -386,7 +404,14 @@
       <option name="project" value="LOCAL" />
       <updated>1593308370374</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="Added a new parser to support ticket fields">
+      <created>1593372492918</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1593372492918</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -430,7 +455,8 @@
     <MESSAGE value="Xenforo integration expansion" />
     <MESSAGE value="More GTM integrations:&#10;- Managers get notified is staff may be cheating&#10;- Discord ticket detection improvements with DAO" />
     <MESSAGE value="Added an &quot;annoy&quot; command and tools to utilize discord webhooks" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added an &quot;annoy&quot; command and tools to utilize discord webhooks" />
+    <MESSAGE value="Added a new parser to support ticket fields" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added a new parser to support ticket fields" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -447,7 +473,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/../GTM/gtm/src/main/java/net/grandtheftmc/gtm/warps/WarpManager.java</url>
-          <line>566</line>
+          <line>564</line>
           <properties class="net.grandtheftmc.gtm.warps.WarpManager">
             <option name="EMULATED" value="true" />
           </properties>

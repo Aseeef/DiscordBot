@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 import static utils.tools.GTools.jda;
 import static utils.tools.GTools.sendThenDelete;
@@ -24,6 +25,7 @@ public class OnSuggestion extends ListenerAdapter {
         TextChannel channel = e.getChannel();
         User user = e.getAuthor();
 
+
         // If it is a suggestion and not a command
         if (getSuggestionsChannel() == channel
                 && !user.isBot()
@@ -32,8 +34,10 @@ public class OnSuggestion extends ListenerAdapter {
             // Delete original message
             e.getMessage().delete().queue();
 
+            String message = SuggestionTools.formatSuggestion(e.getMessage().getContentRaw());
+
             // If user didn't use suggestion format, delete their msg
-            if (!ifUsedFormat(e.getMessage().getContentRaw())) {
+            if (!ifUsedFormat(message)) {
 
                 sendThenDelete(channel, user.getAsMention() + " your message does not follow the suggestion format! " +
                         "Please follow the above given instructions and repost your suggestion.");
@@ -55,7 +59,7 @@ public class OnSuggestion extends ListenerAdapter {
             }
 
             // Create new suggestion object
-            Suggestions suggestion = new Suggestions(Data.getNextNumber(Data.SUGGESTIONS), e.getMessage().getContentRaw(), Objects.requireNonNull(e.getMember()).getId(), "PENDING", "Awaiting response from staff.");
+            Suggestions suggestion = new Suggestions(Data.getNextNumber(Data.SUGGESTIONS), message, Objects.requireNonNull(e.getMember()).getId(), "PENDING", "Awaiting response from staff.");
 
             // Create and send suggestion embed then use the callback to save msg id into suggestion object & add reaction
                 e.getChannel().sendMessage(createSuggestionEmbed(suggestion)).queue( (msg) -> {
@@ -89,9 +93,9 @@ public class OnSuggestion extends ListenerAdapter {
     }
 
     private boolean ifUsedFormat(String msg) {
-        return msg.toLowerCase().contains("what server is your suggestion for") &&
-                msg.toLowerCase().contains("what is your suggestion") &&
-                msg.toLowerCase().contains("why do you suggestion this");
+        return msg.toLowerCase().contains("**What server is your suggestion for?**") &&
+                msg.toLowerCase().contains("**What is your Suggestion? Be concise!**") &&
+                msg.toLowerCase().contains("**Why do you Suggestion this?**");
     }
 
 }

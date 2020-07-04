@@ -2,7 +2,9 @@ utils\database\sql\DatabaseHandler.class
 utils\database\sql\BaseDatabase.class
 utils\Rank.class
 events\OnGuildMessage.class
+utils\tools\PrivateChannel.class
 utils\tools\RaidModeTools.class
+commands\ChannelCommand.class
 commands\HarryCommand.class
 utils\Suggestions.class
 xenforo\objects\Alert.class
@@ -41,6 +43,7 @@ commands\Command$Type.class
 utils\console\commands\listeners\ConsoleStopCommand.class
 events\OnJoin.class
 xenforo\objects\tickets\SupportTicket$ReaderMode.class
+commands\StaffCommand.class
 utils\console\Console.class
 utils\database\XenforoDAO.class
 utils\SelfData.class
@@ -49,7 +52,6 @@ utils\confighelpers\RankSettings.class
 utils\tools\SuggestionTools.class
 GTM.class
 utils\console\commands\listeners\ConsoleHelpCommand.class
-commands\ModCommand.class
 selfevents\ReadyEvents.class
 utils\database\sql\BaseDatabase$1.class
 selfevents\ReadyEvents$1.class

@@ -21,7 +21,7 @@ import java.sql.SQLException;
 public class AccountCommand extends Command {
 
     public AccountCommand() {
-        super("account", "Manage your gtm-discord account link", null, Type.DMS_ONLY);
+        super("discord", "Manage your gtm-discord account link", null, Type.DMS_ONLY);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class AccountCommand extends Command {
                         GTMUser user = (GTMUser) Data.obtainData(Data.USER, member.getIdLong());
                         channel.sendMessage("**Verification successful! Your discord account has now been linked to `" + user.getUsername() + "`!**").queue();
                     } else {
-                        channel.sendMessage("**Verification failed!** Please make sure you provided to correct verification code.").queue();
+                        channel.sendMessage("**Verification failed!** Please make sure you provided to correct verification code from GTM. To get this verification code, log on to GTM with your account and use /discord verify.").queue();
                     }
                 });
 

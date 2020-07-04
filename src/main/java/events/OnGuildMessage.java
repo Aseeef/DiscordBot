@@ -26,17 +26,21 @@ public class OnGuildMessage extends ListenerAdapter {
 
         if (annoyMap.containsKey(user.getIdLong())) {
             String emojiString = annoyMap.get(user.getIdLong());
-            Emote emoji = e.getGuild().getEmoteById(emojiString);
-            if (emoji != null)
-                message.addReaction(emoji).queue(null, error -> {
-                    annoyMap.remove(user.getIdLong());
-                    SelfData.get().update();
-                });
-            else
+            Emote emoji;
+            try {
+                emoji =  e.getGuild().getEmoteById(emojiString);
+                if (emoji != null)
+                    message.addReaction(emoji).queue(null, error -> {
+                        annoyMap.remove(user.getIdLong());
+                        SelfData.get().update();
+                    });
+            } catch (NumberFormatException er) {
                 message.addReaction(emojiString).queue(null, error -> {
                     annoyMap.remove(user.getIdLong());
                     SelfData.get().update();
                 });
+            }
+
         }
 
         else if (scrabbleMap.containsKey(user.getIdLong())) {

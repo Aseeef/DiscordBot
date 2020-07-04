@@ -2,7 +2,6 @@ package utils.webhooks;
 
 import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
-import club.minnced.discord.webhook.WebhookCluster;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -14,6 +13,11 @@ import static utils.tools.GTools.jda;
 
 public class WebhookUtils {
 
+    /**
+     * Retrieve a web hook from either an existing web hook but if none are found create a new web hook for the specified channel
+     * @param channel - The channel for which to get the web hook for.
+     * @return - Returns a CompletableFuture url String which can / should be completed async in lamda using CompleteableFuture#thenCompleteAsync();
+     */
     public static CompletableFuture<String> retrieveWebhookUrl (TextChannel channel) {
         CompletableFuture<String> futureHookUrl = new CompletableFuture<>();
         jda.getGuilds().get(0).retrieveWebhooks().queue( (webhooks -> {

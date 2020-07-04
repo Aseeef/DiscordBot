@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 public class SeniorsCommand extends Command {
 
     public SeniorsCommand() {
-        super("seniors", "Manage senior settings", Rank.ADMIN, Type.DISCORD_ONLY);
+        super("seniors", "Manage senior related settings", Rank.ADMIN, Type.DISCORD_ONLY);
     }
 
     @Override

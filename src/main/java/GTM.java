@@ -118,7 +118,7 @@ public class GTM extends ListenerAdapter {
             jda.addEventListener(new RebootCommand());
             jda.addEventListener(new PingCommand());
             jda.addEventListener(new HarryCommand());
-            jda.addEventListener(new ModCommand());
+            jda.addEventListener(new StaffCommand());
             jda.addEventListener(new AnnoyCommand());
 
             // Self user settings functions to check if there was utils.config change to prevent

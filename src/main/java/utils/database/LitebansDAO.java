@@ -14,7 +14,7 @@ public class LitebansDAO {
     public static Ban getBanByPlayer (Connection conn, String player) {
         try {
             UUID uuid = MojangAPI.getUUID(player);
-            String query = "SELECT * FROM `litebans_bans` WHERE `uuid`=?;";
+            String query = "SELECT * FROM `litebans_bans` WHERE `uuid`=? AND `active`=1;";
 
             try (PreparedStatement statement = conn.prepareStatement(query)) {
                 statement.setString(1, uuid.toString());
@@ -24,9 +24,11 @@ public class LitebansDAO {
                         int id = result.getInt("id");
                         String ip = result.getString("ip");
                         String reason = result.getString("reason");
-                        UUID banUuid = UUID.fromString(result.getString("banned_by_uuid"));
+                        String banUuidString = result.getString("banned_by_uuid");
+                        UUID banUuid = banUuidString == null ? null : UUID.fromString(banUuidString);
                         String banName = result.getString("banned_by_name");
-                        UUID unbanUuid = UUID.fromString(result.getString("removed_by_uuid"));
+                        String unbanUuidString = result.getString("removed_by_uuid");
+                        UUID unbanUuid = unbanUuidString == null ? null : UUID.fromString(unbanUuidString);
                         String unbanName = result.getString("removed_by_name");
                         Timestamp unbanTime = result.getTimestamp("removed_by_date");
                         long banTime = result.getLong("time");
