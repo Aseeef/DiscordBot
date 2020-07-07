@@ -2,6 +2,7 @@ C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\users\GTMUser.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\database\sql\BaseDatabase.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\xenforo\objects\tickets\Department.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\PingCommand.java
+C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\DiscordAccountCommand.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\console\commands\ConsoleCommandListener.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\console\Logs.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\database\DiscordDAO.java
@@ -15,15 +16,16 @@ C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\Command.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\WelcomeCommand.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\events\OnReactRules.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\xenforo\objects\XenforoUser.java
-C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\AccountCommand.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\SelfData.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\selfevents\ReadyEvents.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\SeniorsCommand.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\confighelpers\DatabaseCreds.java
+C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\StaffAccountCommand.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\console\Console.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\database\XenforoDAO.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\xenforo\objects\Alert.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\PlayerCountCommand.java
+C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\StaffCommand.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\events\OnJoin.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\AnnoyCommand.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\tools\WelcomeTools.java
@@ -40,7 +42,6 @@ C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\tools\SuggestionTools.jav
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\SuggestionCommand.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\events\OnSuggestion.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\tools\UUIDUtil.java
-C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\ModCommand.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\database\sql\component\Database.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\console\commands\listeners\ConsoleStopCommand.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\tools\Verification.java
@@ -49,7 +50,7 @@ C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\database\redis\OnRedisMes
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\xenforo\events\NewThreadEvent.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\Rank.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\confighelpers\MineStatSettings.java
-C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\tools\CommandsTools.java
+C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\tools\PrivateChannel.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\RaidModeCommand.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\Data.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\confighelpers\Config.java
@@ -59,4 +60,5 @@ C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\confighelpers\RaidmodeSet
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\GTM.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\database\LitebansDAO.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\tools\RaidModeTools.java
+C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\ChannelCommand.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\RebootCommand.java

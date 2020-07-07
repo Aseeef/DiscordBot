@@ -1,20 +1,21 @@
 package commands;
 
-import utils.confighelpers.Config;
-import utils.Rank;
-import utils.tools.GTools;
-import utils.users.GTMUser;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import utils.Rank;
+import utils.confighelpers.Config;
+import utils.tools.GTools;
+import utils.users.GTMUser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import static utils.console.Logs.log;
 import static utils.tools.GTools.jda;
 import static utils.tools.GTools.sendThenDelete;
-import static utils.console.Logs.log;
 
 public abstract class Command extends ListenerAdapter {
 
@@ -37,30 +38,6 @@ public abstract class Command extends ListenerAdapter {
         this.rank = rank;
         this.type = type;
         commandList.add(this);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public Rank getRank() {
-        return rank;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public static List<Command> getCommands() {
-        return commandList;
-    }
-
-    public static Command getByName (String commandName) {
-        return commandList.stream().filter( (command) -> command.getName().equals(commandName)).findFirst().orElse(null);
     }
 
     @Override
@@ -130,12 +107,50 @@ public abstract class Command extends ListenerAdapter {
 
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Rank getRank() {
+        return rank;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public static List<Command> getCommands() {
+        return commandList;
+    }
+
+    public static Command getByName (String commandName) {
+        return commandList.stream().filter( (command) -> command.getName().equals(commandName)).findFirst().orElse(null);
+    }
+
     /** This is the logic that occurs when this command is used
      * Note: To use TextChannel or PrivateChannel methods, use casting
      */
     public abstract void onCommandUse(Message message, Member member, GTMUser gtmUser, MessageChannel channel, String[] args);
 
-    enum Type {
+
+    // -- Commands static methods -- //
+
+    public static String[] getArgs(String msg) {
+        if (msg.split(" ").length == 1) return new String[0];
+        else return msg.replaceFirst(Config.get().getCommandPrefix() + "[^ ]+ ", "").split(" ");
+    }
+
+    public static boolean ifCommandExists(String commandString) {
+        // Checks if its is a specific command
+        Optional<Command> optionalCommand = getCommands().stream().filter( (command) -> command.getName().equalsIgnoreCase(commandString)).findFirst();
+        return optionalCommand.isPresent();
+    }
+
+    public enum Type {
         /** Commands of this type can be executed anywhere by the user */
         ANYWHERE,
         /** Commands of this type can only be executed in the bot's direct messages */
@@ -144,9 +159,34 @@ public abstract class Command extends ListenerAdapter {
         DISCORD_ONLY,
     }
 
-    public static String[] getArgs(String msg) {
-        if (msg.split(" ").length == 1) return new String[0];
-        else return msg.replaceFirst(Config.get().getCommandPrefix() + "[^ ]+ ", "").split(" ");
+    public static class CommandsTools extends ListenerAdapter {
+        public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
+            onUnknownCommand(e.getMessage(), e.getChannel(), e.getAuthor());
+        }
+        public void onPrivateMessageReceived(PrivateMessageReceivedEvent e) {
+            onUnknownCommand(e.getMessage(), e.getChannel(), e.getAuthor());
+        }
+
+        private void onUnknownCommand(Message message, MessageChannel channel, User user) {
+            String msg = message.getContentRaw();
+            String commandName = msg.toLowerCase().replaceFirst(Config.get().getCommandPrefix(), "")
+                    .split(" ")[0];
+
+            // If is any command, delete it
+            if (GTools.isCommand(msg, user)) {
+                if (channel instanceof TextChannel)
+                    message.delete().queue();
+
+                // If is unknown command, print msg
+                if (!Command.ifCommandExists(commandName)) {
+                    log("User "+ user.getAsTag()+
+                            "("+user.getId()+") issued unknown command: " + msg);
+
+                    GTools.sendThenDelete(channel, "**Unknown command! Do `/help` for a list of all commands that you can use!**");
+                }
+            }
+        }
+
     }
 
 }

@@ -35,7 +35,6 @@ utils\console\commands\ConsoleCommand.class
 utils\litebans\Ban.class
 xenforo\objects\XenforoUser.class
 xenforo\Xenforo.class
-utils\tools\CommandsTools.class
 xenforo\objects\tickets\SupportTicket$KeyType.class
 utils\tools\WelcomeTools.class
 xenforo\events\TicketEvent.class
@@ -48,6 +47,7 @@ utils\console\Console.class
 utils\database\XenforoDAO.class
 utils\SelfData.class
 xenforo\objects\tickets\Department.class
+commands\Command$CommandsTools.class
 utils\confighelpers\RankSettings.class
 utils\tools\SuggestionTools.class
 GTM.class
@@ -56,6 +56,7 @@ selfevents\ReadyEvents.class
 utils\database\sql\BaseDatabase$1.class
 selfevents\ReadyEvents$1.class
 xenforo\events\NewThreadEvent.class
+commands\DiscordAccountCommand.class
 commands\SeniorsCommand.class
 utils\database\redis\OnRedisMessageReceive.class
 selfevents\CloseEvent.class
@@ -68,8 +69,8 @@ utils\confighelpers\MineStatSettings.class
 utils\tools\GTools.class
 utils\tools\MineStat.class
 utils\tools\RaidModeTools$1.class
-commands\AccountCommand.class
 utils\Data.class
+commands\StaffAccountCommand.class
 utils\tools\UUIDUtil.class
 utils\database\sql\component\Database.class
 xenforo\objects\tickets\SupportTicket.class

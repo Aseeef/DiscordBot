@@ -19,7 +19,6 @@ import utils.confighelpers.Config;
 import utils.console.Console;
 import utils.database.redis.OnRedisMessageReceive;
 import utils.database.sql.BaseDatabase;
-import utils.tools.CommandsTools;
 import utils.tools.GTools;
 import utils.tools.MineStat;
 import xenforo.Xenforo;
@@ -100,7 +99,7 @@ public class GTM extends ListenerAdapter {
 
             // JDA Events
             jda.addEventListener(new OnSuggestion());
-            jda.addEventListener(new CommandsTools());
+            jda.addEventListener(new Command.CommandsTools());
             jda.addEventListener(new ReadyEvents());
             jda.addEventListener(new CloseEvent());
             jda.addEventListener(new OnJoin());
@@ -114,12 +113,14 @@ public class GTM extends ListenerAdapter {
             jda.addEventListener(new WelcomeCommand());
             //jda.addEventListener(new SeniorsCommand());
             jda.addEventListener(new HelpCommand());
-            jda.addEventListener(new AccountCommand());
+            jda.addEventListener(new DiscordAccountCommand());
+            //jda.addEventListener(new StaffAccountCommand());
             jda.addEventListener(new RebootCommand());
             jda.addEventListener(new PingCommand());
             jda.addEventListener(new HarryCommand());
             jda.addEventListener(new StaffCommand());
             jda.addEventListener(new AnnoyCommand());
+            //jda.addEventListener(new ChannelCommand());
 
             // Self user settings functions to check if there was utils.config change to prevent
             // unnecessary calls to the discord api which may result in us getting rate limited
