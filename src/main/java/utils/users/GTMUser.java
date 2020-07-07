@@ -2,6 +2,8 @@ package utils.users;
 
 import com.fasterxml.jackson.annotation.*;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.requests.RestAction;
 import utils.Data;
 import utils.Rank;
 import utils.database.DiscordDAO;
@@ -100,8 +102,6 @@ public class GTMUser {
             Rank newRank = DiscordDAO.getRank(conn, this.getUuid());
             this.setLastUpdated(System.currentTimeMillis());
 
-            DiscordDAO.updateDiscordTag(conn, this.discordId, this.getDiscordMember().getUser().getAsTag());
-
             if (newRank != null && newRank != this.getRank()) {
                 this.setRank(newRank);
                 saveUser(this);
@@ -135,6 +135,9 @@ public class GTMUser {
                     this.getDiscordMember().modifyNickname(username).queue();
                 }
             }
+
+            DiscordDAO.updateDiscordTag(conn, this.discordId, this.getDiscordMember().getUser().getAsTag());
+
         } catch (SQLException e) {
             GTools.printStackError(e);
         }
@@ -195,9 +198,32 @@ public class GTMUser {
         this.lastUpdated = lastUpdated;
     }
 
-    @JsonIgnore
+    @JsonIgnore @Deprecated
+    /**
+     * @deprecated - In some cases, this method may freeze the bot for a few ms while the member is retrieved.
+     * This shouldn't cause any issues at our current scale but in the distant future it might!
+     */
     public Member getDiscordMember() {
-        return jda.getGuilds().get(0).getMemberById(this.getDiscordId());
+        return jda.getGuilds().get(0).retrieveMemberById(this.discordId).complete();
+    }
+
+    @JsonIgnore @Deprecated
+    /**
+     * @deprecated - In some cases, this method may freeze the bot for a few ms while the user is retrieved.
+     * This shouldn't cause any issues at our current scale but in the distant future it might!
+     */
+    public User getUser() {
+        return jda.retrieveUserById(this.discordId).complete();
+    }
+
+    @JsonIgnore
+    public RestAction<Member> retrieveMember() {
+        return jda.getGuilds().get(0).retrieveMemberById(this.discordId);
+    }
+
+    @JsonIgnore
+    public RestAction<User> retrieveUser() {
+        return jda.retrieveUserById(this.discordId);
     }
 
 }

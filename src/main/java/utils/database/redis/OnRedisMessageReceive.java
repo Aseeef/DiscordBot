@@ -2,6 +2,7 @@ package utils.database.redis;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
 import net.grandtheftmc.jedisnew.RedisEventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -74,10 +75,13 @@ public class OnRedisMessageReceive implements RedisEventListener {
                         String server = jsonObject.getString("server");
                         try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
                             List<GTMUser> managers = DiscordDAO.getAllWithRank(conn, Rank.MANAGER);
-                            managers.forEach( (gtmUser ->
-                                    gtmUser.getDiscordMember().getUser().openPrivateChannel().queue( (privateChannel ->
-                                    privateChannel.sendMessage(generateStaffReportEmbed(player, check, ping, tps, component, server)).queue()
-                                            ))));
+                            for (GTMUser manager : managers) {
+                                manager.retrieveUser()
+                                        .flatMap( (User::openPrivateChannel))
+                                        .queue( (privateChannel ->
+                                                privateChannel.sendMessage(generateStaffReportEmbed(player, check, ping, tps, component, server)).queue()
+                                        ));
+                            }
                         } catch (SQLException e) {
                             GTools.printStackError(e);
                         }

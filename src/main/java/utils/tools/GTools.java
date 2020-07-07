@@ -1,5 +1,6 @@
 package utils.tools;
 
+import com.google.common.base.Charsets;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -144,6 +145,10 @@ public class GTools {
 
     public static String replaceLast(String text, String regex, String replacement) {
         return text.replaceFirst("(?s)(.*)" + regex, "$1" + replacement);
+    }
+
+    public static String convertSpecialChar(String string) {
+        return new String(string.getBytes(), Charsets.US_ASCII);
     }
 
 }

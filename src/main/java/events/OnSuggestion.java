@@ -93,9 +93,9 @@ public class OnSuggestion extends ListenerAdapter {
     }
 
     private boolean ifUsedFormat(String msg) {
-        return msg.toLowerCase().contains("**What server is your suggestion for?**") &&
-                msg.toLowerCase().contains("**What is your Suggestion? Be concise!**") &&
-                msg.toLowerCase().contains("**Why do you Suggestion this?**");
+        return msg.toLowerCase().contains("**what server is your suggestion for?**") &&
+                msg.toLowerCase().contains("**what is your suggestion? be concise!**") &&
+                msg.toLowerCase().contains("**why do you suggestion this?**");
     }
 
 }

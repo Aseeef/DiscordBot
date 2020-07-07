@@ -1,11 +1,13 @@
 package utils.database;
 
+import com.google.common.base.Charsets;
 import me.kbrewster.exceptions.APIException;
 import me.kbrewster.exceptions.InvalidPlayerException;
 import me.kbrewster.mojangapi.MojangAPI;
 import net.grandtheftmc.jedisnew.NewJedisManager;
 import org.json.JSONObject;
 import utils.Rank;
+import utils.console.Logs;
 import utils.tools.GTools;
 import utils.tools.UUIDUtil;
 import utils.users.GTMUser;
@@ -100,12 +102,15 @@ public class DiscordDAO {
     }
 
     public static void createDiscordProfile(Connection conn, GTMUser gtmUser) {
+        String mention = gtmUser.getDiscordMember().getUser().getAsTag();
+        mention = mention.replaceFirst("@", "");
+        mention = GTools.convertSpecialChar(mention); //changes character encoding to something accepted by database
 
         String query = "INSERT INTO `discord_users` (`uuid`, `discord_tag`, `discord_id`) VALUES (UNHEX(?),?,?);";
 
         try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, gtmUser.getUuid().toString().replace("-", ""));
-            ps.setString(2, gtmUser.getDiscordMember().getUser().getAsTag().replaceFirst("@", ""));
+            ps.setString(2, mention);
             ps.setLong(3, gtmUser.getDiscordId());
             ps.executeUpdate();
         } catch (Exception e) {
