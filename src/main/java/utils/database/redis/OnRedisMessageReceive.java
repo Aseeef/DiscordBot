@@ -58,7 +58,7 @@ public class OnRedisMessageReceive implements RedisEventListener {
 
                     case "update": {
                         long discordId = jsonObject.getLong("discordId");
-                        GTMUser.getGTMUser(discordId).ifPresent((GTMUser::updateUserDataNow));
+                        GTMUser.getGTMUser(discordId).ifPresent(( (user) -> GTools.runAsync(user::updateUserDataNow)));
                         break;
                     }
 

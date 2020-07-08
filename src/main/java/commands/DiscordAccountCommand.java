@@ -77,7 +77,7 @@ public class DiscordAccountCommand extends Command {
             case "update":
                 if (gtmUser == null) GTools.sendThenDelete(channel, "**Your discord account is not linked to any user!**");
                 else {
-                    gtmUser.updateUserDataNow();
+                    GTools.runAsync(gtmUser::updateUserDataNow);
                     GTools.sendThenDelete(channel, "**Your account information has been updated!**");
                 }
                 break;

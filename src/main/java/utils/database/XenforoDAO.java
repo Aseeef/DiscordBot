@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class XenforoDAO {
@@ -74,6 +75,9 @@ public class XenforoDAO {
         } catch (SQLException e) {
             GTools.printStackError(e);
         }
+
+        // sort by open date
+        tickets.sort(Comparator.comparingInt(SupportTicket::getOpenDate));
 
         return tickets;
 

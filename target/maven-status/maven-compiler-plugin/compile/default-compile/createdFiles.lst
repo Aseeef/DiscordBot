@@ -26,6 +26,7 @@ events\OnSuggestion.class
 utils\confighelpers\RaidmodeSettings.class
 xenforo\Xenforo$1.class
 commands\RaidModeCommand.class
+utils\channels\CustomChannel.class
 commands\PlayerCountCommand.class
 utils\database\LitebansDAO.class
 utils\pagination\DiscordMenu$1.class
@@ -53,6 +54,7 @@ utils\SelfData.class
 xenforo\objects\tickets\Department.class
 commands\Command$CommandsTools.class
 utils\confighelpers\RankSettings.class
+utils\console\commands\listeners\ConsoleMemoryCommand.class
 utils\tools\SuggestionTools.class
 GTM.class
 utils\console\commands\listeners\ConsoleHelpCommand.class
@@ -64,6 +66,7 @@ commands\DiscordAccountCommand.class
 commands\SeniorsCommand.class
 utils\database\redis\OnRedisMessageReceive.class
 selfevents\CloseEvent.class
+utils\console\Console$ErrorStream.class
 utils\console\commands\listeners\ConsoleQueryCommand.class
 utils\tools\Verification.class
 utils\confighelpers\Config.class
@@ -73,6 +76,7 @@ selfevents\ReadyEvents$2.class
 utils\confighelpers\MineStatSettings.class
 utils\tools\GTools.class
 utils\tools\MineStat.class
+utils\console\Console$GeneralStream.class
 utils\tools\RaidModeTools$1.class
 utils\Data.class
 commands\StaffAccountCommand.class

@@ -216,7 +216,7 @@ public class DiscordDAO {
                     }
                 }
             } catch (SQLException e) {
-            GTools.printStackError(e);
+                GTools.printStackError(e);
             }
 
         return false;

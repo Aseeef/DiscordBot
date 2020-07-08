@@ -183,7 +183,10 @@ public class TicketEvent {
         if (links.size() == 0) return null;
         StringBuilder sb = new StringBuilder();
         for (String link : links) {
-            sb.append(link).append("\n");
+            StringBuilder testSb = new StringBuilder(sb);
+            if (!(testSb.append(link).append("\n").length() >= 1000))
+                sb.append(link).append("\n");
+            else sb.append("and more...");
         }
         return sb.toString();
     }

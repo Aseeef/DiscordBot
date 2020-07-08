@@ -1,11 +1,15 @@
 package utils.console;
 
+import utils.tools.GTools;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+import static utils.console.Console.*;
 
 public enum Logs {
 
@@ -36,19 +40,11 @@ public enum Logs {
     }
 
     public static void log(String msg, Logs type) {
-        //Log color codes
-        final String ANSI_RESET = "\u001B[0m";
-        final String ANSI_WHITE = "\u001B[37m";
-        final String ANSI_CYAN = "\u001B[36m";
+        msg = "["+type.n+"] " + msg;
+        System.out.println(msg);
+    }
 
-        // Log with time stamp
-        String time = DateTimeFormatter.ofPattern("HH:mm:ss").format(LocalDateTime.now());
-
-        String output = "["+time+"] ["+type+"] "+msg;
-        String coloredOutput = ANSI_RESET+ANSI_WHITE+"["+ANSI_CYAN+time+ANSI_WHITE+"] "+
-                ANSI_WHITE+"["+ANSI_RESET+type.c+type.n+ANSI_WHITE+"] "+type.c+msg+ANSI_RESET;
-        System.out.println(coloredOutput);
-
+    public static void logToFile(String output) {
         // Save logs to file
         String date = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDateTime.now());
         File file = new File("logs/", date+".txt");
@@ -63,9 +59,8 @@ public enum Logs {
             bw.newLine();
             bw.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            GTools.printStackError(e);
         }
-
     }
 
 }

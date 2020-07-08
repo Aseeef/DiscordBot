@@ -5,6 +5,7 @@ C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\PingCommand.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\DiscordAccountCommand.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\console\commands\ConsoleCommandListener.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\console\Logs.java
+C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\channels\CustomChannel.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\database\DiscordDAO.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\xenforo\objects\tickets\SupportTicket.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\database\sql\DatabaseHandler.java
@@ -35,6 +36,7 @@ C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\tools\MineStat.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\database\sql\component\DatabaseCredentials.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\tools\GTools.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\webhooks\WebhookUtils.java
+C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\MembersCache.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\console\commands\listeners\ConsoleHelpCommand.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\xenforo\events\TicketEvent.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\console\commands\listeners\ConsoleQueryCommand.java

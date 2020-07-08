@@ -14,6 +14,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
 
+import static utils.tools.GTools.guild;
+
 public class GTMUser {
 
     /** A maximum of how often should the player's information be updated in minutes */
@@ -96,11 +98,25 @@ public class GTMUser {
 
     @JsonIgnore
     public static boolean removeGTMUser(long discordId) {
-        if (userCache.containsKey(discordId)) {
+        boolean success = false;
+
+        Optional<GTMUser> optionalGTMUser = GTMUser.getGTMUser(discordId);
+        if (optionalGTMUser.isPresent()) {
             userCache.remove(discordId);
-            return Data.deleteData(Data.USER, discordId);
+            success = Data.deleteData(Data.USER, discordId);
+            optionalGTMUser.get().getDiscordMember().ifPresent( member -> {
+                // remove donor roles if any
+                for (Rank r : Rank.values()) {
+                    if (!r.isHigherOrEqualTo(Rank.HELPER) && member.getRoles().contains(r.getRole())) {
+                        guild.removeRoleFromMember(member.getId(), r.getRole()).queue();
+                    }
+                }
+                // reset nick
+                member.modifyNickname("").queue();
+            });
         }
-        else return false;
+
+        return success;
     }
 
     @JsonIgnore
@@ -116,6 +132,8 @@ public class GTMUser {
         }
 
         Logs.log("Attempting to update user data for GTM Player " + this.getUsername() + "!");
+        long start = System.currentTimeMillis();
+
         try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
             String newUsername = DiscordDAO.getUsername(this.getUuid()).orElse(null);
             Rank newRank = DiscordDAO.getRank(conn, this.getUuid());
@@ -138,14 +156,14 @@ public class GTMUser {
                     // msg admins TODO
                 } else {
                     // set new role on discord
-                    discordMember.getGuild().addRoleToMember(this.getDiscordId(), rank.getRole()).queue();
+                    guild.addRoleToMember(this.getDiscordId(), rank.getRole()).queue();
                     // remove old role(s)
                     for (Rank r : Rank.values()) {
-                        if (r != rank && discordMember.getRoles().contains(r.getRole())) {
+                        if (r != this.rank && discordMember.getRoles().contains(r.getRole())) {
                             if (rank.isHigherOrEqualTo(Rank.HELPER) || discordMember.isOwner()) {
                                 // msg admins TODO
                             } else
-                                discordMember.getGuild().removeRoleFromMember(this.getDiscordId(), r.getRole()).queue();
+                                guild.removeRoleFromMember(discordMember, r.getRole()).queue();
                         }
                     }
                 }
@@ -162,11 +180,13 @@ public class GTMUser {
         } catch (SQLException e) {
             GTools.printStackError(e);
         }
+
+        System.out.println("Updated user data for GTM Player " + this.getUsername() + " in " + (System.currentTimeMillis() - start) + " ms!");
     }
 
     @JsonIgnore
     public void updateUserDataIfTime() {
-        if (this.getLastUpdated() + (UPDATE_TIME * 1000 * 60) < System.currentTimeMillis()) updateUserDataNow();
+        if (this.getLastUpdated() + (UPDATE_TIME * 1000 * 60) < System.currentTimeMillis()) GTools.runAsync(this::updateUserDataNow);
     }
 
     @JsonGetter

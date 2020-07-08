@@ -15,9 +15,10 @@ import utils.console.Logs;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import static utils.console.Logs.log;
@@ -135,6 +136,11 @@ public class GTools {
 
     public static void runAsync(Runnable target) {
         new Thread(target).start();
+    }
+
+    public static ScheduledFuture runTaskTimer(Runnable task, int startDelay, int period) {
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        return executor.scheduleAtFixedRate(task, startDelay, period, TimeUnit.MILLISECONDS);
     }
 
     public static File getAsset(String name) {

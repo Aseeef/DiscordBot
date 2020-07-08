@@ -29,27 +29,30 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import static utils.console.Logs.log;
 import static utils.tools.GTools.*;
 
 public class GTM extends ListenerAdapter {
 
     public static void main (String[] args) {
 
+        // Set console output settings
+        System.setOut(new Console.GeneralStream(System.out));
+        System.setErr(new Console.ErrorStream(System.err));
+
         // System/Console settings
         Console.loadShutdownHook();
         Console.loadConsoleCommands();
 
         // Load utils.config
-        log("Loading bot configuration....");
+        System.out.println("Loading bot configuration....");
         Config.load();
 
         // Load Self Data
-        log("Loading bot data....");
+        System.out.println("Loading bot data....");
         SelfData.load();
 
         // Load Databases
-        log("Connecting to databases...");
+        System.out.println("Connecting to databases...");
         loadMySQL();
         loadJedis();
 
@@ -62,7 +65,7 @@ public class GTM extends ListenerAdapter {
 
 
     private static void loadXen() {
-        log("Initializing Xenforo API...");
+        System.out.println("Initializing Xenforo API...");
         new XenAPI("c1230035-cf85-4e3d-add8-f4457b641d1e", "https://grandtheftmc.net/");
         //Xenforo.login();
         Xenforo.startTicketPolling();
@@ -70,10 +73,10 @@ public class GTM extends ListenerAdapter {
 
     private static void loadJDA() {
         // Set up JDA & set Settings
-        log("Initializing JDA...");
+        System.out.println("Initializing JDA...");
 
         // Initialize GTM MineStat
-        log("Loading MineStat data on GTM...");
+        System.out.println("Loading MineStat data on GTM...");
         gtm = new MineStat(Config.get().getMineStatSettings().getServerIp(), Config.get().getMineStatSettings().getServerPort());
 
         try {
@@ -140,7 +143,7 @@ public class GTM extends ListenerAdapter {
         long avatarLastEdit = avatar.lastModified();
         if (avatarLastEdit != SelfData.get().getPreviousAvatarEdited()) {
             try {
-                log("Detected avatar change! Updating bot avatar...");
+                System.out.println("Detected avatar change! Updating bot avatar...");
                 jda.getSelfUser().getManager().setAvatar(Icon.from(avatar)).queueAfter(5, TimeUnit.SECONDS);
                 SelfData.get().setPreviousAvatarEdited(avatarLastEdit);
             } catch (IOException e) {
@@ -152,7 +155,7 @@ public class GTM extends ListenerAdapter {
     private static void setBotName() {
         // If previous bot name doesn't match utils.config bot name, update bot name
         if (!Config.get().getBotName().equals(SelfData.get().getPreviousBotName())) {
-            log("Detected utils.config name change! Updating bot name...");
+            System.out.println("Detected utils.config name change! Updating bot name...");
             jda.getSelfUser().getManager().setName(Config.get().getBotName()).queueAfter(5, TimeUnit.SECONDS);
             SelfData.get().setPreviousBotName(Config.get().getBotName());
         }
@@ -197,7 +200,7 @@ public class GTM extends ListenerAdapter {
         ).addRedisEventListener(new OnRedisMessageReceive());
         jedisManager.init();
 
-        log("Established connection to Redis!");
+        System.out.println("Established connection to Redis!");
     }
 
 }

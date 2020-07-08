@@ -67,7 +67,7 @@ public class Verification {
                     .put("discordId", m.getIdLong())
                     .put("tag", GTools.convertSpecialChar(m.getUser().getAsTag()));
             DiscordDAO.sendToGTM("verified", data);
-            gtmUser.updateUserDataNow();
+            GTools.runAsync(gtmUser::updateUserDataNow);
             // remove code
             verifyHashMap.remove(code);
             return true;

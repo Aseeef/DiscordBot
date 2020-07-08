@@ -16,11 +16,13 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class StaffAccountCommand extends Command {
 
     public StaffAccountCommand() {
-        super("account", "Staff command to pull gtm account information for a verified user", Rank.HELPER, Type.ANYWHERE);
+        super("accounts", "Staff command to pull gtm account information for a verified user", Rank.HELPER, Type.ANYWHERE);
     }
 
     @Override
@@ -68,7 +70,7 @@ public class StaffAccountCommand extends Command {
                     return;
                 }
 
-                user.updateUserDataNow();
+                GTools.runAsync(user::updateUserDataNow);
                 GTools.sendThenDelete(channel, "**Successfully refreshed user data for " + optionalTarget.get().getUser().getAsTag() + " (" + gtmUser.getUsername() + ")!**");
 
                 break;
@@ -79,21 +81,39 @@ public class StaffAccountCommand extends Command {
                     GTools.sendThenDelete(channel, "**You must be an Admin or higher to use this command.**");
                     return;
                 }
-                GTools.runAsync( () -> {
-                    List<GTMUser> users = GTMUser.loadAndGetAllUsers();
-                    users.forEach(GTMUser::updateUserDataNow);
-                    GTools.sendThenDelete(channel, "**All user roles and data have been updated!**");
-                });
-                GTools.sendThenDelete(channel, "**Update roles and data for all verified users. This may take a bit...**");
+                channel.sendMessage("**Updating roles and data for all verified users. [Progress: `?%`]**").queue(
+                        msg -> {
+                            AtomicInteger index = new AtomicInteger(1);
+                            List<GTMUser> users = GTMUser.loadAndGetAllUsers();
+
+                            ScheduledFuture task = GTools.runTaskTimer( () -> {
+                                int percent = Math.round((((float) index.get()) / (float) users.size()) * 100);
+                                int remaining = users.size() - index.get();
+                                int eta = Math.round((remaining * 710) / 1000f); // test show each user to take ~710ms to update
+                                msg.editMessage("**Updating roles and data for all verified users. [Progress: `"+percent+"%`] [ETA: `" + eta + " sec`]**").complete();
+                            }, 1000, 5000);
+                            GTools.runAsync( () -> {
+                                long start = System.currentTimeMillis();
+                                for (GTMUser user : users) {
+                                    user.updateUserDataNow();
+                                    index.addAndGet(1);
+                                }
+                                task.cancel(true);
+                                msg.delete().complete();
+                                GTools.sendThenDelete(channel, "**All user roles and data have been successfully updated in `" + (System.currentTimeMillis() - start) + " ms`!**");
+                            });
+                        }
+                );
                 break;
             }
 
-            case "listall": {
+            case "list": {
                 if (!Rank.hasRolePerms(member, Rank.ADMIN)) {
                     GTools.sendThenDelete(channel, "**You must be an Admin or higher to use this command.**");
                     return;
                 }
                 List<GTMUser> users = GTMUser.loadAndGetAllUsers();
+                users.sort( (u1, u2) -> u1.getUsername().compareToIgnoreCase(u2.getUsername()));
                 int maxPage = (int) Math.ceil(users.size() / 8f);
                 DiscordMenu.create(channel, getPageInfo(users, 1, maxPage), maxPage).thenAcceptAsync( (menu -> {
                     menu.onMenuAction( (menuAction, user) -> {
@@ -140,10 +160,10 @@ public class StaffAccountCommand extends Command {
     private Message getCommandHelpMsg() {
         return new MessageBuilder()
                 .append("> **Please enter a valid command argument:**\n")
-                .append("> `/Account Check <Member ID / Tag>` - *Checks which player the specified discord user is linked to*\n")
-                .append("> `/Account Refresh <Member ID / Tag>` - *Refreshes the target's information (if they are linked to GTM)*\n")
-                .append("> `/Account RefreshAll` - *Refreshes account data for all verified users*\n")
-                .append("> `/Account ListAll` - *Lists all verified users*\n")
+                .append("> `/Accounts Check <Member ID / Tag>` - *Checks which player the specified discord user is linked to*\n")
+                .append("> `/Accounts Refresh <Member ID / Tag>` - *Refreshes the target's information (if they are linked to GTM)*\n")
+                .append("> `/Accounts RefreshAll` - *Refreshes account data for all verified users*\n")
+                .append("> `/Accounts List` - *Lists all verified users*\n")
                 .build();
     }
 

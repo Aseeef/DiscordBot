@@ -1,11 +1,14 @@
 package utils;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import net.dv8tion.jda.api.entities.Category;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static utils.tools.GTools.guild;
 
 public class SelfData {
 
@@ -30,7 +33,7 @@ public class SelfData {
     private Map<Long, Character> scrabbleAnnoyMap = new HashMap<>();
     private List<Long> botAnnoyList = new ArrayList<>();
 
-    private Category privateChannelsCategory;
+    private long privateChannelsCategoryId;
 
     private static SelfData data;
 
@@ -45,7 +48,7 @@ public class SelfData {
               long modChannelId,
               long lastTicketRefreshTime, long lastPostRefreshTime,
               Map<Long, String> emojiAnnoyMap, Map<Long, Long[]> quoteAnnoyMap, Map<Long, Character> scrabbleAnnoyMap, List<Long> botAnnoyList,
-              Category privateChannelsCategory) {
+              long privateChannelsCategoryId) {
 
         this.suggestionChannelId = suggestionChannelId;
         this.playerCountChannelId = playerCountChannelId;
@@ -64,7 +67,7 @@ public class SelfData {
         this.quoteAnnoyMap = quoteAnnoyMap;
         this.scrabbleAnnoyMap = scrabbleAnnoyMap;
         this.botAnnoyList = botAnnoyList;
-        this.privateChannelsCategory = privateChannelsCategory;
+        this.privateChannelsCategoryId = privateChannelsCategoryId;
     }
 
     public static void load() {
@@ -208,12 +211,17 @@ public class SelfData {
         return botAnnoyList;
     }
 
-    public Category getPrivateChannelsCategory() {
-        return privateChannelsCategory;
+    public long getPrivateChannelsCategoryId() {
+        return privateChannelsCategoryId;
     }
 
-    public void setPrivateChannelsCategory(Category privateChannelsCategory) {
-        this.privateChannelsCategory = privateChannelsCategory;
+    @JsonIgnore
+    public Category getPrivateChannelsCategory() {
+        return guild.getCategoryById(privateChannelsCategoryId);
+    }
+
+    public void setPrivateChannelsCategory(long privateChannelsCategoryId) {
+        this.privateChannelsCategoryId = privateChannelsCategoryId;
         Data.storeData(Data.SELFDATA, this);
     }
 
