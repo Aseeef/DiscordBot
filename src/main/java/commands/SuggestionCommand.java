@@ -1,7 +1,7 @@
 package commands;
 
 import utils.Data;
-import utils.Rank;
+import utils.users.Rank;
 import utils.SelfData;
 import utils.Suggestions;
 import utils.users.GTMUser;

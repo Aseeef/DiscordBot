@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import net.grandtheftmc.jedisnew.NewJedisManager;
 import org.json.JSONObject;
+import utils.MembersCache;
 import utils.SelfData;
 import utils.confighelpers.Config;
 import utils.console.Logs;
@@ -14,6 +15,8 @@ import utils.console.Logs;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -22,9 +25,15 @@ import static utils.console.Logs.log;
 public class GTools {
 
     public static JDA jda;
+    public static Guild guild;
     public static MineStat gtm;
     public static NewJedisManager jedisManager;
     public static final Random RANDOM = new Random();
+    private static List<Member> members = new ArrayList<>();
+
+    public static List<Member> getMembers() {
+        return members;
+    }
 
     // Checks if its is a specific command
     public static boolean isCommand(String msg, User user, String command) {
@@ -42,7 +51,11 @@ public class GTools {
     }
 
     public static User userById (String id) {
-        return jda.retrieveUserById(id).complete();
+        return MembersCache.getUser(Long.parseLong(id)).orElse(null);
+    }
+
+    public static User userById (long id) {
+        return MembersCache.getUser(id).orElse(null);
     }
 
     public static void updateOnlinePlayers() {

@@ -52,7 +52,7 @@
                 </exclusion>
             </exclusions>
             <!-- /\ Excludes Audio /\ -->
-            <version>4.1.1_121</version>
+            <version>4.2.0_168</version>
         </dependency>
         <dependency>
             <groupId>org.kefirsf</groupId>

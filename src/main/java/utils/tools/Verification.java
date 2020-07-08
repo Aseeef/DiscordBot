@@ -2,11 +2,12 @@ package utils.tools;
 
 import org.json.JSONObject;
 import utils.Data;
-import utils.Rank;
 import utils.database.DiscordDAO;
 import utils.database.sql.BaseDatabase;
 import utils.users.GTMUser;
 import net.dv8tion.jda.api.entities.Member;
+import utils.users.Rank;
+
 import static utils.database.DiscordDAO.createDiscordProfile;
 
 import java.sql.Connection;

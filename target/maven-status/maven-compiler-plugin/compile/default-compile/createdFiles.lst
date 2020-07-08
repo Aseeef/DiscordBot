@@ -1,10 +1,11 @@
 utils\database\sql\DatabaseHandler.class
 utils\database\sql\BaseDatabase.class
-utils\Rank.class
 events\OnGuildMessage.class
 utils\tools\PrivateChannel.class
+utils\pagination\DiscordMenu.class
 utils\tools\RaidModeTools.class
 commands\ChannelCommand.class
+utils\pagination\MenuAction$Type.class
 commands\HarryCommand.class
 utils\Suggestions.class
 xenforo\objects\Alert.class
@@ -13,8 +14,10 @@ commands\WelcomeCommand.class
 xenforo\events\TicketEvent$1.class
 commands\AnnoyCommand.class
 commands\Command.class
+utils\pagination\MenuAction.class
 utils\database\DiscordDAO.class
 commands\HelpCommand.class
+utils\users\Rank.class
 commands\SuggestionCommand.class
 commands\RebootCommand.class
 events\OnReactRules.class
@@ -25,6 +28,7 @@ xenforo\Xenforo$1.class
 commands\RaidModeCommand.class
 commands\PlayerCountCommand.class
 utils\database\LitebansDAO.class
+utils\pagination\DiscordMenu$1.class
 utils\console\commands\ConsoleCommandListener.class
 utils\users\GTMUser.class
 utils\database\sql\BaseDatabase$Database.class
@@ -63,6 +67,7 @@ selfevents\CloseEvent.class
 utils\console\commands\listeners\ConsoleQueryCommand.class
 utils\tools\Verification.class
 utils\confighelpers\Config.class
+utils\MembersCache.class
 utils\console\Logs.class
 selfevents\ReadyEvents$2.class
 utils\confighelpers\MineStatSettings.class

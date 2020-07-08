@@ -1,6 +1,6 @@
 package events;
 
-import utils.Rank;
+import utils.users.Rank;
 import utils.SelfData;
 import utils.console.Logs;
 import net.dv8tion.jda.api.entities.Emote;

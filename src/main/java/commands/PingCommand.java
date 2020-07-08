@@ -1,7 +1,6 @@
 package commands;
 
 import utils.confighelpers.Config;
-import utils.Rank;
 import utils.users.GTMUser;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -11,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 public class PingCommand extends Command {
 
     public PingCommand() {
-        super("ping", "Ping the bot to see if its alive", Rank.HELPER, Type.ANYWHERE);
+        super("ping", "Ping the bot to see if its alive", null, Type.ANYWHERE);
     }
 
     @Override

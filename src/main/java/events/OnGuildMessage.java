@@ -1,13 +1,15 @@
 package events;
 
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Emote;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import utils.SelfData;
 import utils.tools.GTools;
 import utils.webhooks.WebhookUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 

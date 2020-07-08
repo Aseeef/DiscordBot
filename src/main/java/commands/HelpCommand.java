@@ -1,7 +1,7 @@
 package commands;
 
 import utils.confighelpers.Config;
-import utils.Rank;
+import utils.users.Rank;
 import utils.users.GTMUser;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;

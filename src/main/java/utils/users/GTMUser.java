@@ -3,20 +3,16 @@ package utils.users;
 import com.fasterxml.jackson.annotation.*;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.requests.RestAction;
 import utils.Data;
-import utils.Rank;
+import utils.MembersCache;
+import utils.console.Logs;
 import utils.database.DiscordDAO;
 import utils.database.sql.BaseDatabase;
 import utils.tools.GTools;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Optional;
-import java.util.UUID;
-
-import static utils.tools.GTools.jda;
+import java.util.*;
 
 public class GTMUser {
 
@@ -30,6 +26,9 @@ public class GTMUser {
     private long lastUpdated;
 
     @JsonIgnore
+    private Optional<Member> optionalMember;
+
+    @JsonIgnore
     private static HashMap<Long, GTMUser> userCache = new HashMap<>();
 
     @JsonCreator
@@ -39,8 +38,10 @@ public class GTMUser {
         this.rank = rank;
         this.discordId = discordId;
         this.lastUpdated = lastUpdated;
+        this.optionalMember = MembersCache.getMember(this.discordId);
 
         userCache.put(discordId, this);
+        saveUser(this);
     }
 
     @JsonIgnore
@@ -50,6 +51,7 @@ public class GTMUser {
         this.rank = rank;
         this.discordId = discordId;
         this.lastUpdated = System.currentTimeMillis();
+        this.optionalMember = MembersCache.getMember(this.discordId);
 
         userCache.put(discordId, this);
     }
@@ -82,6 +84,17 @@ public class GTMUser {
     }
 
     @JsonIgnore
+    public static List<GTMUser> loadAndGetAllUsers() {
+        List<GTMUser> users = new ArrayList<>(userCache.values());
+        for (long dataId : Data.getDataList(Data.USER)) {
+            boolean alreadyLoaded = users.stream().anyMatch( (loadedUser) -> dataId == loadedUser.getDiscordId());
+            if (!alreadyLoaded)
+                users.add((GTMUser) Data.obtainData(Data.USER, dataId));
+        }
+        return users;
+    }
+
+    @JsonIgnore
     public static boolean removeGTMUser(long discordId) {
         if (userCache.containsKey(discordId)) {
             userCache.remove(discordId);
@@ -97,6 +110,12 @@ public class GTMUser {
 
     @JsonIgnore
     public void updateUserDataNow() {
+        if (!this.optionalMember.isPresent()) {
+            Logs.log("Skipping data update for GTM Player " + this.getUsername() + " because they have left this discord!");
+            return;
+        }
+
+        Logs.log("Attempting to update user data for GTM Player " + this.getUsername() + "!");
         try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
             String newUsername = DiscordDAO.getUsername(this.getUuid()).orElse(null);
             Rank newRank = DiscordDAO.getRank(conn, this.getUuid());
@@ -112,31 +131,33 @@ public class GTMUser {
                 saveUser(this);
             }
 
-            if (!this.getDiscordMember().getRoles().contains(this.rank.getRole())) {
-                if (this.rank.isHigherOrEqualTo(Rank.HELPER) || this.getDiscordMember().isOwner()) {
+            Member discordMember = this.optionalMember.get();
+
+            if (!discordMember.getRoles().contains(this.rank.getRole())) {
+                if (this.rank.isHigherOrEqualTo(Rank.HELPER) || discordMember.isOwner()) {
                     // msg admins TODO
                 } else {
                     // set new role on discord
-                    this.getDiscordMember().getGuild().addRoleToMember(this.getDiscordId(), rank.getRole()).queue();
+                    discordMember.getGuild().addRoleToMember(this.getDiscordId(), rank.getRole()).queue();
                     // remove old role(s)
                     for (Rank r : Rank.values()) {
-                        if (r != rank && this.getDiscordMember().getRoles().contains(r.getRole())) {
-                            if (rank.isHigherOrEqualTo(Rank.HELPER) || this.getDiscordMember().isOwner()) {
+                        if (r != rank && discordMember.getRoles().contains(r.getRole())) {
+                            if (rank.isHigherOrEqualTo(Rank.HELPER) || discordMember.isOwner()) {
                                 // msg admins TODO
                             } else
-                                this.getDiscordMember().getGuild().removeRoleFromMember(this.getDiscordId(), r.getRole()).queue();
+                                discordMember.getGuild().removeRoleFromMember(this.getDiscordId(), r.getRole()).queue();
                         }
                     }
                 }
             }
 
-            if (!this.getDiscordMember().getEffectiveName().equals(this.username)) {
-                if (!this.rank.isHigherOrEqualTo(Rank.HELPER) && !this.getDiscordMember().isOwner()) {
-                    this.getDiscordMember().modifyNickname(username).queue();
+            if (!discordMember.getEffectiveName().equals(this.username)) {
+                if (!this.rank.isHigherOrEqualTo(Rank.HELPER) && !discordMember.isOwner()) {
+                    discordMember.modifyNickname(username).queue();
                 }
             }
 
-            DiscordDAO.updateDiscordTag(conn, this.discordId, this.getDiscordMember().getUser().getAsTag());
+            DiscordDAO.updateDiscordTag(conn, this.discordId, discordMember.getUser().getAsTag());
 
         } catch (SQLException e) {
             GTools.printStackError(e);
@@ -198,32 +219,19 @@ public class GTMUser {
         this.lastUpdated = lastUpdated;
     }
 
-    @JsonIgnore @Deprecated
-    /**
-     * @deprecated - In some cases, this method may freeze the bot for a few ms while the member is retrieved.
-     * This shouldn't cause any issues at our current scale but in the distant future it might!
-     */
-    public Member getDiscordMember() {
-        return jda.getGuilds().get(0).retrieveMemberById(this.discordId).complete();
-    }
-
-    @JsonIgnore @Deprecated
-    /**
-     * @deprecated - In some cases, this method may freeze the bot for a few ms while the user is retrieved.
-     * This shouldn't cause any issues at our current scale but in the distant future it might!
-     */
-    public User getUser() {
-        return jda.retrieveUserById(this.discordId).complete();
+    @JsonIgnore
+    public boolean isMember() {
+        return this.optionalMember.isPresent();
     }
 
     @JsonIgnore
-    public RestAction<Member> retrieveMember() {
-        return jda.getGuilds().get(0).retrieveMemberById(this.discordId);
+    public Optional<Member> getDiscordMember() {
+        return this.optionalMember;
     }
 
     @JsonIgnore
-    public RestAction<User> retrieveUser() {
-        return jda.retrieveUserById(this.discordId);
+    public Optional<User> getUser() {
+        return this.optionalMember.map(Member::getUser);
     }
 
 }

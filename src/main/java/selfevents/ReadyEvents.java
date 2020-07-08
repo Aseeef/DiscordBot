@@ -3,6 +3,7 @@ package selfevents;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import utils.MembersCache;
 import utils.SelfData;
 import utils.confighelpers.Config;
 import utils.console.Logs;
@@ -13,8 +14,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static utils.console.Logs.log;
-import static utils.tools.GTools.jda;
-import static utils.tools.GTools.updateOnlinePlayers;
+import static utils.tools.GTools.*;
 
 public class ReadyEvents extends ListenerAdapter {
 
@@ -26,6 +26,12 @@ public class ReadyEvents extends ListenerAdapter {
             Logs.log(jda.getGuilds().toString(), Logs.ERROR);
             System.exit(0);
         }
+
+        // set static guild variable
+        guild = jda.getGuilds().get(0);
+
+        // cache all members
+        MembersCache.reloadMembersAsync();
 
         // Print finished loading msg
         log("Bot is now online!");

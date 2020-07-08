@@ -1,7 +1,7 @@
 package events;
 
 import utils.confighelpers.Config;
-import utils.Rank;
+import utils.users.Rank;
 import utils.console.Logs;
 import utils.tools.RaidModeTools;
 import net.dv8tion.jda.api.entities.Member;

@@ -14,6 +14,7 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.grandtheftmc.jedisnew.NewJedisManager;
 import selfevents.CloseEvent;
 import selfevents.ReadyEvents;
+import utils.MembersCache;
 import utils.SelfData;
 import utils.confighelpers.Config;
 import utils.console.Console;
@@ -55,6 +56,7 @@ public class GTM extends ListenerAdapter {
         // Load JDA & Xenforo and start bot
         loadJDA();
         loadXen();
+
 
     }
 
@@ -105,6 +107,7 @@ public class GTM extends ListenerAdapter {
             jda.addEventListener(new OnJoin());
             jda.addEventListener(new OnReactRules());
             jda.addEventListener(new OnGuildMessage());
+            jda.addEventListener(new MembersCache());
 
             // JDA Commands
             jda.addEventListener(new SuggestionCommand());
@@ -114,7 +117,7 @@ public class GTM extends ListenerAdapter {
             //jda.addEventListener(new SeniorsCommand());
             jda.addEventListener(new HelpCommand());
             jda.addEventListener(new DiscordAccountCommand());
-            //jda.addEventListener(new StaffAccountCommand());
+            jda.addEventListener(new StaffAccountCommand());
             jda.addEventListener(new RebootCommand());
             jda.addEventListener(new PingCommand());
             jda.addEventListener(new HarryCommand());

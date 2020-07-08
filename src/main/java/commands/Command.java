@@ -4,7 +4,7 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import utils.Rank;
+import utils.users.Rank;
 import utils.confighelpers.Config;
 import utils.tools.GTools;
 import utils.users.GTMUser;

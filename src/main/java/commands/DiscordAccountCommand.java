@@ -2,7 +2,6 @@ package commands;
 
 import utils.Data;
 import utils.database.DiscordDAO;
-import utils.database.sql.BaseDatabase;
 import utils.tools.GTools;
 import utils.tools.Verification;
 import utils.users.GTMUser;
@@ -11,12 +10,8 @@ import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.MessageEmbed;
-import org.json.JSONObject;
 
 import java.awt.*;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 public class DiscordAccountCommand extends Command {
 
@@ -36,7 +31,7 @@ public class DiscordAccountCommand extends Command {
             case "verify":
 
                 if (args.length < 2) {
-                    GTools.sendThenDelete(channel, "`/Account Verify <Code>` - *Verify your discord account with GTM*");
+                    GTools.sendThenDelete(channel, "`/Discord Verify <Code>` - *Verify your discord account with GTM*");
                     return;
                 }
 
@@ -76,7 +71,7 @@ public class DiscordAccountCommand extends Command {
 
             case "info":
                 if (gtmUser == null) GTools.sendThenDelete(channel, "**Your discord account is not linked to any user!**");
-                else GTools.sendThenDelete(channel, getInfo(gtmUser));
+                else GTools.sendThenDelete(channel, getInfo(gtmUser).build());
                 break;
 
             case "update":
@@ -93,16 +88,16 @@ public class DiscordAccountCommand extends Command {
 
     }
 
-    private MessageEmbed getInfo(GTMUser gtmUser) {
+    private EmbedBuilder getInfo(GTMUser gtmUser) {
         return new EmbedBuilder()
                 .setThumbnail(DiscordDAO.getSkullSkin(gtmUser.getUuid()))
                 .setTitle("**Discord Account Information**")
-                .setDescription("You discord account is linked to the following GTM player...")
+                .setDescription("Your discord account is linked to the following GTM player...")
                 .addField("**UUID:**", gtmUser.getUuid().toString(), false)
-                .addField("**Username:**", gtmUser.getUsername(), false)
+                .addField("**Username:**", "`" + gtmUser.getUsername() + "`", false)
                 .addField("**Rank:**", gtmUser.getRank().n(), false)
                 .setColor(new Color(207,181,59)) //gold color
-                .build();
+                ;
     }
 
     private Message getAccountHelpMsg() {

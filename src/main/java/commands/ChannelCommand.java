@@ -3,7 +3,7 @@ package commands;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
-import utils.Rank;
+import utils.users.Rank;
 import utils.users.GTMUser;
 
 public class ChannelCommand extends Command {

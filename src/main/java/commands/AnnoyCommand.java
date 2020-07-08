@@ -2,7 +2,7 @@ package commands;
 
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
-import utils.Rank;
+import utils.users.Rank;
 import utils.SelfData;
 import utils.tools.GTools;
 import utils.users.GTMUser;

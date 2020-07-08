@@ -2,25 +2,42 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/commands/StaffAccountCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/MembersCache.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/pagination/DiscordMenu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/pagination/MenuAction.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GTM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GTM.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/AccountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/DiscordAccountCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/AnnoyCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/AnnoyCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/ChannelCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/ChannelCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/commands/Command.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/Command.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/HarryCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/HarryCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/events/OnSuggestion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/events/OnSuggestion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/DiscordAccountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/DiscordAccountCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/HelpCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/HelpCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/PingCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/PingCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/PlayerCountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/PlayerCountCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/RaidModeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/RaidModeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/RebootCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/RebootCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/SeniorsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/SeniorsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/StaffAccountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/StaffAccountCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/SuggestionCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/SuggestionCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/WelcomeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/WelcomeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/events/OnGuildMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/events/OnGuildMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/events/OnJoin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/events/OnJoin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/events/OnReactRules.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/events/OnReactRules.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/selfevents/ReadyEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/selfevents/ReadyEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/Data.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/Data.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/Rank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/users/Rank.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/DiscordDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/DiscordDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnRedisMessageReceive.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnRedisMessageReceive.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/CommandsTools.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/GTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/tools/GTools.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/Verification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/tools/Verification.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/utils/users/GTMUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/users/GTMUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/events/TicketEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xenforo/events/TicketEvent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/GTM.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/GTM.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Utils/tools/GTools.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Utils/tools/GTools.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/commands/PlayerCountCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/commands/PlayerCountCommand.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/events/OnSuggestion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/events/OnSuggestion.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" afterDir="false" />
@@ -236,7 +253,8 @@
       <workItem from="1593997168094" duration="8470000" />
       <workItem from="1594062877026" duration="1511000" />
       <workItem from="1594089861388" duration="4279000" />
-      <workItem from="1594103521693" duration="1883000" />
+      <workItem from="1594103521693" duration="26425000" />
+      <workItem from="1594169693303" duration="11904000" />
     </task>
     <task id="LOCAL-00001" summary="Init commit">
       <created>1584645971223</created>
@@ -427,7 +445,21 @@
       <option name="project" value="LOCAL" />
       <updated>1593835976660</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="Improved commands:&#10;- Pm commands will now say when command not found&#10;- /account renamed to /discord&#10;- /harry will now give feedback on success too.">
+      <created>1594105501756</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1594105501756</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Various bug fixes with verification">
+      <created>1594105615432</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1594105615432</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -447,9 +479,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="updating workspace.xml" />
-    <MESSAGE value="Initial Commit 2" />
-    <MESSAGE value="Finished and QA Team anti raid features" />
     <MESSAGE value="Created template for future discord - gtm verification" />
     <MESSAGE value="Bot will now message users their deleted suggestions if they don't follow the format" />
     <MESSAGE value="Command code improvement &amp; minor bug fixes" />
@@ -472,7 +501,10 @@
     <MESSAGE value="Added a new parser to support ticket fields" />
     <MESSAGE value="Various bugs and imporvements" />
     <MESSAGE value="Renamed account command to /discord to match gtm" />
-    <option name="LAST_COMMIT_MESSAGE" value="Renamed account command to /discord to match gtm" />
+    <MESSAGE value="Improved commands:&#10;- Pm commands will now say when command not found&#10;- /account renamed to /discord&#10;- /harry will now give feedback on success too." />
+    <MESSAGE value="Various bug fixes with verification" />
+    <MESSAGE value="- Typo fix in DiscordAccountCommand which still was using the old /account in its help&#10;- Moved Rank.class into users package&#10;- Added an easy to use discord embed menu api&#10;- Added a members cache that stores a list of all members with many useful methods&#10;- Replaced previous blocking retrieve member operations with the new member cache&#10;- Fixed NPE in GTMUser when updating user data for a player who left the discord&#10;- Added a command for staff to be able to look up who a discord user is in-game" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Typo fix in DiscordAccountCommand which still was using the old /account in its help&#10;- Moved Rank.class into users package&#10;- Added an easy to use discord embed menu api&#10;- Added a members cache that stores a list of all members with many useful methods&#10;- Replaced previous blocking retrieve member operations with the new member cache&#10;- Fixed NPE in GTMUser when updating user data for a player who left the discord&#10;- Added a command for staff to be able to look up who a discord user is in-game" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

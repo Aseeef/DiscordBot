@@ -1,16 +1,14 @@
 package utils.database;
 
-import com.google.common.base.Charsets;
 import me.kbrewster.exceptions.APIException;
 import me.kbrewster.exceptions.InvalidPlayerException;
 import me.kbrewster.mojangapi.MojangAPI;
 import net.grandtheftmc.jedisnew.NewJedisManager;
 import org.json.JSONObject;
-import utils.Rank;
-import utils.console.Logs;
 import utils.tools.GTools;
 import utils.tools.UUIDUtil;
 import utils.users.GTMUser;
+import utils.users.Rank;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -102,7 +100,7 @@ public class DiscordDAO {
     }
 
     public static void createDiscordProfile(Connection conn, GTMUser gtmUser) {
-        String mention = gtmUser.getDiscordMember().getUser().getAsTag();
+        String mention = gtmUser.getUser().get().getAsTag();
         mention = mention.replaceFirst("@", "");
         mention = GTools.convertSpecialChar(mention); //changes character encoding to something accepted by database
 

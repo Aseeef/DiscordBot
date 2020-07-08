@@ -1,6 +1,6 @@
 package commands;
 
-import utils.Rank;
+import utils.users.Rank;
 import utils.SelfData;
 import utils.users.GTMUser;
 import net.dv8tion.jda.api.MessageBuilder;
