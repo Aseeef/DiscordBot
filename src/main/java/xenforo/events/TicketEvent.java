@@ -107,7 +107,7 @@ public class TicketEvent {
     }
 
     private MessageEmbed generateStaffReportEmbed(Connection conn, SupportTicket ticket) {
-        String reportedStaff = ticket.getTicketFields().getString("i:1993");
+        String reportedStaff = ticket.getTicketFields().getString("1993");
         GTMUser gtmUser = GTMUser.getGTMUser(DiscordDAO.getDiscordIdFromName(conn, reportedStaff)).orElse(null);
 
         EmbedBuilder embed = new EmbedBuilder()

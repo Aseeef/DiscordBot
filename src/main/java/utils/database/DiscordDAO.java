@@ -82,7 +82,7 @@ public class DiscordDAO {
     }
 
     public static Rank getRank(Connection conn, UUID uuid) {
-        String query = "SELECT * FROM `user_profile` WHERE `uuid`=UNHEX(?)";
+        String query = "SELECT * FROM `user_profile` WHERE `uuid`=UNHEX(?) AND `server_key`='GLOBAL'";
 
         try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, uuid.toString().replaceAll("-", ""));

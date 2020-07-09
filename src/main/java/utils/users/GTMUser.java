@@ -152,25 +152,25 @@ public class GTMUser {
             Member discordMember = this.optionalMember.get();
 
             if (!discordMember.getRoles().contains(this.rank.getRole())) {
-                if (this.rank.isHigherOrEqualTo(Rank.HELPER) || discordMember.isOwner()) {
+                if (this.rank.isHigherOrEqualTo(Rank.BUILDTEAM) || discordMember.isOwner()) {
                     // msg admins TODO
                 } else {
                     // set new role on discord
                     guild.addRoleToMember(this.getDiscordId(), rank.getRole()).queue();
-                    // remove old role(s)
-                    for (Rank r : Rank.values()) {
-                        if (r != this.rank && discordMember.getRoles().contains(r.getRole())) {
-                            if (rank.isHigherOrEqualTo(Rank.HELPER) || discordMember.isOwner()) {
-                                // msg admins TODO
-                            } else
-                                guild.removeRoleFromMember(discordMember, r.getRole()).queue();
-                        }
-                    }
+                }
+            }
+            // remove old role(s)
+            for (Rank r : Rank.values()) {
+                if (r != this.rank && discordMember.getRoles().contains(r.getRole())) {
+                    if (rank.isHigherOrEqualTo(Rank.BUILDTEAM) || discordMember.isOwner()) {
+                        // msg admins TODO
+                    } else
+                        guild.removeRoleFromMember(discordMember, r.getRole()).queue();
                 }
             }
 
             if (!discordMember.getEffectiveName().equals(this.username)) {
-                if (!this.rank.isHigherOrEqualTo(Rank.HELPER) && !discordMember.isOwner()) {
+                if (!this.rank.isHigherOrEqualTo(Rank.BUILDER) && !discordMember.isOwner()) {
                     discordMember.modifyNickname(username).queue();
                 }
             }

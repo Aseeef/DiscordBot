@@ -34,6 +34,7 @@ utils\console\commands\ConsoleCommandListener.class
 utils\users\GTMUser.class
 utils\database\sql\BaseDatabase$Database.class
 utils\tools\Verification$1.class
+utils\database\UsersDAO.class
 utils\webhooks\WebhookUtils.class
 commands\PingCommand.class
 utils\console\commands\ConsoleCommand.class

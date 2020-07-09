@@ -46,6 +46,7 @@ public enum Rank {
         return this.getIndex() <= role.getIndex();
     }
 
+    // lower index = higher role
     public int getIndex() {
         int index = 0;
         for (Rank r : Rank.values()) {

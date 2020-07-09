@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import utils.console.Logs;
+import utils.users.GTMUser;
 import utils.users.Rank;
 
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class MembersCache extends ListenerAdapter {
     }
 
     /**
-     * Tries to get member through multiple methods including checking id, mention, and tag
+     * Tries to get member through multiple methods including checking id, mention, tag, ign
      */
     public static Optional<Member> getMember(String s) {
         Optional<Member> optionalMember;
@@ -68,6 +69,9 @@ public class MembersCache extends ListenerAdapter {
             if (optionalMember.isPresent()) return optionalMember;
         } catch (NumberFormatException ignored) {
         }
+
+        Optional<GTMUser> optionalGTMUser = GTMUser.loadAndGetAllUsers().stream().filter( gtmUser -> gtmUser.getUsername().equalsIgnoreCase(s)).findFirst();
+        if (optionalGTMUser.isPresent()) return optionalGTMUser.get().getDiscordMember();
 
         return Optional.empty();
     }

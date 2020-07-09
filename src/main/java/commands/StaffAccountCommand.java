@@ -81,7 +81,7 @@ public class StaffAccountCommand extends Command {
                 }
 
                 GTools.runAsync(user::updateUserDataNow);
-                GTools.sendThenDelete(channel, "**Successfully refreshed user data for " + optionalTarget.get().getUser().getAsTag() + " (" + gtmUser.getUsername() + ")!**");
+                GTools.sendThenDelete(channel, "**Successfully refreshed user data for " + optionalTarget.get().getUser().getAsTag() + " (" + user.getUsername() + ")!**");
 
                 break;
             }
@@ -99,9 +99,9 @@ public class StaffAccountCommand extends Command {
                             ScheduledFuture task = GTools.runTaskTimer( () -> {
                                 int percent = Math.round((((float) index.get()) / (float) users.size()) * 100);
                                 int remaining = users.size() - index.get();
-                                int eta = Math.round((remaining * 710) / 1000f); // test show each user to take ~710ms to update
+                                int eta = Math.round((remaining * 715) / 1000f); // test show each user to take ~715ms to update
                                 msg.editMessage("**Updating roles and data for all verified users. [Progress: `"+percent+"%`] [ETA: `" + eta + " sec`]**").complete();
-                            }, 1000, 5000);
+                            }, 1000, 3000);
                             GTools.runAsync( () -> {
                                 long start = System.currentTimeMillis();
                                 for (GTMUser user : users) {
