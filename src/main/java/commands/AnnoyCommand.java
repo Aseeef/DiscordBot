@@ -168,7 +168,7 @@ public class AnnoyCommand extends Command {
                 }
 
                 // find appropriate webhook based on channel
-                WebhookUtils.retrieveWebhookUrl((TextChannel) channel).thenAcceptAsync((hookUrl) -> {
+                WebhookUtils.retrieveWebhookUrl((TextChannel) channel).thenAccept((hookUrl) -> {
                     if (hookUrl == null) {
                         GTools.sendThenDelete(channel, "**Sorry, but I can't find a webhooks for this channel. Please create a new webhook for this channel and try again.**");
                         return;

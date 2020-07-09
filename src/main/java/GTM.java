@@ -60,7 +60,6 @@ public class GTM extends ListenerAdapter {
         loadJDA();
         loadXen();
 
-
     }
 
 

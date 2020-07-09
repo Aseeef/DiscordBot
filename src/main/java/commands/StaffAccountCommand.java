@@ -37,6 +37,11 @@ public class StaffAccountCommand extends Command {
 
             case "check": {
 
+                if (args.length < 2) {
+                    GTools.sendThenDelete(channel, "`/Accounts Check <Member ID / Tag>` - *Verify your discord account with GTM*");
+                    return;
+                }
+
                 Optional<Member> optionalTarget = MembersCache.getMember(args[1]);
 
                 if (!optionalTarget.isPresent()) {
@@ -56,6 +61,11 @@ public class StaffAccountCommand extends Command {
             }
 
             case "refresh": {
+
+                if (args.length < 2) {
+                    GTools.sendThenDelete(channel, "`/Accounts Refresh <Member ID / Tag>` - *Verify your discord account with GTM*");
+                    return;
+                }
 
                 Optional<Member> optionalTarget = MembersCache.getMember(args[1]);
 

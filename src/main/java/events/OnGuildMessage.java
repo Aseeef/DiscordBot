@@ -47,8 +47,14 @@ public class OnGuildMessage extends ListenerAdapter {
 
         else if (scrabbleMap.containsKey(user.getIdLong())) {
             message.delete().queue();
-            WebhookUtils.retrieveWebhookUrl(e.getChannel()).thenAcceptAsync((hookUrl) -> {
-                String[] words = message.getContentRaw().split(" ");
+            WebhookUtils.retrieveWebhookUrl(e.getChannel()).thenAccept((hookUrl) -> {
+                //String[] words = message.getContentRaw().split(" ");
+
+                String fullMsg = message.getContentRaw();
+                fullMsg = fullMsg.replaceFirst("[a-zA-Z]", String.valueOf(scrabbleMap.get(user.getIdLong())));
+                fullMsg = fullMsg.replaceAll("([^0-9a-zA-Z])[0-9a-zA-Z]", "$1" + scrabbleMap.get(user.getIdLong()));
+
+                /*
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0 ; i < words.length ; i++) {
                     String word = words[i];
@@ -56,14 +62,16 @@ public class OnGuildMessage extends ListenerAdapter {
                     if (i != 0) sb.append(" ");
                     sb.append(word);
                 }
+                 */
+
                 if (hookUrl != null)
-                    WebhookUtils.sendMessageAs(sb.toString(), member, hookUrl);
+                    WebhookUtils.sendMessageAs(fullMsg, member, hookUrl);
             });
         }
 
         else if (botMap.contains(user.getIdLong())) {
             message.delete().queue();
-            WebhookUtils.retrieveWebhookUrl(e.getChannel()).thenAcceptAsync((hookUrl) -> {
+            WebhookUtils.retrieveWebhookUrl(e.getChannel()).thenAccept((hookUrl) -> {
                 if (hookUrl != null)
                     WebhookUtils.sendMessageAs(e.getMessage().getContentRaw(), member, hookUrl);
             });
