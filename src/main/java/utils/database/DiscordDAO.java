@@ -118,6 +118,8 @@ public class DiscordDAO {
     }
 
     public static void updateDiscordTag(Connection conn, long discordId, String tag) {
+        tag = tag.replaceFirst("@", "");
+        tag = GTools.convertSpecialChar(tag); //changes character encoding to something accepted by database
 
         if (!discordProfileExists(conn, discordId)) return;
 
@@ -130,7 +132,6 @@ public class DiscordDAO {
         } catch (Exception e) {
             GTools.printStackError(e);
         }
-
     }
 
     public static void deleteDiscordProfile(Connection conn, UUID uuid) {

@@ -12,6 +12,7 @@ import utils.users.Rank;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import static utils.tools.GTools.guild;
@@ -80,13 +81,15 @@ public class MembersCache extends ListenerAdapter {
         return getMember(id).map((Member::getUser));
     }
 
-    public static void reloadMembersAsync() {
+    public static CompletableFuture<List<Member>> reloadMembersAsync() {
+        CompletableFuture<List<Member>> futureList = new CompletableFuture<>();
         long cacheStart = System.currentTimeMillis();
         guild.loadMembers().onSuccess( (list) -> {
-            members.clear();
-            members.addAll(list);
+            members = list;
+            futureList.complete(list);
             Logs.log("Successfully cached all members in " + (System.currentTimeMillis() - cacheStart) + " ms!");
         });
+        return futureList;
     }
 
     public static void reloadMembers() {

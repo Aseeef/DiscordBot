@@ -36,8 +36,12 @@ public class GTM extends ListenerAdapter {
     public static void main (String[] args) {
 
         // Set console output settings
-        System.setOut(new Console.GeneralStream(System.out));
-        System.setErr(new Console.ErrorStream(System.err));
+        System.setOut(new Logs.GeneralStream(System.out));
+        System.setErr(new Logs.ErrorStream(System.err));
+        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
+            System.err.println("Uncaught exception in thread \"" + thread.getName() + "\" caused by " + throwable.initCause(throwable.getCause()));
+            throwable.printStackTrace();
+        });
 
         // System/Console settings
         Console.loadShutdownHook();

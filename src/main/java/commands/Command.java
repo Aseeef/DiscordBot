@@ -9,9 +9,7 @@ import utils.confighelpers.Config;
 import utils.tools.GTools;
 import utils.users.GTMUser;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static utils.console.Logs.log;
 import static utils.tools.GTools.jda;
@@ -19,12 +17,16 @@ import static utils.tools.GTools.sendThenDelete;
 
 public abstract class Command extends ListenerAdapter {
 
+    private final static int COMMAND_MS_DELAY = 1250;
+
     private String name;
     private String description;
     private Rank rank;
     private Type type;
 
     private static List<Command> commandList = new ArrayList<>();
+
+    private static Map<User, Long> antiSpamMap = new HashMap<>();
 
     /** The constructor for discord commands for the GTM bot
      *
@@ -52,6 +54,12 @@ public abstract class Command extends ListenerAdapter {
         jda.getGuilds().get(0).retrieveMember(user).queue( (member -> {
             if (GTools.isCommand(msg, user, name)) {
 
+                // anti command spam
+                if (antiSpamMap.containsKey(e.getAuthor()) && antiSpamMap.get(e.getAuthor()) > System.currentTimeMillis() - COMMAND_MS_DELAY) {
+                    sendThenDelete(channel, "**Slow down! Please do not spam commands!**");
+                    return;
+                }
+
                 log("User "+ e.getAuthor().getAsTag()+
                         "("+e.getAuthor().getId()+") issued command: " + e.getMessage().getContentRaw());
 
@@ -68,6 +76,7 @@ public abstract class Command extends ListenerAdapter {
                 }
 
                 onCommandUse(e.getMessage(), member, gtmUser, channel, args);
+                antiSpamMap.put(e.getAuthor(), System.currentTimeMillis()); // set last command use
 
             }
         }));
@@ -84,10 +93,16 @@ public abstract class Command extends ListenerAdapter {
 
         if (member != null && GTools.isCommand(msg, member.getUser(), name)) {
 
+            GTMUser gtmUser = GTMUser.getGTMUser(member.getIdLong()).orElse(null);
+
+            // anti command spam
+            if (antiSpamMap.containsKey(e.getAuthor()) && antiSpamMap.get(e.getAuthor()) > System.currentTimeMillis() - COMMAND_MS_DELAY) {
+                sendThenDelete(channel, "**Slow down! Please do not spam commands!**");
+                return;
+            }
+
             log("User "+ e.getAuthor().getAsTag()+
                     "("+e.getAuthor().getId()+") issued command: " + e.getMessage().getContentRaw());
-
-            GTMUser gtmUser = GTMUser.getGTMUser(member.getIdLong()).orElse(null);
 
             // Check perms
             if (!Rank.hasRolePerms(member, rank)) {
@@ -102,6 +117,7 @@ public abstract class Command extends ListenerAdapter {
             }
 
             onCommandUse(e.getMessage(), member, gtmUser, channel, args);
+            antiSpamMap.put(e.getAuthor(), System.currentTimeMillis()); // set last command use
 
         }
 

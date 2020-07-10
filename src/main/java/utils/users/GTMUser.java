@@ -164,6 +164,8 @@ public class GTMUser {
                 if (r != this.rank && discordMember.getRoles().contains(r.getRole())) {
                     if (rank.isHigherOrEqualTo(Rank.BUILDTEAM) || discordMember.isOwner()) {
                         // msg admins TODO
+                    } else if (r.isHigherOrEqualTo(Rank.BUILDTEAM)) {
+                        // msg admins TODO
                     } else
                         guild.removeRoleFromMember(discordMember, r.getRole()).queue();
                 }

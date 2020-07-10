@@ -55,7 +55,7 @@ public class StaffAccountCommand extends Command {
                     return;
                 }
 
-                GTools.sendThenDelete(channel, getInfoFor(member, gtmUser).build());
+                GTools.sendThenDelete(channel, getInfoFor(optionalTarget.get(), user).build());
 
                 break;
             }

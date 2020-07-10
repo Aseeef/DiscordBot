@@ -170,4 +170,13 @@ public class GTools {
         return new String(string.getBytes(), Charsets.US_ASCII);
     }
 
+    public static String stringFromArgsAfter (String[] args, int from) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = from ; i < args.length ; i++) {
+            sb.append(args[i]);
+            if (args.length != i + 1) sb.append(" ");
+        }
+        return sb.toString();
+    }
+
 }
