@@ -25,7 +25,8 @@ public class GTMUser {
     private String username;
     private Rank rank;
     private long discordId;
-    private long lastUpdated;
+    //due to async updates, this multithreading keyword 'volatile' is needed to update visibility
+    private volatile long lastUpdated;
 
     @JsonIgnore
     private Optional<Member> optionalMember;
@@ -126,10 +127,13 @@ public class GTMUser {
 
     @JsonIgnore
     public void updateUserDataNow() {
+
         if (!this.optionalMember.isPresent()) {
             Logs.log("Skipping data update for GTM Player " + this.getUsername() + " because they have left this discord!");
             return;
         }
+
+        this.lastUpdated = System.currentTimeMillis();
 
         Logs.log("Attempting to update user data for GTM Player " + this.getUsername() + "!");
         long start = System.currentTimeMillis();
@@ -137,7 +141,6 @@ public class GTMUser {
         try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
             String newUsername = DiscordDAO.getUsername(this.getUuid()).orElse(null);
             Rank newRank = DiscordDAO.getRank(conn, this.getUuid());
-            this.setLastUpdated(System.currentTimeMillis());
 
             if (newRank != null && newRank != this.getRank()) {
                 this.setRank(newRank);
@@ -188,7 +191,8 @@ public class GTMUser {
 
     @JsonIgnore
     public void updateUserDataIfTime() {
-        if (this.getLastUpdated() + (UPDATE_TIME * 1000 * 60) < System.currentTimeMillis()) GTools.runAsync(this::updateUserDataNow);
+        if (this.lastUpdated + (UPDATE_TIME * 1000 * 60) < System.currentTimeMillis())
+            GTools.runAsync(this::updateUserDataNow);
     }
 
     @JsonGetter

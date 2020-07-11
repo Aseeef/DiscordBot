@@ -18,6 +18,7 @@ import utils.MembersCache;
 import utils.SelfData;
 import utils.confighelpers.Config;
 import utils.console.Console;
+import utils.console.Logs;
 import utils.database.redis.OnRedisMessageReceive;
 import utils.database.sql.BaseDatabase;
 import utils.tools.GTools;
@@ -129,7 +130,7 @@ public class GTM extends ListenerAdapter {
             jda.addEventListener(new HarryCommand());
             jda.addEventListener(new StaffCommand());
             jda.addEventListener(new AnnoyCommand());
-            //jda.addEventListener(new ChannelCommand());
+            jda.addEventListener(new ChannelCommand());
 
             // Self user settings functions to check if there was utils.config change to prevent
             // unnecessary calls to the discord api which may result in us getting rate limited

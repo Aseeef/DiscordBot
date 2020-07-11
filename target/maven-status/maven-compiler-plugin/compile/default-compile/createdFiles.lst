@@ -1,7 +1,7 @@
 utils\database\sql\DatabaseHandler.class
 utils\database\sql\BaseDatabase.class
+utils\selfdata\SavableSelfData$Type.class
 events\OnGuildMessage.class
-utils\tools\PrivateChannel.class
 utils\pagination\DiscordMenu.class
 utils\tools\RaidModeTools.class
 commands\ChannelCommand.class
@@ -31,6 +31,7 @@ commands\PlayerCountCommand.class
 utils\database\LitebansDAO.class
 utils\pagination\DiscordMenu$1.class
 utils\console\commands\ConsoleCommandListener.class
+utils\selfdata\SavableSelfData.class
 utils\users\GTMUser.class
 utils\database\sql\BaseDatabase$Database.class
 utils\tools\Verification$1.class
@@ -64,6 +65,7 @@ utils\database\sql\BaseDatabase$1.class
 selfevents\ReadyEvents$1.class
 xenforo\events\NewThreadEvent.class
 commands\DiscordAccountCommand.class
+utils\selfdata\ChannelIdData.class
 commands\SeniorsCommand.class
 utils\database\redis\OnRedisMessageReceive.class
 selfevents\CloseEvent.class
@@ -82,5 +84,6 @@ utils\tools\RaidModeTools$1.class
 utils\Data.class
 commands\StaffAccountCommand.class
 utils\tools\UUIDUtil.class
+utils\selfdata\AnnoyData.class
 utils\database\sql\component\Database.class
 xenforo\objects\tickets\SupportTicket.class

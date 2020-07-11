@@ -12,7 +12,8 @@ public class Config {
     private String botToken;
     private String botName;
     private String commandPrefix;
-    private int deleteTime;
+    private int msgDeleteTime;
+    private int customChannelDeleteTime;
     private DatabaseCreds usersDatabase;
     private DatabaseCreds planDatabase;
     private DatabaseCreds bansDatabase;
@@ -28,11 +29,12 @@ public class Config {
     public Config() {
     }
 
-    public Config(String botToken, String botName, String commandPrefix, int deleteTime, DatabaseCreds usersDatabase, DatabaseCreds planDatabase, DatabaseCreds bansDatabase, DatabaseCreds xenDatabase, DatabaseCreds redisDatabase, MineStatSettings mineStatSettings, RaidmodeSettings raidmodeSettings, RankSettings rankSettings) {
+    public Config(String botToken, String botName, String commandPrefix, int msgDeleteTime, int customChannelDeleteTime, DatabaseCreds usersDatabase, DatabaseCreds planDatabase, DatabaseCreds bansDatabase, DatabaseCreds xenDatabase, DatabaseCreds redisDatabase, MineStatSettings mineStatSettings, RaidmodeSettings raidmodeSettings, RankSettings rankSettings) {
         this.botToken = botToken;
         this.botName = botName;
         this.commandPrefix = commandPrefix;
-        this.deleteTime = deleteTime;
+        this.msgDeleteTime = msgDeleteTime;
+        this.customChannelDeleteTime = customChannelDeleteTime;
         this.usersDatabase = usersDatabase;
         this.planDatabase = planDatabase;
         this.bansDatabase = bansDatabase;
@@ -71,8 +73,12 @@ public class Config {
         return commandPrefix;
     }
 
-    public int getDeleteTime() {
-        return deleteTime;
+    public int getMsgDeleteTime() {
+        return msgDeleteTime;
+    }
+
+    public int getCustomChannelDeleteTime() {
+        return customChannelDeleteTime;
     }
 
     public DatabaseCreds getUsersDatabase() {

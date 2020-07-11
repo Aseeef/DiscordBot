@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.events.message.priv.react.PrivateMessageReactionRemov
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import utils.console.Logs;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -28,32 +29,46 @@ public class DiscordMenu extends ListenerAdapter {
     };
 
     private Message message;
+    private User user;
     private MessageChannel channel;
     private MenuAction menuAction;
     private boolean allowChangeFromAll;
     private int page = 1;
     private int maxPages;
 
-    private DiscordMenu (Message message, int maxPages, boolean allowChangeFromAll) {
+    private DiscordMenu (Message message, int maxPages, User user, boolean allowChangeFromAll) {
         jda.addEventListener(this);
         this.message = message;
         this.channel = message.getChannel();
         this.maxPages = maxPages;
+        this.user = user;
         this.allowChangeFromAll = allowChangeFromAll;
 
         addReactions();
     }
 
-    public static CompletableFuture<DiscordMenu> create(MessageChannel channel, EmbedBuilder embedBuilder, int maxPages) {
-        return create(channel, embedBuilder, maxPages, false);
+    private DiscordMenu (Message message, int maxPages) {
+        jda.addEventListener(this);
+        this.message = message;
+        this.channel = message.getChannel();
+        this.maxPages = maxPages;
+
+        this.user = null;
+        this.allowChangeFromAll = true;
+
+        addReactions();
     }
 
-    public static CompletableFuture<DiscordMenu> create(MessageChannel channel, EmbedBuilder embedBuilder, int maxPages, boolean allowChangeFromAll) {
+    public static CompletableFuture<DiscordMenu> create(MessageChannel channel, EmbedBuilder embedBuilder, int maxPages) {
+        return create(channel, embedBuilder, maxPages, null, false);
+    }
+
+    public static CompletableFuture<DiscordMenu> create(MessageChannel channel, EmbedBuilder embedBuilder, int maxPages, @Nullable User user, boolean allowChangeFromAll) {
         CompletableFuture<DiscordMenu> futureMenu = new CompletableFuture<>();
         MessageEmbed embed = buildEmbed(embedBuilder, 1, maxPages);
         channel.sendMessage(embed).submit()
                 .thenAcceptAsync( (msg) -> {
-                    DiscordMenu menu = new DiscordMenu(msg, maxPages, allowChangeFromAll);
+                    DiscordMenu menu = new DiscordMenu(msg, maxPages, user, allowChangeFromAll);
                     futureMenu.complete(menu);
                 });
         return futureMenu;
@@ -124,11 +139,17 @@ public class DiscordMenu extends ListenerAdapter {
             boolean emoji = reactionEmote.isEmoji();
 
             if (emoji && reactionEmote.getEmoji().equals(reactions.get(0).getEmoji()) && this.page - 1 >= 1) {
+
+                if (this.user != user2 && !this.allowChangeFromAll) return; // if this discord menu doesn't accept input from all users, return
+
                 this.page--;
                 this.menuAction.onAction(MenuAction.Type.PREVIOUS_PAGE, user2);
             }
 
             else if (emoji && reactionEmote.getEmoji().equals(reactions.get(1).getEmoji())) {
+
+                if (this.user != user2 && !this.allowChangeFromAll) return;
+
                 this.message.delete().queue();
                 this.message = null;
                 this.menuAction.onAction(MenuAction.Type.DELETE, user2);
@@ -136,6 +157,9 @@ public class DiscordMenu extends ListenerAdapter {
             }
 
             else if (emoji && reactionEmote.getEmoji().equals(reactions.get(2).getEmoji()) && this.page + 1 <= this.maxPages) {
+
+                if (this.user != user2 && !this.allowChangeFromAll) return; // if this discord menu doesn't accept input from all users, return
+
                 this.page++;
                 this.menuAction.onAction(MenuAction.Type.NEXT_PAGE, user2);
             }

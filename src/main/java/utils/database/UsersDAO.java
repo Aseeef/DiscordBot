@@ -14,8 +14,9 @@ import java.util.UUID;
 
 public class UsersDAO {
 
-    public static List<GTMUser> getGangMembersFor (Connection conn, GTMUser user, String server) {
+    public static Object[] getGangMembersFor (Connection conn, GTMUser user, String server) {
 
+        String gangName = null;
         List<GTMUser> gangMembers = new ArrayList<>();
 
         // Step 1: Gang all gangs player is in
@@ -36,6 +37,7 @@ public class UsersDAO {
                         if (result.next()) {
                             if (result.getString("server_key").equalsIgnoreCase(server)) {
                                 gangId = i;
+                                gangName = result.getString("name");
                                 break;
                             }
                         }
@@ -46,13 +48,14 @@ public class UsersDAO {
             // Step 3: Get all users with that gang id
             if (gangId != null) {
                 List<UUID> gangUuids = new ArrayList<>();
-                try (PreparedStatement ps3 = conn.prepareStatement("SELECT * FROM `gtm_gang_member` WHERE `id`=" + gangId)) {
+                try (PreparedStatement ps3 = conn.prepareStatement("SELECT HEX(`uuid`) AS uuid FROM `gtm_gang_member` WHERE `gang_id`=" + gangId)) {
                     try (ResultSet result = ps3.executeQuery()) {
                         while (result.next()) {
                             UUIDUtil.createUUID(result.getString("uuid")).ifPresent(gangUuids::add);
                         }
                     }
                 }
+
                 GTMUser.loadAndGetAllUsers().forEach(gtmUser -> {
                     if (gangUuids.contains(gtmUser.getUuid()))
                         gangMembers.add(gtmUser);
@@ -63,7 +66,7 @@ public class UsersDAO {
             GTools.printStackError(e);
         }
 
-        return gangMembers;
+        return new Object[] {gangName, gangMembers};
     }
 
 }

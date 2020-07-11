@@ -1,5 +1,6 @@
 package commands;
 
+import utils.selfdata.ChannelIdData;
 import utils.users.Rank;
 import utils.SelfData;
 import utils.users.GTMUser;
@@ -21,7 +22,7 @@ public class WelcomeCommand extends Command {
         if (args[0].toLowerCase().equalsIgnoreCase("setchannel")) {
 
             // Delete previous rule embed (if any)
-            TextChannel prevChannel = jda.getTextChannelById(SelfData.get().getRuleAgreeChannelId());
+            TextChannel prevChannel = jda.getTextChannelById(ChannelIdData.get().getRuleAgreeChannelId());
             long prevMsgId = SelfData.get().getRuleAgreeMessageId();
             if (prevChannel != null) {
                 prevChannel.retrieveMessageById(prevMsgId).queue( (prevMsg) -> {
@@ -31,7 +32,7 @@ public class WelcomeCommand extends Command {
             }
 
             // Set as player welcome channel
-            SelfData.get().setRuleAgreeChannelId(channel.getIdLong());
+            ChannelIdData.get().setRuleAgreeChannelId(channel.getIdLong());
 
             // Send success msg
             sendThenDelete(channel, welcomeChannelSet((TextChannel) channel));

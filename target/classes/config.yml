@@ -21,7 +21,10 @@ botName: "Harry"
 commandPrefix: "/"
 
 # How long in seconds should the bot wait before removing its messages
-deleteTime: 30
+msgDeleteTime: 30
+
+# How long is minutes should the bot wait before deleting empty custom channels
+customChannelDeleteTime: 10
 
 
 ###############################

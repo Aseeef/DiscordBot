@@ -8,14 +8,16 @@ import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import net.grandtheftmc.jedisnew.NewJedisManager;
 import org.json.JSONObject;
 import utils.MembersCache;
-import utils.SelfData;
 import utils.confighelpers.Config;
 import utils.console.Logs;
+import utils.selfdata.ChannelIdData;
 
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -60,7 +62,7 @@ public class GTools {
     }
 
     public static void updateOnlinePlayers() {
-        VoiceChannel channel = jda.getVoiceChannelById(SelfData.get().getPlayerCountChannelId());
+        VoiceChannel channel = jda.getVoiceChannelById(ChannelIdData.get().getPlayerCountChannelId());
 
         if (channel == null) {
             log("Failed to updating online player count because Player count channel was not set", Logs.WARNING);
@@ -97,7 +99,7 @@ public class GTools {
             MessageAction ma = channel.sendMessage(msg);
             if (attachment != null) ma = ma.addFile(attachment);
             ma.queue((sentMsg) ->
-                    sentMsg.delete().queueAfter(Config.get().getDeleteTime(), TimeUnit.SECONDS)
+                    sentMsg.delete().queueAfter(Config.get().getMsgDeleteTime(), TimeUnit.SECONDS)
             );
         }
     }
@@ -120,7 +122,7 @@ public class GTools {
             channel.sendMessage(embed).queue();
         else
         channel.sendMessage(embed).queue( (sentMsg) ->
-                sentMsg.delete().queueAfter(Config.get().getDeleteTime(), TimeUnit.SECONDS)
+                sentMsg.delete().queueAfter(Config.get().getMsgDeleteTime(), TimeUnit.SECONDS)
         );
     }
 
@@ -141,6 +143,11 @@ public class GTools {
     public static ScheduledFuture runTaskTimer(Runnable task, int startDelay, int period) {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         return executor.scheduleAtFixedRate(task, startDelay, period, TimeUnit.MILLISECONDS);
+    }
+
+    public static ScheduledFuture runDelayedTask(Runnable task, int startDelay) {
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        return executor.schedule(task, startDelay, TimeUnit.MILLISECONDS);
     }
 
     public static File getAsset(String name) {

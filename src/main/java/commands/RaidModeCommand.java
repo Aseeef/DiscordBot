@@ -1,13 +1,13 @@
 package commands;
 
-import utils.users.Rank;
-import utils.SelfData;
-import utils.users.GTMUser;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
+import utils.selfdata.ChannelIdData;
+import utils.users.GTMUser;
+import utils.users.Rank;
 
 import static utils.tools.GTools.sendThenDelete;
 import static utils.tools.RaidModeTools.*;
@@ -29,7 +29,7 @@ public class RaidModeCommand extends Command {
         else if (args[0].equalsIgnoreCase("setchannel")) {
 
             // Set as raid mode channel
-            SelfData.get().setRaidAlertChannelId(channel.getIdLong());
+            ChannelIdData.get().setRaidAlertChannelId(channel.getIdLong());
 
             // Send success msg
             sendThenDelete(channel, raidChannelSet((TextChannel) channel));

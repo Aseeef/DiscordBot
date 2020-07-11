@@ -125,7 +125,7 @@ public class StaffAccountCommand extends Command {
                 List<GTMUser> users = GTMUser.loadAndGetAllUsers();
                 users.sort( (u1, u2) -> u1.getUsername().compareToIgnoreCase(u2.getUsername()));
                 int maxPage = (int) Math.ceil(users.size() / 8f);
-                DiscordMenu.create(channel, getPageInfo(users, 1, maxPage), maxPage).thenAcceptAsync( (menu -> {
+                DiscordMenu.create(channel, getPageInfo(users, 1, maxPage), maxPage, member.getUser(), false).thenAcceptAsync( (menu -> {
                     menu.onMenuAction( (menuAction, user) -> {
                         menu.setPageContents(getPageInfo(users, menu.getPage(), menu.getMaxPages()));
                     });

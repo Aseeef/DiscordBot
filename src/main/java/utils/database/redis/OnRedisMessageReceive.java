@@ -71,6 +71,8 @@ public class OnRedisMessageReceive implements RedisEventListener {
                         String component = jsonObject.getString("component");
                         String server = jsonObject.getString("server");
 
+                        if (intensity < 3) return; //TODO: Update in bungee
+
                         List<Member> managers = MembersCache.getMembersWithRolePerms(Rank.MANAGER);
                         for (Member manager : managers) {
                             manager.getUser().openPrivateChannel().queue((privateChannel) -> {

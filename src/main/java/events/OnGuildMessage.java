@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import utils.SelfData;
+import utils.selfdata.AnnoyData;
 import utils.tools.GTools;
 import utils.webhooks.WebhookUtils;
 
@@ -22,9 +22,9 @@ public class OnGuildMessage extends ListenerAdapter {
 
         if (member == null || user.isBot() || message.isWebhookMessage() || GTools.isCommand(message.getContentRaw(), user)) return;
 
-        final Map<Long, String> annoyMap = SelfData.get().getEmojiAnnoyMap();
-        final Map<Long, Character> scrabbleMap = SelfData.get().getScrabbleAnnoyMap();
-        final List<Long> botMap = SelfData.get().getBotAnnoyList();
+        final Map<Long, String> annoyMap = AnnoyData.get().getEmojiAnnoyMap();
+        final Map<Long, Character> scrabbleMap = AnnoyData.get().getScrabbleAnnoyMap();
+        final List<Long> botMap = AnnoyData.get().getBotAnnoyList();
 
         if (annoyMap.containsKey(user.getIdLong())) {
             String emojiString = annoyMap.get(user.getIdLong());
@@ -34,12 +34,12 @@ public class OnGuildMessage extends ListenerAdapter {
                 if (emoji != null)
                     message.addReaction(emoji).queue(null, error -> {
                         annoyMap.remove(user.getIdLong());
-                        SelfData.get().update();
+                        AnnoyData.get().save();
                     });
             } catch (NumberFormatException er) {
                 message.addReaction(emojiString).queue(null, error -> {
                     annoyMap.remove(user.getIdLong());
-                    SelfData.get().update();
+                    AnnoyData.get().save();
                 });
             }
 

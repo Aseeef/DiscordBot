@@ -17,6 +17,8 @@ C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\Command.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\WelcomeCommand.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\events\OnReactRules.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\xenforo\objects\XenforoUser.java
+C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\selfdata\SavableSelfData.java
+C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\selfdata\ChannelIdData.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\SelfData.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\selfevents\ReadyEvents.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\SeniorsCommand.java
@@ -29,9 +31,12 @@ C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\xenforo\objects\Alert.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\PlayerCountCommand.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\StaffCommand.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\events\OnJoin.java
+C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\database\UsersDAO.java
+C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\selfdata\ChannelData.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\AnnoyCommand.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\tools\WelcomeTools.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\litebans\Ban.java
+C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\console\commands\listeners\ConsoleMemoryCommand.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\tools\MineStat.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\database\sql\component\DatabaseCredentials.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\tools\GTools.java
@@ -53,7 +58,7 @@ C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\xenforo\Xenforo.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\database\redis\OnRedisMessageReceive.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\xenforo\events\NewThreadEvent.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\confighelpers\MineStatSettings.java
-C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\tools\PrivateChannel.java
+C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\selfdata\AnnoyData.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\RaidModeCommand.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\Data.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\confighelpers\Config.java

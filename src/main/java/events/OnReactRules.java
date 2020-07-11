@@ -1,5 +1,6 @@
 package events;
 
+import utils.selfdata.ChannelIdData;
 import utils.users.Rank;
 import utils.SelfData;
 import utils.console.Logs;
@@ -20,7 +21,7 @@ public class OnReactRules extends ListenerAdapter {
         User user = e.getUser();
         Member member = e.getMember();
 
-        TextChannel ruleChannel = jda.getTextChannelById(SelfData.get().getRuleAgreeChannelId());
+        TextChannel ruleChannel = jda.getTextChannelById(ChannelIdData.get().getRuleAgreeChannelId());
         long msgId = e.getMessageIdLong();
 
         if (!user.isBot() && ruleChannel != null && msgId == SelfData.get().getRuleAgreeMessageId()) {

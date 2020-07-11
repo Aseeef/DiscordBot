@@ -23,7 +23,7 @@ public class PingCommand extends Command {
             sentMsg.editMessage(generatePingData(receiveTime, sendTime)).queue((sentMsg2) -> {
                 // Delete msgs if not dms
                 if (!(channel instanceof PrivateChannel)) {
-                    sentMsg.delete().queueAfter(Config.get().getDeleteTime(), TimeUnit.SECONDS);
+                    sentMsg.delete().queueAfter(Config.get().getMsgDeleteTime(), TimeUnit.SECONDS);
                 }
             });
         });

@@ -5,11 +5,11 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import utils.MembersCache;
-import utils.selfdata.ChannelData;
-import utils.selfdata.SelfData;
+import utils.SelfData;
 import utils.channels.CustomChannel;
 import utils.database.UsersDAO;
 import utils.database.sql.BaseDatabase;
+import utils.selfdata.ChannelIdData;
 import utils.tools.GTools;
 import utils.users.GTMUser;
 import utils.users.Rank;
@@ -107,9 +107,37 @@ public class ChannelCommand extends Command {
                     return;
                 }
 
-                boolean publicChannel = Boolean.parseBoolean(args[0]);
+                boolean publicChannel = Boolean.parseBoolean(args[1]);
                 optionalChannel.get().setPublicChannel(publicChannel);
                 GTools.sendThenDelete(channel, "**Setting your custom channel to " + (publicChannel ? "public" : "private") + "!**");
+
+                break;
+            }
+
+            case "setmax": {
+
+                if (args.length < 2) {
+                    GTools.sendThenDelete(channel, "`/Channel SetMax <Limit>` - *Set the maximum about of people allowed in your channel; 0 is unlimited.*");
+                    return;
+                }
+
+                Optional<CustomChannel> optionalChannel = CustomChannel.get(member);
+
+                if (!optionalChannel.isPresent()) {
+                    GTools.sendThenDelete(channel, "**You don't own a custom channel! Do `/channel create` to make one.**");
+                    return;
+                }
+
+                int limit;
+                try {
+                    limit = Integer.parseInt(args[1]);
+                } catch (NumberFormatException e) {
+                    GTools.sendThenDelete(channel, "**`" + args[1] + "` is not a number!**");
+                    return;
+                }
+
+                optionalChannel.get().setChannelMax(limit);
+                GTools.sendThenDelete(channel, "**Setting max channel user limit to " + args[1] + " users...!**");
 
                 break;
             }
@@ -136,6 +164,12 @@ public class ChannelCommand extends Command {
                 }
 
                 Member target = optionalTarget.get();
+
+                if (target == member) {
+                    GTools.sendThenDelete(channel, "**You can't add yourself to your channel because you own it!**");
+                    return;
+                }
+
                 optionalChannel.get().addMember(target);
                 GTools.sendThenDelete(channel, "**Inviting " + target.getAsMention() + " to your custom channel!**");
 
@@ -164,6 +198,16 @@ public class ChannelCommand extends Command {
                 }
 
                 Member target = optionalTarget.get();
+
+                if (target == member) {
+                    GTools.sendThenDelete(channel, "**You can't remove yourself from your own channel!**");
+                    return;
+                }
+
+                if (Rank.hasRolePerms(target, Rank.ADMIN)) {
+                    GTools.sendThenDelete(channel, "**Sorry but it is not possible to block admins from your custom channel!**");
+                    return;
+                }
 
                 optionalChannel.get().removeMember(target);
 
@@ -203,19 +247,22 @@ public class ChannelCommand extends Command {
 
                 GTools.runAsync( () -> {
                     try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()){
-                        List<GTMUser> gangMembers = UsersDAO.getGangMembersFor(conn, gtmUser, args[1]);
+                        Object[] gangData = UsersDAO.getGangMembersFor(conn, gtmUser, args[1]);
+                        String gangName = (String) gangData[0];
+                        List<GTMUser> gangMembers = (List<GTMUser>) gangData[1];
 
                         if (gangMembers.size() == 0) {
-                            GTools.sendThenDelete(channel, "**No gang members linked to the GTM Discord where found on " + args[1].toUpperCase() + " :(.**");
+                            GTools.sendThenDelete(channel, "**No gang members of `" + gangName + "` were found that are linked to the discord on Server " + args[1].toUpperCase() + "!**");
                             return;
                         }
 
                         // build msg and add members
-                        StringBuilder sb = new StringBuilder("**Added ");
+                        StringBuilder sb = new StringBuilder("**Added `").append(gangName).append("` members ");
                         AtomicInteger i = new AtomicInteger();
                         gangMembers.forEach( gangMember -> {
                             i.getAndIncrement();
                             if (gangMember.getDiscordMember().isPresent()) {
+                                if (gangMember == gtmUser) return; //dont add self to the channel
                                 optionalChannel.get().addMember(gangMember.getDiscordMember().get());
                                 sb.append(gangMember.getDiscordMember().get().getAsMention());
                                 if (i.get() != gangMembers.size())
@@ -259,7 +306,7 @@ public class ChannelCommand extends Command {
                 }
 
                 optionalChannel.get().remove();
-                GTools.sendThenDelete(channel, "**Deleting your custom channel " + optionalChannel.get().getChannelName() + "...!**");
+                GTools.sendThenDelete(channel, "**Deleting your custom channel `" + optionalChannel.get().getChannelName() + "`...!**");
 
                 break;
             }
@@ -289,7 +336,7 @@ public class ChannelCommand extends Command {
                     return;
                 }
 
-                SelfData.get().setPrivateChannelsCategory(categoryId);
+                ChannelIdData.get().setPrivateChannelsCategoryId(categoryId);
                 GTools.sendThenDelete(channel, "**<@" + categoryId + "> has been successfully set as the private channels category.**");
 
                 break;
@@ -310,6 +357,7 @@ public class ChannelCommand extends Command {
                 .append("> `/Channel Create (name)` - *Create a new custom channel with the selected name.*\n")
                 //.append("> `/Channel Rename <name>` - *Rename your custom channel to the given argument.*\n")
                 .append("> `/Channel SetPublic <True/False>` - *Configure whether everyone should be able to join your channel.*\n")
+                .append("> `/Channel SetMax <Limit>` - *Set the maximum about of people allowed in your channel; 0 is unlimited.*\n")
                 .append("> `/Channel Add <Member ID / Tag>` - *Add the selected discord member to your custom channel.*\n")
                 .append("> `/Channel Remove <Member ID / Tag>` - *Remove the selected discord member from your custom channel.*\n")
                 .append("> `/Channel AddGang <Server Key>` - *Add all verified discord members in your gang on the specified server to this private voice channel*\n")

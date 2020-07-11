@@ -1,15 +1,15 @@
 package commands;
 
-import utils.Data;
-import utils.users.Rank;
-import utils.SelfData;
-import utils.Suggestions;
-import utils.users.GTMUser;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
+import utils.Data;
+import utils.Suggestions;
+import utils.selfdata.ChannelIdData;
+import utils.users.GTMUser;
+import utils.users.Rank;
 
 import static utils.tools.GTools.sendThenDelete;
 import static utils.tools.GTools.userById;
@@ -32,7 +32,7 @@ public class SuggestionCommand extends Command {
         else if (args[0].equalsIgnoreCase("setchannel")) {
 
             // Set suggestions settings
-            SelfData.get().setSuggestionChannelId(channel.getIdLong());
+            ChannelIdData.get().setSuggestionChannelId(channel.getIdLong());
 
             sendThenDelete(channel, suggestChannelSet((TextChannel) channel));
 

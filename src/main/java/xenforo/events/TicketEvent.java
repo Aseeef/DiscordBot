@@ -12,6 +12,7 @@ import utils.database.LitebansDAO;
 import utils.database.XenforoDAO;
 import utils.database.sql.BaseDatabase;
 import utils.litebans.Ban;
+import utils.selfdata.ChannelIdData;
 import utils.tools.GTools;
 import utils.users.GTMUser;
 import utils.users.Rank;
@@ -43,7 +44,7 @@ public class TicketEvent {
 
             Logs.log("[DEBUG] [TicketEvent] Received a new support ticket with title '" + alert.getSupportTicket().getTitle() + "' in " + department.getDepartmentName() + "!");
 
-            TextChannel channel = jda.getGuilds().get(0).getTextChannelById(SelfData.get().getModChannelId());
+            TextChannel channel = jda.getGuilds().get(0).getTextChannelById(ChannelIdData.get().getModChannelId());
             if (channel == null) return;
 
             switch (department) {

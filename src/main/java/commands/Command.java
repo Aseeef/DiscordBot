@@ -49,10 +49,11 @@ public abstract class Command extends ListenerAdapter {
         User user = e.getAuthor();
         String[] args = getArgs(msg);
         PrivateChannel channel = e.getChannel();
-        GTMUser gtmUser = GTMUser.getGTMUser(user.getIdLong()).orElse(null);
 
         jda.getGuilds().get(0).retrieveMember(user).queue( (member -> {
             if (GTools.isCommand(msg, user, name)) {
+
+                GTMUser gtmUser = GTMUser.getGTMUser(user.getIdLong()).orElse(null);
 
                 // anti command spam
                 if (antiSpamMap.containsKey(e.getAuthor()) && antiSpamMap.get(e.getAuthor()) > System.currentTimeMillis() - COMMAND_MS_DELAY) {
