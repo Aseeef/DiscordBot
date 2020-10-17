@@ -8,9 +8,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Invite;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.restaction.PermissionOverrideAction;
 import org.jetbrains.annotations.NotNull;
@@ -66,7 +64,10 @@ public class CustomChannel extends ListenerAdapter {
         this.voiceChannel = guild.getVoiceChannelById(this.voiceChannelId);
 
         if (this.voiceChannel == null) {
-            ChannelData.get().getChannelMap().remove(this.ownerId);
+            GTools.runDelayedTask( () -> {
+                ChannelData.get().getChannelMap().remove(this.ownerId);
+                ChannelData.get().save();
+            }, 10);
             return;
         }
 
@@ -90,7 +91,11 @@ public class CustomChannel extends ListenerAdapter {
             this.owner = optionalOwner.get();
         }
         else {
-            ChannelData.get().getChannelMap().remove(this.ownerId);
+            GTools.runDelayedTask( () -> {
+                ChannelData.get().getChannelMap().remove(this.ownerId);
+                ChannelData.get().save();
+            }, 10);
+            return;
         }
 
         // if no one is in this channel, start delete task
@@ -114,49 +119,24 @@ public class CustomChannel extends ListenerAdapter {
         jda.addEventListener(this);
     }
 
-    /**
-     * This event listens to the voice leave event starting a timer to delete the voice channel once the last player leaves
-     */
-    public void onGuildVoiceLeave (@NotNull GuildVoiceLeaveEvent event) {
-        if (event.getChannelLeft() != voiceChannel) return;
 
-        if (event.getChannelLeft().getMembers().size() == 0) {
+    /**
+     * This event listener checks for updates to voice channel in order to determine whether a channel needs to be deleted.
+     */
+    public void onGuildVoiceUpdate (@NotNull GuildVoiceUpdateEvent event) {
+        if (event.getChannelLeft() != voiceChannel && event.getChannelJoined() != voiceChannel) return;
+
+        if (event.getChannelJoined() != null && event.getChannelJoined() == voiceChannel) {
+            if (this.deleteTimer != null && this.voiceChannel.getMembers().size() == 0)
+                this.deleteTimer.cancel(false);
+        }
+
+        else if (event.getChannelLeft() != null && event.getChannelLeft() == voiceChannel && event.getChannelLeft().getMembers().size() == 0) {
             // cancel any previous timers if any
             if (this.deleteTimer != null)
                 this.deleteTimer.cancel(false);
             // start timer to delete the channel
             this.deleteTimer = startDeleteTimer();
-        }
-    }
-
-    /**
-     * This event listens to the voice move event starting a timer to delete the voice channel once the last player leaves (as a result of that move)
-     * It also resets the delete timer if a new user moves in to the channel as a result of the move event.
-     */
-    public void onGuildVoiceMove (@NotNull GuildVoiceMoveEvent event) {
-
-        if (event.getChannelLeft() == voiceChannel && event.getChannelLeft().getMembers().size() == 0) {
-            // cancel any previous timers if any
-            if (this.deleteTimer != null)
-                this.deleteTimer.cancel(false);
-            // start timer to delete the channel
-            this.deleteTimer = startDeleteTimer();
-        }
-
-        else if (event.getChannelJoined() == voiceChannel) {
-            if (this.deleteTimer != null)
-                this.deleteTimer.cancel(false);
-        }
-
-    }
-
-    /**
-     * This event listener checks to see if a new user joined this voice channel and if so, resets any delete timer (if any)
-     */
-    public void onGuildVoiceJoin (@NotNull GuildVoiceJoinEvent event) {
-        if (event.getChannelJoined() == voiceChannel) {
-            if (this.deleteTimer != null)
-                this.deleteTimer.cancel(false);
         }
     }
 
@@ -235,7 +215,7 @@ public class CustomChannel extends ListenerAdapter {
                         this.voiceChannel = vc;
                         this.voiceChannelId = vc.getIdLong();
                         vc.upsertPermissionOverride(owner).setAllow(
-                                EnumSet.of(Permission.VOICE_CONNECT, Permission.VOICE_DEAF_OTHERS, Permission.VOICE_MOVE_OTHERS)
+                                EnumSet.of(Permission.VOICE_CONNECT, Permission.VOICE_MOVE_OTHERS)
                         ).queue(po -> vc.createInvite().setMaxAge(1L, TimeUnit.DAYS)
                                 .queue((invite) -> {
                                     this.invite = invite;
@@ -376,12 +356,9 @@ public class CustomChannel extends ListenerAdapter {
      * Remove or delete this custom channel
      */
     public void remove() {
+        this.voiceChannel.delete().queue();
         ChannelData.get().getChannelMap().remove(this.owner.getIdLong());
         ChannelData.get().save();
-
-        this.voiceChannel.retrieveInvites().queue((invites) -> {
-            this.voiceChannel.delete().queue();
-        });
 
         System.out.println("Removed " + this.owner.getUser().getAsTag() + "'s custom channel " + this.channelName);
     }

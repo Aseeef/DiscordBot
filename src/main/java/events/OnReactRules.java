@@ -28,7 +28,6 @@ public class OnReactRules extends ListenerAdapter {
 
             // Remove reaction
             e.getChannel().removeReactionById(msgId, e.getReactionEmote().getEmote(), e.getUser()).queue();
-
             Emote gtmAgree = jda.getEmotesByName("gtmagree", true).get(0);
             Emote gtmDisagree = jda.getEmotesByName("gtmdisagree", true).get(0);
 

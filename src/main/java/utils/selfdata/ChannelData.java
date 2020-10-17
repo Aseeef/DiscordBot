@@ -30,7 +30,7 @@ public class ChannelData extends SavableSelfData {
     }
 
     @JsonIgnore
-    public static ChannelData get() {
+    public synchronized static ChannelData get() {
         return data;
     }
 

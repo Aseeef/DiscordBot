@@ -1,21 +1,21 @@
 package events;
 
-import utils.Data;
-import utils.Suggestions;
-import utils.tools.GTools;
-import utils.tools.SuggestionTools;
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import utils.Data;
+import utils.Suggestions;
+import utils.tools.GTools;
+import utils.tools.SuggestionTools;
+import utils.users.Rank;
 
 import java.util.Objects;
-import java.util.regex.Pattern;
 
+import static utils.console.Logs.log;
 import static utils.tools.GTools.jda;
 import static utils.tools.GTools.sendThenDelete;
-import static utils.console.Logs.log;
 import static utils.tools.SuggestionTools.*;
 
 public class OnSuggestion extends ListenerAdapter {
@@ -36,6 +36,25 @@ public class OnSuggestion extends ListenerAdapter {
 
             String message = SuggestionTools.formatSuggestion(e.getMessage().getContentRaw());
 
+            // If not verified
+            if (!Rank.hasRolePerms(e.getMember(), Rank.NORANK)) {
+
+                sendThenDelete(channel, user.getAsMention() + " you are not allowed to post suggestions " +
+                        "until you are verified your discord account to GTM by using the `/discord verify` command in game!");
+
+                // DM user their deleted suggestion so it can be reposted
+                user.openPrivateChannel().queue(
+                        userChannel ->
+                                userChannel.sendMessage("**Your suggestion was deleted because you are not a verified user:**\n```" + e.getMessage().getContentRaw() + "```\n" + "**Please link your account to GTM using the `/discord verify` command in game and repost this suggestion.**")
+                                        .queue());
+
+                // Log failure
+                log("Non Verified User: Deleted the following suggestion from user " + user.getAsTag() + " (" + user.getId() + "):" +
+                        "\n" + e.getMessage().getContentRaw());
+
+                return;
+            }
+
             // If user didn't use suggestion format, delete their msg
             if (!ifUsedFormat(message)) {
 
@@ -55,7 +74,6 @@ public class OnSuggestion extends ListenerAdapter {
                         "\n"+e.getMessage().getContentRaw());
 
                 return;
-
             }
 
             // Create new suggestion object
