@@ -10,6 +10,7 @@ import utils.selfdata.AnnoyData;
 import utils.selfdata.ChannelData;
 import utils.selfdata.ChannelIdData;
 import utils.tools.GTools;
+import utils.users.GTMUser;
 
 import java.util.Map;
 import java.util.Timer;
@@ -50,6 +51,9 @@ public class ReadyEvents extends ListenerAdapter {
             // INVALID CONFIG OR DATA WARNINGS
             checkRaidModeSettings();
             checkSuggestionsSettings();
+
+            // load all GTM users in to memory
+            GTMUser.loadUsers();
 
         });
 

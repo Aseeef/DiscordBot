@@ -41,46 +41,6 @@ public class DiscordDAO {
         jedisManager.sendData("discord_to_bungee", data);
     }
 
-    public static String getSkullSkin (UUID uuid) {
-        String stringUUID = uuid.toString().replace("-", "");
-        return "https://minotar.net/avatar/" + stringUUID + ".png";
-    }
-
-    public static Optional<String> getUsername(UUID uuid) {
-        try {
-            return Optional.of(MojangAPI.getUsername(uuid));
-        } catch (IOException | InvalidPlayerException | APIException | NullPointerException e) {
-            GTools.printStackError(e);
-        }
-        return Optional.empty();
-    }
-
-    public static List<String> getAllUsernames(UUID uuid) {
-        try {
-            List<String> nameHist = new ArrayList<>();
-            MojangAPI.getNameHistory(uuid).forEach( (name) -> nameHist.add(name.getName()));
-            return nameHist;
-        } catch (InvalidPlayerException | NullPointerException e) {
-            GTools.printStackError(e);
-        }
-        return null;
-    }
-
-    public static List<String> getAllUsernames(String name) {
-        UUID uuid = getUUID(name).orElse(null);
-        if (uuid == null) return null;
-        else return getAllUsernames(uuid);
-    }
-
-    public static Optional<UUID> getUUID(String userName) {
-        try {
-            return Optional.of(MojangAPI.getUUID(userName));
-        } catch (IOException | InvalidPlayerException | APIException | NullPointerException e) {
-            GTools.printStackError(e);
-        }
-        return Optional.empty();
-    }
-
     public static Rank getRank(Connection conn, UUID uuid) {
         String query = "SELECT * FROM `user_profile` WHERE `uuid`=UNHEX(?) AND `server_key`='GLOBAL'";
 
@@ -181,7 +141,7 @@ public class DiscordDAO {
     }
 
     public static long getDiscordIdFromName (Connection conn, String username) {
-        UUID uuid = getUUID(username).orElse(null);
+        UUID uuid = GTools.getUUID(username).orElse(null);
         if (uuid == null) return -1;
         return getDiscordIdFromUUID(conn, uuid);
     }

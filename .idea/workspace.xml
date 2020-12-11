@@ -1,20 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="- Only allows verified users to make suggestions&#10;- Fixed">
+    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="- Only allows verified users to make suggestions&#10;- Various improvements / bug fixes with custom channels">
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/stats/PlanServer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/stats/StatsCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/stats/StatsDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/stats/StatsMenu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/stats/wrappers/GTMGang.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/stats/wrappers/HelpQuestion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/stats/wrappers/PlanUser.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/stats/wrappers/Session.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/stats/wrappers/WrappedIPData.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/stats/wrappers/WrappedPunishment.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/HarryCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/HarryCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/events/OnReactRules.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/events/OnReactRules.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/events/OnSuggestion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/events/OnSuggestion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/channels/CustomChannel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/channels/CustomChannel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/selfdata/ChannelData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/selfdata/ChannelData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GTM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GTM.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/DiscordAccountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/DiscordAccountCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/StaffAccountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/StaffAccountCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/selfevents/ReadyEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/selfevents/ReadyEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/MembersCache.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/MembersCache.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/DiscordDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/DiscordDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/UsersDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/UsersDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/XenforoDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/XenforoDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/pagination/DiscordMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/pagination/DiscordMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/GTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/tools/GTools.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/users/GTMUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/users/GTMUser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/events/TicketEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xenforo/events/TicketEvent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/GTM.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/GTM.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Utils/tools/GTools.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Utils/tools/GTools.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Utils/tools/SuggestionTools.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Utils/tools/SuggestionTools.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/commands/PlayerCountCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/commands/PlayerCountCommand.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/events/OnSuggestion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/events/OnSuggestion.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -100,15 +116,18 @@
       <recent name="config" />
       <recent name="" />
     </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\java" />
+      <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\Database" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="commands.stats.wrappers" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\java" />
       <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\config" />
       <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\resources" />
       <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\resources\Configuration" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\java" />
-      <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\Database" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -248,6 +267,15 @@
       <workItem from="1602080033882" duration="3065000" />
       <workItem from="1602631546418" duration="1234000" />
       <workItem from="1602788796050" duration="1203000" />
+      <workItem from="1602954757454" duration="11220000" />
+      <workItem from="1603110018748" duration="8508000" />
+      <workItem from="1603303670639" duration="12447000" />
+      <workItem from="1603507498676" duration="2311000" />
+      <workItem from="1604796819015" duration="754000" />
+      <workItem from="1604862434420" duration="340000" />
+      <workItem from="1604979616808" duration="1197000" />
+      <workItem from="1607461709759" duration="665000" />
+      <workItem from="1607471235913" duration="3747000" />
     </task>
     <task id="LOCAL-00001" summary="Init commit">
       <created>1584645971223</created>
@@ -480,7 +508,14 @@
       <option name="project" value="LOCAL" />
       <updated>1594440589021</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="- Only allows verified users to make suggestions&#10;- Various improvements / bug fixes with custom channels">
+      <created>1602954916147</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1602954916147</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -500,7 +535,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Improved bot verification system" />
     <MESSAGE value="Updated Jackson" />
     <MESSAGE value="Makes the raidModeTimeToAccept a configurable option in the config" />
     <MESSAGE value="Fixed bugs relating to gtm player count updater" />
@@ -525,14 +559,15 @@
     <MESSAGE value="- Improvement to console &amp; logging&#10;- Added a console memory command&#10;- Changed calls to GTMUser#updateUserDataNow() to be async&#10;- Improvements to accounts refreshall command&#10;- Added frame work for custom channels which will allow donors in future to create private channels like on team speak&#10;- Fixed error caused by player have too many past tickets (since embeds have a max field length limit)&#10;- Util improvement: Easily create timer tasks&#10;- Upon unverification, a GTMUser will now loose thier discord rank (prevents abuse)" />
     <MESSAGE value="- Custom channels command which will allow donors to create private channels like on team speak&#10;- Made scabble annoy harder to bypass" />
     <MESSAGE value="- Split up self data in to categories for organization and added an easy to use data storage class called SavableSelfData&#10;- Depreciated old self data&#10;- In PMs, GTM user calls will now only be made once we know which command is being ran&#10;- Discord menu class now allows us to configure whether we want everyone to be able to modify the menu&#10;- Member reloading now returns a completable future&#10;- Added a auto deleter for custom channels &amp; more&#10;- Fix /channel addgang&#10;- Made the last updated variable in GTM user volatile&#10;- Added a util to run delayed tasks" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Split up self data in to categories for organization and added an easy to use data storage class called SavableSelfData&#10;- Depreciated old self data&#10;- In PMs, GTM user calls will now only be made once we know which command is being ran&#10;- Discord menu class now allows us to configure whether we want everyone to be able to modify the menu&#10;- Member reloading now returns a completable future&#10;- Added a auto deleter for custom channels &amp; more&#10;- Fix /channel addgang&#10;- Made the last updated variable in GTM user volatile&#10;- Added a util to run delayed tasks" />
+    <MESSAGE value="- Only allows verified users to make suggestions&#10;- Various improvements / bug fixes with custom channels" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Only allows verified users to make suggestions&#10;- Various improvements / bug fixes with custom channels" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/../GTM/gtm/src/main/java/net/grandtheftmc/gtm/listeners/Death.java</url>
-          <line>287</line>
+          <line>289</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">

@@ -71,7 +71,7 @@ public class MembersCache extends ListenerAdapter {
         } catch (NumberFormatException ignored) {
         }
 
-        Optional<GTMUser> optionalGTMUser = GTMUser.loadAndGetAllUsers().stream().filter( gtmUser -> gtmUser.getUsername().equalsIgnoreCase(s)).findFirst();
+        Optional<GTMUser> optionalGTMUser = GTMUser.getLoadedUsers().stream().filter(gtmUser -> gtmUser.getUsername().equalsIgnoreCase(s)).findFirst();
         if (optionalGTMUser.isPresent()) return optionalGTMUser.get().getDiscordMember();
 
         return Optional.empty();

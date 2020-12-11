@@ -36,7 +36,7 @@ public class DiscordMenu extends ListenerAdapter {
     private int page = 1;
     private int maxPages;
 
-    private DiscordMenu (Message message, int maxPages, User user, boolean allowChangeFromAll) {
+    public DiscordMenu (Message message, int maxPages, User user, boolean allowChangeFromAll) {
         jda.addEventListener(this);
         this.message = message;
         this.channel = message.getChannel();
@@ -47,7 +47,7 @@ public class DiscordMenu extends ListenerAdapter {
         addReactions();
     }
 
-    private DiscordMenu (Message message, int maxPages) {
+    public DiscordMenu (Message message, int maxPages) {
         jda.addEventListener(this);
         this.message = message;
         this.channel = message.getChannel();
@@ -63,6 +63,9 @@ public class DiscordMenu extends ListenerAdapter {
         return create(channel, embedBuilder, maxPages, null, false);
     }
 
+    /**
+     * @return - Create a discord menu. May take a while depending on discord. Returns a future completion
+     */
     public static CompletableFuture<DiscordMenu> create(MessageChannel channel, EmbedBuilder embedBuilder, int maxPages, @Nullable User user, boolean allowChangeFromAll) {
         CompletableFuture<DiscordMenu> futureMenu = new CompletableFuture<>();
         MessageEmbed embed = buildEmbed(embedBuilder, 1, maxPages);

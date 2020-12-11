@@ -94,7 +94,7 @@ public class StaffAccountCommand extends Command {
                 channel.sendMessage("**Updating roles and data for all verified users. [Progress: `?%`]**").queue(
                         msg -> {
                             AtomicInteger index = new AtomicInteger(1);
-                            List<GTMUser> users = GTMUser.loadAndGetAllUsers();
+                            List<GTMUser> users = GTMUser.getLoadedUsers();
 
                             ScheduledFuture task = GTools.runTaskTimer( () -> {
                                 int percent = Math.round((((float) index.get()) / (float) users.size()) * 100);
@@ -122,7 +122,7 @@ public class StaffAccountCommand extends Command {
                     GTools.sendThenDelete(channel, "**You must be an Admin or higher to use this command.**");
                     return;
                 }
-                List<GTMUser> users = GTMUser.loadAndGetAllUsers();
+                List<GTMUser> users = GTMUser.getLoadedUsers();
                 users.sort( (u1, u2) -> u1.getUsername().compareToIgnoreCase(u2.getUsername()));
                 int maxPage = (int) Math.ceil(users.size() / 8f);
                 DiscordMenu.create(channel, getPageInfo(users, 1, maxPage), maxPage, member.getUser(), false).thenAcceptAsync( (menu -> {
@@ -144,7 +144,7 @@ public class StaffAccountCommand extends Command {
 
     private EmbedBuilder getInfoFor(Member member, GTMUser gtmUser) {
         return new EmbedBuilder()
-                .setThumbnail(DiscordDAO.getSkullSkin(gtmUser.getUuid()))
+                .setThumbnail(GTools.getSkullSkin(gtmUser.getUuid()))
                 .setTitle("**User Profile Found!**")
                 .setDescription(member.getUser().getAsTag() + "'s discord account is linked to the following GTM player...")
                 .addField("**UUID:**", gtmUser.getUuid().toString(), false)

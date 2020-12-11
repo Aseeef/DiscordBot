@@ -87,14 +87,21 @@ public class GTMUser {
     }
 
     @JsonIgnore
-    public static List<GTMUser> loadAndGetAllUsers() {
-        List<GTMUser> users = new ArrayList<>(userCache.values());
+    public static Optional<GTMUser> getGTMUser(UUID uuid) {
+        return getLoadedUsers().stream().filter( (gtmUser) -> gtmUser.getUuid() == uuid).findFirst();
+    }
+
+    @JsonIgnore
+    public static void loadUsers() {
         for (long dataId : Data.getDataList(Data.USER)) {
-            boolean alreadyLoaded = users.stream().anyMatch( (loadedUser) -> dataId == loadedUser.getDiscordId());
-            if (!alreadyLoaded)
-                users.add((GTMUser) Data.obtainData(Data.USER, dataId));
+            userCache.putIfAbsent(dataId, (GTMUser) Data.obtainData(Data.USER, dataId));
         }
-        return users;
+        System.out.println("Successfully loaded all " + userCache.size() + " GTM Discord Users!");
+    }
+
+    @JsonIgnore
+    public static ArrayList<GTMUser> getLoadedUsers() {
+        return new ArrayList<>(userCache.values());
     }
 
     @JsonIgnore
@@ -139,7 +146,7 @@ public class GTMUser {
         long start = System.currentTimeMillis();
 
         try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
-            String newUsername = DiscordDAO.getUsername(this.getUuid()).orElse(null);
+            String newUsername = GTools.getUsername(this.getUuid()).orElse(null);
             Rank newRank = DiscordDAO.getRank(conn, this.getUuid());
 
             if (newRank != null && newRank != this.getRank()) {

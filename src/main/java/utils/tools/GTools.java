@@ -1,6 +1,9 @@
 package utils.tools;
 
 import com.google.common.base.Charsets;
+import me.kbrewster.exceptions.APIException;
+import me.kbrewster.exceptions.InvalidPlayerException;
+import me.kbrewster.mojangapi.MojangAPI;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -15,9 +18,10 @@ import utils.selfdata.ChannelIdData;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -184,6 +188,69 @@ public class GTools {
             if (args.length != i + 1) sb.append(" ");
         }
         return sb.toString();
+    }
+
+    public static List<String> getAllUsernames(UUID uuid) {
+        try {
+            List<String> nameHist = new ArrayList<>();
+            MojangAPI.getNameHistory(uuid).forEach( (name) -> nameHist.add(name.getName()));
+            return nameHist;
+        } catch (InvalidPlayerException | NullPointerException e) {
+            GTools.printStackError(e);
+        }
+        return null;
+    }
+
+    public static List<String> getAllUsernames(String name) {
+        UUID uuid = getUUID(name).orElse(null);
+        if (uuid == null) return null;
+        else return getAllUsernames(uuid);
+    }
+
+    public static Optional<UUID> getUUID(String userName) {
+        try {
+            return Optional.of(MojangAPI.getUUID(userName));
+        } catch (IOException | InvalidPlayerException | APIException | NullPointerException e) {
+            GTools.printStackError(e);
+        }
+        return Optional.empty();
+    }
+
+    public static String getSkullSkin (UUID uuid) {
+        String stringUUID = uuid.toString().replace("-", "");
+        return "https://minotar.net/avatar/" + stringUUID + ".png";
+    }
+
+    public static Optional<String> getUsername(UUID uuid) {
+        try {
+            return Optional.of(MojangAPI.getUsername(uuid));
+        } catch (IOException | InvalidPlayerException | APIException | NullPointerException e) {
+            GTools.printStackError(e);
+        }
+        return Optional.empty();
+    }
+
+    public static String epochToDate(long date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        return sdf.format(new Date(date));
+    }
+
+    public static String epochToTime(long time) {
+        double months = time / 30D / 24D / 60D / 60D / 1000D;
+        double days = (months - Math.floor(months)) * 30;
+        double hours = (days - Math.floor(days)) * 24;
+        double minutes = (hours - Math.floor(hours)) * 60;
+        double seconds = (minutes - Math.floor(minutes)) * 60;
+
+        long monthR = (long) Math.floor(months);
+        long daysR = (long) Math.floor(days);
+        long hoursR = (long) Math.floor(hours);
+        long minutesR = (long) Math.floor(minutes);
+        long secondsR = Math.round(seconds);
+
+        String timeFormatted = ((monthR == 0 ? "" : monthR + " month(s), ") + (daysR == 0 ? "" : daysR + " day(s), ") + (hoursR == 0 ? "" : hoursR + " hour(s), ") + (minutesR == 0 ? "" : minutesR + " minute(s), ") + (secondsR == 0 ? "" : secondsR + " second(s), "));
+
+        return timeFormatted.length() != 0 ? timeFormatted.substring(0, timeFormatted.length() - 2) : timeFormatted;
     }
 
 }

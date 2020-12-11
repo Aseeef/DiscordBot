@@ -90,7 +90,7 @@ public class DiscordAccountCommand extends Command {
 
     private EmbedBuilder getInfo(GTMUser gtmUser) {
         return new EmbedBuilder()
-                .setThumbnail(DiscordDAO.getSkullSkin(gtmUser.getUuid()))
+                .setThumbnail(GTools.getSkullSkin(gtmUser.getUuid()))
                 .setTitle("**Discord Account Information**")
                 .setDescription("Your discord account is linked to the following GTM player...")
                 .addField("**UUID:**", gtmUser.getUuid().toString(), false)

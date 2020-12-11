@@ -5,7 +5,6 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import utils.MembersCache;
-import utils.SelfData;
 import utils.console.Logs;
 import utils.database.DiscordDAO;
 import utils.database.LitebansDAO;
@@ -24,10 +23,8 @@ import java.awt.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.TimeZone;
 
 import static utils.tools.GTools.jda;
 
@@ -165,28 +162,17 @@ public class TicketEvent {
     }
 
     private String getPreviousAppeals(String username, int currentTicketId) {
-        List<String> links = new ArrayList<>();
+        List<SupportTicket> tickets = new ArrayList<>(XenforoDAO.getAllTicketsFrom(username));
 
-        List<String> names = DiscordDAO.getAllUsernames(username);
-        if (names == null || names.size() == 0) return null;
-        try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.XEN).getConnection()) {
-            for (String u : names) {
-                XenforoDAO.getAllTicketsFrom(conn, u).forEach((ticket) -> {
-                    if (ticket.getDepartment() == Department.PUNISHMENT_APPEALS && ticket.getSupportTicketId() != currentTicketId)
-                        links.add(ticket.getTicketLink());
-                });
-            }
-        } catch (SQLException e) {
-            GTools.printStackError(e);
-        }
+        tickets.removeIf( (ticket) -> ticket.getDepartment() != Department.PUNISHMENT_APPEALS || ticket.getSupportTicketId() == currentTicketId);
 
         // return links
-        if (links.size() == 0) return null;
+        if (tickets.size() == 0) return null;
         StringBuilder sb = new StringBuilder();
-        for (String link : links) {
-            StringBuilder testSb = new StringBuilder(sb).append(link);
+        for (SupportTicket ticket : tickets) {
+            StringBuilder testSb = new StringBuilder(sb).append(ticket.getTicketLink());
             if (testSb.length() < 1000)
-                sb.append(link).append("\n");
+                sb.append(ticket.getTicketLink()).append("\n");
             else {
                 sb.append("and more...");
                 break;

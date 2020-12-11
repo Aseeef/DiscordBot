@@ -1,4 +1,5 @@
 import commands.*;
+import commands.stats.StatsCommand;
 import events.OnGuildMessage;
 import events.OnJoin;
 import events.OnReactRules;
@@ -131,6 +132,7 @@ public class GTM extends ListenerAdapter {
             jda.addEventListener(new StaffCommand());
             jda.addEventListener(new AnnoyCommand());
             jda.addEventListener(new ChannelCommand());
+            jda.addEventListener(new StatsCommand());
 
             // Self user settings functions to check if there was utils.config change to prevent
             // unnecessary calls to the discord api which may result in us getting rate limited

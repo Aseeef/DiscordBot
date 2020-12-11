@@ -3,7 +3,6 @@ package utils.database;
 import utils.tools.GTools;
 import utils.tools.UUIDUtil;
 import utils.users.GTMUser;
-import utils.users.Rank;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -56,7 +55,7 @@ public class UsersDAO {
                     }
                 }
 
-                GTMUser.loadAndGetAllUsers().forEach(gtmUser -> {
+                GTMUser.getLoadedUsers().forEach(gtmUser -> {
                     if (gangUuids.contains(gtmUser.getUuid()))
                         gangMembers.add(gtmUser);
                 });
