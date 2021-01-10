@@ -2,7 +2,6 @@ package utils.selfdata;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import utils.tools.GTools;
 
 import java.io.File;
@@ -51,6 +50,7 @@ public abstract class SavableSelfData {
             GTools.printStackError(e);
         }
 
+        //debug
         //log("Edited " + type.getDataName() + " data in " + number + ".json");
     }
 

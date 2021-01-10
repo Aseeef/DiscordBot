@@ -89,12 +89,15 @@ public class TicketEvent {
                     }
                 }
 
-                case PURCHASES:
-
-                case OTHER_SUPPORT:
-
-                case PLAYER_REPORTS:
-
+                case PURCHASES: {
+                    // TODO
+                }
+                case OTHER_SUPPORT: {
+                    // TODO
+                }
+                case PLAYER_REPORTS: {
+                    // TODO
+                }
                 case BUY_AN_UNBAN: {
                     break;
                 }

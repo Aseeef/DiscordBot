@@ -31,6 +31,7 @@ C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\pagination\MenuAction.jav
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\console\Console.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\stats\PlanServer.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\database\XenforoDAO.java
+C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\stats\StatsMenu.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\xenforo\objects\Alert.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\PlayerCountCommand.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\StaffCommand.java
@@ -61,7 +62,6 @@ C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\console\commands\listener
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\tools\Verification.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\xenforo\Xenforo.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\database\redis\OnRedisMessageReceive.java
-C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\xenforo\events\NewThreadEvent.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\confighelpers\MineStatSettings.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\commands\stats\wrappers\GTMGang.java
 C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\utils\selfdata\AnnoyData.java

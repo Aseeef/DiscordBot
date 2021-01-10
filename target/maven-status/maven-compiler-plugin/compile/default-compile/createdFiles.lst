@@ -38,7 +38,6 @@ utils\console\commands\listeners\ConsoleMemoryCommand.class
 utils\tools\SuggestionTools.class
 commands\stats\wrappers\WrappedPunishment.class
 GTM.class
-xenforo\events\NewThreadEvent.class
 commands\DiscordAccountCommand.class
 commands\stats\StatsMenu.class
 utils\database\redis\OnRedisMessageReceive.class

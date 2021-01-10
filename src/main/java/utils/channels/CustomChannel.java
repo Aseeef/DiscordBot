@@ -53,6 +53,9 @@ public class CustomChannel extends ListenerAdapter {
     private ScheduledFuture deleteTimer;
 
     @JsonCreator
+    /**
+     * This JSONCreator is used by Jackson to load up a custom channel profile from a file
+     */
     public CustomChannel(@JsonProperty("channelName") String channelName, @JsonProperty("voiceChannelId") long voiceChannelId, @JsonProperty("ownerId") long ownerId, @JsonProperty("whitelistIds") List<Long> whitelistIds, @JsonProperty("blacklistIds") List<Long> blacklistIds, @JsonProperty("isPublicChannel") boolean isPublicChannel) {
         this.channelName = channelName;
         this.voiceChannelId = voiceChannelId;
@@ -250,7 +253,7 @@ public class CustomChannel extends ListenerAdapter {
      */
     public void addMember(Member member) {
         member.getUser().openPrivateChannel().queue( privateChannel -> {
-            String msg = "**" + member.getUser().getAsTag() + " has invited you to join their Custom Channel on the GTM Discord!**\n";
+            String msg = "**" + owner.getUser().getAsTag() + " has invited you to join their Custom Channel on the GTM Discord!**\n";
             msg += this.getInvite().getUrl();
             privateChannel.sendMessage(msg).queue();
         });

@@ -1,7 +1,5 @@
 package commands.stats;
 
-import java.util.UUID;
-
 public enum PlanServer {
 
     GTM1("186b8901-2490-466a-bcc9-7af1acddbb63"),
