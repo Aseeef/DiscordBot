@@ -2,21 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/ChannelCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/ChannelCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/stats/PlanServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/stats/PlanServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/MembersCache.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/MembersCache.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/channels/CustomChannel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/channels/CustomChannel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/selfdata/SavableSelfData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/selfdata/SavableSelfData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/events/NewThreadEvent.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/events/TicketEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xenforo/events/TicketEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -91,7 +78,7 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="settings.github" />
   </component>
   <component name="RecentsManager">
     <key name="ExtractSuperBase.RECENT_KEYS">
@@ -264,7 +251,7 @@
       <workItem from="1607652493650" duration="124000" />
       <workItem from="1607997267118" duration="1592000" />
       <workItem from="1609613397891" duration="6975000" />
-      <workItem from="1610215844025" duration="9472000" />
+      <workItem from="1610215844025" duration="12273000" />
     </task>
     <task id="LOCAL-00001" summary="Init commit">
       <created>1584645971223</created>
@@ -511,7 +498,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607652604733</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="* More Comments&#10;* Fixed an issue where when inviting users to custom channel, uses the name of the recipient as the invitor&#10;* updated jda">
+      <created>1610242323447</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1610242323447</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -531,7 +525,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Makes the raidModeTimeToAccept a configurable option in the config" />
     <MESSAGE value="Fixed bugs relating to gtm player count updater" />
     <MESSAGE value="Fixed typo" />
     <MESSAGE value="Added Redis support" />
@@ -556,7 +549,8 @@
     <MESSAGE value="- Split up self data in to categories for organization and added an easy to use data storage class called SavableSelfData&#10;- Depreciated old self data&#10;- In PMs, GTM user calls will now only be made once we know which command is being ran&#10;- Discord menu class now allows us to configure whether we want everyone to be able to modify the menu&#10;- Member reloading now returns a completable future&#10;- Added a auto deleter for custom channels &amp; more&#10;- Fix /channel addgang&#10;- Made the last updated variable in GTM user volatile&#10;- Added a util to run delayed tasks" />
     <MESSAGE value="- Only allows verified users to make suggestions&#10;- Various improvements / bug fixes with custom channels" />
     <MESSAGE value="WIP:&#10;- Comprehensive user statistics command for seniors&#10;- Now loading all GTM users to memory on startup&#10;- Util improvements" />
-    <option name="LAST_COMMIT_MESSAGE" value="WIP:&#10;- Comprehensive user statistics command for seniors&#10;- Now loading all GTM users to memory on startup&#10;- Util improvements" />
+    <MESSAGE value="* More Comments&#10;* Fixed an issue where when inviting users to custom channel, uses the name of the recipient as the invitor&#10;* updated jda" />
+    <option name="LAST_COMMIT_MESSAGE" value="* More Comments&#10;* Fixed an issue where when inviting users to custom channel, uses the name of the recipient as the invitor&#10;* updated jda" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
