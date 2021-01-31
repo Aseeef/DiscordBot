@@ -70,7 +70,7 @@ public class SuggestionTools {
     public static void suggestionInstruct(TextChannel channel) {
 
         channel.sendMessage(createHowSuggestionEmbed()).queueAfter(5, TimeUnit.SECONDS, (embedMsg) -> {
-            channel.sendMessage(suggestionMessage()).queue((rawMsg) -> {
+            channel.sendMessage(suggestionMessage()).queueAfter(250, TimeUnit.MILLISECONDS, (rawMsg) -> {
 
                 // These longs will always store the id of the previous suggestion instruction msgs
                 long prevSuggestHelpEmbedId = SelfData.get().getPrevSuggestEmbedId();

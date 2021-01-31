@@ -139,6 +139,8 @@ public class TicketEvent {
 
         else staff = gtmUser.getDiscordMember().get().getAsMention();
 
+        boolean plead = ticket.getTicketFields().getString("plead").equalsIgnoreCase("yes");
+
         EmbedBuilder embed = new EmbedBuilder()
                 .setTitle("Support Ticket Notification")
                 .setColor(new Color(168, 50, 137))
@@ -154,6 +156,7 @@ public class TicketEvent {
                 .addField("**Ban Timestamp:**", sdf.format(new Date(ban.getBanTime())), false);
 
         } else embed.addField("**Banning Staff Member:**", ticket.getTicketFields().getString("staffban"), false);
+        embed.addField("**Guilty Plea:**", plead ? "Admits to Infraction" : "Denies Fault", false);
         embed.addField("**Ticket Link**", ticket.getTicketLink(), false);
 
         String prevAppealLinks = getPreviousAppeals(ticket.getTicketFields().getString("username"), ticket.getSupportTicketId());

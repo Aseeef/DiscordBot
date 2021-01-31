@@ -153,3 +153,17 @@ rankSettings:
   vip: 336666406831783937
   noRank: 691430666306453574
   unverified: 701855739324399759
+
+
+###############################
+#      XENFORO SETTINGS       #
+###############################
+
+# How often in seconds should the bot check if there is a new support ticket that has been received?
+ticketPollingRate: 60
+
+# The username for the dummy account used to get and take Xenforo-related information or actions like getting new tickets
+dummyAccountUsername: "account username"
+
+# The password for the dummy account used to get and take Xenforo-related information or actions like getting new tickets
+dummyAccountPassword: "account password"

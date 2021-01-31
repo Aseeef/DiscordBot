@@ -56,20 +56,20 @@ public class Verification {
             // save to sql database
             try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
                 createDiscordProfile(conn, gtmUser);
+                Data.storeData(Data.USER, gtmUser, m.getIdLong());
+                // tell gtm verification was successfull
+                JSONObject data = new JSONObject()
+                        .put("uuid", gtmUser.getUuid())
+                        .put("discordId", m.getIdLong())
+                        .put("tag", GTools.convertSpecialChar(m.getUser().getAsTag()));
+                DiscordDAO.sendToGTM("verified", data);
+                GTools.runAsync(gtmUser::updateUserDataNow);
+                // remove code
+                verifyHashMap.remove(code);
             } catch (SQLException e) {
                 GTools.printStackError(e);
                 return false;
             }
-            Data.storeData(Data.USER, gtmUser, m.getIdLong());
-            // tell gtm verification was successfull
-            JSONObject data = new JSONObject()
-                    .put("uuid", gtmUser.getUuid())
-                    .put("discordId", m.getIdLong())
-                    .put("tag", GTools.convertSpecialChar(m.getUser().getAsTag()));
-            DiscordDAO.sendToGTM("verified", data);
-            GTools.runAsync(gtmUser::updateUserDataNow);
-            // remove code
-            verifyHashMap.remove(code);
             return true;
         } else return false;
     }

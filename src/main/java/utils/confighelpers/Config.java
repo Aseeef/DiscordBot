@@ -22,6 +22,9 @@ public class Config {
     private MineStatSettings mineStatSettings;
     private RaidmodeSettings raidmodeSettings;
     private RankSettings rankSettings;
+    private int ticketPollingRate;
+    private String dummyAccountUsername;
+    private String dummyAccountPassword;
 
     private static Config config;
 
@@ -29,7 +32,7 @@ public class Config {
     public Config() {
     }
 
-    public Config(String botToken, String botName, String commandPrefix, int msgDeleteTime, int customChannelDeleteTime, DatabaseCreds usersDatabase, DatabaseCreds planDatabase, DatabaseCreds bansDatabase, DatabaseCreds xenDatabase, DatabaseCreds redisDatabase, MineStatSettings mineStatSettings, RaidmodeSettings raidmodeSettings, RankSettings rankSettings) {
+    public Config(String botToken, String botName, String commandPrefix, int msgDeleteTime, int customChannelDeleteTime, DatabaseCreds usersDatabase, DatabaseCreds planDatabase, DatabaseCreds bansDatabase, DatabaseCreds xenDatabase, DatabaseCreds redisDatabase, MineStatSettings mineStatSettings, RaidmodeSettings raidmodeSettings, RankSettings rankSettings, int ticketPollingRate, String dummyAccountUsername, String dummyAccountPassword) {
         this.botToken = botToken;
         this.botName = botName;
         this.commandPrefix = commandPrefix;
@@ -43,6 +46,9 @@ public class Config {
         this.mineStatSettings = mineStatSettings;
         this.raidmodeSettings = raidmodeSettings;
         this.rankSettings = rankSettings;
+        this.ticketPollingRate = ticketPollingRate;
+        this.dummyAccountUsername = dummyAccountUsername;
+        this.dummyAccountPassword = dummyAccountPassword;
     }
 
     public static Config get() {
@@ -111,6 +117,18 @@ public class Config {
 
     public RankSettings getRankSettings() {
         return rankSettings;
+    }
+
+    public int getTicketPollingRate() {
+        return ticketPollingRate;
+    }
+
+    public String getDummyAccountUsername() {
+        return dummyAccountUsername;
+    }
+
+    public String getDummyAccountPassword() {
+        return dummyAccountPassword;
     }
 
 }

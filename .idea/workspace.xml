@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="">
+    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="* Now updating user data anytime a player types&#10;* Xenforo dummy account creds now defined through config&#10;* Partially redid account verification&#10;* Attempting to fix an issue where suggestion embeds are in the wrong order&#10;* Now including guilty plea in ticket details">
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/punishments/BanCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/punishments/KickCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/punishments/MuteCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/punishments/WarnCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/Command.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/Command.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/confighelpers/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/confighelpers/Config.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/DiscordDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/DiscordDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnRedisMessageReceive.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnRedisMessageReceive.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/SuggestionTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/tools/SuggestionTools.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/Verification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/tools/Verification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/users/GTMUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/users/GTMUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/Xenforo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xenforo/Xenforo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/events/TicketEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xenforo/events/TicketEvent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -251,7 +269,13 @@
       <workItem from="1607652493650" duration="124000" />
       <workItem from="1607997267118" duration="1592000" />
       <workItem from="1609613397891" duration="6975000" />
-      <workItem from="1610215844025" duration="12273000" />
+      <workItem from="1610215844025" duration="22634000" />
+      <workItem from="1610858202534" duration="2174000" />
+      <workItem from="1610930290423" duration="2240000" />
+      <workItem from="1611004449158" duration="1466000" />
+      <workItem from="1611275033917" duration="17567000" />
+      <workItem from="1611865020803" duration="1191000" />
+      <workItem from="1612067421841" duration="2068000" />
     </task>
     <task id="LOCAL-00001" summary="Init commit">
       <created>1584645971223</created>
@@ -505,7 +529,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610242323447</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="* removed default config">
+      <created>1610245398760</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1610245398760</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -525,7 +556,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fixed bugs relating to gtm player count updater" />
     <MESSAGE value="Fixed typo" />
     <MESSAGE value="Added Redis support" />
     <MESSAGE value="Commands bug fixes" />
@@ -550,7 +580,8 @@
     <MESSAGE value="- Only allows verified users to make suggestions&#10;- Various improvements / bug fixes with custom channels" />
     <MESSAGE value="WIP:&#10;- Comprehensive user statistics command for seniors&#10;- Now loading all GTM users to memory on startup&#10;- Util improvements" />
     <MESSAGE value="* More Comments&#10;* Fixed an issue where when inviting users to custom channel, uses the name of the recipient as the invitor&#10;* updated jda" />
-    <option name="LAST_COMMIT_MESSAGE" value="* More Comments&#10;* Fixed an issue where when inviting users to custom channel, uses the name of the recipient as the invitor&#10;* updated jda" />
+    <MESSAGE value="* removed default config" />
+    <option name="LAST_COMMIT_MESSAGE" value="* removed default config" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

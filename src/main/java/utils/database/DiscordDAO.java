@@ -64,12 +64,19 @@ public class DiscordDAO {
         mention = mention.replaceFirst("@", "");
         mention = GTools.convertSpecialChar(mention); //changes character encoding to something accepted by database
 
-        String query = "INSERT INTO `discord_users` (`uuid`, `discord_tag`, `discord_id`) VALUES (UNHEX(?),?,?);";
+        String query = "INSERT INTO `discord_users` (`uuid`, `discord_tag`, `discord_id`, `verify_active`) VALUES (UNHEX(?),?,?,?) ON DUPLICATE KEY UPDATE `discord_tag`=?, `discord_id`=?, `verify_active`=?;";
 
         try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, gtmUser.getUuid().toString().replace("-", ""));
+
             ps.setString(2, mention);
             ps.setLong(3, gtmUser.getDiscordId());
+            ps.setBoolean(4, true);
+
+            ps.setString(5, mention);
+            ps.setLong(6, gtmUser.getDiscordId());
+            ps.setBoolean(7, true);
+
             ps.executeUpdate();
         } catch (Exception e) {
             GTools.printStackError(e);
@@ -95,10 +102,11 @@ public class DiscordDAO {
     }
 
     public static void deleteDiscordProfile(Connection conn, UUID uuid) {
-        String query = "SELECT * FROM discord_users WHERE uuid=UNHEX(?);";
+        String query = "UPDATE `discord_users` SET `verify_active` = ? WHERE uuid=UNHEX(?);";
 
         try (PreparedStatement statement = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
-            statement.setString(1, uuid.toString().replaceAll("-", ""));
+            statement.setBoolean(1, false);
+            statement.setString(2, uuid.toString().replaceAll("-", ""));
             try (ResultSet result = statement.executeQuery()) {
                 if (result.next()) {
                     result.deleteRow();
@@ -118,7 +126,7 @@ public class DiscordDAO {
 
         List<GTMUser> gtmUsersWithRank = new ArrayList<>();
 
-        String query = "SELECT HEX(uuid) FROM user_profile WHERE rank=?;";
+        String query = "SELECT HEX(uuid) FROM user_profile WHERE rank=? AND `verify_active`=1;";
 
         try (PreparedStatement statement = conn.prepareStatement(query)) {
             statement.setString(1, rank.n());
@@ -148,7 +156,7 @@ public class DiscordDAO {
 
     public static long getDiscordIdFromUUID(Connection conn, UUID uuid) {
 
-        String query = "SELECT * FROM discord_users WHERE uuid=UNHEX(?);";
+        String query = "SELECT * FROM discord_users WHERE uuid=UNHEX(?) AND `verify_active`=1;";
 
         try (PreparedStatement statement = conn.prepareStatement(query)) {
             statement.setString(1, uuid.toString().replace("-", ""));
@@ -167,7 +175,7 @@ public class DiscordDAO {
 
     public static boolean discordProfileExists(Connection conn, long discordId) {
 
-            String query = "SELECT * FROM `discord_users` WHERE discord_id=?;";
+            String query = "SELECT * FROM `discord_users` WHERE discord_id=? AND `verify_active`=1;";
 
             try (PreparedStatement statement = conn.prepareStatement(query)) {
                 statement.setLong(1, discordId);

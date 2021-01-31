@@ -2,6 +2,7 @@ package utils.users;
 
 import com.fasterxml.jackson.annotation.*;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import utils.Data;
 import utils.MembersCache;

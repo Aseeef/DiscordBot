@@ -47,13 +47,12 @@ public abstract class Command extends ListenerAdapter {
 
         String msg = e.getMessage().getContentRaw();
         User user = e.getAuthor();
+        GTMUser gtmUser = GTMUser.getGTMUser(user.getIdLong()).orElse(null);
         String[] args = getArgs(msg);
         PrivateChannel channel = e.getChannel();
 
         jda.getGuilds().get(0).retrieveMember(user).queue( (member -> {
             if (GTools.isCommand(msg, user, name)) {
-
-                GTMUser gtmUser = GTMUser.getGTMUser(user.getIdLong()).orElse(null);
 
                 // anti command spam
                 if (antiSpamMap.containsKey(e.getAuthor()) && antiSpamMap.get(e.getAuthor()) > System.currentTimeMillis() - COMMAND_MS_DELAY) {
@@ -92,9 +91,12 @@ public abstract class Command extends ListenerAdapter {
         String[] args = getArgs(msg);
         TextChannel channel = e.getChannel();
 
-        if (member != null && GTools.isCommand(msg, member.getUser(), name)) {
+        if (member == null)
+            return;
 
-            GTMUser gtmUser = GTMUser.getGTMUser(member.getIdLong()).orElse(null);
+        GTMUser gtmUser = GTMUser.getGTMUser(member.getIdLong()).orElse(null);
+
+        if (GTools.isCommand(msg, member.getUser(), name)) {
 
             // anti command spam
             if (antiSpamMap.containsKey(e.getAuthor()) && antiSpamMap.get(e.getAuthor()) > System.currentTimeMillis() - COMMAND_MS_DELAY) {

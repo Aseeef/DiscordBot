@@ -40,6 +40,10 @@ public class OnRedisMessageReceive implements RedisEventListener {
 
                 switch (action.toLowerCase()) {
 
+                    case "inactive_player": {
+                        // TODO: Message players offering them gift cards to tell us why they stopped playing!!?
+                    }
+
                     case "verify": {
                         UUID uuid = UUID.fromString(jsonObject.getString("uuid"));
                         String name = jsonObject.getString("name");
