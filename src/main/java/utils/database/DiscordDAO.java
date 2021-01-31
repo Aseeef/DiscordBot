@@ -11,10 +11,8 @@ import utils.users.GTMUser;
 import utils.users.Rank;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.Instant;
 import java.util.*;
 
 import static utils.tools.GTools.jedisManager;
@@ -64,7 +62,7 @@ public class DiscordDAO {
         mention = mention.replaceFirst("@", "");
         mention = GTools.convertSpecialChar(mention); //changes character encoding to something accepted by database
 
-        String query = "INSERT INTO `discord_users` (`uuid`, `discord_tag`, `discord_id`, `verify_active`) VALUES (UNHEX(?),?,?,?) ON DUPLICATE KEY UPDATE `discord_tag`=?, `discord_id`=?, `verify_active`=?;";
+        String query = "INSERT INTO `discord_users` (`uuid`, `discord_tag`, `discord_id`, `verify_active`, `verify_time`) VALUES (UNHEX(?),?,?,?,?) ON DUPLICATE KEY UPDATE `discord_tag`=?, `discord_id`=?, `verify_active`=?, `verify_time`=?;";
 
         try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, gtmUser.getUuid().toString().replace("-", ""));
@@ -72,10 +70,12 @@ public class DiscordDAO {
             ps.setString(2, mention);
             ps.setLong(3, gtmUser.getDiscordId());
             ps.setBoolean(4, true);
+            ps.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
 
-            ps.setString(5, mention);
-            ps.setLong(6, gtmUser.getDiscordId());
-            ps.setBoolean(7, true);
+            ps.setString(6, mention);
+            ps.setLong(7, gtmUser.getDiscordId());
+            ps.setBoolean(8, true);
+            ps.setTimestamp(9, new Timestamp(System.currentTimeMillis()));
 
             ps.executeUpdate();
         } catch (Exception e) {
