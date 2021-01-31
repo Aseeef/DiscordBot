@@ -3,7 +3,6 @@ package selfevents;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.jetbrains.annotations.NotNull;
 import utils.MembersCache;
 import utils.confighelpers.Config;
 import utils.console.Logs;
@@ -22,8 +21,7 @@ import static utils.tools.GTools.*;
 
 public class ReadyEvents extends ListenerAdapter {
 
-    @Override
-    public void onReady(@NotNull ReadyEvent event) {
+    public void onReady(ReadyEvent event) {
 
         // Make sure bot is only on one server
         if (!inOnlyOneGuild()) {
@@ -36,26 +34,30 @@ public class ReadyEvents extends ListenerAdapter {
         guild = jda.getGuilds().get(0);
 
         // cache all members and once done
-        MembersCache.reloadMembers();
+        MembersCache.reloadMembersAsync().thenAccept( members -> {
 
-        // load self datas
-        ChannelIdData.load();
-        AnnoyData.load();
-        ChannelData.load();
+            // load self datas
+            ChannelIdData.load();
+            AnnoyData.load();
+            ChannelData.load();
 
-        // load all GTM users in to memory
-        GTMUser.loadUsers();
+            // Print finished loading msg
+            log("Bot is now online!");
 
-        // Print finished loading msg
-        log("Bot is now online!");
+            startTasks();
 
-        startTasks();
+            log("Player count channel updater task initialized!");
 
-        log("Player count channel updater task initialized!");
+            // INVALID CONFIG OR DATA WARNINGS
+            checkRaidModeSettings();
+            checkSuggestionsSettings();
 
-        // INVALID CONFIG OR DATA WARNINGS
-        checkRaidModeSettings();
-        checkSuggestionsSettings();
+            // load all GTM users in to memory
+            GTMUser.loadUsers();
+
+            // @Prez, your stuff here:
+
+        });
 
     }
 
