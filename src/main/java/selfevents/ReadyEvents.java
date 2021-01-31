@@ -55,6 +55,8 @@ public class ReadyEvents extends ListenerAdapter {
             // load all GTM users in to memory
             GTMUser.loadUsers();
 
+            // @Prez, your stuff here:
+
         });
 
     }
