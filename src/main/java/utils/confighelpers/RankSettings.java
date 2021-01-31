@@ -17,12 +17,11 @@ public class RankSettings {
     private long premium;
     private long vip;
     private long noRank;
-    private long unverified;
 
     public RankSettings() {
     }
 
-    public RankSettings(long manager, long developer, long admin, long builder, long srMod, long mod, long helper, long buildTeam, long youtuber, long supreme, long sponsor, long elite, long premium, long vip, long noRank, long unverified) {
+    public RankSettings(long manager, long developer, long admin, long builder, long srMod, long mod, long helper, long buildTeam, long youtuber, long supreme, long sponsor, long elite, long premium, long vip, long noRank) {
         this.manager = manager;
         this.developer = developer;
         this.admin = admin;
@@ -38,7 +37,6 @@ public class RankSettings {
         this.premium = premium;
         this.vip = vip;
         this.noRank = noRank;
-        this.unverified = unverified;
     }
 
     public long getManager() {
@@ -99,9 +97,5 @@ public class RankSettings {
 
     public long getNoRank() {
         return noRank;
-    }
-
-    public long getUnverified() {
-        return unverified;
     }
 }

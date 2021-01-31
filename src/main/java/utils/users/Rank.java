@@ -28,7 +28,6 @@ public enum Rank {
     PREMIUM ("PREMIUM", Config.get().getRankSettings().getPremium()),
     VIP ("VIP", Config.get().getRankSettings().getVip()),
     NORANK ("DEFAULT", Config.get().getRankSettings().getNoRank()),
-    UNVERIFIED (null, Config.get().getRankSettings().getUnverified()),
     ;
 
     /** rank as known in the database */

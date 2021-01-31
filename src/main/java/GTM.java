@@ -2,7 +2,7 @@ import commands.*;
 import commands.stats.StatsCommand;
 import events.OnGuildMessage;
 import events.OnJoin;
-import events.OnReactRules;
+import events.GuildReaction;
 import events.OnSuggestion;
 import me.cadox8.xenapi.XenAPI;
 import net.dv8tion.jda.api.JDABuilder;
@@ -113,7 +113,7 @@ public class GTM extends ListenerAdapter {
             jda.addEventListener(new ReadyEvents());
             jda.addEventListener(new CloseEvent());
             jda.addEventListener(new OnJoin());
-            jda.addEventListener(new OnReactRules());
+            jda.addEventListener(new GuildReaction());
             jda.addEventListener(new OnGuildMessage());
             jda.addEventListener(new MembersCache());
 
@@ -121,7 +121,6 @@ public class GTM extends ListenerAdapter {
             jda.addEventListener(new SuggestionCommand());
             jda.addEventListener(new PlayerCountCommand());
             jda.addEventListener(new RaidModeCommand());
-            jda.addEventListener(new WelcomeCommand());
             //jda.addEventListener(new SeniorsCommand());
             jda.addEventListener(new HelpCommand());
             jda.addEventListener(new DiscordAccountCommand());
