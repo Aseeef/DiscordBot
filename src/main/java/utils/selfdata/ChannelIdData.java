@@ -13,7 +13,6 @@ public class ChannelIdData extends SavableSelfData {
     private long playerCountChannelId;
     private long prevSuggestHelpChannelId;
     private long raidAlertChannelId;
-    private long ruleAgreeChannelId;
     private long modChannelId;
     private long privateChannelsCategoryId;
 
@@ -22,7 +21,6 @@ public class ChannelIdData extends SavableSelfData {
                          @JsonProperty("playerCountChannelId") long playerCountChannelId,
                          @JsonProperty("prevSuggestHelpChannelId") long prevSuggestHelpChannelId,
                          @JsonProperty("raidAlertChannelId") long raidAlertChannelId,
-                         @JsonProperty("ruleAgreeChannelId") long ruleAgreeChannelId,
                          @JsonProperty("modChannelId") long modChannelId,
                          @JsonProperty("privateChannelsCategoryId") long privateChannelsCategoryId) {
         super(Type.CHANNELID);
@@ -30,7 +28,6 @@ public class ChannelIdData extends SavableSelfData {
         this.playerCountChannelId = playerCountChannelId;
         this.prevSuggestHelpChannelId = prevSuggestHelpChannelId;
         this.raidAlertChannelId = raidAlertChannelId;
-        this.ruleAgreeChannelId = ruleAgreeChannelId;
         this.modChannelId = modChannelId;
         this.privateChannelsCategoryId = privateChannelsCategoryId;
     }
@@ -90,17 +87,6 @@ public class ChannelIdData extends SavableSelfData {
     }
 
     @JsonGetter
-    public long getRuleAgreeChannelId() {
-        return ruleAgreeChannelId;
-    }
-
-    @JsonSetter
-    public void setRuleAgreeChannelId(long ruleAgreeChannelId) {
-        this.ruleAgreeChannelId = ruleAgreeChannelId;
-        this.save();
-    }
-
-    @JsonGetter
     public long getModChannelId() {
         return modChannelId;
     }
@@ -137,7 +123,7 @@ public class ChannelIdData extends SavableSelfData {
         data = (ChannelIdData) SavableSelfData.obtainData(Type.CHANNELID);
         // default data
         if (data == null) {
-            data = new ChannelIdData(0L, 0L, 0L, 0L, 0L, 0L, 0L);
+            data = new ChannelIdData(0L, 0L, 0L, 0L, 0L, 0L);
             data.save();
         }
         System.out.println("Loaded Channel Id Data: " + data.toString());

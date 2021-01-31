@@ -1,6 +1,7 @@
 package utils.selfdata;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import utils.tools.GTools;
 
@@ -52,6 +53,19 @@ public abstract class SavableSelfData {
 
         //debug
         //log("Edited " + type.getDataName() + " data in " + number + ".json");
+    }
+
+    @JsonIgnore
+    public String toString() {
+        try {
+            // Create an ObjectMapper
+            ObjectMapper om = new ObjectMapper();
+            // Serialize to string
+            return om.writer().writeValueAsString(this);
+        } catch (JsonProcessingException ex) {
+            ex.printStackTrace();
+            return super.toString();
+        }
     }
 
     @JsonIgnore
