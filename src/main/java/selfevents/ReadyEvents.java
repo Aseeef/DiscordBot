@@ -3,18 +3,21 @@ package selfevents;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import utils.SelfData;
+import utils.MembersCache;
 import utils.confighelpers.Config;
 import utils.console.Logs;
+import utils.selfdata.AnnoyData;
+import utils.selfdata.ChannelData;
+import utils.selfdata.ChannelIdData;
 import utils.tools.GTools;
+import utils.users.GTMUser;
 
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import static utils.console.Logs.log;
-import static utils.tools.GTools.jda;
-import static utils.tools.GTools.updateOnlinePlayers;
+import static utils.tools.GTools.*;
 
 public class ReadyEvents extends ListenerAdapter {
 
@@ -27,16 +30,32 @@ public class ReadyEvents extends ListenerAdapter {
             System.exit(0);
         }
 
-        // Print finished loading msg
-        log("Bot is now online!");
+        // set static guild variable
+        guild = jda.getGuilds().get(0);
 
-        startTasks();
+        // cache all members and once done
+        MembersCache.reloadMembersAsync().thenAccept( members -> {
 
-        log("Player count channel updater task initialized!");
+            // load self datas
+            ChannelIdData.load();
+            AnnoyData.load();
+            ChannelData.load();
 
-        // INVALID CONFIG OR DATA WARNINGS
-        checkRaidModeSettings();
-        checkSuggestionsSettings();
+            // Print finished loading msg
+            log("Bot is now online!");
+
+            startTasks();
+
+            log("Player count channel updater task initialized!");
+
+            // INVALID CONFIG OR DATA WARNINGS
+            checkRaidModeSettings();
+            checkSuggestionsSettings();
+
+            // load all GTM users in to memory
+            GTMUser.loadUsers();
+
+        });
 
     }
 
@@ -88,7 +107,7 @@ public class ReadyEvents extends ListenerAdapter {
         wisdomAnnoyTask.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                Map<Long, Long[]> map = SelfData.get().getQuoteAnnoyMap();
+                Map<Long, Long[]> map = AnnoyData.get().getQuoteAnnoyMap();
                 map.forEach( (key, value) -> {
                     long hours = value[0];
                     long lastUpdated = value[1];
@@ -99,7 +118,7 @@ public class ReadyEvents extends ListenerAdapter {
                                 .flatMap(privateChannel -> privateChannel.sendMessage(wiseQuotes[index]))
                                 .queue();
                         map.put(key, new Long[] {hours, System.currentTimeMillis()});
-                        SelfData.get().update();
+                        AnnoyData.get().save();
                     }
 
                 });
@@ -122,15 +141,15 @@ public class ReadyEvents extends ListenerAdapter {
 
     // Check if suggestions channel not configured
     private void checkSuggestionsSettings() {
-        if (jda.getTextChannelById(SelfData.get().getSuggestionChannelId()) == null)
+        if (jda.getTextChannelById(ChannelIdData.get().getSuggestionChannelId()) == null)
             log("The suggestion channel has not been properly configured yet!",
                     Logs.WARNING);
         // Player count channel not configured
-        if (jda.getVoiceChannelById(SelfData.get().getPlayerCountChannelId()) == null)
+        if (jda.getVoiceChannelById(ChannelIdData.get().getPlayerCountChannelId()) == null)
             log("The player count display channel has not been properly configured yet!",
                     Logs.WARNING);
         // Raid alerts channel not configured
-        if (jda.getTextChannelById(SelfData.get().getRaidAlertChannelId()) == null)
+        if (jda.getTextChannelById(ChannelIdData.get().getRaidAlertChannelId()) == null)
             log("The raid alerts channel has not been properly configured yet!",
                     Logs.WARNING);
     }

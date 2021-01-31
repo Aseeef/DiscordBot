@@ -1,6 +1,7 @@
 package events;
 
-import utils.Rank;
+import utils.selfdata.ChannelIdData;
+import utils.users.Rank;
 import utils.SelfData;
 import utils.console.Logs;
 import net.dv8tion.jda.api.entities.Emote;
@@ -20,14 +21,13 @@ public class OnReactRules extends ListenerAdapter {
         User user = e.getUser();
         Member member = e.getMember();
 
-        TextChannel ruleChannel = jda.getTextChannelById(SelfData.get().getRuleAgreeChannelId());
+        TextChannel ruleChannel = jda.getTextChannelById(ChannelIdData.get().getRuleAgreeChannelId());
         long msgId = e.getMessageIdLong();
 
         if (!user.isBot() && ruleChannel != null && msgId == SelfData.get().getRuleAgreeMessageId()) {
 
             // Remove reaction
             e.getChannel().removeReactionById(msgId, e.getReactionEmote().getEmote(), e.getUser()).queue();
-
             Emote gtmAgree = jda.getEmotesByName("gtmagree", true).get(0);
             Emote gtmDisagree = jda.getEmotesByName("gtmdisagree", true).get(0);
 

@@ -1,31 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="Added a new parser to support ticket fields">
-      <change afterPath="$PROJECT_DIR$/src/main/java/commands/ChannelCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/tools/PrivateChannel.java" afterDir="false" />
+    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="* Now updating user data anytime a player types&#10;* Xenforo dummy account creds now defined through config&#10;* Partially redid account verification&#10;* Attempting to fix an issue where suggestion embeds are in the wrong order&#10;* Now including guilty plea in ticket details">
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/punishments/BanCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/punishments/KickCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/punishments/MuteCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/punishments/WarnCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GTM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GTM.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/AccountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/AccountCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/SeniorsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/SeniorsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/events/OnGuildMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/events/OnGuildMessage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/events/OnSuggestion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/events/OnSuggestion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/SelfData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/SelfData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/LitebansDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/LitebansDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/XenforoDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/XenforoDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/Command.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/Command.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/confighelpers/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/confighelpers/Config.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/DiscordDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/DiscordDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnRedisMessageReceive.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnRedisMessageReceive.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/GTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/tools/GTools.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/SuggestionTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/tools/SuggestionTools.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/webhooks/WebhookUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/webhooks/WebhookUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/Verification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/tools/Verification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/users/GTMUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/users/GTMUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/Xenforo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xenforo/Xenforo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/events/TicketEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xenforo/events/TicketEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/objects/tickets/SupportTicket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xenforo/objects/tickets/SupportTicket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/GTM.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/GTM.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Utils/Data.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Utils/tools/GTools.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Utils/tools/GTools.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Utils/tools/SuggestionTools.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Utils/tools/SuggestionTools.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/events/OnSuggestion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/events/OnSuggestion.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/config.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" afterDir="false" />
     </list>
@@ -102,7 +96,7 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="settings.github" />
   </component>
   <component name="RecentsManager">
     <key name="ExtractSuperBase.RECENT_KEYS">
@@ -112,15 +106,18 @@
       <recent name="config" />
       <recent name="" />
     </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\java" />
+      <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\Database" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="commands.stats.wrappers" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\java" />
       <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\config" />
       <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\resources" />
       <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\resources\Configuration" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\java" />
-      <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\Database" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -234,7 +231,51 @@
       <workItem from="1593632934158" duration="2886000" />
       <workItem from="1593762932191" duration="2706000" />
       <workItem from="1593812118140" duration="63000" />
-      <workItem from="1593825638126" duration="1381000" />
+      <workItem from="1593825638126" duration="2184000" />
+      <workItem from="1593836943144" duration="1784000" />
+      <workItem from="1593882331488" duration="4289000" />
+      <workItem from="1593997168094" duration="8470000" />
+      <workItem from="1594062877026" duration="1511000" />
+      <workItem from="1594089861388" duration="4279000" />
+      <workItem from="1594103521693" duration="26425000" />
+      <workItem from="1594169693303" duration="49397000" />
+      <workItem from="1594486757123" duration="1294000" />
+      <workItem from="1594508006073" duration="10574000" />
+      <workItem from="1594624902757" duration="2757000" />
+      <workItem from="1595125724826" duration="10716000" />
+      <workItem from="1595353526301" duration="597000" />
+      <workItem from="1595746746136" duration="272000" />
+      <workItem from="1595783669378" duration="1802000" />
+      <workItem from="1597878552618" duration="1214000" />
+      <workItem from="1599356168220" duration="2191000" />
+      <workItem from="1599627707306" duration="1772000" />
+      <workItem from="1600146406763" duration="75000" />
+      <workItem from="1600568778977" duration="1202000" />
+      <workItem from="1600831702856" duration="632000" />
+      <workItem from="1601596445332" duration="1259000" />
+      <workItem from="1601827186320" duration="594000" />
+      <workItem from="1602080033882" duration="3065000" />
+      <workItem from="1602631546418" duration="1234000" />
+      <workItem from="1602788796050" duration="1203000" />
+      <workItem from="1602954757454" duration="11220000" />
+      <workItem from="1603110018748" duration="8508000" />
+      <workItem from="1603303670639" duration="12447000" />
+      <workItem from="1603507498676" duration="2311000" />
+      <workItem from="1604796819015" duration="754000" />
+      <workItem from="1604862434420" duration="340000" />
+      <workItem from="1604979616808" duration="1197000" />
+      <workItem from="1607461709759" duration="665000" />
+      <workItem from="1607471235913" duration="3747000" />
+      <workItem from="1607652493650" duration="124000" />
+      <workItem from="1607997267118" duration="1592000" />
+      <workItem from="1609613397891" duration="6975000" />
+      <workItem from="1610215844025" duration="22634000" />
+      <workItem from="1610858202534" duration="2174000" />
+      <workItem from="1610930290423" duration="2240000" />
+      <workItem from="1611004449158" duration="1466000" />
+      <workItem from="1611275033917" duration="17567000" />
+      <workItem from="1611865020803" duration="1191000" />
+      <workItem from="1612067421841" duration="2068000" />
     </task>
     <task id="LOCAL-00001" summary="Init commit">
       <created>1584645971223</created>
@@ -411,7 +452,91 @@
       <option name="project" value="LOCAL" />
       <updated>1593372492918</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Various bugs and imporvements">
+      <created>1593835835639</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1593835835639</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Renamed account command to /discord to match gtm">
+      <created>1593835976660</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1593835976660</updated>
+    </task>
+    <task id="LOCAL-00028" summary="Improved commands:&#10;- Pm commands will now say when command not found&#10;- /account renamed to /discord&#10;- /harry will now give feedback on success too.">
+      <created>1594105501756</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1594105501756</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Various bug fixes with verification">
+      <created>1594105615432</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1594105615432</updated>
+    </task>
+    <task id="LOCAL-00030" summary="- Typo fix in DiscordAccountCommand which still was using the old /account in its help&#10;- Moved Rank.class into users package&#10;- Added an easy to use discord embed menu api&#10;- Added a members cache that stores a list of all members with many useful methods&#10;- Replaced previous blocking retrieve member operations with the new member cache&#10;- Fixed NPE in GTMUser when updating user data for a player who left the discord&#10;- Added a command for staff to be able to look up who a discord user is in-game">
+      <created>1594182946488</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1594182946488</updated>
+    </task>
+    <task id="LOCAL-00031" summary="- Improvement to console &amp; logging&#10;- Added a console memory command&#10;- Changed calls to GTMUser#updateUserDataNow() to be async&#10;- Improvements to accounts refreshall command&#10;- Added frame work for custom channels which will allow donors in future to create private channels like on team speak&#10;- Fixed error caused by player have too many past tickets (since embeds have a max field length limit)&#10;- Util improvement: Easily create timer tasks&#10;- Upon unverification, a GTMUser will now loose thier discord rank (prevents abuse)">
+      <created>1594248474336</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1594248474336</updated>
+    </task>
+    <task id="LOCAL-00032" summary="- Custom channels command which will allow donors to create private channels like on team speak&#10;- Made scabble annoy harder to bypass">
+      <created>1594272835114</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1594272835114</updated>
+    </task>
+    <task id="LOCAL-00033" summary="- Split up self data in to categories for organization and added an easy to use data storage class called SavableSelfData&#10;- Depreciated old self data&#10;- In PMs, GTM user calls will now only be made once we know which command is being ran&#10;- Discord menu class now allows us to configure whether we want everyone to be able to modify the menu&#10;- Member reloading now returns a completable future&#10;- Added a auto deleter for custom channels &amp; more&#10;- Fix /channel addgang&#10;- Made the last updated variable in GTM user volatile&#10;- Added a util to run delayed tasks">
+      <created>1594440589021</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1594440589021</updated>
+    </task>
+    <task id="LOCAL-00034" summary="- Only allows verified users to make suggestions&#10;- Various improvements / bug fixes with custom channels">
+      <created>1602954916147</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1602954916147</updated>
+    </task>
+    <task id="LOCAL-00035" summary="WIP:&#10;- Comprehensive user statistics command for seniors&#10;- Now loading all GTM users to memory on startup&#10;- Util improvements">
+      <created>1607652604733</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1607652604733</updated>
+    </task>
+    <task id="LOCAL-00036" summary="* More Comments&#10;* Fixed an issue where when inviting users to custom channel, uses the name of the recipient as the invitor&#10;* updated jda">
+      <created>1610242323447</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1610242323447</updated>
+    </task>
+    <task id="LOCAL-00037" summary="* removed default config">
+      <created>1610245398760</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1610245398760</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -431,18 +556,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Init commit" />
-    <MESSAGE value="Attempts to add sql capabilities" />
-    <MESSAGE value="updating workspace.xml" />
-    <MESSAGE value="Initial Commit 2" />
-    <MESSAGE value="Finished and QA Team anti raid features" />
-    <MESSAGE value="Created template for future discord - gtm verification" />
-    <MESSAGE value="Bot will now message users their deleted suggestions if they don't follow the format" />
-    <MESSAGE value="Command code improvement &amp; minor bug fixes" />
-    <MESSAGE value="Improved bot verification system" />
-    <MESSAGE value="Updated Jackson" />
-    <MESSAGE value="Makes the raidModeTimeToAccept a configurable option in the config" />
-    <MESSAGE value="Fixed bugs relating to gtm player count updater" />
     <MESSAGE value="Fixed typo" />
     <MESSAGE value="Added Redis support" />
     <MESSAGE value="Commands bug fixes" />
@@ -456,24 +569,36 @@
     <MESSAGE value="More GTM integrations:&#10;- Managers get notified is staff may be cheating&#10;- Discord ticket detection improvements with DAO" />
     <MESSAGE value="Added an &quot;annoy&quot; command and tools to utilize discord webhooks" />
     <MESSAGE value="Added a new parser to support ticket fields" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added a new parser to support ticket fields" />
+    <MESSAGE value="Various bugs and imporvements" />
+    <MESSAGE value="Renamed account command to /discord to match gtm" />
+    <MESSAGE value="Improved commands:&#10;- Pm commands will now say when command not found&#10;- /account renamed to /discord&#10;- /harry will now give feedback on success too." />
+    <MESSAGE value="Various bug fixes with verification" />
+    <MESSAGE value="- Typo fix in DiscordAccountCommand which still was using the old /account in its help&#10;- Moved Rank.class into users package&#10;- Added an easy to use discord embed menu api&#10;- Added a members cache that stores a list of all members with many useful methods&#10;- Replaced previous blocking retrieve member operations with the new member cache&#10;- Fixed NPE in GTMUser when updating user data for a player who left the discord&#10;- Added a command for staff to be able to look up who a discord user is in-game" />
+    <MESSAGE value="- Improvement to console &amp; logging&#10;- Added a console memory command&#10;- Changed calls to GTMUser#updateUserDataNow() to be async&#10;- Improvements to accounts refreshall command&#10;- Added frame work for custom channels which will allow donors in future to create private channels like on team speak&#10;- Fixed error caused by player have too many past tickets (since embeds have a max field length limit)&#10;- Util improvement: Easily create timer tasks&#10;- Upon unverification, a GTMUser will now loose thier discord rank (prevents abuse)" />
+    <MESSAGE value="- Custom channels command which will allow donors to create private channels like on team speak&#10;- Made scabble annoy harder to bypass" />
+    <MESSAGE value="- Split up self data in to categories for organization and added an easy to use data storage class called SavableSelfData&#10;- Depreciated old self data&#10;- In PMs, GTM user calls will now only be made once we know which command is being ran&#10;- Discord menu class now allows us to configure whether we want everyone to be able to modify the menu&#10;- Member reloading now returns a completable future&#10;- Added a auto deleter for custom channels &amp; more&#10;- Fix /channel addgang&#10;- Made the last updated variable in GTM user volatile&#10;- Added a util to run delayed tasks" />
+    <MESSAGE value="- Only allows verified users to make suggestions&#10;- Various improvements / bug fixes with custom channels" />
+    <MESSAGE value="WIP:&#10;- Comprehensive user statistics command for seniors&#10;- Now loading all GTM users to memory on startup&#10;- Util improvements" />
+    <MESSAGE value="* More Comments&#10;* Fixed an issue where when inviting users to custom channel, uses the name of the recipient as the invitor&#10;* updated jda" />
+    <MESSAGE value="* removed default config" />
+    <option name="LAST_COMMIT_MESSAGE" value="* removed default config" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/../GTM/gtm/src/main/java/net/grandtheftmc/gtm/listeners/Death.java</url>
-          <line>298</line>
+          <line>289</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/../GTM/gtm/src/main/java/net/grandtheftmc/gtm/listeners/Interact.java</url>
-          <line>239</line>
+          <line>257</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/../GTM/gtm/src/main/java/net/grandtheftmc/gtm/warps/WarpManager.java</url>
-          <line>564</line>
+          <line>566</line>
           <properties class="net.grandtheftmc.gtm.warps.WarpManager">
             <option name="EMULATED" value="true" />
           </properties>

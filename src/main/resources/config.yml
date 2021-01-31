@@ -10,71 +10,160 @@
 ########################
 
 # The bot token that the bot should use to log in
-botToken: "NjkwNjU5NzQxNTQ1OTIyNjAx.XnU3DA.qsiZ4ZcbiUvjmCxT91YCQ0PQKn8"
+botToken: "insert bot token"
 
 # The name of the bot (warning: if the name is too common, the bot will not start)
-botName: "QA-GTM"
+botName: "Harry"
+
+# The webhook url
 
 # The prefix that the bot commands should use
 commandPrefix: "/"
 
+# How long in seconds should the bot wait before removing its messages
+msgDeleteTime: 30
+
+# How long is minutes should the bot wait before deleting empty custom channels
+customChannelDeleteTime: 10
+
+
+###############################
+# MY SQL USERS DATABASE CREDS #
+###############################
+usersDatabase:
+
+  hostname: "insert host name"
+  port: 3306
+  username: "insert user"
+  password: "insert pass"
+  database: "insert db name"
+
+
+##############################
+# MY SQL PLAN DATABASE CREDS #
+##############################
+planDatabase:
+
+  hostname: "insert host name"
+  port: 3306
+  username: "insert user"
+  password: "insert pass"
+  database: "insert db name"
+
+
+##############################
+# MY SQL BANS DATABASE CREDS #
+##############################
+bansDatabase:
+
+  hostname: "insert host name"
+  port: 3306
+  username: "insert user"
+  password: "insert pass"
+  database: "insert db name"
+
+
+#################################
+# MY SQL XENFORO DATABASE CREDS #
+#################################
+xenDatabase:
+
+  hostname: "insert host name"
+  port: 3306
+  username: "insert user"
+  password: "insert pass"
+  database: "insert db name"
+
+
+########################
+# REDIS DATABASE CREDS #
+########################
+redisDatabase:
+
+  hostname: "insert host name"
+  port: 3306
+  username: "insert user"
+  password: "insert pass"
+  database: "insert db name"
+
+
 #########################
-# MY SQL DATABASE CREDS #
+#   MINESTAT SETTINGS   #
 #########################
+mineStatSettings:
 
-# SQL hostname
-sqlHostname: "1780.bae1-bhs.srv.vlan.network"
+  # The IP of the server Minestat should refresh (VPS can't ping mc-gtm.net for some reason)
+  serverIp: "insert ip"
 
-# SQL port
-sqlPort: 3306
+  # The port of the server Minestat should refresh (Will almost always be 25565)
+  serverPort: 25566
 
-# SQL login username
-sqlUsername: "root"
+  # How often in seconds should the bot refresh the server's player count?
+  refreshFrequency: 361
 
-# SQL login password
-sqlPassword: "gtmmysqlpass"
-
-# Database name
-sqlDatabase: "users"
 
 #########################
 #   RAID MODE SETTINGS  #
 #########################
 
-# The number of players that need to join in the below configured time to active raid mode
-raidModePlayers: 5
+raidmodeSettings:
 
-# The time peroid over which raid mode checks players in seconds
-raidModeTime: 30
+  # The number of players that need to join in the below configured time to active raid mode
+  raidModePlayers: 4
 
-# If raid mode is active, and a new player joins with in this many seconds of the previous player, kicks/bans them (this time can't be larger then raidModeTime)
-raidModePunishTime: 10
+  # The time peroid over which raid mode checks players in seconds
+  raidModeTime: 30
 
-# What should we do to the players detected as bots? (Options: KICK, BAN, NOTIFY)
-raidModePunishType: "KICK"
+  # When raid mode is *automatically* triggered, how long after the last bot is detected should it disable (in minutes)
+  raidModeDisable: 1
 
-# What should the bot message the player on executing the punishment. You may use discord formating. Use \n for linebreaks. (Note: This only works for bans / kicks)
-raidModeMessage: "**You were kicked from the discord because you were detected being a bot! If you believe this was an error, simply rejoin.**"
+  # If raid mode is active, and a new player joins with in this many seconds of the previous player, punish them because they are bot (this time can't be larger then raidModeTime)
+  raidModePunishTime: 15
 
-#########################
-#     ROLES NAMES       #
-#########################
+  # How much time should we give new players to accept the rules before we kick them in minutes (forcing them to react to a msg also prevents basic bots)
+  raidModeTimeToAccept: 15
 
-# The bot uses the following role names to get the role for each rank.
-# There should NEVER be multiple roles with the same name to prevent
-# errors! This list is NOT caps sensitive.
+  # What should we do to the players detected as bots? (Options: KICK, BAN, NOTIFY)
+  raidModePunishType: "KICK"
 
-manager: "Manager"
-developer: "Developer"
-admin: "Admin"
-builder: "Builder"
-srmod: "Sr. Mod"
-mod: "Moderator"
-helper: "Helper"
-buildteam: "Build Team"
-youtuber: "Youtuber"
-supreme: "Supreme"
-sponsor: "Sponsor"
-elite: "Elite"
-premium: "Premium"
-vip: "VIP"
+  # What should the bot message the player on executing the punishment. You may use discord formating. Use \n for linebreaks. (Note: This only works for bans / kicks)
+  raidModeMessage: "**You were kicked from the discord because you were detected being a bot! If you believe this was an error, simply rejoin at http://grandtheftmc.net/discord! **"
+
+################################
+#     RANK SETTINGS NAMES      #
+################################
+
+# The bot uses the following role ids get the role for each rank.
+# Simply right click the discord role and select "copy id" to get the id.
+
+rankSettings:
+  manager: 316630771341328394
+  developer: 320638685194354689
+  admin: 316622289489887235
+  builder: 381309906998919188
+  srMod: 336611623781269506
+  mod: 316621917727752193
+  helper: 316660822443032576
+  buildTeam: 366015517485694976
+  youtuber: 536269873148461097
+  supreme: 336668284399386624
+  sponsor: 336668037715460097
+  elite: 336666910039212046
+  premium: 336666616941117442
+  vip: 336666406831783937
+  noRank: 691430666306453574
+  unverified: 701855739324399759
+
+
+###############################
+#      XENFORO SETTINGS       #
+###############################
+
+# How often in seconds should the bot check if there is a new support ticket that has been received?
+ticketPollingRate: 60
+
+# The username for the dummy account used to get and take Xenforo-related information or actions like getting new tickets
+dummyAccountUsername: "account username"
+
+# The password for the dummy account used to get and take Xenforo-related information or actions like getting new tickets
+dummyAccountPassword: "account password"

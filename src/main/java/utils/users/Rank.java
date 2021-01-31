@@ -1,4 +1,4 @@
-package utils;
+package utils.users;
 
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -6,6 +6,7 @@ import utils.confighelpers.Config;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static utils.tools.GTools.jda;
@@ -45,6 +46,7 @@ public enum Rank {
         return this.getIndex() <= role.getIndex();
     }
 
+    // lower index = higher role
     public int getIndex() {
         int index = 0;
         for (Rank r : Rank.values()) {
@@ -167,11 +169,10 @@ public enum Rank {
     }
 
     public static Rank getRankFromString(String rString) {
-        for (Rank r : Rank.values()) {
-            if (r.name.equals(rString.toUpperCase()))
-                return r;
-        }
-        return null;
+        if (rString.equalsIgnoreCase("HELPOP")) rString = "HELPER"; //some parts of gtm still refer helper as helpop
+
+        String finalRString = rString;
+        return Arrays.stream(Rank.values()).filter( (rank) -> rank.name.equalsIgnoreCase(finalRString)).findFirst().orElse(null);
     }
 
 }

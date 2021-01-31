@@ -1,21 +1,19 @@
 package utils.database.redis;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.grandtheftmc.jedisnew.RedisEventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
-import utils.Rank;
+import utils.MembersCache;
 import utils.console.Logs;
-import utils.database.DiscordDAO;
-import utils.database.sql.BaseDatabase;
 import utils.tools.GTools;
 import utils.tools.Verification;
 import utils.users.GTMUser;
+import utils.users.Rank;
 
 import java.awt.*;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -42,6 +40,10 @@ public class OnRedisMessageReceive implements RedisEventListener {
 
                 switch (action.toLowerCase()) {
 
+                    case "inactive_player": {
+                        // TODO: Message players offering them gift cards to tell us why they stopped playing!!?
+                    }
+
                     case "verify": {
                         UUID uuid = UUID.fromString(jsonObject.getString("uuid"));
                         String name = jsonObject.getString("name");
@@ -60,7 +62,7 @@ public class OnRedisMessageReceive implements RedisEventListener {
 
                     case "update": {
                         long discordId = jsonObject.getLong("discordId");
-                        GTMUser.getGTMUser(discordId).ifPresent((GTMUser::updateUserDataNow));
+                        GTMUser.getGTMUser(discordId).ifPresent(( (user) -> GTools.runAsync(user::updateUserDataNow)));
                         break;
                     }
 
@@ -72,15 +74,16 @@ public class OnRedisMessageReceive implements RedisEventListener {
                         double tps = jsonObject.getDouble("tps");
                         String component = jsonObject.getString("component");
                         String server = jsonObject.getString("server");
-                        try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
-                            List<GTMUser> managers = DiscordDAO.getAllWithRank(conn, Rank.MANAGER);
-                            managers.forEach( (gtmUser ->
-                                    gtmUser.getDiscordMember().getUser().openPrivateChannel().queue( (privateChannel ->
-                                    privateChannel.sendMessage(generateStaffReportEmbed(player, check, ping, tps, component, server)).queue()
-                                            ))));
-                        } catch (SQLException e) {
-                            GTools.printStackError(e);
+
+                        if (intensity < 3) return; //TODO: Update in bungee
+
+                        List<Member> managers = MembersCache.getMembersWithRolePerms(Rank.MANAGER);
+                        for (Member manager : managers) {
+                            manager.getUser().openPrivateChannel().queue((privateChannel) -> {
+                                privateChannel.sendMessage(generateStaffReportEmbed(player, check, ping, tps, component, server)).queue();
+                            });
                         }
+
                         break;
                     }
 

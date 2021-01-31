@@ -1,10 +1,13 @@
 package utils.tools;
 
+import org.json.JSONObject;
 import utils.Data;
-import utils.Rank;
+import utils.database.DiscordDAO;
 import utils.database.sql.BaseDatabase;
 import utils.users.GTMUser;
 import net.dv8tion.jda.api.entities.Member;
+import utils.users.Rank;
+
 import static utils.database.DiscordDAO.createDiscordProfile;
 
 import java.sql.Connection;
@@ -50,19 +53,36 @@ public class Verification {
         if (verifyHashMap.containsKey(code)) {
             Map<String, Object> dataMap = verifyHashMap.get(code);
             GTMUser gtmUser = new GTMUser((UUID) dataMap.get("uuid"), (String) dataMap.get("name"), (Rank) dataMap.get("rank"), m.getIdLong());
-            gtmUser.updateUserDataNow();
             // save to sql database
             try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
                 createDiscordProfile(conn, gtmUser);
+                Data.storeData(Data.USER, gtmUser, m.getIdLong());
+                // tell gtm verification was successfull
+                JSONObject data = new JSONObject()
+                        .put("uuid", gtmUser.getUuid())
+                        .put("discordId", m.getIdLong())
+                        .put("tag", GTools.convertSpecialChar(m.getUser().getAsTag()));
+                DiscordDAO.sendToGTM("verified", data);
+                GTools.runAsync(gtmUser::updateUserDataNow);
+                // remove code
+                verifyHashMap.remove(code);
             } catch (SQLException e) {
                 GTools.printStackError(e);
                 return false;
             }
-            Data.storeData(Data.USER, gtmUser, m.getIdLong());
-            // remove code
-            verifyHashMap.remove(code);
             return true;
         } else return false;
+    }
+
+    public static void unVerifyUser(GTMUser gtmUser) {
+        GTools.runAsync( () -> {
+            try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
+                DiscordDAO.deleteDiscordProfile(conn, gtmUser.getUuid());
+            } catch (SQLException e) {
+                GTools.printStackError(e);
+            }
+        });
+        DiscordDAO.sendToGTM("unverify", new JSONObject().put("uuid", gtmUser.getUuid()));
     }
 
 }

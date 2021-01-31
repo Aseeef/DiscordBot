@@ -6,6 +6,7 @@ import utils.console.Logs;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
+import utils.selfdata.ChannelIdData;
 
 import javax.annotation.Nullable;
 
@@ -37,7 +38,7 @@ public class RaidModeTools {
             raidMode[0] = false;
             raidMode[1] = false;
 
-            TextChannel alertChannel = jda.getTextChannelById(SelfData.get().getRaidAlertChannelId());
+            TextChannel alertChannel = jda.getTextChannelById(ChannelIdData.get().getRaidAlertChannelId());
 
             if (alertChannel != null) {
                 // Notify staff members
@@ -78,7 +79,7 @@ public class RaidModeTools {
             raidMode[1] = true;
         }
 
-        TextChannel alertChannel = jda.getTextChannelById(SelfData.get().getRaidAlertChannelId());
+        TextChannel alertChannel = jda.getTextChannelById(ChannelIdData.get().getRaidAlertChannelId());
 
         if (alertChannel != null) {
             // Notify staff members
@@ -151,7 +152,7 @@ public class RaidModeTools {
 
         else if (raidModePunishType.equalsIgnoreCase("NOTIFY")) {
 
-            TextChannel alertChannel = jda.getTextChannelById(SelfData.get().getRaidAlertChannelId());
+            TextChannel alertChannel = jda.getTextChannelById(ChannelIdData.get().getRaidAlertChannelId());
 
             if (alertChannel != null)
                 alertChannel.sendMessage("**BOTS>** User " + member.getAsMention() + " was detected as a bot!").queue();

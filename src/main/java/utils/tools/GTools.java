@@ -1,19 +1,30 @@
 package utils.tools;
 
+import com.google.common.base.Charsets;
+import me.kbrewster.exceptions.APIException;
+import me.kbrewster.exceptions.InvalidPlayerException;
+import me.kbrewster.mojangapi.MojangAPI;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import net.grandtheftmc.jedisnew.NewJedisManager;
 import org.json.JSONObject;
-import utils.SelfData;
+import utils.MembersCache;
 import utils.confighelpers.Config;
 import utils.console.Logs;
+import utils.selfdata.ChannelIdData;
 
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Random;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import static utils.console.Logs.log;
@@ -21,9 +32,15 @@ import static utils.console.Logs.log;
 public class GTools {
 
     public static JDA jda;
+    public static Guild guild;
     public static MineStat gtm;
     public static NewJedisManager jedisManager;
     public static final Random RANDOM = new Random();
+    private static List<Member> members = new ArrayList<>();
+
+    public static List<Member> getMembers() {
+        return members;
+    }
 
     // Checks if its is a specific command
     public static boolean isCommand(String msg, User user, String command) {
@@ -41,11 +58,15 @@ public class GTools {
     }
 
     public static User userById (String id) {
-        return jda.retrieveUserById(id).complete();
+        return MembersCache.getUser(Long.parseLong(id)).orElse(null);
+    }
+
+    public static User userById (long id) {
+        return MembersCache.getUser(id).orElse(null);
     }
 
     public static void updateOnlinePlayers() {
-        VoiceChannel channel = jda.getVoiceChannelById(SelfData.get().getPlayerCountChannelId());
+        VoiceChannel channel = jda.getVoiceChannelById(ChannelIdData.get().getPlayerCountChannelId());
 
         if (channel == null) {
             log("Failed to updating online player count because Player count channel was not set", Logs.WARNING);
@@ -82,7 +103,7 @@ public class GTools {
             MessageAction ma = channel.sendMessage(msg);
             if (attachment != null) ma = ma.addFile(attachment);
             ma.queue((sentMsg) ->
-                    sentMsg.delete().queueAfter(Config.get().getDeleteTime(), TimeUnit.SECONDS)
+                    sentMsg.delete().queueAfter(Config.get().getMsgDeleteTime(), TimeUnit.SECONDS)
             );
         }
     }
@@ -105,7 +126,7 @@ public class GTools {
             channel.sendMessage(embed).queue();
         else
         channel.sendMessage(embed).queue( (sentMsg) ->
-                sentMsg.delete().queueAfter(Config.get().getDeleteTime(), TimeUnit.SECONDS)
+                sentMsg.delete().queueAfter(Config.get().getMsgDeleteTime(), TimeUnit.SECONDS)
         );
     }
 
@@ -121,6 +142,16 @@ public class GTools {
 
     public static void runAsync(Runnable target) {
         new Thread(target).start();
+    }
+
+    public static ScheduledFuture runTaskTimer(Runnable task, int startDelay, int period) {
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        return executor.scheduleAtFixedRate(task, startDelay, period, TimeUnit.MILLISECONDS);
+    }
+
+    public static ScheduledFuture runDelayedTask(Runnable task, int startDelay) {
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        return executor.schedule(task, startDelay, TimeUnit.MILLISECONDS);
     }
 
     public static File getAsset(String name) {
@@ -144,6 +175,82 @@ public class GTools {
 
     public static String replaceLast(String text, String regex, String replacement) {
         return text.replaceFirst("(?s)(.*)" + regex, "$1" + replacement);
+    }
+
+    public static String convertSpecialChar(String string) {
+        return new String(string.getBytes(), Charsets.US_ASCII);
+    }
+
+    public static String stringFromArgsAfter (String[] args, int from) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = from ; i < args.length ; i++) {
+            sb.append(args[i]);
+            if (args.length != i + 1) sb.append(" ");
+        }
+        return sb.toString();
+    }
+
+    public static List<String> getAllUsernames(UUID uuid) {
+        try {
+            List<String> nameHist = new ArrayList<>();
+            MojangAPI.getNameHistory(uuid).forEach( (name) -> nameHist.add(name.getName()));
+            return nameHist;
+        } catch (InvalidPlayerException | NullPointerException e) {
+            GTools.printStackError(e);
+        }
+        return null;
+    }
+
+    public static List<String> getAllUsernames(String name) {
+        UUID uuid = getUUID(name).orElse(null);
+        if (uuid == null) return null;
+        else return getAllUsernames(uuid);
+    }
+
+    public static Optional<UUID> getUUID(String userName) {
+        try {
+            return Optional.of(MojangAPI.getUUID(userName));
+        } catch (IOException | InvalidPlayerException | APIException | NullPointerException e) {
+            GTools.printStackError(e);
+        }
+        return Optional.empty();
+    }
+
+    public static String getSkullSkin (UUID uuid) {
+        String stringUUID = uuid.toString().replace("-", "");
+        return "https://minotar.net/avatar/" + stringUUID + ".png";
+    }
+
+    public static Optional<String> getUsername(UUID uuid) {
+        try {
+            return Optional.of(MojangAPI.getUsername(uuid));
+        } catch (IOException | InvalidPlayerException | APIException | NullPointerException e) {
+            GTools.printStackError(e);
+        }
+        return Optional.empty();
+    }
+
+    public static String epochToDate(long date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        return sdf.format(new Date(date));
+    }
+
+    public static String epochToTime(long time) {
+        double months = time / 30D / 24D / 60D / 60D / 1000D;
+        double days = (months - Math.floor(months)) * 30;
+        double hours = (days - Math.floor(days)) * 24;
+        double minutes = (hours - Math.floor(hours)) * 60;
+        double seconds = (minutes - Math.floor(minutes)) * 60;
+
+        long monthR = (long) Math.floor(months);
+        long daysR = (long) Math.floor(days);
+        long hoursR = (long) Math.floor(hours);
+        long minutesR = (long) Math.floor(minutes);
+        long secondsR = Math.round(seconds);
+
+        String timeFormatted = ((monthR == 0 ? "" : monthR + " month(s), ") + (daysR == 0 ? "" : daysR + " day(s), ") + (hoursR == 0 ? "" : hoursR + " hour(s), ") + (minutesR == 0 ? "" : minutesR + " minute(s), ") + (secondsR == 0 ? "" : secondsR + " second(s), "));
+
+        return timeFormatted.length() != 0 ? timeFormatted.substring(0, timeFormatted.length() - 2) : timeFormatted;
     }
 
 }

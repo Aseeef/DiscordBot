@@ -2,7 +2,6 @@ package commands;
 
 import utils.Data;
 import utils.database.DiscordDAO;
-import utils.database.sql.BaseDatabase;
 import utils.tools.GTools;
 import utils.tools.Verification;
 import utils.users.GTMUser;
@@ -11,16 +10,12 @@ import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.MessageEmbed;
-import org.json.JSONObject;
 
 import java.awt.*;
-import java.sql.Connection;
-import java.sql.SQLException;
 
-public class AccountCommand extends Command {
+public class DiscordAccountCommand extends Command {
 
-    public AccountCommand() {
+    public DiscordAccountCommand() {
         super("discord", "Manage your gtm-discord account link", null, Type.DMS_ONLY);
     }
 
@@ -36,7 +31,7 @@ public class AccountCommand extends Command {
             case "verify":
 
                 if (args.length < 2) {
-                    GTools.sendThenDelete(channel, "`/Account Verify <Code>` - *Verify your discord account with GTM*");
+                    GTools.sendThenDelete(channel, "`/Discord Verify <Code>` - *Verify your discord account with GTM*");
                     return;
                 }
 
@@ -68,15 +63,7 @@ public class AccountCommand extends Command {
 
                 boolean deleted = GTMUser.removeGTMUser(member.getIdLong());
 
-                GTools.runAsync( () -> {
-                    try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
-                        DiscordDAO.deleteDiscordProfile(conn, gtmUser.getUuid());
-                    } catch (SQLException e) {
-                        GTools.printStackError(e);
-                    }
-                });
-
-                DiscordDAO.sendToGTM("unverify", new JSONObject().put("uuid", gtmUser.getUuid()));
+                Verification.unVerifyUser(gtmUser);
 
                 channel.sendMessage(deleted ? "**You have successfully unlinked your account from the player `" + gtmUser.getUsername() + "`!**" : "**Unable to proccess request. It appears something went wrong...!**").queue();
 
@@ -84,13 +71,13 @@ public class AccountCommand extends Command {
 
             case "info":
                 if (gtmUser == null) GTools.sendThenDelete(channel, "**Your discord account is not linked to any user!**");
-                else GTools.sendThenDelete(channel, getInfo(gtmUser));
+                else GTools.sendThenDelete(channel, getInfo(gtmUser).build());
                 break;
 
             case "update":
                 if (gtmUser == null) GTools.sendThenDelete(channel, "**Your discord account is not linked to any user!**");
                 else {
-                    gtmUser.updateUserDataNow();
+                    GTools.runAsync(gtmUser::updateUserDataNow);
                     GTools.sendThenDelete(channel, "**Your account information has been updated!**");
                 }
                 break;
@@ -101,25 +88,25 @@ public class AccountCommand extends Command {
 
     }
 
-    private MessageEmbed getInfo(GTMUser gtmUser) {
+    private EmbedBuilder getInfo(GTMUser gtmUser) {
         return new EmbedBuilder()
-                .setThumbnail(DiscordDAO.getSkullSkin(gtmUser.getUuid()))
+                .setThumbnail(GTools.getSkullSkin(gtmUser.getUuid()))
                 .setTitle("**Discord Account Information**")
-                .setDescription("You discord account is linked to the following GTM player...")
+                .setDescription("Your discord account is linked to the following GTM player...")
                 .addField("**UUID:**", gtmUser.getUuid().toString(), false)
-                .addField("**Username:**", gtmUser.getUsername(), false)
+                .addField("**Username:**", "`" + gtmUser.getUsername() + "`", false)
                 .addField("**Rank:**", gtmUser.getRank().n(), false)
                 .setColor(new Color(207,181,59)) //gold color
-                .build();
+                ;
     }
 
     private Message getAccountHelpMsg() {
         return new MessageBuilder()
                 .append("> **Please enter a valid command argument:**\n")
-                .append("> `/Account Verify <Code>` - *Verify your discord account with GTM*\n")
-                .append("> `/Account UnVerify` - *Un-link your discord account with GTM*\n")
-                .append("> `/Account Info` - *Displays your current account information*\n")
-                .append("> `/Account Update` - *Force update your account data*\n")
+                .append("> `/Discord Verify <Code>` - *Verify your discord account with GTM*\n")
+                .append("> `/Discord UnVerify` - *Un-link your discord account with GTM*\n")
+                .append("> `/Discord Info` - *Displays your current account information*\n")
+                .append("> `/Discord Update` - *Force update your account data*\n")
                 .build();
     }
 

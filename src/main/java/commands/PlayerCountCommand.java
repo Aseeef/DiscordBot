@@ -1,11 +1,14 @@
 package commands;
 
-import utils.Rank;
-import utils.SelfData;
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.VoiceChannel;
+import utils.selfdata.ChannelIdData;
 import utils.tools.GTools;
 import utils.users.GTMUser;
-import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.*;
+import utils.users.Rank;
 
 import static utils.tools.GTools.sendThenDelete;
 import static utils.tools.GTools.updateOnlinePlayers;
@@ -33,7 +36,7 @@ public class PlayerCountCommand extends Command {
             if (playerCountChannel != null) {
 
                 // Set as player count channel
-                SelfData.get().setPlayerCountChannelId(Long.parseLong(args[1]));
+                ChannelIdData.get().setPlayerCountChannelId(Long.parseLong(args[1]));
 
                 // Updates online players
                 updateOnlinePlayers();

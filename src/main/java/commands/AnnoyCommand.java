@@ -2,10 +2,10 @@ package commands;
 
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
-import utils.Rank;
-import utils.SelfData;
+import utils.selfdata.AnnoyData;
 import utils.tools.GTools;
 import utils.users.GTMUser;
+import utils.users.Rank;
 import utils.webhooks.WebhookUtils;
 
 import java.util.List;
@@ -52,8 +52,8 @@ public class AnnoyCommand extends Command {
                 }
 
                 GTools.sendThenDelete(channel, "**I will now give " + target.getEffectiveName() + " the care they deserve by reacting to all of their messages with a " + emojiTag + "!**");
-                SelfData.get().getEmojiAnnoyMap().put(target.getIdLong(), emoji);
-                SelfData.get().update();
+                AnnoyData.get().getEmojiAnnoyMap().put(target.getIdLong(), emoji);
+                AnnoyData.get().save();
 
                 break;
             }
@@ -72,8 +72,8 @@ public class AnnoyCommand extends Command {
                 }
                 try {
                     long hours = Long.parseLong(args[2]);
-                    SelfData.get().getQuoteAnnoyMap().put(target.getIdLong(), new Long[] {hours, 0L});
-                    SelfData.get().update();
+                    AnnoyData.get().getQuoteAnnoyMap().put(target.getIdLong(), new Long[] {hours, 0L});
+                    AnnoyData.get().save();
                     GTools.sendThenDelete(channel, "**I will now begin sharing some of my great wisdom with " + target.getEffectiveName() + " every " + hours + " hour(s)!**");
                 } catch (NumberFormatException e) {
                     GTools.sendThenDelete(channel, "**" + args[2] + " is not a number!**");
@@ -101,8 +101,8 @@ public class AnnoyCommand extends Command {
 
                 char character = args[2].charAt(0);
 
-                SelfData.get().getScrabbleAnnoyMap().put(target.getIdLong(), character);
-                SelfData.get().update();
+                AnnoyData.get().getScrabbleAnnoyMap().put(target.getIdLong(), character);
+                AnnoyData.get().save();
                 GTools.sendThenDelete(channel, "**" + target.getEffectiveName() + " words will now be converted to match their IQ!**");
 
                 break;
@@ -121,8 +121,8 @@ public class AnnoyCommand extends Command {
                     return;
                 }
 
-                SelfData.get().getBotAnnoyList().add(target.getIdLong());
-                SelfData.get().update();
+                AnnoyData.get().getBotAnnoyList().add(target.getIdLong());
+                AnnoyData.get().save();
                 GTools.sendThenDelete(channel, "**" + target.getEffectiveName() + " is now a bot! Beep bop!**");
 
                 break;
@@ -138,12 +138,12 @@ public class AnnoyCommand extends Command {
                     GTools.sendThenDelete(channel, "**User not found!**");
                     return;
                 }
-                if (SelfData.get().getQuoteAnnoyMap().remove(target.getIdLong()) != null ||
-                        SelfData.get().getEmojiAnnoyMap().remove(target.getIdLong()) != null ||
-                        SelfData.get().getScrabbleAnnoyMap().remove(target.getIdLong()) != null ||
-                        SelfData.get().getBotAnnoyList().remove(target.getIdLong())) {
+                if (AnnoyData.get().getQuoteAnnoyMap().remove(target.getIdLong()) != null ||
+                        AnnoyData.get().getEmojiAnnoyMap().remove(target.getIdLong()) != null ||
+                        AnnoyData.get().getScrabbleAnnoyMap().remove(target.getIdLong()) != null ||
+                        AnnoyData.get().getBotAnnoyList().remove(target.getIdLong())) {
                     GTools.sendThenDelete(channel, "**Ok. I will now stop bothering " + target.getEffectiveName() + "... :(**");
-                    SelfData.get().update();
+                    AnnoyData.get().save();
                 }
                 else
                     GTools.sendThenDelete(channel, "**I am already not annoying " + target.getEffectiveName() + "!**");
@@ -168,7 +168,7 @@ public class AnnoyCommand extends Command {
                 }
 
                 // find appropriate webhook based on channel
-                WebhookUtils.retrieveWebhookUrl((TextChannel) channel).thenAcceptAsync((hookUrl) -> {
+                WebhookUtils.retrieveWebhookUrl((TextChannel) channel).thenAccept((hookUrl) -> {
                     if (hookUrl == null) {
                         GTools.sendThenDelete(channel, "**Sorry, but I can't find a webhooks for this channel. Please create a new webhook for this channel and try again.**");
                         return;
@@ -199,19 +199,19 @@ public class AnnoyCommand extends Command {
     }
 
     private boolean alreadyAnnoying(MessageChannel channel, Member member) {
-        if (SelfData.get().getBotAnnoyList().contains(member.getIdLong())) {
+        if (AnnoyData.get().getBotAnnoyList().contains(member.getIdLong())) {
             GTools.sendThenDelete(channel, alreadyAnnoyingMessage(member, "bot annoy"));
             return true;
         }
-        if (SelfData.get().getScrabbleAnnoyMap().containsKey(member.getIdLong())) {
+        if (AnnoyData.get().getScrabbleAnnoyMap().containsKey(member.getIdLong())) {
             GTools.sendThenDelete(channel, alreadyAnnoyingMessage(member, "scrabble annoy"));
             return true;
         }
-        if (SelfData.get().getEmojiAnnoyMap().containsKey(member.getIdLong())) {
+        if (AnnoyData.get().getEmojiAnnoyMap().containsKey(member.getIdLong())) {
             GTools.sendThenDelete(channel, alreadyAnnoyingMessage(member, "emoji annoy"));
             return true;
         }
-        if (SelfData.get().getQuoteAnnoyMap().containsKey(member.getIdLong())) {
+        if (AnnoyData.get().getQuoteAnnoyMap().containsKey(member.getIdLong())) {
             GTools.sendThenDelete(channel, alreadyAnnoyingMessage(member, "education"));
             return true;
         }

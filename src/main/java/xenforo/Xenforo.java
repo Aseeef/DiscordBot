@@ -1,6 +1,7 @@
 package xenforo;
 
 import utils.SelfData;
+import utils.confighelpers.Config;
 import utils.console.Logs;
 import utils.tools.GTools;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -19,13 +20,16 @@ import xenforo.objects.Alert;
 
 import java.util.*;
 
+/**
+ * Information and docs related to the XenAPI can be found at https://xenapi.readthedocs.io/
+ */
 public class Xenforo {
 
     public static void login() {
         // Create request
         Request r = RequestBuilder.newRequest(RequestType.AUTHENTICATE)
-                .addParam(RequestParam.AUTH_USER, "Information")
-                .addParam(RequestParam.AUTH_PASS, "3q3USp6kj2SnQqB4")
+                .addParam(RequestParam.AUTH_USER, Config.get().getDummyAccountUsername())
+                .addParam(RequestParam.AUTH_PASS, Config.get().getDummyAccountPassword())
                 .createRequest();
         // Handle Callback
         XenAPI.getInstance().getReply(r, (Callback<AuthenticateReply>) (failCause, result) -> {
@@ -51,7 +55,7 @@ public class Xenforo {
                 long lastTicketRefreshTime = SelfData.get().getLastTicketRefreshTime();
 
                 Request r = RequestBuilder.newRequest(RequestType.GET_ALERTS)
-                        .addParam(RequestParam.VALUE_STRING, "Information")
+                        .addParam(RequestParam.VALUE_STRING, Config.get().getDummyAccountUsername())
                         .addParam(RequestParam.TYPE_STRING, "fetchRecent")
                         .createRequest();
 
@@ -83,7 +87,7 @@ public class Xenforo {
                 }
 
             }
-        }, 1000 * 10, 1000 * 60 );
+        }, 1000 * 10, 1000 * Config.get().getTicketPollingRate());
 
     }
 

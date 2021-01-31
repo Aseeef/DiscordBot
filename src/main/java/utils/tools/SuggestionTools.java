@@ -7,17 +7,17 @@ import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
+import utils.selfdata.ChannelIdData;
 
 import java.awt.*;
 import java.util.concurrent.TimeUnit;
 
-import static utils.tools.GTools.jda;
-import static utils.tools.GTools.userById;
+import static utils.tools.GTools.*;
 
 public class SuggestionTools {
 
     public static TextChannel getSuggestionsChannel () {
-        return jda.getGuilds().get(0).getTextChannelById(SelfData.get().getSuggestionChannelId());
+        return guild.getTextChannelById(ChannelIdData.get().getSuggestionChannelId());
     }
 
     public static MessageEmbed createSuggestionEmbed (Suggestions s) {
@@ -70,12 +70,12 @@ public class SuggestionTools {
     public static void suggestionInstruct(TextChannel channel) {
 
         channel.sendMessage(createHowSuggestionEmbed()).queueAfter(5, TimeUnit.SECONDS, (embedMsg) -> {
-            channel.sendMessage(suggestionMessage()).queue((rawMsg) -> {
+            channel.sendMessage(suggestionMessage()).queueAfter(250, TimeUnit.MILLISECONDS, (rawMsg) -> {
 
                 // These longs will always store the id of the previous suggestion instruction msgs
                 long prevSuggestHelpEmbedId = SelfData.get().getPrevSuggestEmbedId();
                 long prevSuggestHelpMsgId = SelfData.get().getPrevSuggestHelpMsgId();
-                TextChannel prevSuggestHelpChannel = jda.getTextChannelById(SelfData.get().getPrevSuggestHelpChannelId());
+                TextChannel prevSuggestHelpChannel = jda.getTextChannelById(ChannelIdData.get().getPrevSuggestHelpChannelId());
 
                 // Delete previous instruction embed & msg
                 if (prevSuggestHelpChannel != null) {
@@ -92,7 +92,7 @@ public class SuggestionTools {
                 // Save current embed & msg ids
                 SelfData.get().setPrevSuggestEmbedId(embedMsg.getIdLong());
                 SelfData.get().setPrevSuggestHelpMsgId(rawMsg.getIdLong());
-                SelfData.get().setPrevSuggestHelpChannelId(channel.getIdLong());
+                ChannelIdData.get().setPrevSuggestHelpChannelId(channel.getIdLong());
 
             });
 

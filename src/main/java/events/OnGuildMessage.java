@@ -1,13 +1,15 @@
 package events;
 
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Emote;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import utils.SelfData;
+import utils.selfdata.AnnoyData;
 import utils.tools.GTools;
 import utils.webhooks.WebhookUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -20,9 +22,9 @@ public class OnGuildMessage extends ListenerAdapter {
 
         if (member == null || user.isBot() || message.isWebhookMessage() || GTools.isCommand(message.getContentRaw(), user)) return;
 
-        final Map<Long, String> annoyMap = SelfData.get().getEmojiAnnoyMap();
-        final Map<Long, Character> scrabbleMap = SelfData.get().getScrabbleAnnoyMap();
-        final List<Long> botMap = SelfData.get().getBotAnnoyList();
+        final Map<Long, String> annoyMap = AnnoyData.get().getEmojiAnnoyMap();
+        final Map<Long, Character> scrabbleMap = AnnoyData.get().getScrabbleAnnoyMap();
+        final List<Long> botMap = AnnoyData.get().getBotAnnoyList();
 
         if (annoyMap.containsKey(user.getIdLong())) {
             String emojiString = annoyMap.get(user.getIdLong());
@@ -32,12 +34,12 @@ public class OnGuildMessage extends ListenerAdapter {
                 if (emoji != null)
                     message.addReaction(emoji).queue(null, error -> {
                         annoyMap.remove(user.getIdLong());
-                        SelfData.get().update();
+                        AnnoyData.get().save();
                     });
             } catch (NumberFormatException er) {
                 message.addReaction(emojiString).queue(null, error -> {
                     annoyMap.remove(user.getIdLong());
-                    SelfData.get().update();
+                    AnnoyData.get().save();
                 });
             }
 
@@ -45,8 +47,14 @@ public class OnGuildMessage extends ListenerAdapter {
 
         else if (scrabbleMap.containsKey(user.getIdLong())) {
             message.delete().queue();
-            WebhookUtils.retrieveWebhookUrl(e.getChannel()).thenAcceptAsync((hookUrl) -> {
-                String[] words = message.getContentRaw().split(" ");
+            WebhookUtils.retrieveWebhookUrl(e.getChannel()).thenAccept((hookUrl) -> {
+                //String[] words = message.getContentRaw().split(" ");
+
+                String fullMsg = message.getContentRaw();
+                fullMsg = fullMsg.replaceFirst("[a-zA-Z]", String.valueOf(scrabbleMap.get(user.getIdLong())));
+                fullMsg = fullMsg.replaceAll("([^0-9a-zA-Z])[0-9a-zA-Z]", "$1" + scrabbleMap.get(user.getIdLong()));
+
+                /*
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0 ; i < words.length ; i++) {
                     String word = words[i];
@@ -54,14 +62,16 @@ public class OnGuildMessage extends ListenerAdapter {
                     if (i != 0) sb.append(" ");
                     sb.append(word);
                 }
+                 */
+
                 if (hookUrl != null)
-                    WebhookUtils.sendMessageAs(sb.toString(), member, hookUrl);
+                    WebhookUtils.sendMessageAs(fullMsg, member, hookUrl);
             });
         }
 
         else if (botMap.contains(user.getIdLong())) {
             message.delete().queue();
-            WebhookUtils.retrieveWebhookUrl(e.getChannel()).thenAcceptAsync((hookUrl) -> {
+            WebhookUtils.retrieveWebhookUrl(e.getChannel()).thenAccept((hookUrl) -> {
                 if (hookUrl != null)
                     WebhookUtils.sendMessageAs(e.getMessage().getContentRaw(), member, hookUrl);
             });

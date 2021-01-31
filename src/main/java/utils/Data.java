@@ -106,15 +106,15 @@ public enum Data {
     }
 
     public static List<Long> getDataList(Data type) {
-        File dir = new File("data");
+        File dir = new File("data", type.dataName);
         String[] dirArray = dir.list();
-        if (dirArray == null || dirArray.length == 0) return null;
 
         List<Long> list = new ArrayList<>();
-        for (String fileName : dirArray) {
-            fileName = fileName.replace(".json", "");
-            list.add(Long.parseLong(fileName));
-        }
+        if (dirArray != null && dirArray.length != 0)
+            for (String fileName : dirArray) {
+                fileName = fileName.replace(".json", "");
+                list.add(Long.parseLong(fileName));
+            }
         return list;
     }
 

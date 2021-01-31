@@ -1,6 +1,8 @@
 package utils.database;
 
+import utils.database.sql.BaseDatabase;
 import utils.tools.GTools;
+import xenforo.objects.tickets.Department;
 import xenforo.objects.tickets.SupportTicket;
 
 import java.sql.Connection;
@@ -8,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class XenforoDAO {
@@ -31,13 +34,29 @@ public class XenforoDAO {
         return null;
     }
 
+    public static List<SupportTicket> getAllTicketsFrom (String username) {
+        List<SupportTicket> ticketsList = new ArrayList<>();
+
+        List<String> names = GTools.getAllUsernames(username);
+        if (names == null || names.size() == 0) return new ArrayList<>();
+        try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.XEN).getConnection()) {
+            for (String u : names) {
+                ticketsList.addAll(XenforoDAO.searchTickets(conn, u));
+            }
+        } catch (SQLException e) {
+            GTools.printStackError(e);
+        }
+
+        return ticketsList;
+    }
+
     /** Get a list of all tickets from the specified username.
      *
      * @param conn - Connection
      * @param username - The username who's ticket to search
      * @return - List of tickets from the username
      */
-    public static List<SupportTicket> getAllTicketsFrom(Connection conn, String username) {
+    public static List<SupportTicket> searchTickets(Connection conn, String username) {
 
         String query = "SELECT * FROM `xf_brivium_support_ticket` WHERE LOWER(CONVERT(`custom_support_ticket_fields` USING latin1)) LIKE '%s:8:\"username\";s:" + username.length() + ":\"" + username + "\"%';";
 
@@ -74,6 +93,9 @@ public class XenforoDAO {
         } catch (SQLException e) {
             GTools.printStackError(e);
         }
+
+        // sort by open date
+        tickets.sort(Comparator.comparingInt(SupportTicket::getOpenDate));
 
         return tickets;
 

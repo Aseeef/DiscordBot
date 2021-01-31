@@ -5,10 +5,10 @@ import me.kbrewster.exceptions.InvalidPlayerException;
 import me.kbrewster.mojangapi.MojangAPI;
 import net.grandtheftmc.jedisnew.NewJedisManager;
 import org.json.JSONObject;
-import utils.Rank;
 import utils.tools.GTools;
 import utils.tools.UUIDUtil;
 import utils.users.GTMUser;
+import utils.users.Rank;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -41,48 +41,8 @@ public class DiscordDAO {
         jedisManager.sendData("discord_to_bungee", data);
     }
 
-    public static String getSkullSkin (UUID uuid) {
-        String stringUUID = uuid.toString().replace("-", "");
-        return "https://minotar.net/avatar/" + stringUUID + ".png";
-    }
-
-    public static Optional<String> getUsername(UUID uuid) {
-        try {
-            return Optional.of(MojangAPI.getUsername(uuid));
-        } catch (IOException | InvalidPlayerException | APIException | NullPointerException e) {
-            GTools.printStackError(e);
-        }
-        return Optional.empty();
-    }
-
-    public static List<String> getAllUsernames(UUID uuid) {
-        try {
-            List<String> nameHist = new ArrayList<>();
-            MojangAPI.getNameHistory(uuid).forEach( (name) -> nameHist.add(name.getName()));
-            return nameHist;
-        } catch (InvalidPlayerException | NullPointerException e) {
-            GTools.printStackError(e);
-        }
-        return null;
-    }
-
-    public static List<String> getAllUsernames(String name) {
-        UUID uuid = getUUID(name).orElse(null);
-        if (uuid == null) return null;
-        else return getAllUsernames(uuid);
-    }
-
-    public static Optional<UUID> getUUID(String userName) {
-        try {
-            return Optional.of(MojangAPI.getUUID(userName));
-        } catch (IOException | InvalidPlayerException | APIException | NullPointerException e) {
-            GTools.printStackError(e);
-        }
-        return Optional.empty();
-    }
-
     public static Rank getRank(Connection conn, UUID uuid) {
-        String query = "SELECT * FROM `user_profile` WHERE `uuid`=UNHEX(?)";
+        String query = "SELECT * FROM `user_profile` WHERE `uuid`=UNHEX(?) AND `server_key`='GLOBAL'";
 
         try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, uuid.toString().replaceAll("-", ""));
@@ -100,13 +60,23 @@ public class DiscordDAO {
     }
 
     public static void createDiscordProfile(Connection conn, GTMUser gtmUser) {
+        String mention = gtmUser.getUser().get().getAsTag();
+        mention = mention.replaceFirst("@", "");
+        mention = GTools.convertSpecialChar(mention); //changes character encoding to something accepted by database
 
-        String query = "INSERT INTO `discord_users` (`uuid`, `discord_tag`, `discord_id`) VALUES (UNHEX(?),?,?);";
+        String query = "INSERT INTO `discord_users` (`uuid`, `discord_tag`, `discord_id`, `verify_active`) VALUES (UNHEX(?),?,?,?) ON DUPLICATE KEY UPDATE `discord_tag`=?, `discord_id`=?, `verify_active`=?;";
 
         try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, gtmUser.getUuid().toString().replace("-", ""));
-            ps.setString(2, gtmUser.getDiscordMember().getUser().getAsTag().replaceFirst("@", ""));
+
+            ps.setString(2, mention);
             ps.setLong(3, gtmUser.getDiscordId());
+            ps.setBoolean(4, true);
+
+            ps.setString(5, mention);
+            ps.setLong(6, gtmUser.getDiscordId());
+            ps.setBoolean(7, true);
+
             ps.executeUpdate();
         } catch (Exception e) {
             GTools.printStackError(e);
@@ -115,6 +85,8 @@ public class DiscordDAO {
     }
 
     public static void updateDiscordTag(Connection conn, long discordId, String tag) {
+        tag = tag.replaceFirst("@", "");
+        tag = GTools.convertSpecialChar(tag); //changes character encoding to something accepted by database
 
         if (!discordProfileExists(conn, discordId)) return;
 
@@ -127,14 +99,14 @@ public class DiscordDAO {
         } catch (Exception e) {
             GTools.printStackError(e);
         }
-
     }
 
     public static void deleteDiscordProfile(Connection conn, UUID uuid) {
-        String query = "SELECT * FROM discord_users WHERE uuid=UNHEX(?);";
+        String query = "UPDATE `discord_users` SET `verify_active` = ? WHERE uuid=UNHEX(?);";
 
         try (PreparedStatement statement = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
-            statement.setString(1, uuid.toString().replaceAll("-", ""));
+            statement.setBoolean(1, false);
+            statement.setString(2, uuid.toString().replaceAll("-", ""));
             try (ResultSet result = statement.executeQuery()) {
                 if (result.next()) {
                     result.deleteRow();
@@ -154,7 +126,7 @@ public class DiscordDAO {
 
         List<GTMUser> gtmUsersWithRank = new ArrayList<>();
 
-        String query = "SELECT HEX(uuid) FROM user_profile WHERE rank=?;";
+        String query = "SELECT HEX(uuid) FROM user_profile WHERE rank=? AND `verify_active`=1;";
 
         try (PreparedStatement statement = conn.prepareStatement(query)) {
             statement.setString(1, rank.n());
@@ -177,14 +149,14 @@ public class DiscordDAO {
     }
 
     public static long getDiscordIdFromName (Connection conn, String username) {
-        UUID uuid = getUUID(username).orElse(null);
+        UUID uuid = GTools.getUUID(username).orElse(null);
         if (uuid == null) return -1;
         return getDiscordIdFromUUID(conn, uuid);
     }
 
     public static long getDiscordIdFromUUID(Connection conn, UUID uuid) {
 
-        String query = "SELECT * FROM discord_users WHERE uuid=UNHEX(?);";
+        String query = "SELECT * FROM discord_users WHERE uuid=UNHEX(?) AND `verify_active`=1;";
 
         try (PreparedStatement statement = conn.prepareStatement(query)) {
             statement.setString(1, uuid.toString().replace("-", ""));
@@ -203,7 +175,7 @@ public class DiscordDAO {
 
     public static boolean discordProfileExists(Connection conn, long discordId) {
 
-            String query = "SELECT * FROM `discord_users` WHERE discord_id=?;";
+            String query = "SELECT * FROM `discord_users` WHERE discord_id=? AND `verify_active`=1;";
 
             try (PreparedStatement statement = conn.prepareStatement(query)) {
                 statement.setLong(1, discordId);
@@ -213,7 +185,7 @@ public class DiscordDAO {
                     }
                 }
             } catch (SQLException e) {
-            GTools.printStackError(e);
+                GTools.printStackError(e);
             }
 
         return false;

@@ -1,11 +1,14 @@
 package utils.console;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
+import utils.tools.GTools;
+
+import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+
+import static utils.console.Console.*;
 
 public enum Logs {
 
@@ -36,19 +39,11 @@ public enum Logs {
     }
 
     public static void log(String msg, Logs type) {
-        //Log color codes
-        final String ANSI_RESET = "\u001B[0m";
-        final String ANSI_WHITE = "\u001B[37m";
-        final String ANSI_CYAN = "\u001B[36m";
+        msg = "["+type.n+"] " + msg;
+        System.out.println(msg);
+    }
 
-        // Log with time stamp
-        String time = DateTimeFormatter.ofPattern("HH:mm:ss").format(LocalDateTime.now());
-
-        String output = "["+time+"] ["+type+"] "+msg;
-        String coloredOutput = ANSI_RESET+ANSI_WHITE+"["+ANSI_CYAN+time+ANSI_WHITE+"] "+
-                ANSI_WHITE+"["+ANSI_RESET+type.c+type.n+ANSI_WHITE+"] "+type.c+msg+ANSI_RESET;
-        System.out.println(coloredOutput);
-
+    public static void logToFile(String output) {
         // Save logs to file
         String date = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDateTime.now());
         File file = new File("logs/", date+".txt");
@@ -63,9 +58,170 @@ public enum Logs {
             bw.newLine();
             bw.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            GTools.printStackError(e);
+        }
+    }
+
+    //Log color codes
+    private static final String ANSI_RESET = "\u001B[0m";
+    private static final String ANSI_WHITE = "\u001B[37m";
+    private static final String ANSI_CYAN = "\u001B[36m";
+
+    public static class ErrorStream extends PrintStream {
+
+        public ErrorStream(OutputStream out) {
+            super(out);
         }
 
+        @Override
+        public void println(Object object) {
+            println(object.toString());
+        }
+
+        @Override
+        public void println(int i) {
+            println(String.valueOf(i));
+        }
+
+        @Override
+        public void println(long i) {
+            println(String.valueOf(i));
+        }
+
+        @Override
+        public void println(float i) {
+            println(String.valueOf(i));
+        }
+
+        @Override
+        public void println(double i) {
+            println(String.valueOf(i));
+        }
+
+        @Override
+        public void println(boolean b) {
+            println(String.valueOf(b));
+        }
+
+        @Override
+        public void println(@NotNull char[] chars) {
+            println(Arrays.toString(chars));
+        }
+
+        @Override
+        public void println(char c) {
+            println(String.valueOf(c));
+        }
+
+        @Override
+        public void println(String string) {
+            super.println(generateAndLogCustomOutput(string));
+        }
+
+        private String generateAndLogCustomOutput(String string) {
+            String time = DateTimeFormatter.ofPattern("HH:mm:ss").format(LocalDateTime.now());
+
+            // for file logging
+            String output;
+            // for console logging
+            String coloredOutput;
+
+            // for some unknown reason some of JDA's non-error prints ges to System.err instead .out?
+            if (string.contains("INFO JDA") || string.contains("INFO WebSocketClient")) {
+                output = "["+time+"] ["+Logs.INFO.n()+"] "+string;
+                coloredOutput = ANSI_RESET+ANSI_WHITE+"["+ANSI_CYAN+time+ANSI_WHITE+"] "+
+                        ANSI_WHITE+"["+ANSI_RESET+Logs.INFO.c()+Logs.INFO.n()+ANSI_WHITE+"] "+Logs.INFO.c()+string+ANSI_RESET;
+            }
+            else {
+                output = "[" + time + "] [" + Logs.ERROR.n() + "] " + string;
+                coloredOutput = ANSI_RESET + ANSI_WHITE + "[" + ANSI_CYAN + time + ANSI_WHITE + "] " +
+                        ANSI_WHITE + "[" + ANSI_RESET + Logs.ERROR.c() + Logs.ERROR.n() + ANSI_WHITE + "] " + Logs.ERROR.c() + string + ANSI_RESET;
+            }
+
+            Logs.logToFile(output);
+
+            return coloredOutput;
+        }
+    }
+
+    public static class GeneralStream extends PrintStream {
+
+        public GeneralStream(OutputStream out) {
+            super(out);
+        }
+
+        @Override
+        public void println(Object object) {
+            println(object.toString());
+        }
+
+        @Override
+        public void println(int i) {
+            println(String.valueOf(i));
+        }
+
+        @Override
+        public void println(long i) {
+            println(String.valueOf(i));
+        }
+
+        @Override
+        public void println(float i) {
+            println(String.valueOf(i));
+        }
+
+        @Override
+        public void println(double i) {
+            println(String.valueOf(i));
+        }
+
+        @Override
+        public void println(boolean b) {
+            println(String.valueOf(b));
+        }
+
+        @Override
+        public void println(@NotNull char[] chars) {
+            println(Arrays.toString(chars));
+        }
+
+        @Override
+        public void println(char c) {
+            println(String.valueOf(c));
+        }
+
+        @Override
+        public void println(String string) {
+            super.println(generateAndLogCustomOutput(string));
+        }
+
+        private String generateAndLogCustomOutput(String string) {
+
+            String time = DateTimeFormatter.ofPattern("HH:mm:ss").format(LocalDateTime.now());
+
+            Logs type;
+            if (string.startsWith("["+Logs.WARNING.n()+"] ")) {
+                type = Logs.WARNING;
+                string = string.replaceFirst("\\["+Logs.WARNING.n()+"] ", "");
+            }
+            else if (string.startsWith("["+Logs.INFO.n()+"] ")) {
+                type = Logs.INFO;
+                string = string.replaceFirst("\\["+Logs.INFO.n()+"] ", "");
+            }
+            else if (string.startsWith("["+Logs.ERROR.n()+"] ")) {
+                type = Logs.ERROR;
+                string = string.replaceFirst("\\["+Logs.ERROR.n()+"] ", "");
+            }
+            else type = Logs.INFO;
+
+            String output = "["+time+"] ["+type.n()+"] "+string;
+            Logs.logToFile(output);
+
+            String coloredOutput = ANSI_RESET+ANSI_WHITE+"["+ANSI_CYAN+time+ANSI_WHITE+"] "+
+                    ANSI_WHITE+"["+ANSI_RESET+type.c()+type.n()+ANSI_WHITE+"] "+type.c()+string+ANSI_RESET;
+
+            return coloredOutput;
+        }
     }
 
 }
