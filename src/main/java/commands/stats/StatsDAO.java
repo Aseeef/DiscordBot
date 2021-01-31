@@ -1,6 +1,5 @@
 package commands.stats;
 
-import com.mysql.jdbc.jdbc2.optional.SuspendableXAConnection;
 import commands.stats.wrappers.*;
 import org.jetbrains.annotations.Nullable;
 import utils.database.sql.BaseDatabase;
@@ -8,7 +7,6 @@ import utils.tools.UUIDUtil;
 
 import java.sql.*;
 import java.time.Instant;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
