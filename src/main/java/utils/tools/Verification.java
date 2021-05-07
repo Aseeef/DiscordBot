@@ -13,10 +13,11 @@ import static utils.database.DiscordDAO.createDiscordProfile;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Verification {
 
-    private static HashMap<String, Map<String, Object>> verifyHashMap = new HashMap<>();
+    private static ConcurrentHashMap<String, Map<String, Object>> verifyHashMap = new ConcurrentHashMap<>();
 
     /** Creates a request to verify a user with GTM
      *

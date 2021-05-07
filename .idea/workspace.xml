@@ -1,32 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="* Removed rules reaction">
       <change afterPath="$PROJECT_DIR$/src/main/java/commands/punishments/BanCommand.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/commands/punishments/KickCommand.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/commands/punishments/MuteCommand.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/commands/punishments/WarnCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/MembersCache.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/MembersCache.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/DiscordDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/DiscordDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/Verification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/tools/Verification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/users/GTMUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/users/GTMUser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/GTM.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/GTM.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Utils/Suggestions.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Utils/tools/GTools.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Utils/tools/SuggestionTools.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Utils/tools/SuggestionTools.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Utils/tools/SuggestionTools.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/config.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="ComposerSettings">
-    <execution>
-      <executable />
-    </execution>
+    <execution />
   </component>
   <component name="CoverageViewManager">
     <option name="myElementSize" value="82" />
@@ -77,15 +82,24 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitToolBoxStore">
+    <option name="projectConfigVersion" value="2" />
+  </component>
   <component name="ProjectId" id="1YplmcKc1xSxFTqjIPBr0wRiY3s" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
     <property name="DatabaseDriversLRU" value="mysql" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="extract.method.default.visibility" value="private" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../XenAPI/XenAPI.jar!/" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -114,18 +128,6 @@
       <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\resources\Configuration" />
     </key>
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
   <component name="RunManager">
     <configuration name="GTM" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
@@ -136,11 +138,25 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.GTM" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="SQLPlugin.ProjectConfiguration">
+    <queries />
   </component>
   <component name="ServiceViewManager">
     <option name="allServicesViewState">
@@ -152,6 +168,7 @@
       </serviceView>
     </option>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="project-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -269,7 +286,14 @@
       <workItem from="1611004449158" duration="1466000" />
       <workItem from="1611275033917" duration="17567000" />
       <workItem from="1611865020803" duration="1191000" />
-      <workItem from="1612067421841" duration="8698000" />
+      <workItem from="1612067421841" duration="9245000" />
+      <workItem from="1612164267331" duration="9947000" />
+      <workItem from="1612396672541" duration="1193000" />
+      <workItem from="1612466876784" duration="1209000" />
+      <workItem from="1612529070283" duration="2379000" />
+      <workItem from="1616293630381" duration="130000" />
+      <workItem from="1616294065720" duration="812000" />
+      <workItem from="1620416993625" duration="930000" />
     </task>
     <task id="LOCAL-00001" summary="Init commit">
       <created>1584645971223</created>
@@ -558,28 +582,32 @@
       <option name="project" value="LOCAL" />
       <updated>1612129572711</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="* Blocking actions are actually not permitted in gateway thread">
+      <created>1612129848345</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1612129848345</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
+            <State />
           </value>
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Improvements to verification system" />
-    <MESSAGE value="Adds Xenforo integration" />
     <MESSAGE value="Bug fixes with xenforo" />
     <MESSAGE value="Added console commands" />
     <MESSAGE value="Package rename &amp; config reorganization" />
@@ -603,7 +631,9 @@
     <MESSAGE value="*Fixed verify time not updated" />
     <MESSAGE value="* Removed rules reaction channel &amp; players no longer have to react to rules to join. This is now handled by a discord feature&#10;* Removed references to the UNVERIFIED user role as its no longer needed" />
     <MESSAGE value="* GTMUsers are now loaded in sync" />
-    <option name="LAST_COMMIT_MESSAGE" value="* GTMUsers are now loaded in sync" />
+    <MESSAGE value="* Blocking actions are actually not permitted in gateway thread" />
+    <MESSAGE value="* Should fix channel mentions" />
+    <option name="LAST_COMMIT_MESSAGE" value="* Should fix channel mentions" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -134,7 +134,7 @@ public class GTMUser {
     }
 
     @JsonIgnore
-    public void updateUserDataNow() {
+    public synchronized void updateUserDataNow() {
 
         if (!this.optionalMember.isPresent()) {
             Logs.log("Skipping data update for GTM Player " + this.getUsername() + " because they have left this discord!");

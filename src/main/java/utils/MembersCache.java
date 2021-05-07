@@ -50,7 +50,7 @@ public class MembersCache extends ListenerAdapter {
     }
 
     public static Optional<Member> getMemberFromMention(String mention) {
-        return members.stream().filter( member -> member.getAsMention().equalsIgnoreCase(mention.replace("!", ""))).findFirst();
+        return members.stream().filter( member -> member.getId().equals(mention.replaceAll("[!<@>]", ""))).findFirst();
     }
 
     /**
