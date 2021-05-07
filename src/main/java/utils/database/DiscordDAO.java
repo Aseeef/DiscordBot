@@ -57,7 +57,7 @@ public class DiscordDAO {
         return null;
     }
 
-    public static void createDiscordProfile(Connection conn, GTMUser gtmUser) {
+    public static void createDiscordProfile(Connection conn, GTMUser gtmUser) throws SQLException {
         String mention = gtmUser.getUser().get().getAsTag();
         mention = mention.replaceFirst("@", "");
         mention = GTools.convertSpecialChar(mention); //changes character encoding to something accepted by database
@@ -78,8 +78,6 @@ public class DiscordDAO {
             ps.setTimestamp(9, new Timestamp(System.currentTimeMillis()));
 
             ps.executeUpdate();
-        } catch (Exception e) {
-            GTools.printStackError(e);
         }
 
     }
