@@ -175,7 +175,6 @@ public class StatsMenu implements MenuAction {
         recentAlts.remove(username);
         allAlts.remove(username);
         targetUser = GTMUser.getGTMUser(uuid).orElse(null);
-        System.out.println(uuid);
         bans = StatsDAO.getPunishments(uuid, WrappedPunishment.PunishmentType.BAN);
         mutes = StatsDAO.getPunishments(uuid, WrappedPunishment.PunishmentType.MUTE);
         warns = StatsDAO.getPunishments(uuid, WrappedPunishment.PunishmentType.WARN);
