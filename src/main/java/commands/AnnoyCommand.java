@@ -2,6 +2,8 @@ package commands;
 
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.Event;
+import utils.MembersCache;
 import utils.selfdata.AnnoyData;
 import utils.tools.GTools;
 import utils.users.GTMUser;
@@ -9,6 +11,11 @@ import utils.users.Rank;
 import utils.webhooks.WebhookUtils;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static utils.tools.GTools.jda;
 
 public class AnnoyCommand extends Command {
 
@@ -33,19 +40,20 @@ public class AnnoyCommand extends Command {
                 if (alreadyAnnoying(channel, member))
                     return;
 
-                Member target = message.getMentionedMembers().get(0);
+                Member target = MembersCache.getMember(args[1]).orElse(null);
                 if (target == null) {
                     GTools.sendThenDelete(channel, "**User not found!**");
                     return;
                 }
 
-                List<Emote> emojis = message.getEmotes();
                 String emoji;
                 String emojiTag;
 
-                if (emojis.size() >= 1) {
-                    emoji = emojis.get(0).getId();
-                    emojiTag = emojis.get(0).getAsMention();
+                Optional<Emote> emoteOptional = GTools.getEmote(args[2]);
+
+                if (emoteOptional.isPresent()) {
+                    emoji = emoteOptional.get().getId();
+                    emojiTag = emoteOptional.get().getAsMention();
                 } else {
                     emoji = args[2];
                     emojiTag = emoji;
@@ -65,7 +73,7 @@ public class AnnoyCommand extends Command {
                 if (alreadyAnnoying(channel, member))
                     return;
 
-                Member target = message.getMentionedMembers().get(0);
+                Member target = MembersCache.getMember(args[1]).orElse(null);
                 if (target == null) {
                     GTools.sendThenDelete(channel, "**User not found!**");
                     return;
@@ -89,7 +97,7 @@ public class AnnoyCommand extends Command {
                 if (alreadyAnnoying(channel, member))
                     return;
 
-                Member target = message.getMentionedMembers().get(0);
+                Member target = MembersCache.getMember(args[1]).orElse(null);
                 if (target == null) {
                     GTools.sendThenDelete(channel, "**User not found!**");
                     return;
@@ -115,7 +123,7 @@ public class AnnoyCommand extends Command {
                 if (alreadyAnnoying(channel, member))
                     return;
 
-                Member target = message.getMentionedMembers().get(0);
+                Member target = MembersCache.getMember(args[1]).orElse(null);
                 if (target == null) {
                     GTools.sendThenDelete(channel, "**User not found!**");
                     return;
@@ -133,7 +141,7 @@ public class AnnoyCommand extends Command {
                     return;
                 }
 
-                Member target = message.getMentionedMembers().get(0);
+                Member target = MembersCache.getMember(args[1]).orElse(null);
                 if (target == null) {
                     GTools.sendThenDelete(channel, "**User not found!**");
                     return;
@@ -156,7 +164,7 @@ public class AnnoyCommand extends Command {
                     return;
                 }
 
-                Member target = message.getMentionedMembers().get(0);
+                Member target = MembersCache.getMember(args[1]).orElse(null);
                 if (target == null) {
                     GTools.sendThenDelete(channel, "**User not found!**");
                     return;

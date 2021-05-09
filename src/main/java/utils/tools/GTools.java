@@ -26,6 +26,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static utils.console.Logs.log;
 
@@ -218,7 +220,7 @@ public class GTools {
 
     public static String getSkullSkin (UUID uuid) {
         String stringUUID = uuid.toString().replace("-", "");
-        return "https://minotar.net/avatar/" + stringUUID + ".png";
+        return "https://crafatar.com/avatars/" + stringUUID;
     }
 
     public static Optional<String> getUsername(UUID uuid) {
@@ -251,6 +253,15 @@ public class GTools {
         String timeFormatted = ((monthR == 0 ? "" : monthR + " month(s), ") + (daysR == 0 ? "" : daysR + " day(s), ") + (hoursR == 0 ? "" : hoursR + " hour(s), ") + (minutesR == 0 ? "" : minutesR + " minute(s), ") + (secondsR == 0 ? "" : secondsR + " second(s), "));
 
         return timeFormatted.length() != 0 ? timeFormatted.substring(0, timeFormatted.length() - 2) : timeFormatted;
+    }
+
+    public static Optional<Emote> getEmote(String s) {
+        Pattern pattern = Pattern.compile("<:.{1,32}:([0-9]{18})>");
+        Matcher matcher = pattern.matcher(s);
+        if (matcher.find()) {
+            return Optional.ofNullable(jda.getEmoteById(matcher.group(1)));
+        }
+        return Optional.empty();
     }
 
 }

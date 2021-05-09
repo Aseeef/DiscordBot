@@ -65,7 +65,6 @@ public class GTM extends ListenerAdapter {
         // Load JDA & Xenforo and start bot
         loadJDA();
         loadXen();
-
     }
 
 

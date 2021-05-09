@@ -2,21 +2,29 @@ package commands.stats.wrappers;
 
 import commands.stats.PlanServer;
 import org.jetbrains.annotations.Nullable;
+import utils.Data;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Session {
 
+    long startTime;
     long playtime;
     long afkTime;
     PlanServer server;
 
-    public Session(long playtime, long afkTime, PlanServer server) {
+    public Session(long startTime, long playtime, long afkTime, PlanServer server) {
+        this.startTime = startTime;
         this.playtime = playtime;
         this.afkTime = afkTime;
         this.server = server;
+    }
+
+    public long getStartTime() {
+        return startTime;
     }
 
     public long getActivePlaytime() {

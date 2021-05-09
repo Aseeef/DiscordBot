@@ -39,8 +39,17 @@ public class XenforoDAO {
 
         List<String> names = GTools.getAllUsernames(username);
         if (names == null || names.size() == 0) return new ArrayList<>();
+
+        // extract unique usernames
+        List<String> uniqueNames = new ArrayList<>();
+        for (String name : names) {
+            if (uniqueNames.stream().noneMatch(s -> s.equalsIgnoreCase(name))) {
+                uniqueNames.add(name);
+            }
+        }
+
         try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.XEN).getConnection()) {
-            for (String u : names) {
+            for (String u : uniqueNames) {
                 ticketsList.addAll(XenforoDAO.searchTickets(conn, u));
             }
         } catch (SQLException e) {

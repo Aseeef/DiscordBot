@@ -36,8 +36,8 @@ public class GTMUser {
     private static HashMap<Long, GTMUser> userCache = new HashMap<>();
 
     @JsonCreator
-    public GTMUser(@JsonProperty("uuid") UUID uuid, @JsonProperty("username") String username, @JsonProperty("rank") Rank rank, @JsonProperty("discordId") long discordId, @JsonProperty("lastUpdated") long lastUpdated) {
-        this.uuid = uuid;
+    public GTMUser(@JsonProperty("uuid") String uuid, @JsonProperty("username") String username, @JsonProperty("rank") Rank rank, @JsonProperty("discordId") long discordId, @JsonProperty("lastUpdated") long lastUpdated) {
+        this.uuid = UUID.fromString(uuid);
         this.username = username;
         this.rank = rank;
         this.discordId = discordId;

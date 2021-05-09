@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.jetbrains.annotations.NotNull;
 import utils.users.Rank;
 import utils.confighelpers.Config;
 import utils.tools.GTools;
@@ -19,14 +20,14 @@ public abstract class Command extends ListenerAdapter {
 
     private final static int COMMAND_MS_DELAY = 1250;
 
-    private String name;
-    private String description;
-    private Rank rank;
-    private Type type;
+    private final String name;
+    private final String description;
+    private final Rank rank;
+    private final Type type;
 
-    private static List<Command> commandList = new ArrayList<>();
+    private static final List<Command> commandList = new ArrayList<>();
 
-    private static Map<User, Long> antiSpamMap = new HashMap<>();
+    private static final Map<User, Long> antiSpamMap = new HashMap<>();
 
     /** The constructor for discord commands for the GTM bot
      *
@@ -40,7 +41,58 @@ public abstract class Command extends ListenerAdapter {
         this.rank = rank;
         this.type = type;
         commandList.add(this);
+
+        // TODO: jda.upsertCommand(name, description).queue();
     }
+
+    /* TODO - Gettings args
+    @Override
+    public void onSlashCommand (@NotNull SlashCommandEvent e) {
+
+        User user = e.getUser();
+        GTMUser gtmUser = GTMUser.getGTMUser(user.getIdLong()).orElse(null);
+        String[] args = e.get.split("/");
+        MessageChannel channel = e.getChannel();
+
+        jda.getGuilds().get(0).retrieveMember(user).queue((member -> {
+
+            if (e.getName().equals(name)) {
+                // anti command spam
+                if (antiSpamMap.containsKey(user) && antiSpamMap.get(user) > System.currentTimeMillis() - COMMAND_MS_DELAY) {
+                    sendThenDelete(channel, "**Slow down! Please do not spam commands!**");
+                    return;
+                }
+
+                log("User " + user.getAsTag() +
+                        "(" + user.getId() + ") issued command: " + e.getCommandPath());
+
+                // Check perms
+                if (!Rank.hasRolePerms(member, rank)) {
+                    sendThenDelete(channel, "**Sorry but you must be " + getRank().name() + " or higher to use this command! Use `/help` to list all commands you can use.**");
+                    return;
+                }
+
+                // Check type
+                if (type == Type.DISCORD_ONLY && e.getChannelType() == ChannelType.PRIVATE) {
+                    sendThenDelete(channel, "**Sorry but this command can only be executed on the GTM discord!**");
+                    return;
+                }
+
+                else if (type == Type.DMS_ONLY && e.getChannelType() != ChannelType.PRIVATE) {
+                    sendThenDelete(channel, "**Sorry but this command can only be executed in direct messages with me!**");
+                    return;
+                }
+
+                onCommandUse(e, member, gtmUser, channel, args);
+                e.acknowledge(true).queue();
+
+                antiSpamMap.put(user, System.currentTimeMillis()); // set last command use
+            }
+
+        }));
+
+    }
+     */
 
     @Override
     public void onPrivateMessageReceived(PrivateMessageReceivedEvent e) {
@@ -153,8 +205,7 @@ public abstract class Command extends ListenerAdapter {
     /** This is the logic that occurs when this command is used
      * Note: To use TextChannel or PrivateChannel methods, use casting
      */
-    public abstract void onCommandUse(Message message, Member member, GTMUser gtmUser, MessageChannel channel, String[] args);
-
+    public abstract void onCommandUse(@Deprecated Message message, Member member, GTMUser gtmUser, MessageChannel channel, String[] args);
 
     // -- Commands static methods -- //
 

@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.events.Event;
 import utils.MembersCache;
 import utils.channels.CustomChannel;
 import utils.database.UsersDAO;
