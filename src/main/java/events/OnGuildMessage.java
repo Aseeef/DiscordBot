@@ -72,8 +72,9 @@ public class OnGuildMessage extends ListenerAdapter {
         else if (botMap.contains(user.getIdLong())) {
             message.delete().queue();
             WebhookUtils.retrieveWebhookUrl(e.getChannel()).thenAccept((hookUrl) -> {
-                if (hookUrl != null)
-                    WebhookUtils.sendMessageAs(e.getMessage().getContentRaw(), member, hookUrl);
+                if (hookUrl != null) {
+                    WebhookUtils.sendMessageAs(e.getMessage().getContentRaw().replaceAll("@everyone", "everyone"), member, hookUrl);
+                }
             });
         }
 

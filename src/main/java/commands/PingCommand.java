@@ -1,9 +1,9 @@
 package commands;
 
-import utils.confighelpers.Config;
-import utils.users.GTMUser;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import utils.confighelpers.Config;
+import utils.users.GTMUser;
 
 import java.util.concurrent.TimeUnit;
 

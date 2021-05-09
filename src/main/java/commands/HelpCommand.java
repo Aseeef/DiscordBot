@@ -1,5 +1,6 @@
 package commands;
 
+import net.dv8tion.jda.api.events.Event;
 import utils.confighelpers.Config;
 import utils.users.Rank;
 import utils.users.GTMUser;

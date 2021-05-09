@@ -20,13 +20,9 @@ import static utils.tools.GTools.jda;
 
 public class DiscordMenu extends ListenerAdapter {
 
-    private static ArrayList<MessageReaction.ReactionEmote> reactions = new ArrayList<MessageReaction.ReactionEmote>() {
-        {
-            add(MessageReaction.ReactionEmote.fromUnicode("◀️", jda));
-            add(MessageReaction.ReactionEmote.fromUnicode("❎", jda));
-            add(MessageReaction.ReactionEmote.fromUnicode("▶️", jda));
-        }
-    };
+    private static final String BACK = "◀️";
+    private static final String FORWARD = "▶️";
+    private static final String CLOSE = "❎";
 
     private Message message;
     private User user;
@@ -36,7 +32,15 @@ public class DiscordMenu extends ListenerAdapter {
     private int page = 1;
     private int maxPages;
 
-    public DiscordMenu (Message message, int maxPages, User user, boolean allowChangeFromAll) {
+    /**
+     * Initialize a new discord menu
+     *
+     * @param message -
+     * @param maxPages
+     * @param user
+     * @param allowChangeFromAll
+     */
+    protected DiscordMenu (Message message, int maxPages, User user, boolean allowChangeFromAll) {
         jda.addEventListener(this);
         this.message = message;
         this.channel = message.getChannel();
@@ -47,7 +51,7 @@ public class DiscordMenu extends ListenerAdapter {
         addReactions();
     }
 
-    public DiscordMenu (Message message, int maxPages) {
+    protected DiscordMenu (Message message, int maxPages) {
         jda.addEventListener(this);
         this.message = message;
         this.channel = message.getChannel();
@@ -60,7 +64,7 @@ public class DiscordMenu extends ListenerAdapter {
     }
 
     public static CompletableFuture<DiscordMenu> create(MessageChannel channel, EmbedBuilder embedBuilder, int maxPages) {
-        return create(channel, embedBuilder, maxPages, null, false);
+        return create(channel, embedBuilder, maxPages, null, true);
     }
 
     /**
@@ -110,18 +114,10 @@ public class DiscordMenu extends ListenerAdapter {
     }
 
     private void addReactions() {
-        List<MessageReaction.ReactionEmote> messageEmotes = new ArrayList<>();
-        this.message.getReactions().forEach( (reaction) -> messageEmotes.add(reaction.getReactionEmote()));
-
-        reactions.forEach((button) -> {
-            if (messageEmotes.contains(button)) return;
-
-            if (button.isEmoji() && this.message != null)
-                this.message.addReaction(button.getEmoji()).queue();
-            else if (button.isEmote() && this.message != null)
-                this.message.addReaction(button.getEmote()).queue();
-        });
-
+        this.message.addReaction(BACK)
+                .flatMap(v -> this.message.addReaction(CLOSE))
+                .flatMap(v -> this.message.addReaction(FORWARD))
+                .queue();
     }
 
     public final void onGuildMessageEmbed (GuildMessageEmbedEvent event) {
@@ -136,42 +132,43 @@ public class DiscordMenu extends ListenerAdapter {
         onReactionAdd(event.getMessageIdLong(), event.getUser(), event.getReactionEmote());
     }
 
-    private void onReactionAdd(long messageIdLong, User user2, MessageReaction.ReactionEmote reactionEmote) {
-        if (this.message != null && this.message.getIdLong() == messageIdLong && !(user2 == jda.getSelfUser())) {
+    private void onReactionAdd(long messageIdLong, User reactingUser, MessageReaction.ReactionEmote reactionEmote) {
 
-            boolean emoji = reactionEmote.isEmoji();
+        if (this.message != null && this.message.getIdLong() == messageIdLong && !(reactingUser == jda.getSelfUser())) {
 
-            if (emoji && reactionEmote.getEmoji().equals(reactions.get(0).getEmoji()) && this.page - 1 >= 1) {
+            // remove the reaction
+            if (this.channel == null || this.channel instanceof PrivateChannel || (reactionEmote.isEmoji() && reactionEmote.getEmoji().equals(CLOSE))) {}
+            else if (reactionEmote.isEmoji())
+                this.message.removeReaction(reactionEmote.getEmoji(), reactingUser).queue();
+            else this.message.removeReaction(reactionEmote.getEmote(), reactingUser).queue();
 
-                if (this.user != user2 && !this.allowChangeFromAll) return; // if this discord menu doesn't accept input from all users, return
+            // fire appropriate event
+
+            if (reactionEmote.isEmoji() && reactionEmote.getEmoji().equals(BACK) && this.page - 1 >= 1) {
+
+                if (this.user != reactingUser && !this.allowChangeFromAll) return; // if this discord menu doesn't accept input from all users, return
 
                 this.page--;
-                this.menuAction.onAction(MenuAction.Type.PREVIOUS_PAGE, user2);
+                this.menuAction.onAction(MenuAction.Type.PREVIOUS_PAGE, reactingUser);
             }
 
-            else if (emoji && reactionEmote.getEmoji().equals(reactions.get(1).getEmoji())) {
+            else if (reactionEmote.isEmoji() && reactionEmote.getEmoji().equals(CLOSE)) {
 
-                if (this.user != user2 && !this.allowChangeFromAll) return;
+                if (this.user != reactingUser && !this.allowChangeFromAll) return;
 
                 this.message.delete().queue();
                 this.message = null;
-                this.menuAction.onAction(MenuAction.Type.DELETE, user2);
+                this.menuAction.onAction(MenuAction.Type.DELETE, reactingUser);
                 jda.getEventManager().unregister(this);
             }
 
-            else if (emoji && reactionEmote.getEmoji().equals(reactions.get(2).getEmoji()) && this.page + 1 <= this.maxPages) {
+            else if (reactionEmote.isEmoji() && reactionEmote.getEmoji().equals(FORWARD) && this.page + 1 <= this.maxPages) {
 
-                if (this.user != user2 && !this.allowChangeFromAll) return; // if this discord menu doesn't accept input from all users, return
+                if (this.user != reactingUser && !this.allowChangeFromAll) return; // if this discord menu doesn't accept input from all users, return
 
                 this.page++;
-                this.menuAction.onAction(MenuAction.Type.NEXT_PAGE, user2);
+                this.menuAction.onAction(MenuAction.Type.NEXT_PAGE, reactingUser);
             }
-
-            if (this.channel == null || this.channel instanceof PrivateChannel || (emoji && reactionEmote.getEmoji().equals(reactions.get(1).getEmoji())))
-                return;
-            else if (emoji)
-                this.message.removeReaction(reactionEmote.getEmoji(), user2).queue();
-            else this.message.removeReaction(reactionEmote.getEmote(), user2).queue();
 
         }
     }

@@ -3,7 +3,9 @@ package commands.stats;
 import commands.stats.wrappers.*;
 import org.jetbrains.annotations.Nullable;
 import utils.database.sql.BaseDatabase;
+import utils.tools.GTools;
 import utils.tools.UUIDUtil;
+import utils.users.GTMUser;
 
 import java.sql.*;
 import java.time.Instant;
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 public class StatsDAO {
 
@@ -54,10 +57,11 @@ public class StatsDAO {
                     List<Session> sessionsList = new ArrayList<>();
 
                     while (rs.next()) {
-                        long playtime = rs.getLong("session_end") - rs.getLong("session_start");
+                        long start = rs.getLong("session_start");
+                        long playtime = rs.getLong("session_end") - start;
                         long afkTime = rs.getLong("afk_time");
                         PlanServer server = PlanServer.getFromUUID(rs.getString("server_uuid"));
-                        sessionsList.add(new Session(playtime, afkTime, server));
+                        sessionsList.add(new Session(start, playtime, afkTime, server));
                     }
 
                     return sessionsList;
@@ -172,12 +176,10 @@ public class StatsDAO {
     /**
      * @return - The account name of every single alt that this player has ever been linked to through their entire ip history
      */
-    public static List<String> getAllAlts(UUID uuid) {
+    public static List<String> getAllAlts(UUID uuid, List<String> ipHistory) {
         List<String> alts = new ArrayList<>();
 
-        List<String> ips = getIPs(uuid);
-
-        for (String ip : ips) {
+        for (String ip : ipHistory) {
             for (String newAlt : getAlts(uuid, ip))
                 if (!alts.contains(newAlt))
                     alts.add(newAlt);
@@ -190,6 +192,7 @@ public class StatsDAO {
     public static List<WrappedPunishment> getPunishments (UUID uuid, WrappedPunishment.PunishmentType punishmentType) {
 
         List<WrappedPunishment> punishments = new ArrayList<>();
+        Pattern uuidPattern = Pattern.compile("\\b[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}\\b");
 
         try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.BANS).getConnection()) {
             String query = "SELECT * FROM `" + punishmentType.getTable() + "` WHERE uuid=?";
@@ -202,10 +205,10 @@ public class StatsDAO {
                         String reason = rs.getString("reason");
                         String banningName = rs.getString("banned_by_name");
                         String banningUUIDString = rs.getString("banned_by_uuid");
-                        UUID banningUUID = banningUUIDString == null ? null : UUID.fromString(banningUUIDString);
+                        UUID banningUUID = banningUUIDString == null || !uuidPattern.matcher(banningUUIDString).find() ? null : UUID.fromString(banningUUIDString);
                         String unbanName = rs.getString("removed_by_name");
                         String unbanUUIDString = rs.getString("removed_by_uuid");
-                        UUID unbanUUID = unbanUUIDString == null ? null : UUID.fromString(unbanUUIDString);
+                        UUID unbanUUID = unbanUUIDString == null || !uuidPattern.matcher(unbanUUIDString).find() ? null : UUID.fromString(unbanUUIDString);
                         Timestamp time = Timestamp.from(Instant.ofEpochMilli(rs.getLong("time")));
                         long unbanOnRaw = rs.getLong("until");
                         Timestamp unbanOn = unbanOnRaw == -1 ? null : Timestamp.from(Instant.ofEpochMilli(unbanOnRaw));
@@ -227,30 +230,49 @@ public class StatsDAO {
 
     }
 
-    public GTMGang getGang (UUID uuid) {
+    public static List<GTMGang> getGangs (UUID uuid) {
+
+        List<GTMGang> gangs = new ArrayList<>();
 
         try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
 
-            int gangId = -1;
-            String server = null;
-            String name = null;
-            String description = null;
-            List<UUID> members = new ArrayList<>();
-            List<String> memberNames = new ArrayList<>();
+            List<Integer> gangIds = new ArrayList<>();
 
             String query1 = "SELECT `gang_id` FROM `gtm_gang_member` WHERE HEX(uuid)=?";
             try (PreparedStatement ps = conn.prepareStatement(query1)) {
                 ps.setString(1, uuid.toString().replace("-", ""));
                 try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        gangId = rs.getInt("gang_id");
+                    while (rs.next()) {
+                        gangIds.add(rs.getInt("gang_id"));
                     }
                 }
             }
 
-            if (gangId == -1) return null;
+            for (int gangId : gangIds) {
+                gangs.add(getGang(gangId));
+            }
 
-            String query2 = "SELECT * FROM `gtm_gang` WHERE id=?";
+            return gangs;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+
+    }
+
+    public static GTMGang getGang (int gangId) {
+
+        String server = null;
+        String name = null;
+        String description = null;
+        List<UUID> members = new ArrayList<>();
+        List<String> memberNames = new ArrayList<>();
+
+        try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
+
+            String query2 = "SELECT * FROM `gtm_gang` WHERE id=?;";
             try (PreparedStatement ps = conn.prepareStatement(query2)) {
                 ps.setInt(1, gangId);
                 try (ResultSet rs = ps.executeQuery()) {
@@ -262,12 +284,12 @@ public class StatsDAO {
                 }
             }
 
-            String query3 = "SELECT * FROM `gtm_gang_member` WHERE id=?";
+            String query3 = "SELECT HEX(uuid) FROM `gtm_gang_member` WHERE gang_id=?;";
             try (PreparedStatement ps = conn.prepareStatement(query3)) {
                 ps.setInt(1, gangId);
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
-                        UUID memberUUID = UUIDUtil.createUUID(rs.getString("uuid")).orElse(null);
+                        UUID memberUUID = UUIDUtil.createUUID(rs.getString("HEX(uuid)")).orElse(null);
                         if (memberUUID != null) members.add(memberUUID);
                     }
                 }

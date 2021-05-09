@@ -7,7 +7,7 @@ public interface MenuAction {
 
     void onAction(Type actionType, User user);
 
-    public enum Type {
+    enum Type {
         NEXT_PAGE,
         PREVIOUS_PAGE,
         DELETE,

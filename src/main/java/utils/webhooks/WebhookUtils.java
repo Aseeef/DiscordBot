@@ -7,6 +7,8 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.Webhook;
 
+import javax.annotation.Nullable;
+import java.io.File;
 import java.util.concurrent.CompletableFuture;
 
 import static utils.tools.GTools.jda;
@@ -43,12 +45,18 @@ public class WebhookUtils {
     }
 
     public static void sendMessageAs (String message, Member target, String hookUrl) {
+        sendMessageAs(message, target, hookUrl, null);
+    }
+
+    public static void sendMessageAs (String message, Member target, String hookUrl, @Nullable File file) {
         try (WebhookClient client = WebhookUtils.getWebhookClient(hookUrl)) {
             // Change appearance of webhook message to match target
             WebhookMessageBuilder mb = new WebhookMessageBuilder();
             mb.setUsername(target.getEffectiveName()); // use this username
             mb.setAvatarUrl(target.getUser().getAvatarUrl()); // use this avatar
             mb.setContent(message);
+            if (file != null)
+                mb.addFile(file);
             client.send(mb.build());
         }
     }
