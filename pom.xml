@@ -53,7 +53,7 @@
                 </exclusion>
             </exclusions>
             <!-- /\ Excludes Audio /\ -->
-            <version>feature~slash-commands-v3.7.1-g5951675-657</version>
+            <version>4.2.1</version>
         </dependency>
         <dependency>
             <groupId>org.kefirsf</groupId>
