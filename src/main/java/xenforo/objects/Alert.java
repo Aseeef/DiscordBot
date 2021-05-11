@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import xenforo.objects.tickets.SupportTicket;
 
+@Deprecated
 @JsonIgnoreProperties ({"extra_data", "extra", "alerted_user_id", "new", "unviewed", "view_date"})
 public class Alert {
 
@@ -14,7 +15,7 @@ public class Alert {
     private String action;
     private long eventDate;
     private SupportTicket supportTicket;
-    private XenforoUser user;
+    private XenforoUserJson user;
 
     @JsonCreator
     public Alert(@JsonProperty("alert_id") int alertId,
@@ -23,7 +24,7 @@ public class Alert {
                  @JsonProperty("action") String action,
                  @JsonProperty("event_date") long eventDate,
                  @JsonProperty("content") SupportTicket supportTicket,
-                 @JsonProperty("user") XenforoUser user) {
+                 @JsonProperty("user") XenforoUserJson user) {
         this.alertId = alertId;
         this.contentType = contentType;
         this.contentId = contentId;
@@ -57,7 +58,7 @@ public class Alert {
         return supportTicket;
     }
 
-    public XenforoUser getUser() {
+    public XenforoUserJson getUser() {
         return user;
     }
 

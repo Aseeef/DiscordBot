@@ -2,33 +2,30 @@ package commands.stats;
 
 import commands.stats.wrappers.*;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.utils.AttachmentOption;
 import utils.chart.PlaytimeChart;
+import utils.database.DiscordDAO;
 import utils.database.XenforoDAO;
 import utils.pagination.DiscordMenu;
 import utils.pagination.MenuAction;
 import utils.tools.GTools;
 import utils.users.GTMUser;
+import utils.users.Rank;
 import xenforo.objects.tickets.Department;
 import xenforo.objects.tickets.SupportTicket;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -43,12 +40,14 @@ public class StatsMenu implements MenuAction {
     private EmbedBuilder punishmentStats;
     private EmbedBuilder playtimeStats;
     private EmbedBuilder gangStats;
+    private EmbedBuilder staffStats;
 
     private String username;
     private MessageChannel channel;
 
     private UUID uuid;
     private PlanUser pu;
+    private Rank rank;
     private List<Session> sessions;
     private WrappedIPData lastIp;
     private List<String> ipHistory;
@@ -58,9 +57,16 @@ public class StatsMenu implements MenuAction {
     private List<WrappedPunishment> bans;
     private List<WrappedPunishment> mutes;
     private List<WrappedPunishment> warns;
+    private List<WrappedPunishment> kicks;
     private List<String> usernames;
     private String skullURL;
     private List<GTMGang> gangs;
+
+    private List<HelpQuestion> helpQuestions;
+    private List<WrappedPunishment> bansGiven;
+    private List<WrappedPunishment> mutesGiven;
+    private List<WrappedPunishment> warnsGiven;
+    private List<WrappedPunishment> kicksGiven;
 
     public StatsMenu(User user, MessageChannel channel, String username) {
         this.creator = user;
@@ -77,8 +83,10 @@ public class StatsMenu implements MenuAction {
 
         Thread thread = new Thread(() -> {
 
-            CompletableFuture<DiscordMenu> futureMenu = DiscordMenu.create(channel, getPendingEmbed(1), 4);
+            CompletableFuture<DiscordMenu> futureMenu = DiscordMenu.create(channel, getPendingEmbed(1), 1);
             loadRawData();
+
+            int maxPages = 4;
 
             try {
                 menu = futureMenu.get();
@@ -89,6 +97,12 @@ public class StatsMenu implements MenuAction {
                 playtimeStats = getPlaytimeStats();
                 gangStats = getGangStats();
 
+                if (rank.isHigherOrEqualTo(Rank.HELPER)) {
+                    staffStats = getStaffStats();
+                    maxPages++;
+                }
+
+                menu.setMaxPages(maxPages);
                 menu.setPageContents(getGeneralStats());
                 menu.onMenuAction(this);
 
@@ -115,34 +129,18 @@ public class StatsMenu implements MenuAction {
             menu.setPageContents(playtimeStats);
         } else if (page == 4) {
             menu.setPageContents(gangStats);
+        } else if (page == 5) {
+            menu.setPageContents(staffStats);
         }
 
         // /stats (
 
         /*
 
-        General overview:
-        - Username
-        - First join
-        - Total playtime (aft and active)
-        - Favorite server
-        - previous user names
-        - alts (full alt hist + non full)
-        - linked discord?
-        - timezone
-
-
-        Punishments:
-        - Total warnings
-        - Total mutes
-        - Total bans
-        - Last punishment
-        - Ban appeals made
-
         Recent Playtime Stats:
         - Stats about playtime afk and non afk
         - Playtime stats break down by days like in a graph using JFreeChart
-        - general time they are online around
+        - general time they are online around todo
 
         Recent PvP Stats:
         - Stats about kills
@@ -150,10 +148,6 @@ public class StatsMenu implements MenuAction {
         - Kills per hour
         - recent / total
         - time spent in warzone?
-
-        Gang:
-        - Gang name
-        - Whos in the gang
 
         Staff stats
         - Help questions answered
@@ -175,12 +169,47 @@ public class StatsMenu implements MenuAction {
         recentAlts.remove(username);
         allAlts.remove(username);
         targetUser = GTMUser.getGTMUser(uuid).orElse(null);
-        bans = StatsDAO.getPunishments(uuid, WrappedPunishment.PunishmentType.BAN);
-        mutes = StatsDAO.getPunishments(uuid, WrappedPunishment.PunishmentType.MUTE);
-        warns = StatsDAO.getPunishments(uuid, WrappedPunishment.PunishmentType.WARN);
+        bans = StatsDAO.getPunishments(uuid, WrappedPunishment.PunishmentType.BAN, false);
+        mutes = StatsDAO.getPunishments(uuid, WrappedPunishment.PunishmentType.MUTE, false);
+        warns = StatsDAO.getPunishments(uuid, WrappedPunishment.PunishmentType.WARN, false);
+        kicks = StatsDAO.getPunishments(uuid, WrappedPunishment.PunishmentType.KICK, false);
         usernames = GTools.getAllUsernames(uuid);
         skullURL = GTools.getSkullSkin(uuid);
         gangs = StatsDAO.getGangs(uuid);
+        rank = DiscordDAO.getRank(uuid);
+        rank = rank == null ? Rank.NORANK : rank;
+        if (rank.isHigherOrEqualTo(Rank.HELPER)) {
+            helpQuestions = StatsDAO.getHelpQuestions(System.currentTimeMillis() - (1000L * 60 * 60 * 24 * 30), uuid);
+            bansGiven = StatsDAO.getPunishments(uuid, WrappedPunishment.PunishmentType.BAN, true);
+            mutesGiven = StatsDAO.getPunishments(uuid, WrappedPunishment.PunishmentType.MUTE, true);
+            warnsGiven = StatsDAO.getPunishments(uuid, WrappedPunishment.PunishmentType.WARN, true);
+            kicksGiven = StatsDAO.getPunishments(uuid, WrappedPunishment.PunishmentType.KICK, true);
+        }
+    }
+
+    private EmbedBuilder getStaffStats() {
+
+        EmbedBuilder eb = new EmbedBuilder();
+
+        eb.setTitle("**Staff Statistics for `" + pu.getUsername() + "`:**");
+
+        LinkedList<WrappedPunishment> allPunishments = new LinkedList<>();
+        allPunishments.addAll(bansGiven);
+        allPunishments.addAll(mutesGiven);
+        allPunishments.addAll(warnsGiven);
+        allPunishments.addAll(kicksGiven);
+        allPunishments.sort(Comparator.comparing(WrappedPunishment::getIssueDate));
+
+        eb.addField("Punishments Given", String.valueOf(allPunishments.size()), true)
+                .addField("Bans Given", String.valueOf(bansGiven.size()), true)
+                .addField("Mutes Given", String.valueOf(mutesGiven.size()), true)
+                .addField("Warns Given", String.valueOf(warnsGiven.size()), true)
+                .addField("Kicks Given", String.valueOf(kicksGiven.size()), true)
+                .addField("LiteBans Dashboard", "https://grandtheftmc.net/bans/history.php?uuid=" + uuid.toString() + "&staffhistory=1", false);
+
+        // todo help question stats
+
+        return eb;
     }
 
     private EmbedBuilder getGangStats() {
@@ -257,17 +286,17 @@ public class StatsMenu implements MenuAction {
             long rawLower = System.currentTimeMillis() - (1000L * 60 * 60 * 24 * (i + 1));
 
             ZoneId z = ZoneId.of("America/New_York");
-            long lower = ZonedDateTime.ofInstant(Instant.ofEpochMilli(rawLower), z).toLocalDate().atStartOfDay(z).toEpochSecond() * 1000 ;
+            long lower = ZonedDateTime.ofInstant(Instant.ofEpochMilli(rawLower), z).toLocalDate().atStartOfDay(z).toEpochSecond() * 1000;
             long upper = lower - (1000L * 60 * 60 * 24);
 
-            List<Session> clonedSessions2 = new ArrayList<>(sessions);
-            clonedSessions2.removeIf(session ->
+            List<Session> clonedSession = new ArrayList<>(sessions);
+            clonedSession.removeIf(session ->
                     session.getStartTime() < upper ||
                             session.getStartTime() > lower);
 
-            totalPlaytime.add(Session.getTotalPlaytime(clonedSessions2) / 1000 / 60 / 60D);
-            activePlaytime.add(Session.getActivePlaytime(clonedSessions2) / 1000 / 60 / 60D);
-            afkPlaytime.add(Session.getTotalAFK(clonedSessions2) / 1000 / 60 / 60D);
+            totalPlaytime.add(Session.getTotalPlaytime(clonedSession) / 1000 / 60 / 60D);
+            activePlaytime.add(Session.getActivePlaytime(clonedSession) / 1000 / 60 / 60D);
+            afkPlaytime.add(Session.getTotalAFK(clonedSession) / 1000 / 60 / 60D);
 
             keys.add(sdf.format(new Date(rawLower)));
         }
@@ -275,6 +304,10 @@ public class StatsMenu implements MenuAction {
         try {
             PlaytimeChart pc = new PlaytimeChart(username + "'s Playtime", Color.GREEN, 2500, 1100);
             InputStream stream = pc.get(keys, totalPlaytime, activePlaytime, afkPlaytime);
+
+            // todo show frequently online timing
+            //PlaytimeHourChart phc = new PlaytimeHourChart(username + "'s Frequent Online Hours", Color.GREEN, 2500, 1100);
+
             //TODO, pull id from a config - this channel is needed because we need a link to set the image
             Message msg = jda.getTextChannelById(631612007384350733L).sendFile(stream, username + "_PLAYTIME.png").complete();
             eb.setImage(msg.getAttachments().get(0).getUrl());
@@ -296,6 +329,7 @@ public class StatsMenu implements MenuAction {
         allPunishments.addAll(bans);
         allPunishments.addAll(mutes);
         allPunishments.addAll(warns);
+        allPunishments.addAll(kicks);
         allPunishments.sort(Comparator.comparing(WrappedPunishment::getIssueDate));
 
         eb.setDescription("*Please note that these punishment statistics are only for the account `" + pu.getUsername() + "`. They do not include any punishments on alts.*");
@@ -303,6 +337,7 @@ public class StatsMenu implements MenuAction {
                 .addField("Total Bans", String.valueOf(bans.size()), true)
                 .addField("Total Mutes", String.valueOf(mutes.size()), true)
                 .addField("Total Warns", String.valueOf(warns.size()), true)
+                .addField("Total Kicks", String.valueOf(kicks.size()), true)
                 .addField("LiteBans Dashboard", "https://grandtheftmc.net/bans/history.php?uuid=" + uuid.toString(), false);
 
         if (allPunishments.size() > 0) {
@@ -367,6 +402,7 @@ public class StatsMenu implements MenuAction {
         eb.setThumbnail(skullURL);
 
         eb.addField("Username", "`" + pu.getUsername() + "`", true)
+                .addField("User Rank", rank.n(), true)
                 .addField("Linked Discord", targetUser == null || !targetUser.getDiscordMember().isPresent() ? "None" : targetUser.getDiscordMember().get().getAsMention(), true)
                 .addField("Previous Username(s)", "`" + prevUsernames  + "`", false)
                 .addField("Current Alts", "`" + recentAltsString + "`", false)
@@ -391,7 +427,7 @@ public class StatsMenu implements MenuAction {
         String desc;
 
         if (stage == 1) {
-            desc = "Loading raw data from the database...";
+            desc = "Loading raw data from the database... This may take a few seconds.";
         } else {
             desc = "Processing data to compile statistics...";
         }

@@ -1,19 +1,18 @@
 package utils.database;
 
-import me.kbrewster.exceptions.APIException;
-import me.kbrewster.exceptions.InvalidPlayerException;
-import me.kbrewster.mojangapi.MojangAPI;
 import net.grandtheftmc.jedisnew.NewJedisManager;
 import org.json.JSONObject;
+import utils.database.sql.BaseDatabase;
 import utils.tools.GTools;
 import utils.tools.UUIDUtil;
 import utils.users.GTMUser;
 import utils.users.Rank;
 
-import java.io.IOException;
 import java.sql.*;
-import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 import static utils.tools.GTools.jedisManager;
 
@@ -37,6 +36,15 @@ public class DiscordDAO {
     public static void sendToBungee(String action, JSONObject data) {
         data.put("action", action);
         jedisManager.sendData("discord_to_bungee", data);
+    }
+
+    public static Rank getRank (UUID uuid) {
+        try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
+            return getRank(conn, uuid);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 
     public static Rank getRank(Connection conn, UUID uuid) {

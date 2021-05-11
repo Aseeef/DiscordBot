@@ -1,9 +1,5 @@
 package xenforo;
 
-import utils.SelfData;
-import utils.confighelpers.Config;
-import utils.console.Logs;
-import utils.tools.GTools;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.cadox8.xenapi.XenAPI;
@@ -15,10 +11,21 @@ import me.cadox8.xenapi.request.RequestParam;
 import me.cadox8.xenapi.request.RequestType;
 import me.cadox8.xenapi.utils.Callback;
 import org.json.JSONObject;
+import utils.SelfData;
+import utils.confighelpers.Config;
+import utils.console.Logs;
+import utils.database.XenforoDAO;
+import utils.tools.GTools;
+import xenforo.events.DBTicketEvent;
 import xenforo.events.TicketEvent;
 import xenforo.objects.Alert;
+import xenforo.objects.tickets.EventType;
+import xenforo.objects.tickets.SupportTicket;
 
-import java.util.*;
+import java.util.List;
+import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Information and docs related to the XenAPI can be found at https://xenapi.readthedocs.io/
@@ -47,7 +54,40 @@ public class Xenforo {
         });
     }
 
-    public static void startTicketPolling() {
+    public static void dbPollTickets() {
+
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+
+                long lastTicketRefreshTime = SelfData.get().getLastTicketRefreshTime();
+
+                List<SupportTicket> activeTickets = XenforoDAO.getPendingTickets();
+
+                for (SupportTicket ticket : activeTickets) {
+
+                    EventType type;
+
+                    if (ticket.getOpenDate() * 1000L > lastTicketRefreshTime) {
+                        type = EventType.NEW_TICKET;
+                    } else if (ticket.getLastMessageDate() * 1000L > lastTicketRefreshTime) {
+                        type = EventType.NEW_MESSAGE;
+                    } else if (ticket.getLastUpdate() * 1000L > lastTicketRefreshTime) {
+                        type = EventType.TICKET_UPDATE;
+                    } else continue;
+
+                    GTools.runAsync(() -> new DBTicketEvent().onTicketEvent(type, ticket));
+
+                }
+
+                SelfData.get().setLastTicketRefreshTime(System.currentTimeMillis());
+
+            }
+        }, 1000 * 10, 1000L * Config.get().getTicketPollingRate());
+
+    }
+
+    @Deprecated public static void startTicketPolling() {
 
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -87,7 +127,7 @@ public class Xenforo {
                 }
 
             }
-        }, 1000 * 10, 1000 * Config.get().getTicketPollingRate());
+        }, 1000 * 10, 1000L * Config.get().getTicketPollingRate());
 
     }
 

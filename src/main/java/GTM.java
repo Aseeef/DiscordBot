@@ -72,7 +72,7 @@ public class GTM extends ListenerAdapter {
         System.out.println("Initializing Xenforo API...");
         new XenAPI("c1230035-cf85-4e3d-add8-f4457b641d1e", "https://grandtheftmc.net/");
         //Xenforo.login();
-        Xenforo.startTicketPolling();
+        Xenforo.dbPollTickets();
     }
 
     private static void loadJDA() {
