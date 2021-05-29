@@ -34,6 +34,7 @@ public class SuggestionTools {
         if (s.getStatus().equals("PENDING")) embed.setColor(Color.ORANGE);
         else if (s.getStatus().equals("APPROVED")) embed.setColor(Color.GREEN);
         else if (s.getStatus().equals("DENIED")) embed.setColor(Color.RED);
+        else if (s.getStatus().equals("COMPLETE")) embed.setColor(Color.CYAN);
 
         return embed.build();
     }

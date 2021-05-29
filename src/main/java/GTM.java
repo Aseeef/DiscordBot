@@ -1,9 +1,6 @@
 import commands.*;
 import commands.stats.StatsCommand;
-import events.OnGuildMessage;
-import events.OnJoin;
-import events.GuildReaction;
-import events.OnSuggestion;
+import events.*;
 import me.cadox8.xenapi.XenAPI;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -72,7 +69,7 @@ public class GTM extends ListenerAdapter {
         System.out.println("Initializing Xenforo API...");
         new XenAPI("c1230035-cf85-4e3d-add8-f4457b641d1e", "https://grandtheftmc.net/");
         //Xenforo.login();
-        Xenforo.startTicketPolling();
+        Xenforo.dbPollTickets();
     }
 
     private static void loadJDA() {
@@ -115,6 +112,7 @@ public class GTM extends ListenerAdapter {
             jda.addEventListener(new GuildReaction());
             jda.addEventListener(new OnGuildMessage());
             jda.addEventListener(new MembersCache());
+            jda.addEventListener(new GuildMessageStash());
 
             // JDA Commands
             jda.addEventListener(new SuggestionCommand());

@@ -1,9 +1,11 @@
 package commands;
 
-import net.dv8tion.jda.api.events.Event;
-import utils.users.Rank;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.PrivateChannel;
 import utils.users.GTMUser;
-import net.dv8tion.jda.api.entities.*;
+import utils.users.Rank;
 
 public class RebootCommand extends Command {
 

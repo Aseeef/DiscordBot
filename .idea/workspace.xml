@@ -5,25 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="* Removed rules reaction">
-      <change afterPath="$PROJECT_DIR$/src/main/java/commands/punishments/BanCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/commands/punishments/KickCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/commands/punishments/MuteCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/commands/punishments/WarnCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/events/GuildMessageStash.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/chart/PlaytimeHourChart.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/MembersCache.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/MembersCache.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/DiscordDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/DiscordDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/Verification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/tools/Verification.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/users/GTMUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/users/GTMUser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GTM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GTM.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/SuggestionCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/SuggestionCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/stats/StatsMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/stats/StatsMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/SuggestionTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/tools/SuggestionTools.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/webhooks/WebhookUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/webhooks/WebhookUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/events/DBTicketEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xenforo/events/DBTicketEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/objects/tickets/SupportTicket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xenforo/objects/tickets/SupportTicket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT-shaded.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/GTM-1.0-SNAPSHOT.jar" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/GTM.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/GTM.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Utils/tools/GTools.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Utils/tools/GTools.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Utils/tools/SuggestionTools.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Utils/tools/SuggestionTools.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/original-GTM-1.0-SNAPSHOT.jar" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,6 +83,14 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
   <component name="GitToolBoxStore">
     <option name="projectConfigVersion" value="2" />
   </component>
@@ -104,9 +113,20 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="settings.github" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\java" />
+      <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\Database" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\java" />
+      <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\config" />
+      <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\resources" />
+      <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\resources\Configuration" />
+    </key>
     <key name="ExtractSuperBase.RECENT_KEYS">
       <recent name="events" />
     </key>
@@ -114,18 +134,8 @@
       <recent name="config" />
       <recent name="" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\java" />
-      <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\java\Database" />
-    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="commands.stats.wrappers" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\java" />
-      <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\config" />
-      <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\resources" />
-      <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\resources\Configuration" />
     </key>
   </component>
   <component name="RunManager">
@@ -138,13 +148,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -293,49 +305,14 @@
       <workItem from="1612529070283" duration="2379000" />
       <workItem from="1616293630381" duration="130000" />
       <workItem from="1616294065720" duration="812000" />
-      <workItem from="1620416993625" duration="930000" />
-    </task>
-    <task id="LOCAL-00001" summary="Init commit">
-      <created>1584645971223</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1584645971223</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Attempts to add sql capabilities">
-      <created>1584646931037</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1584646931037</updated>
-    </task>
-    <task id="LOCAL-00003" summary="updating workspace.xml">
-      <created>1584647002290</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1584647002290</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Initial Commit 2">
-      <created>1586831052827</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1586831052828</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Finished and QA Team anti raid features">
-      <created>1586911659388</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1586911659388</updated>
-    </task>
-    <task id="LOCAL-00006" summary="Created template for future discord - gtm verification">
-      <created>1586911683430</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1586911683430</updated>
+      <workItem from="1620416993625" duration="10231000" />
+      <workItem from="1620493680051" duration="8674000" />
+      <workItem from="1620505413748" duration="53965000" />
+      <workItem from="1621126541458" duration="1416000" />
+      <workItem from="1621474333396" duration="1208000" />
+      <workItem from="1621846876591" duration="594000" />
+      <workItem from="1622111003094" duration="1389000" />
+      <workItem from="1622248859498" duration="17258000" />
     </task>
     <task id="LOCAL-00007" summary="Bot will now message users their deleted suggestions if they don't follow the format">
       <created>1587412347874</created>
@@ -589,7 +566,98 @@
       <option name="project" value="LOCAL" />
       <updated>1612129848345</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="* Should fix channel mentions">
+      <created>1620417931676</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1620417931676</updated>
+    </task>
+    <task id="LOCAL-00044" summary="* Removed rules reaction">
+      <created>1620418513159</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1620418513159</updated>
+    </task>
+    <task id="LOCAL-00045" summary="* Updated pom">
+      <created>1620418721725</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1620418721725</updated>
+    </task>
+    <task id="LOCAL-00046" summary="* Updated statistics">
+      <created>1620602095683</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1620602095683</updated>
+    </task>
+    <task id="LOCAL-00047" summary="forgot to remove debug">
+      <created>1620602491135</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1620602491135</updated>
+    </task>
+    <task id="LOCAL-00048" summary="* added gitignore">
+      <created>1620602589937</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1620602589937</updated>
+    </task>
+    <task id="LOCAL-00049" summary="* Added basic staff stats&#10;* Improved ticket event system&#10;* Tickets not replied to in 3d+ reminder&#10;* Fixed PHP parser (hence fixed staff report alerts)&#10;* Depreciated old support ticket alert event system">
+      <created>1620764594275</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1620764594276</updated>
+    </task>
+    <task id="LOCAL-00050" summary="* Fixed version for discord jda">
+      <created>1620764685470</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1620764685470</updated>
+    </task>
+    <task id="LOCAL-00051" summary="* test">
+      <created>1622264929039</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1622264929039</updated>
+    </task>
+    <task id="LOCAL-00052" summary="* test">
+      <created>1622265042631</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1622265042631</updated>
+    </task>
+    <task id="LOCAL-00053" summary="* test">
+      <created>1622268386838</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1622268386838</updated>
+    </task>
+    <task id="LOCAL-00054" summary="* test">
+      <created>1622269141819</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1622269141819</updated>
+    </task>
+    <task id="LOCAL-00055" summary="* Added missing departments">
+      <created>1622269444851</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1622269444852</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -608,15 +676,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Bug fixes with xenforo" />
-    <MESSAGE value="Added console commands" />
-    <MESSAGE value="Package rename &amp; config reorganization" />
-    <MESSAGE value="Xenforo integration expansion" />
-    <MESSAGE value="More GTM integrations:&#10;- Managers get notified is staff may be cheating&#10;- Discord ticket detection improvements with DAO" />
-    <MESSAGE value="Added an &quot;annoy&quot; command and tools to utilize discord webhooks" />
-    <MESSAGE value="Added a new parser to support ticket fields" />
-    <MESSAGE value="Various bugs and imporvements" />
-    <MESSAGE value="Renamed account command to /discord to match gtm" />
     <MESSAGE value="Improved commands:&#10;- Pm commands will now say when command not found&#10;- /account renamed to /discord&#10;- /harry will now give feedback on success too." />
     <MESSAGE value="Various bug fixes with verification" />
     <MESSAGE value="- Typo fix in DiscordAccountCommand which still was using the old /account in its help&#10;- Moved Rank.class into users package&#10;- Added an easy to use discord embed menu api&#10;- Added a members cache that stores a list of all members with many useful methods&#10;- Replaced previous blocking retrieve member operations with the new member cache&#10;- Fixed NPE in GTMUser when updating user data for a player who left the discord&#10;- Added a command for staff to be able to look up who a discord user is in-game" />
@@ -633,7 +692,16 @@
     <MESSAGE value="* GTMUsers are now loaded in sync" />
     <MESSAGE value="* Blocking actions are actually not permitted in gateway thread" />
     <MESSAGE value="* Should fix channel mentions" />
-    <option name="LAST_COMMIT_MESSAGE" value="* Should fix channel mentions" />
+    <MESSAGE value="* Removed rules reaction" />
+    <MESSAGE value="* Updated pom" />
+    <MESSAGE value="* Updated statistics" />
+    <MESSAGE value="forgot to remove debug" />
+    <MESSAGE value="* added gitignore" />
+    <MESSAGE value="* Added basic staff stats&#10;* Improved ticket event system&#10;* Tickets not replied to in 3d+ reminder&#10;* Fixed PHP parser (hence fixed staff report alerts)&#10;* Depreciated old support ticket alert event system" />
+    <MESSAGE value="* Fixed version for discord jda" />
+    <MESSAGE value="* test" />
+    <MESSAGE value="* Added missing departments" />
+    <option name="LAST_COMMIT_MESSAGE" value="* Added missing departments" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -650,7 +718,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/../GTM/gtm/src/main/java/net/grandtheftmc/gtm/warps/WarpManager.java</url>
-          <line>566</line>
+          <line>576</line>
           <properties class="net.grandtheftmc.gtm.warps.WarpManager">
             <option name="EMULATED" value="true" />
           </properties>

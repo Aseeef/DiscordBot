@@ -3,17 +3,13 @@ package commands.stats;
 import commands.stats.wrappers.*;
 import org.jetbrains.annotations.Nullable;
 import utils.database.sql.BaseDatabase;
-import utils.tools.GTools;
 import utils.tools.UUIDUtil;
-import utils.users.GTMUser;
 
 import java.sql.*;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TimeZone;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class StatsDAO {
 
@@ -189,13 +185,13 @@ public class StatsDAO {
 
     }
 
-    public static List<WrappedPunishment> getPunishments (UUID uuid, WrappedPunishment.PunishmentType punishmentType) {
+    public static List<WrappedPunishment> getPunishments (UUID uuid, WrappedPunishment.PunishmentType punishmentType, boolean getBanner) {
 
         List<WrappedPunishment> punishments = new ArrayList<>();
         Pattern uuidPattern = Pattern.compile("\\b[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}\\b");
 
         try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.BANS).getConnection()) {
-            String query = "SELECT * FROM `" + punishmentType.getTable() + "` WHERE uuid=?";
+            String query = "SELECT * FROM `" + punishmentType.getTable() + "` WHERE " + (getBanner ? "banned_by_uuid" : "uuid") + "=?;";
             try (PreparedStatement ps = conn.prepareStatement(query)) {
                 ps.setString(1, uuid.toString());
                 try (ResultSet rs = ps.executeQuery()) {
@@ -206,8 +202,8 @@ public class StatsDAO {
                         String banningName = rs.getString("banned_by_name");
                         String banningUUIDString = rs.getString("banned_by_uuid");
                         UUID banningUUID = banningUUIDString == null || !uuidPattern.matcher(banningUUIDString).find() ? null : UUID.fromString(banningUUIDString);
-                        String unbanName = rs.getString("removed_by_name");
-                        String unbanUUIDString = rs.getString("removed_by_uuid");
+                        String unbanName = punishmentType == WrappedPunishment.PunishmentType.KICK ? null : rs.getString("removed_by_name");
+                        String unbanUUIDString = punishmentType == WrappedPunishment.PunishmentType.KICK ? null : rs.getString("removed_by_uuid");
                         UUID unbanUUID = unbanUUIDString == null || !uuidPattern.matcher(unbanUUIDString).find() ? null : UUID.fromString(unbanUUIDString);
                         Timestamp time = Timestamp.from(Instant.ofEpochMilli(rs.getLong("time")));
                         long unbanOnRaw = rs.getLong("until");
@@ -315,6 +311,139 @@ public class StatsDAO {
 
         return null;
 
+    }
+
+    private static final String questionTable = "helpquestions";
+    private static final String answerTable = "helpanswers";
+
+    /**
+     * @return - HelpQuestions where one of the answerer was the specified staff uuid.
+     * If staff UUID is null, will return help questions for Larry.
+     */
+    public static LinkedList<HelpQuestion> getHelpQuestions (long sinceAfter, @Nullable UUID staff) {
+        // create list
+        List<Integer> questionIds = new ArrayList<>();
+        // construct search parameter
+        String search = staff == null ? null : staff.toString().replace("-", "");
+
+        String query1 = "SELECT question_id FROM " + answerTable + " WHERE reply_time > ? AND HEX(staff_uuid) = ?;";
+        String query2 = "SELECT question_id FROM " + answerTable + " WHERE reply_time > ? AND staff_uuid IS NULL;";
+
+        try (Connection connection = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(search == null ? query2 : query1)) {
+                // set time
+                statement.setTimestamp(1, new Timestamp(sinceAfter));
+                // set staff if it isnt null
+                if (search != null) {
+                    statement.setString(2, search);
+                }
+
+                try (ResultSet rs = statement.executeQuery()) {
+                    while (rs.next()) {
+                        questionIds.add(rs.getInt("question_id"));
+                    }
+                }
+
+            }
+
+            return getHelpQuestions(connection, questionIds);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return new LinkedList<>();
+    }
+
+    public static LinkedList<HelpQuestion> getHelpQuestions (Connection connection, List<Integer> questionIds) {
+
+        LinkedList<HelpQuestion> questions = new LinkedList<>();
+
+        int upperLimit = questionIds.stream().mapToInt(i -> i).max().orElse(-1);
+        int lowerLimit = questionIds.stream().mapToInt(i -> i).min().orElse(-1);
+        if (upperLimit < 0 || lowerLimit < 0) return questions;
+
+        String query = "SELECT question_id, HEX(asker_uuid), question, server_key, ask_time, online_staff, close_reason FROM " + questionTable + " WHERE question_id > ? AND question_id < ? ORDER BY ask_time DESC;";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            // set lower and upper limit for questions
+            statement.setInt(1, lowerLimit);
+            statement.setInt(2, upperLimit);
+
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    // if this isn't a question id we are interested in continue
+                    if (!questionIds.contains(rs.getInt("question_id"))) continue;
+
+                    HelpQuestion helpQuestion = constructHelpQuestion(rs);
+                    questions.add(helpQuestion);
+                }
+            }
+
+            // population questions with answers
+            populationAnswers(connection, questions);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return questions;
+
+    }
+
+    public static void populationAnswers (Connection connection, LinkedList<HelpQuestion> questions) {
+
+        int upperLimit = questions.stream().mapToInt(HelpQuestion::getQuestionId).max().orElse(-1);
+        int lowerLimit = questions.stream().mapToInt(HelpQuestion::getQuestionId).min().orElse(-1);
+        if (upperLimit < 0 || lowerLimit < 0) return;
+
+        String query2 = "SELECT question_id, HEX(staff_uuid), answer, reply_time FROM " + answerTable + " WHERE question_id > ? AND question_id < ? ORDER BY reply_time ASC;";
+
+        try (PreparedStatement statement = connection.prepareStatement(query2)) {
+            // set lower and upper limit for question ids in answers
+            statement.setInt(1, lowerLimit);
+            statement.setInt(2, upperLimit);
+
+            // populate question with answers in order of first answered to last
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    int questionId = rs.getInt("question_id");
+                    Optional<HelpQuestion> optQuestion = questions.stream().filter(q -> q.getQuestionId() == questionId).findFirst();
+                    if (optQuestion.isPresent()) {
+                        optQuestion.get().getAnswers().add(constructHelpAnswer(rs));
+                    }
+                }
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private static HelpQuestion constructHelpQuestion(ResultSet rs) throws SQLException {
+
+        String rawStaffList = rs.getString("online_staff");
+        List<String> stringUUIDs = rawStaffList == null ? new ArrayList<>() : Arrays.asList(rawStaffList.split(","));
+        List<UUID> staffUUIDs = stringUUIDs.stream().map((sUUID) -> UUIDUtil.createUUID(sUUID).orElse(null)).collect(Collectors.toList());
+
+        return new HelpQuestion(
+                rs.getInt("question_id"),
+                UUIDUtil.createUUID(rs.getString("HEX(asker_uuid)")).orElse(null),
+                rs.getString("question"), rs.getString("server_key"),
+                rs.getTimestamp("ask_time").getTime(),
+                staffUUIDs,
+                new LinkedList<>(),
+                HelpQuestion.CloseReason.getReason(rs.getInt("close_reason"))
+        );
+    }
+
+    private static HelpAnswer constructHelpAnswer(ResultSet rs) throws SQLException {
+        return new HelpAnswer(
+                // staff_uuid creation will result in null when the answerer is larry
+                UUIDUtil.createUUID(rs.getString("HEX(staff_uuid)")).orElse(null),
+                rs.getString("answer"),
+                rs.getTimestamp("reply_time").getTime()
+        );
     }
 
 }

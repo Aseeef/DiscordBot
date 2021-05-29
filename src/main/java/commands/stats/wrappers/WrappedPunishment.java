@@ -111,6 +111,7 @@ public class WrappedPunishment {
         BAN("litebans_bans"),
         MUTE("litebans_mutes"),
         WARN("litebans_warnings"),
+        KICK("litebans_kicks")
         ;
         private String table;
         private PunishmentType (String table) {

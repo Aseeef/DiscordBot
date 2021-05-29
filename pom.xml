@@ -112,6 +112,11 @@
             <artifactId>jfreechart</artifactId>
             <version>1.0.13</version>
         </dependency>
+        <dependency>
+        <groupId>com.github.ooxi</groupId>
+        <artifactId>serialized-php-parser</artifactId>
+        <version>0.5.0</version>
+        </dependency>
     </dependencies>
 
     <repositories>
@@ -144,6 +149,10 @@
         <repository>
             <id>jfreechart</id>
             <url>https://mvnrepository.com/artifact/jfree/jfreechart</url>
+        </repository>
+        <repository>
+            <id>serialized-php-parser</id>
+            <url>https://mvnrepository.com/artifact/com.github.ooxi/serialized-php-parser</url>
         </repository>
     </repositories>
 

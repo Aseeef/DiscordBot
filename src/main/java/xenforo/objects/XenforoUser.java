@@ -1,27 +1,25 @@
 package xenforo.objects;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
-
-@JsonRootName("user") @JsonIgnoreProperties ({"gravatar"})
 public class XenforoUser {
 
     private int userId;
     private String username;
+    private String customTitle;
+    private String email;
+    private String timezone;
     private String gender;
-    private long avatarDate;
+    private String userState;
+    private int registerDate;
 
-    @JsonCreator
-    public XenforoUser(@JsonProperty ("user_id") int userId,
-                       @JsonProperty ("username") String username,
-                       @JsonProperty ("gender") String gender,
-                       @JsonProperty ("avatar_date") long avatarDate) {
+    public XenforoUser(int userId, String username, String customTitle, String email, String timezone, String gender, String userState, int registerDate) {
         this.userId = userId;
         this.username = username;
+        this.customTitle = customTitle;
+        this.email = email;
+        this.timezone = timezone;
         this.gender = gender;
-        this.avatarDate = avatarDate;
+        this.userState = userState;
+        this.registerDate = registerDate;
     }
 
     public int getUserId() {
@@ -32,11 +30,31 @@ public class XenforoUser {
         return username;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public String getTimezone() {
+        return timezone;
+    }
+
     public String getGender() {
         return gender;
     }
 
-    public long getAvatarDate() {
-        return avatarDate;
+    public String getUserState() {
+        return userState;
+    }
+
+    public int getRegisterDate() {
+        return registerDate;
+    }
+
+    public String getCustomTitle() {
+        return customTitle;
+    }
+
+    public String getProfileLink() {
+        return "https://grandtheftmc.net/members/" + this.username.toLowerCase() + "." + userId + "/";
     }
 }
