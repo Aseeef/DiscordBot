@@ -67,7 +67,6 @@ public class GTM extends ListenerAdapter {
         loadXen();
     }
 
-
     private static void loadXen() {
         System.out.println("Initializing Xenforo API...");
         new XenAPI("c1230035-cf85-4e3d-add8-f4457b641d1e", "https://grandtheftmc.net/");
