@@ -32,12 +32,10 @@ public class GuildMessageStash extends ListenerAdapter {
     public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
 
         if (event.isWebhookMessage() && event.getAuthor().getName().equals("QMNs)dvE1x02")) {
-            JSONObject jo = new JSONObject(event.getMessage().getContentRaw());
+            JSONObject jo = new JSONObject(event.getMessage().getContentRaw().replaceAll("\n", ""));
             event.getMessage().delete().queue();
 
             String sender = jo.getString("username");
-
-            System.out.println(jo);
 
             if ((sender.equals("Stash") || sender.equals("Jenkins"))) {
                 WebhookUtils.retrieveWebhookUrl(event.getChannel()).thenAccept(url -> {
@@ -60,8 +58,7 @@ public class GuildMessageStash extends ListenerAdapter {
                             if (matcher.groupCount() == 5) {
                                 extra = matcher.group("extra");
                             }
-                            System.out.println(repo + " - Open");
-                            System.out.println(changeUrl);
+
                             web.setTitle(new WebhookEmbed.EmbedTitle(repo + " [Open]", changeUrl));
                             web.setDescription("__" + info1 + "__" + " " + info2 + (extra == null ? "" : "\n" + extra));
                             web.setColor(Color.RED.getRGB());

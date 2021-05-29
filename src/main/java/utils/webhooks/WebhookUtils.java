@@ -65,7 +65,7 @@ public class WebhookUtils {
     }
 
     public static void sendMessage (String name, String iconUrl, String message, @Nullable WebhookEmbed embed, String hookUrl, @Nullable File file) {
-        System.out.println(1);
+
         try (WebhookClient client = WebhookUtils.getWebhookClient(hookUrl)) {
             // Change appearance of webhook message to match target
             WebhookMessageBuilder mb = new WebhookMessageBuilder();
