@@ -1,12 +1,11 @@
 package commands;
 
-import net.dv8tion.jda.api.events.Event;
-import utils.confighelpers.Config;
-import utils.tools.GTools;
-import utils.users.GTMUser;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import utils.confighelpers.Config;
+import utils.tools.GTools;
+import utils.users.GTMUser;
 
 public class HarryCommand extends Command {
 

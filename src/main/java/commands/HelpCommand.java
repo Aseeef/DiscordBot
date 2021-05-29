@@ -1,11 +1,10 @@
 package commands;
 
-import net.dv8tion.jda.api.events.Event;
-import utils.confighelpers.Config;
-import utils.users.Rank;
-import utils.users.GTMUser;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import utils.confighelpers.Config;
+import utils.users.GTMUser;
+import utils.users.Rank;
 
 import java.util.ArrayList;
 import java.util.Collections;

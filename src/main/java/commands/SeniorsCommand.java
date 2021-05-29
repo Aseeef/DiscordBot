@@ -1,11 +1,10 @@
 package commands;
 
-import net.dv8tion.jda.api.events.Event;
-import utils.users.Rank;
-import utils.users.GTMUser;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import utils.users.GTMUser;
+import utils.users.Rank;
 
 public class SeniorsCommand extends Command {
 
@@ -19,11 +18,13 @@ public class SeniorsCommand extends Command {
 
         }
 
-        // RaidMode SetChannel Command
+
         else if (args[0].equalsIgnoreCase("setchannel")) {
 
 
         }
+
+
     }
 
 }

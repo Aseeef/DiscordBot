@@ -7,7 +7,9 @@ public enum Department {
     PURCHASES(1, "Purchases"),
     PLAYER_REPORTS(5, "Player Reports"),
     STAFF_REPORTS(8, "Staff Reports"),
-    OTHER_SUPPORT(9, "Other Support");
+    OTHER_SUPPORT(9, "Other Support"),
+    CUSTOM_HOUSES(11, "Custom Houses")
+    ;
 
     private int departmentId;
     private String departmentName;

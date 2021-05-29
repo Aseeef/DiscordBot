@@ -2,8 +2,12 @@ package utils.webhooks;
 
 import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
+import club.minnced.discord.webhook.send.WebhookEmbed;
+import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.Webhook;
 
@@ -49,12 +53,28 @@ public class WebhookUtils {
     }
 
     public static void sendMessageAs (String message, Member target, String hookUrl, @Nullable File file) {
+        sendMessage(target.getEffectiveName(), target.getUser().getAvatarUrl(), message, null, hookUrl, file);
+    }
+
+    public static void sendMessage (String name, String iconUrl, String message, String hookUrl) {
+        sendMessage(name, iconUrl, message, null, hookUrl, null);
+    }
+
+    public static void sendMessage (String name, String iconUrl, String message, WebhookEmbed embed, String hookUrl) {
+        sendMessage(name, iconUrl, message, embed, hookUrl, null);
+    }
+
+    public static void sendMessage (String name, String iconUrl, String message, @Nullable WebhookEmbed embed, String hookUrl, @Nullable File file) {
+        System.out.println(1);
         try (WebhookClient client = WebhookUtils.getWebhookClient(hookUrl)) {
             // Change appearance of webhook message to match target
             WebhookMessageBuilder mb = new WebhookMessageBuilder();
-            mb.setUsername(target.getEffectiveName()); // use this username
-            mb.setAvatarUrl(target.getUser().getAvatarUrl()); // use this avatar
+            mb.setUsername(name); // use this username
+            mb.setAvatarUrl(iconUrl); // use this avatar
             mb.setContent(message);
+            if (embed != null) {
+                mb.addEmbeds(embed);
+            }
             if (file != null)
                 mb.addFile(file);
             client.send(mb.build());

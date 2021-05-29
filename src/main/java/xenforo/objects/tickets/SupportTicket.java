@@ -1,15 +1,16 @@
 package xenforo.objects.tickets;
 
 import com.fasterxml.jackson.annotation.*;
+import com.github.ooxi.phparser.SerializedPhpParser;
+import com.github.ooxi.phparser.SerializedPhpParserException;
 import org.json.JSONObject;
 import utils.console.Logs;
 import utils.database.XenforoDAO;
-import utils.database.sql.BaseDatabase;
-import utils.tools.GTools;
+import xenforo.objects.TicketMessage;
+import xenforo.objects.XenforoUser;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,9 +34,10 @@ public class SupportTicket {
     private int assignedUserId;
     private int ticketStatusId;
     private int firstMessageId;
-    private long lastUpdate;
-    private long lastMessageDate;
-    private int submittedRating;
+    private int lastUpdate;
+    private int lastMessageDate;
+    private int lastMessageId;
+    private float submittedRating;
     private String ticketFields;
     private String participants;
 
@@ -57,9 +59,10 @@ public class SupportTicket {
                          @JsonProperty("assigned_user_id") int assignedUserId,
                          @JsonProperty("ticket_status_id") int ticketStatusId,
                          @JsonProperty("first_message_id") int firstMessageId,
-                         @JsonProperty("last_update") long lastUpdate,
-                         @JsonProperty("last_message_date") long lastMessageDate,
-                         @JsonProperty("submitter_rating") int submittedRating,
+                         @JsonProperty("last_update") int lastUpdate,
+                         @JsonProperty("last_message_date") int lastMessageDate,
+                         @JsonProperty("last_message_id") int lastMessageId,
+                         @JsonProperty("submitter_rating") float submittedRating,
                          @JsonProperty("custom_support_ticket_fields") String ticketFields,
                          @JsonProperty("participants") String participants) {
         this.supportTicketId = supportTicketId;
@@ -80,6 +83,7 @@ public class SupportTicket {
         this.firstMessageId = firstMessageId;
         this.lastUpdate = lastUpdate;
         this.lastMessageDate = lastMessageDate;
+        this.lastMessageId = lastMessageId;
         this.submittedRating = submittedRating;
         this.ticketFields = ticketFields;
         this.participants = participants;
@@ -101,6 +105,11 @@ public class SupportTicket {
         return userId;
     }
 
+    @JsonIgnore
+    public XenforoUser getUser() {
+        return XenforoDAO.xenforoUserFromId(userId);
+    }
+
     public String getUsername() {
         return username;
     }
@@ -113,6 +122,11 @@ public class SupportTicket {
         return openingUserId;
     }
 
+    @JsonIgnore
+    public XenforoUser getOpeningUser() {
+        return XenforoDAO.xenforoUserFromId(openingUserId);
+    }
+
     public String getOpeningUserName() {
         return openingUserName;
     }
@@ -121,8 +135,8 @@ public class SupportTicket {
         return openDate;
     }
 
-    public String getUrgency() {
-        return urgency;
+    public Urgency getUrgency() {
+        return Urgency.fromId(Integer.parseInt(urgency));
     }
 
     public int getReplyCount() {
@@ -146,153 +160,66 @@ public class SupportTicket {
         return assignedUserId;
     }
 
+    @JsonIgnore
+    public XenforoUser getAssignedUser() {
+        return XenforoDAO.xenforoUserFromId(assignedUserId);
+    }
+
     public int getTicketStatusId() {
         return ticketStatusId;
+    }
+
+    @JsonIgnore
+    public TicketStatus getTicketStatus() {
+        return TicketStatus.fromId(ticketStatusId);
     }
 
     public int getFirstMessageId() {
         return firstMessageId;
     }
 
-    public long getLastUpdate() {
+    public int getLastUpdate() {
         return lastUpdate;
     }
 
     @JsonIgnore
-    public String getMessage(int messageId) {
-        try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.XEN).getConnection()) {
-            return XenforoDAO.getTicketMessage(conn, this.supportTicketId, messageId);
-        } catch (SQLException e) {
-            GTools.printStackError(e);
-        }
-        return null;
+    public TicketMessage getMessage(int messageId) {
+        return XenforoDAO.getTicketMessage(this.supportTicketId, messageId);
     }
 
-    public long getLastMessageDate() {
+    public int getLastMessageDate() {
         return lastMessageDate;
     }
 
-    public int getSubmittedRating() {
+    public int getLastMessageId() {
+        return lastMessageId;
+    }
+
+    @JsonIgnore
+    public TicketMessage getLastMessage() {
+        return XenforoDAO.getTicketMessage(this.supportTicketId, this.lastMessageId);
+    }
+
+    public float getSubmittedRating() {
         return submittedRating;
     }
 
     public JSONObject getTicketFields() {
-        return convertToMap(ticketFields);
+        try {
+            LinkedHashMap<Object, Object> ob = (LinkedHashMap<Object, Object>) new SerializedPhpParser(ticketFields).parse();
+            JSONObject jsonObject = new JSONObject();
+            ob.keySet().forEach(key -> jsonObject.put(String.valueOf(key), ob.get(key)));
+            return new JSONObject(jsonObject.toString());
+        } catch (SerializedPhpParserException e) {
+            System.err.println("[SupportTicket] Unable to deserialize the following PHP String: " + this.ticketFields);
+            e.printStackTrace();
+            // sometimes, the php parser i made is still able to decipher php better than this
+            return convertToMapOld(this.ticketFields);
+        }
     }
 
     public String getParticipants() {
         return participants;
-    }
-
-    private static JSONObject convertToMap(String pattern) {
-
-        pattern = pattern.replaceFirst("a:.:\\{", "");
-        pattern = pattern.substring(0, pattern.length()-2);
-
-        JSONObject data = new JSONObject();
-        char[] chars = pattern.toCharArray();
-
-        ReaderMode mode = ReaderMode.OUT_TYPE;
-        KeyType keyType = KeyType.KEY;
-        String dataSizeType = "";
-        StringBuilder dstBuilder = new StringBuilder();
-        int dataSizeLength = 0;
-        StringBuilder dslBuilder = new StringBuilder();
-        String key = "";
-        Object value;
-        StringBuilder keyValueBuilder = new StringBuilder();
-        for (int i = 0; i < chars.length; i++) {
-
-            if (mode == ReaderMode.OUT_TYPE) {
-                if (chars[i] == ":".charAt(0)) {
-                    dataSizeType = dstBuilder.toString();
-                    dstBuilder = new StringBuilder();
-
-                    if (dataSizeType.equals("a") && keyType == KeyType.VALUE) {
-                        StringBuilder arrayData = new StringBuilder();
-                        int exitIndex = i;
-                        for (int k = (i - 1); k < chars.length; k++) {
-                            arrayData.append(chars[k]);
-                            if (chars[k] == '}' && chars[k - 1] == ';') {
-                                exitIndex = k;
-                                break;
-                            }
-                        }
-                        value = convertToMap(arrayData.toString());
-                        data.put(key, value);
-                        keyType = KeyType.KEY;
-                        i = exitIndex;
-                        continue;
-                    }
-
-                    mode = ReaderMode.OUT_SIZE;
-                    continue;
-                }
-                dstBuilder.append(chars[i]);
-            } else if (mode == ReaderMode.OUT_SIZE) {
-                if (chars[i] == ":".charAt(0) || chars[i] == ";".charAt(0) || chars.length == i + 1) {
-
-                    if (chars.length == i + 1) dslBuilder.append(chars[i]);
-
-                    dataSizeLength = Integer.parseInt(dslBuilder.toString());
-                    dslBuilder = new StringBuilder();
-                    if (dataSizeType.equals("s")) {
-                        mode = ReaderMode.STRING_READING;
-                        dataSizeType = "";
-                        i++; //to skip quote
-                    }
-                    else if (dataSizeType.equals("i")) {
-                        if (keyType == KeyType.KEY) {
-                            key = String.valueOf(dataSizeLength);
-                            keyType = KeyType.VALUE;
-                        } else if (keyType == KeyType.VALUE) {
-                            value = String.valueOf(dataSizeLength);
-                            data.put(key, value);
-                            keyType = KeyType.KEY;
-                        }
-                        mode = ReaderMode.OUT_TYPE;
-                        dataSizeType = "";
-                    }
-                    else {
-                        Logs.log("Unsupported data type sent through custom support ticket fields!");
-                    }
-                    continue;
-                }
-                dslBuilder.append(chars[i]);
-
-            } else if (mode == ReaderMode.STRING_READING) {
-                if (keyValueBuilder.length() != dataSizeLength)
-                    keyValueBuilder.append(chars[i]);
-                else {
-                    if (keyType == KeyType.KEY) {
-                        key = keyValueBuilder.toString();
-                        keyType = KeyType.VALUE;
-                    } else if (keyType == KeyType.VALUE) {
-                        value = keyValueBuilder.toString();
-                        keyType = KeyType.KEY;
-                        data.put(key, value);
-                    }
-                    keyValueBuilder = new StringBuilder();
-                    i++;
-                    mode = ReaderMode.OUT_TYPE;
-                }
-            }
-
-        }
-        return data;
-    }
-
-    private enum ReaderMode {
-        OUT_TYPE,
-        OUT_SIZE,
-        STRING_READING,
-        ;
-    }
-
-    private enum KeyType {
-        KEY,
-        VALUE
-        ;
     }
 
     @JsonIgnore
@@ -347,5 +274,54 @@ public class SupportTicket {
                 .append(this.getSupportTicketId())
                 .append("/")
                 .toString();
+    }
+
+    @Override
+    public String toString() {
+        return this.ticketId + "[title=" + title + ", user=" + this.username + ", priority=" + this.getUrgency() + ", url=" + this.getTicketLink() + "]";
+    }
+
+    public enum Urgency {
+        HIGH(1),
+        MEDIUM(2),
+        LOW(3),
+        ;
+
+        private int id;
+        Urgency (int id) {
+            this.id = id;
+        }
+
+        public static Urgency fromId(int id) {
+            for (Urgency value : values()) {
+                if (value.id == id) {
+                    return value;
+                }
+            }
+            return MEDIUM;
+        }
+    }
+
+    public enum TicketStatus {
+        OPEN(1),
+        ANSWERED(2),
+        CUSTOMER_REPLY(3),
+        CLOSED(4),
+        AWAITING_CLIENT_RESPONSE(5)
+        ;
+
+        private int id;
+        TicketStatus (int id) {
+            this.id = id;
+        }
+
+        public static TicketStatus fromId(int id) {
+            for (TicketStatus value : values()) {
+                if (value.id == id) {
+                    return value;
+                }
+            }
+            return CLOSED;
+        }
     }
 }

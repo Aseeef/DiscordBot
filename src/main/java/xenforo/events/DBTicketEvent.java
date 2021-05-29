@@ -15,32 +15,31 @@ import utils.selfdata.ChannelIdData;
 import utils.tools.GTools;
 import utils.users.GTMUser;
 import utils.users.Rank;
-import xenforo.objects.Alert;
 import xenforo.objects.tickets.Department;
+import xenforo.objects.tickets.EventType;
 import xenforo.objects.tickets.SupportTicket;
 
 import java.awt.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import static utils.tools.GTools.jda;
 
-@Deprecated
-public class TicketEvent {
+public class DBTicketEvent {
 
     // run async
-    public void onTicketEvent(Alert alert) {
-        GTools.runAsync( () -> {
+    public void onTicketEvent(EventType type, SupportTicket ticket) {
+        Department department = ticket.getDepartment();
+        if (department == null) return;
 
-            if (!alert.getAction().equals("new_ticket")) return;
+        if (type == EventType.NEW_TICKET) {
 
-            Department department = alert.getSupportTicket().getDepartment();
-            if (department == null) return;
-
-            Logs.log("[DEBUG] [EventType] Received a new support ticket with title '" + alert.getSupportTicket().getTitle() + "' in " + department.getDepartmentName() + "!");
+            Logs.log("[DEBUG] [EventType] Received a new support ticket with title '" + ticket.getTitle() + "' in " + department.getDepartmentName() + "!");
 
             TextChannel channel = jda.getGuilds().get(0).getTextChannelById(ChannelIdData.get().getModChannelId());
             if (channel == null) return;
@@ -50,26 +49,26 @@ public class TicketEvent {
                 case PUNISHMENT_APPEALS: {
                     try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
 
-                            String username = alert.getSupportTicket().getTicketFields().getString("username");
-                            Ban ban = null;
-                            try (Connection conn2 = BaseDatabase.getInstance(BaseDatabase.Database.BANS).getConnection()) {
-                                ban = LitebansDAO.getBanByPlayer(conn2, username);
-                            } catch (SQLException e) {
-                                GTools.printStackError(e);
-                            }
+                        String username = ticket.getTicketFields().getString("username");
+                        Ban ban = null;
+                        try (Connection conn2 = BaseDatabase.getInstance(BaseDatabase.Database.BANS).getConnection()) {
+                            ban = LitebansDAO.getBanByPlayer(conn2, username);
+                        } catch (SQLException e) {
+                            GTools.printStackError(e);
+                        }
 
-                            String banStaff;
-                            if (ban == null || !ban.isActive()) {
-                                banStaff = alert.getSupportTicket().getTicketFields().getString("staffban");
-                            } else banStaff = ban.getBanName();
+                        String banStaff;
+                        if (ban == null || !ban.isActive()) {
+                            banStaff = ticket.getTicketFields().getString("staffban");
+                        } else banStaff = ban.getBanName();
 
-                            GTMUser gtmUser = GTMUser.getGTMUser(DiscordDAO.getDiscordIdFromName(conn, banStaff)).orElse(null);
-                            MessageEmbed embed = generateAppealsEmbed(gtmUser, alert.getSupportTicket(), ban);
-                            channel.sendMessage(embed).queue();
-                            if (gtmUser != null && gtmUser.getRank().isHigherOrEqualTo(Rank.MOD) && gtmUser.getUser().isPresent())
-                                gtmUser.getUser().get().openPrivateChannel().queue((privateChannel) ->
-                                        privateChannel.sendMessage(embed).queue()
-                                );
+                        GTMUser gtmUser = GTMUser.getGTMUser(DiscordDAO.getDiscordIdFromName(conn, banStaff)).orElse(null);
+                        MessageEmbed embed = generateAppealsEmbed(gtmUser, ticket, ban);
+                        channel.sendMessage(embed).queue();
+                        if (gtmUser != null && gtmUser.getRank().isHigherOrEqualTo(Rank.MOD) && gtmUser.getUser().isPresent())
+                            gtmUser.getUser().get().openPrivateChannel().queue((privateChannel) ->
+                                    privateChannel.sendMessage(embed).queue()
+                            );
                     } catch (SQLException e) {
                         GTools.printStackError(e);
                     }
@@ -82,7 +81,7 @@ public class TicketEvent {
 
                         for (Member manager : managers) {
                             manager.getUser().openPrivateChannel().queue((privateChannel) -> {
-                                privateChannel.sendMessage(generateStaffReportEmbed(conn, alert.getSupportTicket())).queue();
+                                privateChannel.sendMessage(generateStaffReportEmbed(conn, ticket)).queue();
                             });
                         }
                     } catch (SQLException e) {
@@ -103,9 +102,83 @@ public class TicketEvent {
                     break;
                 }
 
+                case CUSTOM_HOUSES: {
+                    break;
+                }
+
             }
 
-        });
+        }
+
+        // todo: do something about duplicate code
+        else if (type == EventType.NEW_MESSAGE) {
+
+            Logs.log("[DEBUG] [EventType] Support ticket '" + ticket.getTitle() + "' received a new reply in " + department.getDepartmentName() + "!");
+
+            switch (department) {
+
+                case PUNISHMENT_APPEALS: {
+                    // user id 10 is the user id for "Information" automated bot that replies when ticket is inactive for 3d+
+                    if (ticket.getUrgency() == SupportTicket.Urgency.HIGH && ticket.getLastMessage().getUserId() == 10) {
+                        try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
+
+                            String username = ticket.getTicketFields().getString("username");
+                            Ban ban = null;
+                            try (Connection conn2 = BaseDatabase.getInstance(BaseDatabase.Database.BANS).getConnection()) {
+                                ban = LitebansDAO.getBanByPlayer(conn2, username);
+                            } catch (SQLException e) {
+                                GTools.printStackError(e);
+                            }
+
+                            String banStaff;
+                            if (ban == null || !ban.isActive()) {
+                                banStaff = ticket.getTicketFields().getString("staffban");
+                            } else banStaff = ban.getBanName();
+
+                            GTMUser gtmUser = GTMUser.getGTMUser(DiscordDAO.getDiscordIdFromName(conn, banStaff)).orElse(null);
+                            MessageEmbed embed = generateAppealsEmbed(gtmUser, ticket, ban);;
+                            if (gtmUser != null && gtmUser.getRank().isHigherOrEqualTo(Rank.MOD) && gtmUser.getUser().isPresent())
+                                gtmUser.getUser().get().openPrivateChannel().queue((privateChannel) ->
+                                        privateChannel
+                                                .sendMessage("**Your ticket has not been responded to in over 3 days! Please handle it urgently!**")
+                                                .flatMap(v -> privateChannel.sendMessage(embed)).queue()
+                                );
+                        } catch (SQLException e) {
+                            GTools.printStackError(e);
+                        }
+                    }
+                    break;
+                }
+
+                case STAFF_REPORTS: {
+                    // todo
+                    break;
+                }
+
+                case PURCHASES: {
+                    // TODO
+                    break;
+                }
+                case OTHER_SUPPORT: {
+                    // TODO
+                    break;
+                }
+                case PLAYER_REPORTS: {
+                    // TODO
+                    break;
+                }
+                case BUY_AN_UNBAN: {
+                    break;
+                }
+
+                case CUSTOM_HOUSES: {
+                    break;
+                }
+
+            }
+
+        }
+
     }
 
     private MessageEmbed generateStaffReportEmbed(Connection conn, SupportTicket ticket) {
@@ -154,7 +227,7 @@ public class TicketEvent {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd @ hh:mm a z");
             sdf.setTimeZone(TimeZone.getTimeZone("America/New_York"));
             embed.addField("**Banning Staff Member:**", ban.getBanName(), false)
-                .addField("**Ban Timestamp:**", sdf.format(new Date(ban.getBanTime())), false);
+                    .addField("**Ban Timestamp:**", sdf.format(new Date(ban.getBanTime())), false);
 
         } else embed.addField("**Banning Staff Member:**", ticket.getTicketFields().getString("staffban"), false);
         embed.addField("**Guilty Plea:**", plead ? "Admits to Infraction" : "Denies Fault", false);
@@ -187,5 +260,5 @@ public class TicketEvent {
         }
         return sb.toString();
     }
-
+    
 }

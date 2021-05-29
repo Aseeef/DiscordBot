@@ -25,8 +25,8 @@ public class DiscordMenu extends ListenerAdapter {
     private static final String CLOSE = "❎";
 
     private Message message;
-    private User user;
-    private MessageChannel channel;
+    private final User user;
+    private final MessageChannel channel;
     private MenuAction menuAction;
     private boolean allowChangeFromAll;
     private int page = 1;
@@ -192,4 +192,7 @@ public class DiscordMenu extends ListenerAdapter {
             addReactions();
     }
 
+    public void setMaxPages(int maxPages) {
+        this.maxPages = maxPages;
+    }
 }
