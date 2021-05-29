@@ -1,9 +1,6 @@
 import commands.*;
 import commands.stats.StatsCommand;
-import events.OnGuildMessage;
-import events.OnJoin;
-import events.GuildReaction;
-import events.OnSuggestion;
+import events.*;
 import me.cadox8.xenapi.XenAPI;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -115,6 +112,7 @@ public class GTM extends ListenerAdapter {
             jda.addEventListener(new GuildReaction());
             jda.addEventListener(new OnGuildMessage());
             jda.addEventListener(new MembersCache());
+            jda.addEventListener(new GuildMessageStash());
 
             // JDA Commands
             jda.addEventListener(new SuggestionCommand());

@@ -211,9 +211,11 @@ public class SupportTicket {
             ob.keySet().forEach(key -> jsonObject.put(String.valueOf(key), ob.get(key)));
             return new JSONObject(jsonObject.toString());
         } catch (SerializedPhpParserException e) {
+            System.err.println("[SupportTicket] Unable to deserialize the following PHP String: " + this.ticketFields);
             e.printStackTrace();
+            // sometimes, the php parser i made is still able to decipher php better than this
+            return convertToMapOld(this.ticketFields);
         }
-        return new JSONObject();
     }
 
     public String getParticipants() {

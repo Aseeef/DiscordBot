@@ -118,6 +118,36 @@ public class SuggestionCommand extends Command {
             }
         }
 
+        // Suggestions Approve Command
+        else if (args[0].equalsIgnoreCase("complete")) {
+            if (Data.doesNumberExist(Data.SUGGESTIONS, Integer.parseInt(args[1]))) {
+
+                Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(args[1]));
+                // Set new data
+                suggestion.setStatus("COMPLETED");
+                suggestion.setStatusReason(generateStatusReason(args));
+                // Build and edit denied suggestion embed
+                getSuggestionsChannel().editMessageById(suggestion.getId(), createSuggestionEmbed(suggestion)).queue();
+
+                // Notify user about the results of their suggestion
+                userById(suggestion.getSuggesterId()).openPrivateChannel().queue((userChannel) ->
+                {
+                    // Send a private message to the user
+                    userChannel.sendMessage("**Hey there! Staff have updated the status of your suggestion:**").queue();
+                    // Send suggestion embed
+                    userChannel.sendMessage(createSuggestionEmbed(suggestion)).queue();
+                });
+
+                // Send message in channel informing executor that the command was ran
+                sendThenDelete(channel, "**Suggestion #"+suggestion.getNumber()+" has been set to COMPLETED!**");
+
+            }
+            // If none of the suggestions match provided id
+            else {
+                sendThenDelete(channel, "**Suggestion not found. Please check your command!**");
+            }
+        }
+
         // Suggestions Hold Command
         else if (args[0].equalsIgnoreCase("hold")) {
             if (Data.doesNumberExist(Data.SUGGESTIONS, Integer.parseInt(args[1]))) {

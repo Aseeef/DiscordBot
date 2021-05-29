@@ -102,6 +102,10 @@ public class DBTicketEvent {
                     break;
                 }
 
+                case CUSTOM_HOUSES: {
+                    break;
+                }
+
             }
 
         }
@@ -164,6 +168,10 @@ public class DBTicketEvent {
                     break;
                 }
                 case BUY_AN_UNBAN: {
+                    break;
+                }
+
+                case CUSTOM_HOUSES: {
                     break;
                 }
 
