@@ -1,5 +1,9 @@
 import commands.*;
+import commands.bugs.BugReportCommand;
+import commands.bugs.ReportListener;
 import commands.stats.StatsCommand;
+import commands.suggestions.SuggestionListener;
+import commands.suggestions.SuggestionCommand;
 import events.*;
 import me.cadox8.xenapi.XenAPI;
 import net.dv8tion.jda.api.JDABuilder;
@@ -104,7 +108,7 @@ public class GTM extends ListenerAdapter {
             jda.getPresence().setIdle(false);
 
             // JDA Events
-            jda.addEventListener(new OnSuggestion());
+            jda.addEventListener(new SuggestionListener());
             jda.addEventListener(new Command.CommandsTools());
             jda.addEventListener(new ReadyEvents());
             jda.addEventListener(new CloseEvent());
@@ -113,6 +117,7 @@ public class GTM extends ListenerAdapter {
             jda.addEventListener(new OnGuildMessage());
             jda.addEventListener(new MembersCache());
             jda.addEventListener(new GuildMessageStash());
+            jda.addEventListener(new ReportListener());
 
             // JDA Commands
             jda.addEventListener(new SuggestionCommand());
@@ -129,6 +134,7 @@ public class GTM extends ListenerAdapter {
             jda.addEventListener(new AnnoyCommand());
             jda.addEventListener(new ChannelCommand());
             jda.addEventListener(new StatsCommand());
+            jda.addEventListener(new BugReportCommand());
 
             // Self user settings functions to check if there was utils.config change to prevent
             // unnecessary calls to the discord api which may result in us getting rate limited

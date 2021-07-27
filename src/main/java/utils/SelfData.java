@@ -7,13 +7,15 @@ package utils;
  */
 public class SelfData {
 
-    private String previousBotName;
-    private long previousAvatarEdited;
-    private long prevSuggestHelpMsgId;
-    private long prevSuggestEmbedId;
-    private long ruleAgreeMessageId;
-    private long lastTicketRefreshTime;
-    private long lastPostRefreshTime;
+    private String previousBotName = "Harry";
+    private long previousAvatarEdited = 0L;
+    private long prevSuggestHelpMsgId = 0L;
+    private long prevSuggestEmbedId = 0L;
+    private long prevBugHelpMsgId = 0L;
+    private long prevBugEmbedId = 0L;
+    private long ruleAgreeMessageId = 0L;
+    private long lastTicketRefreshTime = 0L;
+    private long lastPostRefreshTime = 0L;
 
     private static SelfData data;
 
@@ -23,6 +25,7 @@ public class SelfData {
 
     SelfData (String previousBotName, long previousAvatarEdited,
               long prevSuggestHelpMsgId, long prevSuggestEmbedId,
+              long prevBugHelpMsgId, long prevBugEmbedId,
               long ruleAgreeMessageId,
               long lastTicketRefreshTime, long lastPostRefreshTime) {
 
@@ -30,6 +33,8 @@ public class SelfData {
         this.previousAvatarEdited = previousAvatarEdited;
         this.prevSuggestHelpMsgId = prevSuggestHelpMsgId;
         this.prevSuggestEmbedId = prevSuggestEmbedId;
+        this.prevBugHelpMsgId = prevBugHelpMsgId;
+        this.prevBugEmbedId = prevBugEmbedId;
         this.ruleAgreeMessageId = ruleAgreeMessageId;
         this.lastTicketRefreshTime = lastTicketRefreshTime;
         this.lastPostRefreshTime = lastPostRefreshTime;
@@ -76,6 +81,24 @@ public class SelfData {
 
     public void setPrevSuggestEmbedId(long prevSuggestEmbedId) {
         this.prevSuggestEmbedId = prevSuggestEmbedId;
+        Data.storeData(Data.SELFDATA, this);
+    }
+
+    public long getPrevBugHelpMsgId() {
+        return prevBugHelpMsgId;
+    }
+
+    public void setPrevBugHelpMsgId(long prevBugHelpMsgId) {
+        this.prevBugHelpMsgId = prevBugHelpMsgId;
+        Data.storeData(Data.SELFDATA, this);
+    }
+
+    public long getPrevBugEmbedId() {
+        return prevBugEmbedId;
+    }
+
+    public void setPrevBugEmbedId(long prevBugEmbedId) {
+        this.prevBugEmbedId = prevBugEmbedId;
         Data.storeData(Data.SELFDATA, this);
     }
 

@@ -5,9 +5,6 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import utils.confighelpers.Config;
-import utils.tools.GTools;
-import utils.tools.SuggestionTools;
 import utils.users.GTMUser;
 
 public class GuildReaction extends ListenerAdapter {

@@ -1,0 +1,94 @@
+plugins {
+    id "java"
+    id "com.github.johnrengelman.shadow" version "6.1.0"
+    id 'maven-publish'
+    id "org.hidetake.ssh" version "2.10.1"
+}
+
+group 'net.grandtheftmc'
+version '1.0.1'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+compileJava.options.encoding = "UTF-8"
+compileTestJava.options.encoding = "UTF-8"
+
+repositories {
+    maven {
+        url 'https://nexus.grandtheftmc.net/content/repositories/releases/'
+        credentials {
+            username mavenUser
+            password mavenPassword
+        }
+    }
+    maven {
+        url 'https://jitpack.io'
+    }
+    maven {
+        url 'https://jcenter.bintray.com'
+    }
+    maven {
+        url 'https://mvnrepository.com/artifact/org.json/'
+    }
+    maven {
+        url 'https://m2.dv8tion.net/releases'
+    }
+    maven {
+        url 'https://mvnrepository.com/artifact/jfree/jfreechart'
+    }
+    maven {
+        url 'https://mvnrepository.com/artifact/com.github.ooxi/serialized-php-parser'
+    }
+}
+
+dependencies {
+    implementation('com.github.DV8FromTheWorld:JDA:4.3.0') {
+        exclude group: 'club.minnced', module: 'opus-java'
+    }
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.10.0'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.8'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.0'
+    implementation 'com.zaxxer:HikariCP:2.6.0'
+    implementation 'mysql:mysql-connector-java:5.1.36'
+    implementation 'com.github.cadox8:XenAPI:0.5.0'
+    implementation 'com.github.KevinPriv:MojangAPI:1.0'
+    implementation 'net.grandtheftmc:common:1.1.7'
+    implementation 'club.minnced:discord-webhooks:0.3.1'
+    implementation 'jfree:jfreechart:1.0.13'
+    implementation 'com.github.ooxi:serialized-php-parser:0.5.0'
+}
+
+shadowJar {
+    archiveFileName = project.name + ".jar"
+    exclude 'META-INF', 'META-INF/**'
+    destinationDirectory = file("build")
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'GTM'
+    }
+}
+
+// Force character encoding in case the workspace was not set up correctly
+tasks.withType(Javadoc) {
+    options.encoding = 'UTF-8'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId = 'discordbot'
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url 'https://nexus.grandtheftmc.net/content/repositories/releases/'
+            credentials {
+                username mavenUser
+                password mavenPassword
+            }
+        }
+    }
+}

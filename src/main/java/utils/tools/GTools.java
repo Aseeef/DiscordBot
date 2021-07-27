@@ -38,7 +38,7 @@ public class GTools {
     public static MineStat gtm;
     public static NewJedisManager jedisManager;
     public static final Random RANDOM = new Random();
-    private static List<Member> members = new ArrayList<>();
+    private static final List<Member> members = new ArrayList<>();
 
     public static List<Member> getMembers() {
         return members;
@@ -57,6 +57,16 @@ public class GTools {
         if (user.isBot())
             return false;
         else return msg.toLowerCase().startsWith(Config.get().getCommandPrefix());
+    }
+
+    public static String joinArgsAfter(String[] args, int index) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0 ; i < args.length ; i++) {
+            if (i < index) continue;
+            if (i != index) sb.append(" ");
+            sb.append(args[i]);
+        }
+        return sb.toString();
     }
 
     public static User userById (String id) {
