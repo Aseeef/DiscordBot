@@ -68,19 +68,19 @@ public class BugReportCommand extends Command {
             case "deny": {
                 if (!isValidArgs(textChannel, args)) return;
                 BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, Integer.parseInt(args[1]));
-                report.updateStatus(BugReport.ReportStatus.DENIED, args.length > 2 ? GTools.joinArgsAfter(args, 2) : null, false);
+                report.updateStatus(BugReport.ReportStatus.DENIED, args.length > 2 ? GTools.joinArgsAfter(args, 2) : null, report.isHidden());
                 break;
             }
             case "complete": {
                 if (!isValidArgs(textChannel, args)) return;
                 BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, Integer.parseInt(args[1]));
-                report.updateStatus(BugReport.ReportStatus.PATCHED, args.length > 2 ? GTools.joinArgsAfter(args, 2) : null, false);
+                report.updateStatus(BugReport.ReportStatus.PATCHED, args.length > 2 ? GTools.joinArgsAfter(args, 2) : null, report.isHidden());
                 break;
             }
             case "duplicate": {
                 if (!isValidArgs(textChannel, args)) return;
                 BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, Integer.parseInt(args[1]));
-                report.updateStatus(BugReport.ReportStatus.DUPLICATE_REPORT, args.length > 2 ? GTools.joinArgsAfter(args, 2) : null, false);
+                report.updateStatus(BugReport.ReportStatus.DUPLICATE_REPORT, args.length > 2 ? GTools.joinArgsAfter(args, 2) : null, report.isHidden());
                 break;
             }
             case "approve": {
@@ -97,6 +97,8 @@ public class BugReportCommand extends Command {
                 BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, Integer.parseInt(args[1]));
 
                 report.updateStatus(BugReport.ReportStatus.CONFIRMED_BUG, args.length > 3 ? GTools.joinArgsAfter(args, 3) : null, b);
+                report.setHidden(b);
+
                 GTMUser.getGTMUser(report.getReporterId()).ifPresent(reporterGTMUser -> {
                     JSONObject data = new JSONObject()
                             .put("uuid", reporterGTMUser.getUuid());

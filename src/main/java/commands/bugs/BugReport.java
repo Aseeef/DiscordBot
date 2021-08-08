@@ -21,6 +21,7 @@ public class BugReport {
     private long receiveChannelId;
     private long reportChannelId;
     private String reportMessage;
+    private boolean hidden;
     private long reporterId;
     private ReportStatus status;
     private String fileName;
@@ -28,11 +29,12 @@ public class BugReport {
     public BugReport() {
     }
 
-    public BugReport(int number, long receiveChannelId, long reportChannelId, String reportMessage, long reporterId, ReportStatus status, String fileName) {
+    public BugReport(int number, long receiveChannelId, long reportChannelId, String reportMessage, boolean hidden, long reporterId, ReportStatus status, String fileName) {
         this.number = number;
         this.receiveChannelId = receiveChannelId;
         this.reportChannelId = reportChannelId;
         this.reportMessage = reportMessage;
+        this.hidden = hidden;
         this.reporterId = reporterId;
         this.status = status;
         this.fileName = fileName;
@@ -66,6 +68,15 @@ public class BugReport {
         return reportMessage;
     }
 
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
+        Data.storeData(Data.BUG_REPORTS, this, this.number);
+    }
+
     public long getReporterId() {
         return reporterId;
     }
@@ -90,7 +101,7 @@ public class BugReport {
                 if (statusReason != null) {
                     channel.sendMessage("**Additional info from an admin:** \n" + statusReason).queue();
                 }
-                if (warnCensor)
+                if (warnCensor && status == ReportStatus.CONFIRMED_BUG)
                     channel.sendMessage("**Warning!** This bug report has been marked as 'hidden' (probably because this bug can be abused). Sharing this bug with anyone may result in a cancellation of any rewards and/or may result in a punishment!").queue();
             });
         });

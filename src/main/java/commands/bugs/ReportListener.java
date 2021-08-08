@@ -74,7 +74,7 @@ public class ReportListener extends ListenerAdapter {
                     }
                 }
 
-                BugReport report = new BugReport(Data.getNextNumber(Data.BUG_REPORTS), 0L, 0L, rawMsg, user.getIdLong(), BugReport.ReportStatus.PENDING_REVIEW, fileName);
+                BugReport report = new BugReport(Data.getNextNumber(Data.BUG_REPORTS), 0L, 0L, rawMsg, false, user.getIdLong(), BugReport.ReportStatus.PENDING_REVIEW, fileName);
                 MessageAction ma = BugReport.getBugReceiveChannel().sendMessage(report.createEmbed(false));
                 if (file != null) {
                     ma = ma.addFile(file);

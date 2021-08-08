@@ -5,6 +5,7 @@
       <profile default="true" name="Default" enabled="true" />
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
+      <module name="GTM" target="1.8" />
       <module name="GTMBot" target="1.8" />
     </bytecodeTargetLevel>
   </component>
