@@ -69,18 +69,21 @@ public class BugReportCommand extends Command {
                 if (!isValidArgs(textChannel, args)) return;
                 BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, Integer.parseInt(args[1]));
                 report.updateStatus(BugReport.ReportStatus.DENIED, args.length > 2 ? GTools.joinArgsAfter(args, 2) : null, report.isHidden());
+                sendThenDelete(channel, "**Success!** You set bug report id " + Integer.parseInt(args[1]) + " to " + BugReport.ReportStatus.DENIED + "!");
                 break;
             }
             case "complete": {
                 if (!isValidArgs(textChannel, args)) return;
                 BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, Integer.parseInt(args[1]));
                 report.updateStatus(BugReport.ReportStatus.PATCHED, args.length > 2 ? GTools.joinArgsAfter(args, 2) : null, report.isHidden());
+                sendThenDelete(channel, "**Success!** You set bug report id " + Integer.parseInt(args[1]) + " to " + BugReport.ReportStatus.PATCHED + "!");
                 break;
             }
             case "duplicate": {
                 if (!isValidArgs(textChannel, args)) return;
                 BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, Integer.parseInt(args[1]));
                 report.updateStatus(BugReport.ReportStatus.DUPLICATE_REPORT, args.length > 2 ? GTools.joinArgsAfter(args, 2) : null, report.isHidden());
+                sendThenDelete(channel, "**Success!** You set bug report id " + Integer.parseInt(args[1]) + " to " + BugReport.ReportStatus.DUPLICATE_REPORT + "!");
                 break;
             }
             case "approve": {
@@ -104,6 +107,7 @@ public class BugReportCommand extends Command {
                             .put("uuid", reporterGTMUser.getUuid());
                     DiscordDAO.sendToGTM("bug_reported", data);
                 });
+                sendThenDelete(channel, "**Success!** You set bug report id " + Integer.parseInt(args[1]) + " to " + BugReport.ReportStatus.CONFIRMED_BUG + "!");
                 break;
             }
             default: {
