@@ -1,5 +1,7 @@
 package utils;
 
+import commands.bugs.BugReport;
+import commands.suggestions.Suggestions;
 import utils.tools.GTools;
 import utils.users.GTMUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +16,7 @@ import static utils.console.Logs.log;
 public enum Data {
     SELFDATA("SELFDATA", SelfData.class),
     SUGGESTIONS("SUGGESTIONS", Suggestions.class),
+    BUG_REPORTS("BUGS", BugReport.class),
     USER("USER", GTMUser.class),
     ;
 
@@ -54,8 +57,9 @@ public enum Data {
 
     private static File createFile(Data type, long number) {
 
-        File file = new File("data/" + type.getDataName(), number + ".json");
-
+        File directory = new File("data/" + type.getDataName());
+        directory.mkdirs();
+        File file = new File(directory, number + ".json");
         try {
             if (file.createNewFile()) log("Creating a new " + type.getDataName() + " file named " + number + ".json");
         } catch (IOException e) {

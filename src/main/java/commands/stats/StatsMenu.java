@@ -40,7 +40,8 @@ public class StatsMenu implements MenuAction {
     private EmbedBuilder punishmentStats;
     private EmbedBuilder playtimeStats;
     private EmbedBuilder gangStats;
-    private EmbedBuilder staffStats;
+    private EmbedBuilder staffBanStats;
+    private EmbedBuilder staffHelpStats;
 
     private String username;
     private MessageChannel channel;
@@ -98,8 +99,9 @@ public class StatsMenu implements MenuAction {
                 gangStats = getGangStats();
 
                 if (rank.isHigherOrEqualTo(Rank.HELPER)) {
-                    staffStats = getStaffStats();
-                    maxPages++;
+                    staffBanStats = getStaffBanStats();
+                    staffHelpStats = getStaffHelpStats();
+                    maxPages += 2;
                 }
 
                 menu.setMaxPages(maxPages);
@@ -130,7 +132,9 @@ public class StatsMenu implements MenuAction {
         } else if (page == 4) {
             menu.setPageContents(gangStats);
         } else if (page == 5) {
-            menu.setPageContents(staffStats);
+            menu.setPageContents(staffBanStats);
+        } else if (page == 6) {
+            menu.setPageContents(staffHelpStats);
         }
 
         // /stats (
@@ -187,7 +191,17 @@ public class StatsMenu implements MenuAction {
         }
     }
 
-    private EmbedBuilder getStaffStats() {
+    private EmbedBuilder getStaffHelpStats() {
+
+        EmbedBuilder eb = new EmbedBuilder();
+
+
+
+        return eb;
+
+    }
+
+    private EmbedBuilder getStaffBanStats() {
 
         EmbedBuilder eb = new EmbedBuilder();
 
@@ -343,9 +357,11 @@ public class StatsMenu implements MenuAction {
         if (allPunishments.size() > 0) {
             WrappedPunishment lastPunishment = allPunishments.getLast();
             eb.addBlankField(false)
-                    .addField("Recent Punishment Type", lastPunishment.getPunishmentType().toString(), true)
-                    .addField("Recent Punishment Duration", lastPunishment.getEndDate() == null ? "Permanent" : GTools.epochToTime(lastPunishment.getEndDate().toInstant().toEpochMilli() - lastPunishment.getIssueDate().toInstant().toEpochMilli()), true)
-                    .addField("Recent Punishment Issues", GTools.epochToTime(System.currentTimeMillis() - lastPunishment.getIssueDate().toInstant().toEpochMilli()), true)
+                    .addField("Recent Punishment Type", lastPunishment.getPunishmentType().toString(), true);
+            if (lastPunishment.getPunishmentType() != WrappedPunishment.PunishmentType.KICK) {
+                eb.addField("Recent Punishment Duration", lastPunishment.getEndDate() == null ? "Permanent" : GTools.epochToTime(lastPunishment.getEndDate().toInstant().toEpochMilli() - lastPunishment.getIssueDate().toInstant().toEpochMilli()), true);
+            }
+            eb.addField("Recent Punishment Issues", GTools.epochToTime(System.currentTimeMillis() - lastPunishment.getIssueDate().toInstant().toEpochMilli()), true)
                     .addField("Recent Punishment Issuer", lastPunishment.getPunisher() == null ? "CONSOLE" : lastPunishment.getPunisher(), true)
                     .addField("Recent Punishment Reason", lastPunishment.getReason(), true);
         }
