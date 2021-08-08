@@ -4,14 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="* Removed rules reaction">
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="* BugReporter bug fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/commands/bugs/BugReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/bugs/BugReport.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/commands/bugs/BugReportCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/bugs/BugReportCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/bugs/ReportListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/bugs/ReportListener.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,6 +78,12 @@
                 <item name="DiscordBot" type="f1a62948:ProjectNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
                 <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="DiscordBot" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="shadow" type="c8890929:TasksNode$1" />
               </path>
             </expand>
             <select />
@@ -415,14 +417,8 @@
       <workItem from="1627355337680" duration="93000" />
       <workItem from="1628216977311" duration="3958000" />
       <workItem from="1628270522692" duration="636000" />
-      <workItem from="1628366888096" duration="1506000" />
-    </task>
-    <task id="LOCAL-00010" summary="Updated Jackson">
-      <created>1587412472774</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1587412472774</updated>
+      <workItem from="1628366888096" duration="2145000" />
+      <workItem from="1628442203426" duration="643000" />
     </task>
     <task id="LOCAL-00011" summary="Makes the raidModeTimeToAccept a configurable option in the config">
       <created>1587413373266</created>
@@ -760,7 +756,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622329922562</updated>
     </task>
-    <option name="localTasksCounter" value="59" />
+    <task id="LOCAL-00059" summary="* BugReporter bug fix">
+      <created>1628385050209</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1628385050210</updated>
+    </task>
+    <option name="localTasksCounter" value="60" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -779,7 +782,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="- Improvement to console &amp; logging&#10;- Added a console memory command&#10;- Changed calls to GTMUser#updateUserDataNow() to be async&#10;- Improvements to accounts refreshall command&#10;- Added frame work for custom channels which will allow donors in future to create private channels like on team speak&#10;- Fixed error caused by player have too many past tickets (since embeds have a max field length limit)&#10;- Util improvement: Easily create timer tasks&#10;- Upon unverification, a GTMUser will now loose thier discord rank (prevents abuse)" />
     <MESSAGE value="- Custom channels command which will allow donors to create private channels like on team speak&#10;- Made scabble annoy harder to bypass" />
     <MESSAGE value="- Split up self data in to categories for organization and added an easy to use data storage class called SavableSelfData&#10;- Depreciated old self data&#10;- In PMs, GTM user calls will now only be made once we know which command is being ran&#10;- Discord menu class now allows us to configure whether we want everyone to be able to modify the menu&#10;- Member reloading now returns a completable future&#10;- Added a auto deleter for custom channels &amp; more&#10;- Fix /channel addgang&#10;- Made the last updated variable in GTM user volatile&#10;- Added a util to run delayed tasks" />
     <MESSAGE value="- Only allows verified users to make suggestions&#10;- Various improvements / bug fixes with custom channels" />
@@ -804,7 +806,8 @@
     <MESSAGE value="* Added the ability to &quot;complete&quot; suggestions&#10;* Webhook utils improvements&#10;* Listener that listens to a zapier webhook to post stash/jenkins pushes&#10;* Improved the reliability to ticket parser" />
     <MESSAGE value="* Fixed a bug with msg parsing stash" />
     <MESSAGE value="* Removed debugs" />
-    <option name="LAST_COMMIT_MESSAGE" value="* Removed debugs" />
+    <MESSAGE value="* BugReporter bug fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="* BugReporter bug fix" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

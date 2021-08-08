@@ -141,12 +141,14 @@ public class BugReport {
         }
 
         if (status == ReportStatus.DENIED) {
-            if (this.receiveChannelId != 0)
-                getBugReceiveChannel().retrieveMessageById(this.receiveChannelId).queue(msg ->
-                        msg.delete().queue());
-            if (this.reportChannelId != 0)
+            //if (this.receiveChannelId != 0)
+            //    getBugReceiveChannel().retrieveMessageById(this.receiveChannelId).queue(msg ->
+            //            msg.delete().queue());
+            if (this.reportChannelId != 0) {
                 getBugReportChannel().retrieveMessageById(this.reportChannelId).queue(msg ->
                         msg.delete().queue());
+                setReportChannelId(0);
+            }
         }
 
         Data.storeData(Data.BUG_REPORTS, this, this.number);
