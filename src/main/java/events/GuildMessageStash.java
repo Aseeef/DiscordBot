@@ -91,14 +91,14 @@ public class GuildMessageStash extends ListenerAdapter {
                         }
 
                         //opened pull request <https://stash.grandtheftmc.net/projects/GRAN/repos/discordbot/pull-requests/10/overview|#10: Skylix qa>
-                        Pattern pattern1 = Pattern.compile("(?<action>.{1,24}) pull request <(?<prUrl>https://stash\\.grandtheftmc\\.net/projects/.+)\\|#(?<prNumber>[0-9]{1,5}): (?<branch>.+)>");
+                        Pattern pattern1 = Pattern.compile("(?<action>.{1,24}) pull request <(?<prUrl>https://stash\\.grandtheftmc\\.net/projects/.+)\\|#(?<prNumber>[0-9]{1,5}): (?<title>.+)>");
                         Matcher matcher1 = pattern1.matcher(message);
                         if (matcher1.find()) {
 
                             String action = matcher1.group("action");
                             String prUrl = matcher1.group("prUrl");
                             String prNumber = matcher1.group("prNumber");
-                            String branch = matcher1.group("branch");
+                            String title = matcher1.group("title");
 
                             //https://stash.grandtheftmc.net/projects/GRAN/repos/discordbot/pull-requests/10/overview
                             Pattern urlPattern = Pattern.compile("https://stash\\.grandtheftmc\\.net/projects/GRAN/repos/(?<project>.{1,36})/pull-requests/.+");
@@ -111,7 +111,7 @@ public class GuildMessageStash extends ListenerAdapter {
                                 web.setColor(Color.GREEN.getRGB());
 
                                 web.addField(new WebhookEmbed.EmbedField(true, "Project", project.toUpperCase()));
-                                web.addField(new WebhookEmbed.EmbedField(true, "Branch", branch.replaceAll(" ", "_").toUpperCase()));
+                                web.addField(new WebhookEmbed.EmbedField(true, "Title", title));
                                 web.addField(new WebhookEmbed.EmbedField(false, "Pull Request URL", prUrl));
                             }
                         }

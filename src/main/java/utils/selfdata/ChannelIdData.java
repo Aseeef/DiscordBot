@@ -9,12 +9,18 @@ public class ChannelIdData extends SavableSelfData {
 
     private static ChannelIdData data;
 
-    private long suggestionChannelId;
-    private long playerCountChannelId;
-    private long prevSuggestHelpChannelId;
-    private long raidAlertChannelId;
-    private long modChannelId;
-    private long privateChannelsCategoryId;
+    private long suggestionChannelId = 0L;
+    private long playerCountChannelId = 0L;
+    private long prevSuggestHelpChannelId = 0L;
+    private long raidAlertChannelId = 0L;
+    private long modChannelId = 0L;
+    private long privateChannelsCategoryId = 0L;
+    private long bugReportChannelId = 0L;
+    private long bugReceiveChannelId = 0L;
+
+    public ChannelIdData() {
+        super(Type.CHANNELID);
+    }
 
     @JsonCreator
     public ChannelIdData(@JsonProperty("suggestionChannelId") long suggestionChannelId,
@@ -22,7 +28,9 @@ public class ChannelIdData extends SavableSelfData {
                          @JsonProperty("prevSuggestHelpChannelId") long prevSuggestHelpChannelId,
                          @JsonProperty("raidAlertChannelId") long raidAlertChannelId,
                          @JsonProperty("modChannelId") long modChannelId,
-                         @JsonProperty("privateChannelsCategoryId") long privateChannelsCategoryId) {
+                         @JsonProperty("privateChannelsCategoryId") long privateChannelsCategoryId,
+                         @JsonProperty("bugReportChannelId") long bugReportChannelId,
+                         @JsonProperty("bugReceiveChannelId") long bugReceiveChannelId) {
         super(Type.CHANNELID);
         this.suggestionChannelId = suggestionChannelId;
         this.playerCountChannelId = playerCountChannelId;
@@ -30,6 +38,8 @@ public class ChannelIdData extends SavableSelfData {
         this.raidAlertChannelId = raidAlertChannelId;
         this.modChannelId = modChannelId;
         this.privateChannelsCategoryId = privateChannelsCategoryId;
+        this.bugReportChannelId = bugReportChannelId;
+        this.bugReceiveChannelId = bugReceiveChannelId;
     }
 
     @JsonGetter
@@ -113,6 +123,28 @@ public class ChannelIdData extends SavableSelfData {
         this.save();
     }
 
+    @JsonGetter
+    public long getBugReportChannelId() {
+        return bugReportChannelId;
+    }
+
+    @JsonSetter
+    public void setBugReportChannelId(long bugReportChannelId) {
+        this.bugReportChannelId = bugReportChannelId;
+        this.save();
+    }
+
+    @JsonGetter
+    public long getBugReceiveChannelId() {
+        return bugReceiveChannelId;
+    }
+
+    @JsonSetter
+    public void setBugReceiveChannelId(long bugReceiveChannelId) {
+        this.bugReceiveChannelId = bugReceiveChannelId;
+        this.save();
+    }
+
     @JsonIgnore
     public static ChannelIdData get() {
         return data;
@@ -123,7 +155,7 @@ public class ChannelIdData extends SavableSelfData {
         data = (ChannelIdData) SavableSelfData.obtainData(Type.CHANNELID);
         // default data
         if (data == null) {
-            data = new ChannelIdData(0L, 0L, 0L, 0L, 0L, 0L);
+            data = new ChannelIdData();
             data.save();
         }
         System.out.println("Loaded Channel Id Data: " + data.toString());
