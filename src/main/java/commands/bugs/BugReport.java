@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import utils.Data;
 import utils.SelfData;
@@ -92,19 +93,22 @@ public class BugReport {
     @JsonIgnore
     public void updateStatus(ReportStatus status, String statusReason, boolean warnCensor) {
         this.status = status;
-        userById(this.reporterId).openPrivateChannel().queue(channel -> {
-            MessageAction ma = channel.sendMessage("An update has been received on the following bug report:").embed(this.createEmbed(false));
-            if (fileName != null) {
-                ma = ma.addFile(new File(BugReport.getDownloadDir(), fileName));
-            }
-            ma.queue(success -> {
-                if (statusReason != null) {
-                    channel.sendMessage("**Additional info from an admin:** \n" + statusReason).queue();
+        User reporter = userById(this.reporterId);
+        if (reporter != null) {
+            reporter.openPrivateChannel().queue(channel -> {
+                MessageAction ma = channel.sendMessage("An update has been received on the following bug report:").embed(this.createEmbed(false));
+                if (fileName != null) {
+                    ma = ma.addFile(new File(BugReport.getDownloadDir(), fileName));
                 }
-                if (warnCensor && status == ReportStatus.CONFIRMED_BUG)
-                    channel.sendMessage("**Warning!** This bug report has been marked as 'hidden' (probably because this bug can be abused). Sharing this bug with anyone may result in a cancellation of any rewards and/or may result in a punishment!").queue();
+                ma.queue(success -> {
+                    if (statusReason != null) {
+                        channel.sendMessage("**Additional info from an admin:** \n" + statusReason).queue();
+                    }
+                    if (warnCensor && status == ReportStatus.CONFIRMED_BUG)
+                        channel.sendMessage("**Warning!** This bug report has been marked as 'hidden' (probably because this bug can be abused). Sharing this bug with anyone may result in a cancellation of any rewards and/or may result in a punishment!").queue();
+                });
             });
-        });
+        }
         if (this.receiveChannelId != 0) {
             getBugReceiveChannel().retrieveMessageById(this.receiveChannelId).queue(msg ->
                     msg.editMessage(createEmbed(false)).queue());

@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="* BugReporter bug fix">
+    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="* Fixed NPE">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/commands/bugs/BugReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/bugs/BugReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/bugs/BugReportCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/bugs/BugReportCommand.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,19 +70,7 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="DiscordBot" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="DiscordBot" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="build" type="c8890929:TasksNode$1" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="DiscordBot" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="shadow" type="c8890929:TasksNode$1" />
+                <item name="Run Configurations" type="7b0102dc:RunConfigurationsNode" />
               </path>
             </expand>
             <select />
@@ -418,21 +405,8 @@
       <workItem from="1628216977311" duration="3958000" />
       <workItem from="1628270522692" duration="636000" />
       <workItem from="1628366888096" duration="2145000" />
-      <workItem from="1628442203426" duration="643000" />
-    </task>
-    <task id="LOCAL-00011" summary="Makes the raidModeTimeToAccept a configurable option in the config">
-      <created>1587413373266</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1587413373266</updated>
-    </task>
-    <task id="LOCAL-00012" summary="Fixed bugs relating to gtm player count updater">
-      <created>1587414325667</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1587414325667</updated>
+      <workItem from="1628442203426" duration="1520000" />
+      <workItem from="1628746563244" duration="307000" />
     </task>
     <task id="LOCAL-00013" summary="Fixed typo">
       <created>1587414829840</created>
@@ -763,7 +737,21 @@
       <option name="project" value="LOCAL" />
       <updated>1628385050210</updated>
     </task>
-    <option name="localTasksCounter" value="60" />
+    <task id="LOCAL-00060" summary="* Command feedback">
+      <created>1628442874645</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1628442874645</updated>
+    </task>
+    <task id="LOCAL-00061" summary="* Error fix">
+      <created>1628442954978</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1628442954978</updated>
+    </task>
+    <option name="localTasksCounter" value="62" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -782,9 +770,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="- Custom channels command which will allow donors to create private channels like on team speak&#10;- Made scabble annoy harder to bypass" />
-    <MESSAGE value="- Split up self data in to categories for organization and added an easy to use data storage class called SavableSelfData&#10;- Depreciated old self data&#10;- In PMs, GTM user calls will now only be made once we know which command is being ran&#10;- Discord menu class now allows us to configure whether we want everyone to be able to modify the menu&#10;- Member reloading now returns a completable future&#10;- Added a auto deleter for custom channels &amp; more&#10;- Fix /channel addgang&#10;- Made the last updated variable in GTM user volatile&#10;- Added a util to run delayed tasks" />
-    <MESSAGE value="- Only allows verified users to make suggestions&#10;- Various improvements / bug fixes with custom channels" />
     <MESSAGE value="WIP:&#10;- Comprehensive user statistics command for seniors&#10;- Now loading all GTM users to memory on startup&#10;- Util improvements" />
     <MESSAGE value="* More Comments&#10;* Fixed an issue where when inviting users to custom channel, uses the name of the recipient as the invitor&#10;* updated jda" />
     <MESSAGE value="* removed default config" />
@@ -807,7 +792,10 @@
     <MESSAGE value="* Fixed a bug with msg parsing stash" />
     <MESSAGE value="* Removed debugs" />
     <MESSAGE value="* BugReporter bug fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="* BugReporter bug fix" />
+    <MESSAGE value="* Command feedback" />
+    <MESSAGE value="* Error fix" />
+    <MESSAGE value="* Fixed NPE" />
+    <option name="LAST_COMMIT_MESSAGE" value="* Fixed NPE" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
