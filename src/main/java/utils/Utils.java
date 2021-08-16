@@ -1,4 +1,4 @@
-package utils.tools;
+package utils;
 
 import com.google.common.base.Charsets;
 import me.kbrewster.exceptions.APIException;
@@ -10,39 +10,30 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import net.grandtheftmc.jedisnew.NewJedisManager;
 import org.json.JSONObject;
-import utils.MembersCache;
 import utils.confighelpers.Config;
 import utils.console.Logs;
 import utils.selfdata.ChannelIdData;
+import utils.tools.MineStat;
 
+import javax.annotation.Nullable;
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static utils.console.Logs.log;
 
-public class GTools {
+public class Utils {
 
-    public static JDA jda;
     public static Guild guild;
     public static MineStat gtm;
     public static NewJedisManager jedisManager;
     public static final Random RANDOM = new Random();
-    private static final List<Member> members = new ArrayList<>();
-
-    public static List<Member> getMembers() {
-        return members;
-    }
+    public static JDA JDA;
 
     // Checks if its is a specific command
     public static boolean isCommand(String msg, User user, String command) {
@@ -69,23 +60,23 @@ public class GTools {
         return sb.toString();
     }
 
-    public static User userById (String id) {
+    public static @Nullable User userById (String id) {
         return MembersCache.getUser(Long.parseLong(id)).orElse(null);
     }
 
-    public static User userById (long id) {
+    public static @Nullable User userById (long id) {
         return MembersCache.getUser(id).orElse(null);
     }
 
     public static void updateOnlinePlayers() {
-        VoiceChannel channel = jda.getVoiceChannelById(ChannelIdData.get().getPlayerCountChannelId());
+        VoiceChannel channel = JDA.getVoiceChannelById(ChannelIdData.get().getPlayerCountChannelId());
 
         if (channel == null) {
             log("Failed to updating online player count because Player count channel was not set", Logs.WARNING);
             return;
         }
 
-        GTools.gtm.refresh();
+        Utils.gtm.refresh();
 
         if (!gtm.isServerUp()) {
             String msg = new MessageBuilder()
@@ -152,22 +143,29 @@ public class GTools {
             log("        at " + error.toString(), Logs.ERROR);
     }
 
-    public static void runAsync(Runnable target) {
-        new Thread(target).start();
-    }
-
-    public static ScheduledFuture runTaskTimer(Runnable task, int startDelay, int period) {
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        return executor.scheduleAtFixedRate(task, startDelay, period, TimeUnit.MILLISECONDS);
-    }
-
-    public static ScheduledFuture runDelayedTask(Runnable task, int startDelay) {
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        return executor.schedule(task, startDelay, TimeUnit.MILLISECONDS);
-    }
-
     public static File getAsset(String name) {
         return new File("assets", name);
+    }
+
+    public static String convertStreamToString(InputStream is) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+
+        String line;
+        try {
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return sb.toString();
     }
 
     public static JSONObject getJsonFromApi(String url) {
@@ -180,7 +178,7 @@ public class GTools {
             }
             return new JSONObject(sb.toString());
         } catch (IOException e) {
-            GTools.printStackError(e);
+            Utils.printStackError(e);
             return null;
         }
     }
@@ -208,7 +206,7 @@ public class GTools {
             MojangAPI.getNameHistory(uuid).forEach( (name) -> nameHist.add(name.getName()));
             return nameHist;
         } catch (InvalidPlayerException | NullPointerException e) {
-            GTools.printStackError(e);
+            Utils.printStackError(e);
         }
         return null;
     }
@@ -223,7 +221,7 @@ public class GTools {
         try {
             return Optional.of(MojangAPI.getUUID(userName));
         } catch (IOException | InvalidPlayerException | APIException | NullPointerException e) {
-            GTools.printStackError(e);
+            Utils.printStackError(e);
         }
         return Optional.empty();
     }
@@ -237,7 +235,7 @@ public class GTools {
         try {
             return Optional.of(MojangAPI.getUsername(uuid));
         } catch (IOException | InvalidPlayerException | APIException | NullPointerException e) {
-            GTools.printStackError(e);
+            Utils.printStackError(e);
         }
         return Optional.empty();
     }
@@ -269,7 +267,7 @@ public class GTools {
         Pattern pattern = Pattern.compile("<:.{1,32}:([0-9]{18})>");
         Matcher matcher = pattern.matcher(s);
         if (matcher.find()) {
-            return Optional.ofNullable(jda.getEmoteById(matcher.group(1)));
+            return Optional.ofNullable(JDA.getEmoteById(matcher.group(1)));
         }
         return Optional.empty();
     }

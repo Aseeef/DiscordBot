@@ -1,18 +1,18 @@
 package commands.suggestions;
 
-import utils.SelfData;
+import utils.BotData;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import utils.selfdata.ChannelIdData;
-import utils.tools.GTools;
+import utils.Utils;
 
 import java.awt.*;
 import java.util.concurrent.TimeUnit;
 
-import static utils.tools.GTools.*;
+import static utils.Utils.*;
 
 public class SuggestionTools {
 
@@ -23,7 +23,7 @@ public class SuggestionTools {
     public static MessageEmbed createSuggestionEmbed (Suggestions s) {
         // Create suggestion embed
         EmbedBuilder embed = new EmbedBuilder();
-        String gtmLearnablesEmoji = jda.getEmotesByName("gtmlearnables", true).get(0).getAsMention();
+        String gtmLearnablesEmoji = JDA.getEmotesByName("gtmlearnables", true).get(0).getAsMention();
         embed.setTitle(gtmLearnablesEmoji + "  SUGGESTION ID: #" + s.getNumber());
         embed.setThumbnail(userById(s.getSuggesterId()).getAvatarUrl());
         embed.setDescription("\n\u200E"+s.getMsg()+"\n\u200E");
@@ -74,9 +74,9 @@ public class SuggestionTools {
             channel.sendMessage(suggestionMessage()).queueAfter(250, TimeUnit.MILLISECONDS, (rawMsg) -> {
 
                 // These longs will always store the id of the previous suggestion instruction msgs
-                long prevSuggestHelpEmbedId = SelfData.get().getPrevSuggestEmbedId();
-                long prevSuggestHelpMsgId = SelfData.get().getPrevSuggestHelpMsgId();
-                TextChannel prevSuggestHelpChannel = jda.getTextChannelById(ChannelIdData.get().getPrevSuggestHelpChannelId());
+                long prevSuggestHelpEmbedId = BotData.LAST_SUGGEST_EMBED_ID.getData(Long.TYPE);
+                long prevSuggestHelpMsgId = BotData.LAST_SUGGEST_MSG_ID.getData(Long.TYPE);
+                TextChannel prevSuggestHelpChannel = JDA.getTextChannelById(ChannelIdData.get().getPrevSuggestHelpChannelId());
 
                 // Delete previous instruction embed & msg
                 if (prevSuggestHelpChannel != null) {
@@ -91,8 +91,8 @@ public class SuggestionTools {
                 }
 
                 // Save current embed & msg ids
-                SelfData.get().setPrevSuggestEmbedId(embedMsg.getIdLong());
-                SelfData.get().setPrevSuggestHelpMsgId(rawMsg.getIdLong());
+                BotData.LAST_SUGGEST_EMBED_ID.setValue(embedMsg.getIdLong());
+                BotData.LAST_SUGGEST_MSG_ID.setValue(rawMsg.getIdLong());
                 ChannelIdData.get().setPrevSuggestHelpChannelId(channel.getIdLong());
 
             });
@@ -103,7 +103,7 @@ public class SuggestionTools {
 
     public static String formatSuggestion(String msg) {
         if (msg.startsWith("```")) msg = msg.replaceFirst("```", "");
-        if (msg.endsWith("```")) msg = GTools.replaceLast(msg, "```", "");
+        if (msg.endsWith("```")) msg = Utils.replaceLast(msg, "```", "");
         msg = msg.replaceFirst(".*What Server is your Suggestion for\\?.*\n", "**What Server is your Suggestion for?**\n");
         msg = msg.replaceFirst(".*What is your Suggestion\\? Be concise!.*\n", "**What is your Suggestion? Be concise!**\n");
         msg = msg.replaceFirst(".*Why do you Suggestion this\\?.*\n", "**Why do you Suggestion this?**\n");

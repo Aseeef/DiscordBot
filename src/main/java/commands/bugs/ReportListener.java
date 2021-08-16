@@ -2,28 +2,28 @@ package commands.bugs;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.jetbrains.annotations.NotNull;
-import utils.Data;
-import utils.tools.GTools;
+import utils.StringUtils;
+import utils.Utils;
+import utils.threads.ThreadUtil;
 import utils.users.GTMUser;
+import utils.web.ImgurUploader;
+import utils.web.clickup.CUTask;
 
 import java.awt.*;
-import java.io.File;
-import java.util.UUID;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static utils.console.Logs.log;
-import static utils.tools.GTools.jda;
-import static utils.tools.GTools.sendThenDelete;
+import static utils.Utils.JDA;
+import static utils.Utils.sendThenDelete;
 
 public class ReportListener extends ListenerAdapter {
 
@@ -37,12 +37,12 @@ public class ReportListener extends ListenerAdapter {
 
         if (channel != BugReport.getBugReportChannel()) return;
         if (user.isBot()) return;
-        if (GTools.isCommand(rawMsg, user)) return;
+        if (Utils.isCommand(rawMsg, user)) return;
         if (!GTMUser.getGTMUser(user.getIdLong()).isPresent()) {
             sendThenDelete(channel, user.getAsMention() + " you are not allowed to post bug reports " +
                     "until you have verified your discord account to GTM by using the `/discord verify` command in game!");
 
-            // DM user their deleted suggestion so it can be reposted
+            // DM user their deleted bug so it can be reposted
             user.openPrivateChannel().queue(
                     userChannel ->
                             userChannel.sendMessage("**Your Bug Report was deleted because you are not a verified user:**\n```" + rawMsg + "```\n" + "**Please link your account to GTM using the `/discord verify` command in game and repost this bug report.**")
@@ -56,52 +56,84 @@ public class ReportListener extends ListenerAdapter {
         }
 
         if (match(rawMsg)) {
-            GTools.runAsync(() -> {
+            ThreadUtil.runAsync(() -> {
 
-                UUID fileUUID = msg.getAttachments().size() > 0 ? UUID.randomUUID() : null;
-                Message.Attachment attachment;
-                String fileName = null;
-                File file = null;
-                if (fileUUID != null) {
-                    File dir = BugReport.getDownloadDir();
-                    dir.mkdirs();
-                    attachment = msg.getAttachments().get(0);
-                    fileName = fileUUID + (attachment.getFileExtension() == null ? "" : "." + msg.getAttachments().get(0).getFileExtension());
-                    try {
-                        file = attachment.downloadToFile(new File(dir, fileName)).get();
-                    } catch (InterruptedException | ExecutionException e) {
-                        e.printStackTrace();
+                String attachmentUrl = null;
+
+                if (msg.getAttachments().size() > 0) {
+                    Message.Attachment attachment = msg.getAttachments().get(0);
+                    if (attachment == null || attachment.getFileExtension() == null) return;
+
+                    if (ImgurUploader.isSupportedExtension(attachment.getFileExtension().toLowerCase())) {
+                        if (ImgurUploader.checkAttachmentSize(attachment)) {
+                            try {
+                                attachmentUrl = ImgurUploader.uploadMedia(attachment.getFileName(), attachment.retrieveInputStream().get(), attachment.isVideo());
+                                // mkv isn't properly support by imgur. API returns broken link with a . at the end.
+                                if (attachment.getFileExtension().equalsIgnoreCase("mkv")) {
+                                    if (attachmentUrl.endsWith("."))
+                                        attachmentUrl = attachmentUrl.substring(0, attachmentUrl.length() - 1);
+                                }
+                            } catch (InterruptedException | ExecutionException | IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            sendThenDelete(channel, user.getAsMention() + ", sorry but the attachment file size is too large for me to process. Try upload a smaller file, or share using a media sharing service like Dropbox/Google Drive/Imgur/Youtube.");
+                            PrivateChannel pc = user.openPrivateChannel().complete();
+                            pc.sendMessage("**Your Bug Report was deleted because your attachment is too large. Please note that images must be less then 10 MB and videos must be less then 200 MB! Here is your deleted bug report so you can repost it:**\n```" + rawMsg + "```")
+                                    .complete();
+                            return;
+                        }
+                    } else {
+                        sendThenDelete(channel, user.getAsMention() + ", you used an unsupported attachment for you bug report! Supported attachment formats are: " + Arrays.asList(ImgurUploader.IMAGE_FORMATS, ImgurUploader.VIDEO_FORMATS));
+                        PrivateChannel pc = user.openPrivateChannel().complete();
+                        pc.sendMessage("**Your Bug Report was deleted because you attached an unsupported file! Only include **video** or **image** files using one of the following formats: " + Arrays.asList(ImgurUploader.IMAGE_FORMATS, ImgurUploader.VIDEO_FORMATS) + "! Here is your deleted bug report so you can repost it:**\n```" + rawMsg + "```")
+                                .complete();
+                        return;
                     }
                 }
 
-                BugReport report = new BugReport(Data.getNextNumber(Data.BUG_REPORTS), 0L, 0L, rawMsg, false, user.getIdLong(), BugReport.ReportStatus.PENDING_REVIEW, fileName);
-                MessageAction ma = BugReport.getBugReceiveChannel().sendMessage(report.createEmbed(false));
-                if (file != null) {
-                    ma = ma.addFile(file);
-                }
-                // Send message
-                ma.queue(success -> report.setReceiveChannelId(success.getIdLong()));
-                // Delete original message & acknowledge report
-                event.getMessage().delete().queue();
-                File finalFile = file;
-                user.openPrivateChannel().queue(userChannel -> {
-                    MessageAction ma1 = userChannel.sendMessage("**Hey!** We received the following bug report from you:").embed(report.createEmbed(false));
-                    if (report.getFileName() != null) {
-                        ma1 = ma1.addFile(finalFile);
+                String updatedMsg = rawMsg;
+                Matcher matcher = getFormatMatcher(rawMsg);
+                matcher.find();
+                String priority = matcher.group(4);
+                int p = 3;
+                for (char c : priority.toCharArray()) {
+                    if (Character.isDigit(c)) {
+                        p = Character.getNumericValue(c);
                     }
-                    ma1.queue(success -> userChannel.sendMessage("I will notify you if there are any further updates on this report. Thank you!").queue());
+                }
+                p = Math.min(p, 4);
+                if (attachmentUrl != null) {
+                    updatedMsg = StringUtils.replaceLast(updatedMsg, matcher.group(5), "\n");
+                    updatedMsg = updatedMsg + "\n(" + attachmentUrl + ")";
+                }
+
+                BugReport report = new BugReport(0L, 0L, updatedMsg, false, user.getIdLong(), BugReport.ReportStatus.AWAITING_REVIEW);
+
+                new CUTask(GTMUser.getGTMUser(user.getIdLong()).get().getUsername(), user.getIdLong(), updatedMsg, BugReport.ReportStatus.AWAITING_REVIEW, p).createTask().thenAccept((id) -> {
+                   report.setId(id);
+                   report.save();
+
+                   // send msg
+                   Message bugMsg = BugReport.getBugReceiveChannel().sendMessageEmbeds(report.createEmbed(false)).complete();
+                   report.setReceiveChannelId(bugMsg.getIdLong());
+                   // delete original
+                   event.getMessage().delete().complete();
+                    PrivateChannel userChannel = user.openPrivateChannel().complete();
+                    userChannel.sendMessage("**Hey!** We received the following bug report from you:").setEmbeds(report.createEmbed(false)).complete();
+                    userChannel.sendMessage("I will notify you if there are any further updates on this report. Thank you!").complete();
+                    String gtmAgree = JDA.getEmotesByName("gtmagree", true).get(0).getAsMention();
+                    Utils.sendThenDelete(channel, gtmAgree + " **Success!** You submitted a bug report. Check your DMs for more info! (If you didn't receive a DM you may have your private messages turned off)");
                 });
-                String gtmAgree = jda.getEmotesByName("gtmagree", true).get(0).getAsMention();
-                GTools.sendThenDelete(channel, gtmAgree + " **Success!** You submitted a bug report. Check your DMs for more info! (If you didn't receive a DM you may have your private messages turned off)");
             });
         } else {
             event.getMessage().delete().queue();
-            GTools.sendThenDelete(channel, "**Hey!** " + user.getAsMention() + ", sorry but your message does not follow the bug reports format. I am sending the details in your PMs...");
-            // DM user their deleted suggestion so it can be reposted
+            Utils.sendThenDelete(channel, "**Hey!** " + user.getAsMention() + ", sorry but your message does not follow the bug reports format. I am sending the details in your PMs...");
+            // DM user their deleted bug so it can be reposted
             user.openPrivateChannel().queue(userChannel ->
-                    userChannel.sendMessage("**The following bug report from you was deleted because it did not follow the bug reports format:**\n```" + rawMsg + "```\n" + "**Please copy paste this exact format in to your message and repost your suggestion:**\n")
+                    userChannel.sendMessage("**The following bug report from you was deleted because it did not follow the bug reports format:**\n```" + rawMsg + "```\n" + "**Please copy paste this exact format in to your message and repost your bug report:**\n")
                             .queue( (success) -> userChannel.sendMessage(getFormatMessage()).queue(),
-                                    (error) -> GTools.sendThenDelete(channel, "**Hey!** " + user.getAsMention() + ", sorry but I was unable to message you because you have your PMs disabled. Use /Harry for more info."))
+                                    (error) -> Utils.sendThenDelete(channel, "**Hey!** " + user.getAsMention() + ", sorry but I was unable to message you because you have your PMs disabled. Use /Harry for more info."))
             );
 
             // Log failure
@@ -112,18 +144,24 @@ public class ReportListener extends ListenerAdapter {
     }
 
     private static boolean match(String s) {
-        Pattern pattern = Pattern.compile(
-                "\\*\\*What server is this Bug Report for\\?\\*\\*" +
-                ".+" +
-                "\\*\\*What is happening / What is going wrong\\?\\*\\*" +
-                ".+" +
-                "\\*\\*What should be happening / What should be fixed\\?\\*\\*" +
-                ".*" +
-                "\\*\\*Video / Screenshot:\\*\\*" +
-                ".*", Pattern.DOTALL
-        );
-        Matcher matcher = pattern.matcher(s);
+        Matcher matcher = getFormatMatcher(s);
         return matcher.matches();
+    }
+
+    private static Matcher getFormatMatcher(String s) {
+        Pattern pattern = Pattern.compile(
+                "\\*\\*What server is this Bug Report for\\?\\*\\*(" +
+                        ".+)" +
+                        "\\*\\*What is happening / What is going wrong\\?\\*\\*(" +
+                        ".+)" +
+                        "\\*\\*What should be happening / What should be fixed\\?\\*\\*(" +
+                        ".*)" +
+                        "\\*\\*On a scale of 1-5, urgent is this bug?\\?\\*\\*(" +
+                        ".*)" +
+                        "\\*\\*Video / Screenshot:\\*\\*(" +
+                        ".*)", Pattern.DOTALL
+        );
+        return pattern.matcher(s);
     }
 
     public static MessageEmbed createHowBugReportEmbed () {
@@ -165,6 +203,10 @@ public class ReportListener extends ListenerAdapter {
                 .append("**What should be happening / What should be fixed?**")
                 .append("\n")
                 .append("[Explain the expected behavior here (If not applicable, type \"N/A\")]")
+                .append("\n\u200E\n")
+                .append("**On a scale of 1-5, urgent is this bug?**")
+                .append("\n")
+                .append("[1=Not Urgent, minor bug ; 5=Major bug, please fix now]")
                 .append("\n\u200E\n")
                 .append("**Video / Screenshot:**")
                 .append("\n")

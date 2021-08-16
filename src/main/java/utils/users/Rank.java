@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static utils.tools.GTools.jda;
+import static utils.Utils.JDA;
 
 public enum Rank {
 
@@ -164,7 +164,7 @@ public enum Rank {
     }
 
     public Role getRole() {
-        return jda.getRoleById(roleId);
+        return JDA.getRoleById(roleId);
     }
 
     public static Rank getRankFromString(String rString) {

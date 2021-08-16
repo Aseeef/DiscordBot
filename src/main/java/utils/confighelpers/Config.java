@@ -2,7 +2,7 @@ package utils.confighelpers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import utils.tools.GTools;
+import utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,30 +25,13 @@ public class Config {
     private int ticketPollingRate;
     private String dummyAccountUsername;
     private String dummyAccountPassword;
+    private String clickUpKey;
+    private int clickUpRefreshFrequency;
 
     private static Config config;
 
 
     public Config() {
-    }
-
-    public Config(String botToken, String botName, String commandPrefix, int msgDeleteTime, int customChannelDeleteTime, DatabaseCreds usersDatabase, DatabaseCreds planDatabase, DatabaseCreds bansDatabase, DatabaseCreds xenDatabase, DatabaseCreds redisDatabase, MineStatSettings mineStatSettings, RaidmodeSettings raidmodeSettings, RankSettings rankSettings, int ticketPollingRate, String dummyAccountUsername, String dummyAccountPassword) {
-        this.botToken = botToken;
-        this.botName = botName;
-        this.commandPrefix = commandPrefix;
-        this.msgDeleteTime = msgDeleteTime;
-        this.customChannelDeleteTime = customChannelDeleteTime;
-        this.usersDatabase = usersDatabase;
-        this.planDatabase = planDatabase;
-        this.bansDatabase = bansDatabase;
-        this.xenDatabase = xenDatabase;
-        this.redisDatabase = redisDatabase;
-        this.mineStatSettings = mineStatSettings;
-        this.raidmodeSettings = raidmodeSettings;
-        this.rankSettings = rankSettings;
-        this.ticketPollingRate = ticketPollingRate;
-        this.dummyAccountUsername = dummyAccountUsername;
-        this.dummyAccountPassword = dummyAccountPassword;
     }
 
     public static Config get() {
@@ -63,7 +46,7 @@ public class Config {
             config = mapper.readValue(file, Config.class);
 
         } catch (IOException e) {
-            GTools.printStackError(e);
+            Utils.printStackError(e);
         }
     }
 
@@ -131,4 +114,11 @@ public class Config {
         return dummyAccountPassword;
     }
 
+    public String getClickUpKey() {
+        return clickUpKey;
+    }
+
+    public int getClickUpRefreshFrequency() {
+        return clickUpRefreshFrequency;
+    }
 }

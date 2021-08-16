@@ -6,12 +6,10 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import utils.selfdata.ChannelIdData;
-import utils.tools.GTools;
 import utils.users.GTMUser;
 import utils.users.Rank;
 
-import static utils.tools.GTools.sendThenDelete;
-import static utils.tools.GTools.updateOnlinePlayers;
+import static utils.Utils.*;
 
 public class PlayerCountCommand extends Command {
 
@@ -30,7 +28,7 @@ public class PlayerCountCommand extends Command {
         // Suggestions SetChannel Command
         else if (args[0].equalsIgnoreCase("setchannel")) {
 
-            VoiceChannel playerCountChannel = GTools.jda.getVoiceChannelById(Long.parseLong(args[1]));
+            VoiceChannel playerCountChannel = JDA.getVoiceChannelById(Long.parseLong(args[1]));
 
             // If its a valid voice channel id
             if (playerCountChannel != null) {

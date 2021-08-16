@@ -8,7 +8,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import utils.MembersCache;
 import utils.console.Logs;
-import utils.tools.GTools;
+import utils.Utils;
+import utils.threads.ThreadUtil;
 import utils.tools.Verification;
 import utils.users.GTMUser;
 import utils.users.Rank;
@@ -29,7 +30,7 @@ public class OnRedisMessageReceive implements RedisEventListener {
 
     @Override
     public void onRedisEvent(String s, JSONObject jsonObject) {
-        GTools.runAsync( () -> {
+        ThreadUtil.runAsync( () -> {
 
             try {
 
@@ -62,7 +63,7 @@ public class OnRedisMessageReceive implements RedisEventListener {
 
                     case "update": {
                         long discordId = jsonObject.getLong("discordId");
-                        GTMUser.getGTMUser(discordId).ifPresent(( (user) -> GTools.runAsync(user::updateUserDataNow)));
+                        GTMUser.getGTMUser(discordId).ifPresent(( (user) -> ThreadUtil.runAsync(user::updateUserDataNow)));
                         break;
                     }
 
@@ -94,7 +95,7 @@ public class OnRedisMessageReceive implements RedisEventListener {
 
                 }
             } catch (JSONException e) {
-                GTools.printStackError(e);
+                Utils.printStackError(e);
             }
 
         });

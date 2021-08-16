@@ -7,7 +7,8 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import utils.MembersCache;
 import utils.pagination.DiscordMenu;
-import utils.tools.GTools;
+import utils.Utils;
+import utils.threads.ThreadUtil;
 import utils.users.GTMUser;
 import utils.users.Rank;
 
@@ -28,7 +29,7 @@ public class StaffAccountCommand extends Command {
     public void onCommandUse(Message message, Member member, GTMUser gtmUser, MessageChannel channel, String[] args) {
 
         if (args.length < 1) {
-            GTools.sendThenDelete(channel, getCommandHelpMsg());
+            Utils.sendThenDelete(channel, getCommandHelpMsg());
             return;
         }
 
@@ -37,24 +38,24 @@ public class StaffAccountCommand extends Command {
             case "check": {
 
                 if (args.length < 2) {
-                    GTools.sendThenDelete(channel, "`/Accounts Check <Member ID / Tag>` - *Verify your discord account with GTM*");
+                    Utils.sendThenDelete(channel, "`/Accounts Check <Member ID / Tag>` - *Verify your discord account with GTM*");
                     return;
                 }
 
                 Optional<Member> optionalTarget = MembersCache.getMember(args[1]);
 
                 if (!optionalTarget.isPresent()) {
-                    GTools.sendThenDelete(channel, "**Target user not found!**");
+                    Utils.sendThenDelete(channel, "**Target user not found!**");
                     return;
                 }
 
                 GTMUser user = GTMUser.getGTMUser(optionalTarget.get().getIdLong()).orElse(null);
                 if (user == null) {
-                    GTools.sendThenDelete(channel, "**That user is not linked to GTM!**");
+                    Utils.sendThenDelete(channel, "**That user is not linked to GTM!**");
                     return;
                 }
 
-                GTools.sendThenDelete(channel, getInfoFor(optionalTarget.get(), user).build());
+                Utils.sendThenDelete(channel, getInfoFor(optionalTarget.get(), user).build());
 
                 break;
             }
@@ -62,32 +63,32 @@ public class StaffAccountCommand extends Command {
             case "refresh": {
 
                 if (args.length < 2) {
-                    GTools.sendThenDelete(channel, "`/Accounts Refresh <Member ID / Tag>` - *Verify your discord account with GTM*");
+                    Utils.sendThenDelete(channel, "`/Accounts Refresh <Member ID / Tag>` - *Verify your discord account with GTM*");
                     return;
                 }
 
                 Optional<Member> optionalTarget = MembersCache.getMember(args[1]);
 
                 if (!optionalTarget.isPresent()) {
-                    GTools.sendThenDelete(channel, "**Target user not found!**");
+                    Utils.sendThenDelete(channel, "**Target user not found!**");
                     return;
                 }
 
                 GTMUser user = GTMUser.getGTMUser(optionalTarget.get().getIdLong()).orElse(null);
                 if (user == null) {
-                    GTools.sendThenDelete(channel, "**That user is not linked to GTM!**");
+                    Utils.sendThenDelete(channel, "**That user is not linked to GTM!**");
                     return;
                 }
 
-                GTools.runAsync(user::updateUserDataNow);
-                GTools.sendThenDelete(channel, "**Successfully refreshed user data for " + optionalTarget.get().getUser().getAsTag() + " (" + user.getUsername() + ")!**");
+                ThreadUtil.runAsync(user::updateUserDataNow);
+                Utils.sendThenDelete(channel, "**Successfully refreshed user data for " + optionalTarget.get().getUser().getAsTag() + " (" + user.getUsername() + ")!**");
 
                 break;
             }
 
             case "refreshall": {
                 if (!Rank.hasRolePerms(member, Rank.ADMIN)) {
-                    GTools.sendThenDelete(channel, "**You must be an Admin or higher to use this command.**");
+                    Utils.sendThenDelete(channel, "**You must be an Admin or higher to use this command.**");
                     return;
                 }
                 channel.sendMessage("**Updating roles and data for all verified users. [Progress: `?%`]**").queue(
@@ -95,13 +96,13 @@ public class StaffAccountCommand extends Command {
                             AtomicInteger index = new AtomicInteger(1);
                             List<GTMUser> users = GTMUser.getLoadedUsers();
 
-                            ScheduledFuture task = GTools.runTaskTimer( () -> {
+                            ScheduledFuture<?> task = ThreadUtil.runTaskTimer( () -> {
                                 int percent = Math.round((((float) index.get()) / (float) users.size()) * 100);
                                 int remaining = users.size() - index.get();
                                 int eta = Math.round((remaining * 715) / 1000f); // test show each user to take ~715ms to update
                                 msg.editMessage("**Updating roles and data for all verified users. [Progress: `"+percent+"%`] [ETA: `" + eta + " sec`]**").complete();
                             }, 1000, 3000);
-                            GTools.runAsync( () -> {
+                            ThreadUtil.runAsync( () -> {
                                 long start = System.currentTimeMillis();
                                 for (GTMUser user : users) {
                                     user.updateUserDataNow();
@@ -109,7 +110,7 @@ public class StaffAccountCommand extends Command {
                                 }
                                 task.cancel(true);
                                 msg.delete().complete();
-                                GTools.sendThenDelete(channel, "**All user roles and data have been successfully updated in `" + (System.currentTimeMillis() - start) + " ms`!**");
+                                Utils.sendThenDelete(channel, "**All user roles and data have been successfully updated in `" + (System.currentTimeMillis() - start) + " ms`!**");
                             });
                         }
                 );
@@ -118,7 +119,7 @@ public class StaffAccountCommand extends Command {
 
             case "list": {
                 if (!Rank.hasRolePerms(member, Rank.ADMIN)) {
-                    GTools.sendThenDelete(channel, "**You must be an Admin or higher to use this command.**");
+                    Utils.sendThenDelete(channel, "**You must be an Admin or higher to use this command.**");
                     return;
                 }
                 List<GTMUser> users = GTMUser.getLoadedUsers();
@@ -133,7 +134,7 @@ public class StaffAccountCommand extends Command {
             }
 
             default: {
-                GTools.sendThenDelete(channel, getCommandHelpMsg());
+                Utils.sendThenDelete(channel, getCommandHelpMsg());
                 break;
             }
 
@@ -143,7 +144,7 @@ public class StaffAccountCommand extends Command {
 
     private EmbedBuilder getInfoFor(Member member, GTMUser gtmUser) {
         return new EmbedBuilder()
-                .setThumbnail(GTools.getSkullSkin(gtmUser.getUuid()))
+                .setThumbnail(Utils.getSkullSkin(gtmUser.getUuid()))
                 .setTitle("**User Profile Found!**")
                 .setDescription(member.getUser().getAsTag() + "'s discord account is linked to the following GTM player...")
                 .addField("**UUID:**", gtmUser.getUuid().toString(), false)

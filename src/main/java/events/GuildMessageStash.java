@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
-import utils.webhooks.WebhookUtils;
+import utils.WebhookUtils;
 
 import java.awt.*;
 import java.util.regex.Matcher;

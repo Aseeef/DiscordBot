@@ -2,16 +2,16 @@ package commands.stats;
 
 import commands.stats.wrappers.*;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import utils.chart.PlaytimeChart;
 import utils.database.DiscordDAO;
 import utils.database.XenforoDAO;
+import utils.web.ImgurUploader;
 import utils.pagination.DiscordMenu;
 import utils.pagination.MenuAction;
-import utils.tools.GTools;
+import utils.Utils;
 import utils.users.GTMUser;
 import utils.users.Rank;
 import xenforo.objects.tickets.Department;
@@ -28,8 +28,6 @@ import java.util.List;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-
-import static utils.tools.GTools.jda;
 
 public class StatsMenu implements MenuAction {
 
@@ -76,7 +74,7 @@ public class StatsMenu implements MenuAction {
     }
 
     public boolean load() {
-        uuid = GTools.getUUID(username).orElse(null);
+        uuid = Utils.getUUID(username).orElse(null);
         if (uuid == null) return false;
 
         pu = StatsDAO.getPlanUser(uuid);
@@ -177,8 +175,8 @@ public class StatsMenu implements MenuAction {
         mutes = StatsDAO.getPunishments(uuid, WrappedPunishment.PunishmentType.MUTE, false);
         warns = StatsDAO.getPunishments(uuid, WrappedPunishment.PunishmentType.WARN, false);
         kicks = StatsDAO.getPunishments(uuid, WrappedPunishment.PunishmentType.KICK, false);
-        usernames = GTools.getAllUsernames(uuid);
-        skullURL = GTools.getSkullSkin(uuid);
+        usernames = Utils.getAllUsernames(uuid);
+        skullURL = Utils.getSkullSkin(uuid);
         gangs = StatsDAO.getGangs(uuid);
         rank = DiscordDAO.getRank(uuid);
         rank = rank == null ? Rank.NORANK : rank;
@@ -282,12 +280,12 @@ public class StatsMenu implements MenuAction {
         sessions7.removeIf(session ->
                 session.getStartTime() < (System.currentTimeMillis() - (1000L * 60 * 60 * 24 * 7)));
 
-        eb.addField("7d Playtime", GTools.epochToTime(Session.getTotalPlaytime(sessions7)), true)
-                .addField("7d Active Playtime", GTools.epochToTime(Session.getActivePlaytime(sessions7)), true)
-                .addField("7d AFK Playtime", GTools.epochToTime(Session.getTotalAFK(sessions7)), true)
-                .addField("30d Playtime", GTools.epochToTime(Session.getTotalPlaytime(sessions30)), true)
-                .addField("30d Active Playtime", GTools.epochToTime(Session.getActivePlaytime(sessions30)), true)
-                .addField("30d AFK Playtime", GTools.epochToTime(Session.getTotalAFK(sessions30)), true);
+        eb.addField("7d Playtime", Utils.epochToTime(Session.getTotalPlaytime(sessions7)), true)
+                .addField("7d Active Playtime", Utils.epochToTime(Session.getActivePlaytime(sessions7)), true)
+                .addField("7d AFK Playtime", Utils.epochToTime(Session.getTotalAFK(sessions7)), true)
+                .addField("30d Playtime", Utils.epochToTime(Session.getTotalPlaytime(sessions30)), true)
+                .addField("30d Active Playtime", Utils.epochToTime(Session.getActivePlaytime(sessions30)), true)
+                .addField("30d AFK Playtime", Utils.epochToTime(Session.getTotalAFK(sessions30)), true);
 
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd-EEE");
         LinkedList<String> keys = new LinkedList<>();
@@ -322,9 +320,7 @@ public class StatsMenu implements MenuAction {
             // todo show frequently online timing
             //PlaytimeHourChart phc = new PlaytimeHourChart(username + "'s Frequent Online Hours", Color.GREEN, 2500, 1100);
 
-            //TODO, pull id from a config - this channel is needed because we need a link to set the image
-            Message msg = jda.getTextChannelById(631612007384350733L).sendFile(stream, username + "_PLAYTIME.png").complete();
-            eb.setImage(msg.getAttachments().get(0).getUrl());
+            eb.setImage(ImgurUploader.uploadMedia(username + "'s Playtime.png", stream, false));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -359,9 +355,9 @@ public class StatsMenu implements MenuAction {
             eb.addBlankField(false)
                     .addField("Recent Punishment Type", lastPunishment.getPunishmentType().toString(), true);
             if (lastPunishment.getPunishmentType() != WrappedPunishment.PunishmentType.KICK) {
-                eb.addField("Recent Punishment Duration", lastPunishment.getEndDate() == null ? "Permanent" : GTools.epochToTime(lastPunishment.getEndDate().toInstant().toEpochMilli() - lastPunishment.getIssueDate().toInstant().toEpochMilli()), true);
+                eb.addField("Recent Punishment Duration", lastPunishment.getEndDate() == null ? "Permanent" : Utils.epochToTime(lastPunishment.getEndDate().toInstant().toEpochMilli() - lastPunishment.getIssueDate().toInstant().toEpochMilli()), true);
             }
-            eb.addField("Recent Punishment Issues", GTools.epochToTime(System.currentTimeMillis() - lastPunishment.getIssueDate().toInstant().toEpochMilli()), true)
+            eb.addField("Recent Punishment Issues", Utils.epochToTime(System.currentTimeMillis() - lastPunishment.getIssueDate().toInstant().toEpochMilli()), true)
                     .addField("Recent Punishment Issuer", lastPunishment.getPunisher() == null ? "CONSOLE" : lastPunishment.getPunisher(), true)
                     .addField("Recent Punishment Reason", lastPunishment.getReason(), true);
         }
@@ -423,10 +419,10 @@ public class StatsMenu implements MenuAction {
                 .addField("Previous Username(s)", "`" + prevUsernames  + "`", false)
                 .addField("Current Alts", "`" + recentAltsString + "`", false)
                 .addField("All Linked Alts", "`" + altString + "`", false)
-                .addField("First Join Date", GTools.epochToDate(pu.getRegistered()), true)
-                .addField("Total Playtime", GTools.epochToTime(Session.getTotalPlaytime(sessions)), true)
-                .addField("Active Playtime", GTools.epochToTime(Session.getActivePlaytime(sessions)), true)
-                .addField("AFK Playtime", GTools.epochToTime(Session.getTotalAFK(sessions)), true)
+                .addField("First Join Date", Utils.epochToDate(pu.getRegistered()), true)
+                .addField("Total Playtime", Utils.epochToTime(Session.getTotalPlaytime(sessions)), true)
+                .addField("Active Playtime", Utils.epochToTime(Session.getActivePlaytime(sessions)), true)
+                .addField("AFK Playtime", Utils.epochToTime(Session.getTotalAFK(sessions)), true)
                 .addField("Favorite Server", Session.getFavoriteServer(sessions).name(), true)
                 .addField("Country", lastIp == null ? "null" : lastIp.getCountry(), true)
                 .addField("Time Zone", lastIp == null || lastIp.getTimezone() == null ? "null" : lastIp.getTimezone().getDisplayName(), true)

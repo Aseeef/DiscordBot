@@ -5,6 +5,8 @@
       <profile default="true" name="Default" enabled="true" />
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
+      <module name="DiscordBot.BotLib.main" target="16" />
+      <module name="DiscordBot.BotLib.test" target="16" />
       <module name="GTM" target="1.8" />
       <module name="GTMBot" target="1.8" />
     </bytecodeTargetLevel>

@@ -2,8 +2,7 @@ package utils.selfdata;
 
 import com.fasterxml.jackson.annotation.*;
 import net.dv8tion.jda.api.entities.Category;
-import net.dv8tion.jda.api.entities.VoiceChannel;
-import utils.tools.GTools;
+import utils.Utils;
 
 public class ChannelIdData extends SavableSelfData {
 
@@ -114,7 +113,7 @@ public class ChannelIdData extends SavableSelfData {
 
     @JsonIgnore
     public Category getPrivateChannelsCategory() {
-        return GTools.guild.getCategoryById(this.privateChannelsCategoryId);
+        return Utils.guild.getCategoryById(this.privateChannelsCategoryId);
     }
 
     @JsonSetter

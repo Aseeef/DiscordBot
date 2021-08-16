@@ -1,9 +1,8 @@
 package commands;
 
-import net.dv8tion.jda.api.events.Event;
 import utils.Data;
-import utils.database.DiscordDAO;
-import utils.tools.GTools;
+import utils.Utils;
+import utils.threads.ThreadUtil;
 import utils.tools.Verification;
 import utils.users.GTMUser;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -24,7 +23,7 @@ public class DiscordAccountCommand extends Command {
     public void onCommandUse(Message message, Member member, GTMUser gtmUser, MessageChannel channel, String[] args) {
 
         if (args.length < 1) {
-            GTools.sendThenDelete(channel, getAccountHelpMsg());
+            Utils.sendThenDelete(channel, getAccountHelpMsg());
             return;
         }
 
@@ -32,7 +31,7 @@ public class DiscordAccountCommand extends Command {
             case "verify":
 
                 if (args.length < 2) {
-                    GTools.sendThenDelete(channel, "`/Discord Verify <Code>` - *Verify your discord account with GTM*");
+                    Utils.sendThenDelete(channel, "`/Discord Verify <Code>` - *Verify your discord account with GTM*");
                     return;
                 }
 
@@ -42,7 +41,7 @@ public class DiscordAccountCommand extends Command {
                     return;
                 }
 
-                GTools.runAsync( () -> {
+                ThreadUtil.runAsync( () -> {
                     boolean success = Verification.verifyMember(member, args[1]);
 
                     if (success) {
@@ -71,27 +70,27 @@ public class DiscordAccountCommand extends Command {
                 break;
 
             case "info":
-                if (gtmUser == null) GTools.sendThenDelete(channel, "**Your discord account is not linked to any user!**");
-                else GTools.sendThenDelete(channel, getInfo(gtmUser).build());
+                if (gtmUser == null) Utils.sendThenDelete(channel, "**Your discord account is not linked to any user!**");
+                else Utils.sendThenDelete(channel, getInfo(gtmUser).build());
                 break;
 
             case "update":
-                if (gtmUser == null) GTools.sendThenDelete(channel, "**Your discord account is not linked to any user!**");
+                if (gtmUser == null) Utils.sendThenDelete(channel, "**Your discord account is not linked to any user!**");
                 else {
-                    GTools.runAsync(gtmUser::updateUserDataNow);
-                    GTools.sendThenDelete(channel, "**Your account information has been updated!**");
+                    ThreadUtil.runAsync(gtmUser::updateUserDataNow);
+                    Utils.sendThenDelete(channel, "**Your account information has been updated!**");
                 }
                 break;
 
             default:
-                GTools.sendThenDelete(channel, getAccountHelpMsg());
+                Utils.sendThenDelete(channel, getAccountHelpMsg());
         }
 
     }
 
     private EmbedBuilder getInfo(GTMUser gtmUser) {
         return new EmbedBuilder()
-                .setThumbnail(GTools.getSkullSkin(gtmUser.getUuid()))
+                .setThumbnail(Utils.getSkullSkin(gtmUser.getUuid()))
                 .setTitle("**Discord Account Information**")
                 .setDescription("Your discord account is linked to the following GTM player...")
                 .addField("**UUID:**", gtmUser.getUuid().toString(), false)

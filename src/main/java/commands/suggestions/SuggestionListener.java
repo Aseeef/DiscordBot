@@ -6,16 +6,14 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import utils.Data;
-import commands.suggestions.Suggestions;
-import utils.tools.GTools;
-import commands.suggestions.SuggestionTools;
+import utils.Utils;
 import utils.users.Rank;
 
 import java.util.Objects;
 
 import static utils.console.Logs.log;
-import static utils.tools.GTools.jda;
-import static utils.tools.GTools.sendThenDelete;
+import static utils.Utils.JDA;
+import static utils.Utils.sendThenDelete;
 import static commands.suggestions.SuggestionTools.*;
 
 public class SuggestionListener extends ListenerAdapter {
@@ -29,7 +27,7 @@ public class SuggestionListener extends ListenerAdapter {
         // If it is a suggestion and not a command
         if (getSuggestionsChannel() == channel
                 && !user.isBot()
-                && !GTools.isCommand(e.getMessage().getContentRaw(), user)) {
+                && !Utils.isCommand(e.getMessage().getContentRaw(), user)) {
 
             // Delete original message
             e.getMessage().delete().queue();
@@ -84,8 +82,8 @@ public class SuggestionListener extends ListenerAdapter {
                     // Set suggestion id
                     suggestion.setId(msg.getIdLong());
                     // React to the message
-                    Emote gtmAgree = jda.getEmotesByName("gtmagree", true).get(0);
-                    Emote gtmDisagree = jda.getEmotesByName("gtmdisagree", true).get(0);
+                    Emote gtmAgree = JDA.getEmotesByName("gtmagree", true).get(0);
+                    Emote gtmDisagree = JDA.getEmotesByName("gtmdisagree", true).get(0);
                     msg.addReaction(gtmAgree).queue();
                     msg.addReaction(gtmDisagree).queue();
                 });

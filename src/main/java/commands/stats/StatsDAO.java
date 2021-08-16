@@ -3,7 +3,7 @@ package commands.stats;
 import commands.stats.wrappers.*;
 import org.jetbrains.annotations.Nullable;
 import utils.database.sql.BaseDatabase;
-import utils.tools.UUIDUtil;
+import utils.UUIDUtil;
 
 import java.sql.*;
 import java.time.Instant;
