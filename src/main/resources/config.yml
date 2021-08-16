@@ -167,3 +167,13 @@ dummyAccountUsername: "account username"
 
 # The password for the dummy account used to get and take Xenforo-related information or actions like getting new tickets
 dummyAccountPassword: "account password"
+
+###############################
+#      CLICKUP SETTINGS       #
+###############################
+
+# What is the API key for the click up bot account?
+clickUpKey: "insert key"
+
+# How often to refresh click up in seconds?
+clickUpRefreshFrequency: 10

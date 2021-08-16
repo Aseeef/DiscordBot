@@ -2,7 +2,7 @@ package utils.database.sql;
 
 import utils.database.sql.component.Database;
 import utils.database.sql.component.DatabaseCredentials;
-import utils.tools.GTools;
+import utils.Utils;
 import utils.console.Logs;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -120,7 +120,7 @@ public class DatabaseHandler implements Database {
 			hikariSource.setLogWriter(new PrintWriter(System.out));
 		}
 		catch (SQLException e) {
-			GTools.printStackError(e);
+			Utils.printStackError(e);
 		}
 
 		log("A connection to the database " + this.getCredentials().getName() + " has successfully been established!");
@@ -182,7 +182,7 @@ public class DatabaseHandler implements Database {
 			}
 			catch (Exception e) {
 				log("[DatabaseHandler] Unable to grab a connection from the connection pool!", Logs.ERROR);
-				GTools.printStackError(e);
+				Utils.printStackError(e);
 			}
 		}
 

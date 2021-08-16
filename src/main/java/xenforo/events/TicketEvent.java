@@ -12,7 +12,8 @@ import utils.database.XenforoDAO;
 import utils.database.sql.BaseDatabase;
 import utils.litebans.Ban;
 import utils.selfdata.ChannelIdData;
-import utils.tools.GTools;
+import utils.Utils;
+import utils.threads.ThreadUtil;
 import utils.users.GTMUser;
 import utils.users.Rank;
 import xenforo.objects.Alert;
@@ -26,14 +27,14 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
-import static utils.tools.GTools.jda;
+import static utils.Utils.JDA;
 
 @Deprecated
 public class TicketEvent {
 
     // run async
     public void onTicketEvent(Alert alert) {
-        GTools.runAsync( () -> {
+        ThreadUtil.runAsync( () -> {
 
             if (!alert.getAction().equals("new_ticket")) return;
 
@@ -42,7 +43,7 @@ public class TicketEvent {
 
             Logs.log("[DEBUG] [EventType] Received a new support ticket with title '" + alert.getSupportTicket().getTitle() + "' in " + department.getDepartmentName() + "!");
 
-            TextChannel channel = jda.getGuilds().get(0).getTextChannelById(ChannelIdData.get().getModChannelId());
+            TextChannel channel = JDA.getGuilds().get(0).getTextChannelById(ChannelIdData.get().getModChannelId());
             if (channel == null) return;
 
             switch (department) {
@@ -55,7 +56,7 @@ public class TicketEvent {
                             try (Connection conn2 = BaseDatabase.getInstance(BaseDatabase.Database.BANS).getConnection()) {
                                 ban = LitebansDAO.getBanByPlayer(conn2, username);
                             } catch (SQLException e) {
-                                GTools.printStackError(e);
+                                Utils.printStackError(e);
                             }
 
                             String banStaff;
@@ -71,7 +72,7 @@ public class TicketEvent {
                                         privateChannel.sendMessage(embed).queue()
                                 );
                     } catch (SQLException e) {
-                        GTools.printStackError(e);
+                        Utils.printStackError(e);
                     }
                     break;
                 }
@@ -86,7 +87,7 @@ public class TicketEvent {
                             });
                         }
                     } catch (SQLException e) {
-                        GTools.printStackError(e);
+                        Utils.printStackError(e);
                     }
                 }
 

@@ -1,14 +1,12 @@
 package utils.console;
 
 import org.jetbrains.annotations.NotNull;
-import utils.tools.GTools;
+import utils.Utils;
 
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-
-import static utils.console.Console.*;
 
 public enum Logs {
 
@@ -58,7 +56,7 @@ public enum Logs {
             bw.newLine();
             bw.close();
         } catch (IOException e) {
-            GTools.printStackError(e);
+            Utils.printStackError(e);
         }
     }
 

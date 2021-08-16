@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import static utils.tools.GTools.printStackError;
+import static utils.Utils.printStackError;
 
 public class ConsoleCommand implements Runnable {
 

@@ -1,7 +1,7 @@
 package utils.database;
 
 import utils.database.sql.BaseDatabase;
-import utils.tools.GTools;
+import utils.Utils;
 import xenforo.objects.TicketMessage;
 import xenforo.objects.XenforoUser;
 import xenforo.objects.tickets.SupportTicket;
@@ -46,7 +46,7 @@ public class XenforoDAO {
                 }
             }
         } catch (SQLException e) {
-            GTools.printStackError(e);
+            Utils.printStackError(e);
         }
 
         return null;
@@ -55,7 +55,7 @@ public class XenforoDAO {
     public static List<SupportTicket> getAllTicketsFrom (String username) {
         List<SupportTicket> ticketsList = new ArrayList<>();
 
-        List<String> names = GTools.getAllUsernames(username);
+        List<String> names = Utils.getAllUsernames(username);
         if (names == null || names.size() == 0) return new ArrayList<>();
 
         // extract unique usernames
@@ -71,7 +71,7 @@ public class XenforoDAO {
                 ticketsList.addAll(XenforoDAO.searchTickets(conn, u));
             }
         } catch (SQLException e) {
-            GTools.printStackError(e);
+            Utils.printStackError(e);
         }
 
         return ticketsList;
@@ -119,7 +119,7 @@ public class XenforoDAO {
                 }
             }
         } catch (SQLException e) {
-            GTools.printStackError(e);
+            Utils.printStackError(e);
         }
 
         // sort by open date

@@ -1,10 +1,9 @@
 package utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import commands.bugs.BugReport;
 import commands.suggestions.Suggestions;
-import utils.tools.GTools;
 import utils.users.GTMUser;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +13,6 @@ import java.util.List;
 import static utils.console.Logs.log;
 
 public enum Data {
-    SELFDATA("SELFDATA", SelfData.class),
     SUGGESTIONS("SUGGESTIONS", Suggestions.class),
     BUG_REPORTS("BUGS", BugReport.class),
     USER("USER", GTMUser.class),
@@ -50,12 +48,12 @@ public enum Data {
         return getNextNumber(type)-1;
     }
 
-    public static boolean doesNumberExist (Data type, int number) {
-        File file = new File("data/"+type.getDataName(), number+".json");
+    public static boolean doesNumberExist (Data type, Object id) {
+        File file = new File("data/"+type.getDataName(), id+".json");
         return file.exists();
     }
 
-    private static File createFile(Data type, long number) {
+    private static File createFile(Data type, String number) {
 
         File directory = new File("data/" + type.getDataName());
         directory.mkdirs();
@@ -63,7 +61,7 @@ public enum Data {
         try {
             if (file.createNewFile()) log("Creating a new " + type.getDataName() + " file named " + number + ".json");
         } catch (IOException e) {
-            GTools.printStackError(e);
+            Utils.printStackError(e);
         }
 
         return file;
@@ -73,29 +71,29 @@ public enum Data {
 
         long num = getCurrentNumber(type);
 
-        createFile(type, num);
+        createFile(type, String.valueOf(num));
         storeData(type, o, num);
 
     }
 
-    public static void storeData(Data type, Object o, long number) {
-        createFile(type, number);
+    public static void storeData(Data type, Object o, Object number) {
+        createFile(type, number.toString());
 
         // Create an ObjectMapper and serialize object to string for storage
         ObjectMapper om = new ObjectMapper();
-        File file = new File("data/"+type.getDataName(), number+".json");
+        File file = new File("data/"+type.getDataName(), number.toString() +".json");
 
         try {
             om.writerWithDefaultPrettyPrinter().writeValue(file, o);
         } catch (IOException e) {
-            GTools.printStackError(e);
+            Utils.printStackError(e);
         }
 
         //log("Edited " + type.getDataName() + " data in " + number + ".json");
 
     }
 
-    public static Object obtainData(Data type, long number) {
+    public static Object obtainData(Data type, Object number) {
         File file = new File("data/"+type.getDataName(), number+".json");
 
         // Load the object back
@@ -103,19 +101,21 @@ public enum Data {
             ObjectMapper mapper = new ObjectMapper();
             return mapper.readValue(file, type.getaClass());
         } catch (IllegalStateException | IOException e ) {
-            GTools.printStackError(e);
+            Utils.printStackError(e);
+            System.err.println("Failed to load data id=" + number);
         }
 
         return null;
     }
 
-    public static List<Long> getDataList(Data type) {
+    public static List<Object> getDataList(Data type) {
         File dir = new File("data", type.dataName);
         String[] dirArray = dir.list();
 
-        List<Long> list = new ArrayList<>();
+        List<Object> list = new ArrayList<>();
         if (dirArray != null && dirArray.length != 0)
             for (String fileName : dirArray) {
+                if (new File(dir, fileName).isDirectory()) continue;
                 fileName = fileName.replace(".json", "");
                 list.add(Long.parseLong(fileName));
             }

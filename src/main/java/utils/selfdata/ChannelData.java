@@ -15,7 +15,6 @@ public class ChannelData extends SavableSelfData {
     @JsonCreator
     public ChannelData(@JsonProperty("channelMap") HashMap<Long, CustomChannel> channelMap) {
         super(Type.CHANNELDATA);
-        this.channelMap = new HashMap<>();
         this.channelMap = channelMap;
     }
 

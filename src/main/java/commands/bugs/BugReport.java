@@ -1,49 +1,60 @@
 package commands.bugs;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
+import org.json.JSONObject;
+import utils.BotData;
 import utils.Data;
-import utils.SelfData;
+import utils.database.DiscordDAO;
 import utils.selfdata.ChannelIdData;
-import utils.tools.GTools;
+import utils.threads.ThreadUtil;
+import utils.users.GTMUser;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.io.File;
 
-import static utils.tools.GTools.*;
+import static utils.Utils.*;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class BugReport {
 
-    private int number;
+    private String id;
     private long receiveChannelId;
     private long reportChannelId;
     private String reportMessage;
     private boolean hidden;
     private long reporterId;
     private ReportStatus status;
-    private String fileName;
+    private boolean awarded = false;
 
     public BugReport() {
     }
 
-    public BugReport(int number, long receiveChannelId, long reportChannelId, String reportMessage, boolean hidden, long reporterId, ReportStatus status, String fileName) {
-        this.number = number;
+    @JsonIgnore
+    public BugReport(long receiveChannelId, long reportChannelId, String reportMessage, boolean hidden, long reporterId, ReportStatus status) {
         this.receiveChannelId = receiveChannelId;
         this.reportChannelId = reportChannelId;
         this.reportMessage = reportMessage;
         this.hidden = hidden;
         this.reporterId = reporterId;
         this.status = status;
-        this.fileName = fileName;
-
-        Data.storeData(Data.BUG_REPORTS, this, number);
     }
 
-    public int getNumber() {
-        return number;
+    public void save() {
+        Data.storeData(Data.BUG_REPORTS, this, id);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public long getReceiveChannelId() {
@@ -52,7 +63,7 @@ public class BugReport {
 
     public void setReceiveChannelId(long receiveChannelId) {
         this.receiveChannelId = receiveChannelId;
-        Data.storeData(Data.BUG_REPORTS, this, this.number);
+        Data.storeData(Data.BUG_REPORTS, this, this.id);
     }
 
     public long getReportChannelId() {
@@ -61,11 +72,16 @@ public class BugReport {
 
     public void setReportChannelId(long reportChannelId) {
         this.reportChannelId = reportChannelId;
-        Data.storeData(Data.BUG_REPORTS, this, this.number);
+        Data.storeData(Data.BUG_REPORTS, this, this.id);
     }
 
     public String getReportMessage() {
         return reportMessage;
+    }
+
+    public void setReportMessage(String reportMessage) {
+        this.reportMessage = reportMessage;
+        Data.storeData(Data.BUG_REPORTS, this, this.id);
     }
 
     public boolean isHidden() {
@@ -74,7 +90,7 @@ public class BugReport {
 
     public void setHidden(boolean hidden) {
         this.hidden = hidden;
-        Data.storeData(Data.BUG_REPORTS, this, this.number);
+        Data.storeData(Data.BUG_REPORTS, this, this.id);
     }
 
     public long getReporterId() {
@@ -85,83 +101,112 @@ public class BugReport {
         return status;
     }
 
-    public String getFileName() {
-        return fileName;
+    public void setStatus(ReportStatus status) {
+        this.status = status;
+        Data.storeData(Data.BUG_REPORTS, this, this.id);
+    }
+
+    public boolean isAwarded() {
+        return awarded;
+    }
+
+    public void setAwarded(boolean awarded) {
+        this.awarded = awarded;
+        Data.storeData(Data.BUG_REPORTS, this, this.id);
     }
 
     @JsonIgnore
-    public void updateStatus(ReportStatus status, String statusReason, boolean warnCensor) {
-        this.status = status;
-        userById(this.reporterId).openPrivateChannel().queue(channel -> {
-            MessageAction ma = channel.sendMessage("An update has been received on the following bug report:").embed(this.createEmbed(false));
-            if (fileName != null) {
-                ma = ma.addFile(new File(BugReport.getDownloadDir(), fileName));
-            }
-            ma.queue(success -> {
+    public void sendUpdate(@Nullable String statusReason) {
+        ThreadUtil.runAsync(() -> {
+            // dm user about an update
+            User reporter = userById(this.reporterId);
+            if (reporter != null) {
+                PrivateChannel privateChannel = reporter.openPrivateChannel().complete();
+                MessageAction ma = privateChannel.sendMessage("An update has been received on the following bug report:").setEmbeds(this.createEmbed(false));
+                ma.complete();
                 if (statusReason != null) {
-                    channel.sendMessage("**Additional info from an admin:** \n" + statusReason).queue();
+                    privateChannel.sendMessage("**Additional info from an admin:** \n" + statusReason).complete();
                 }
-                if (warnCensor && status == ReportStatus.CONFIRMED_BUG)
-                    channel.sendMessage("**Warning!** This bug report has been marked as 'hidden' (probably because this bug can be abused). Sharing this bug with anyone may result in a cancellation of any rewards and/or may result in a punishment!").queue();
-            });
-        });
-        if (this.receiveChannelId != 0) {
-            getBugReceiveChannel().retrieveMessageById(this.receiveChannelId).queue(msg ->
-                    msg.editMessage(createEmbed(false)).queue());
-        }
-        if (this.reportChannelId != 0) {
-            getBugReportChannel().retrieveMessageById(this.reportChannelId).queue(msg -> {
-                    MessageAction ma = msg.editMessage(createEmbed(warnCensor));
-                    if (warnCensor) ma.clearFiles();
-                    ma.queue();
-            });
-        }
-        else if (status == ReportStatus.CONFIRMED_BUG) {
-            // Delete previous msg
-            if (SelfData.get().getPrevBugEmbedId() != 0)
-                guild.getTextChannelById(ChannelIdData.getData().getBugReportChannelId()).retrieveMessageById(SelfData.get().getPrevBugEmbedId()).queue(m -> m.delete().queue());
-            if (SelfData.get().getPrevBugHelpMsgId() != 0)
-                guild.getTextChannelById(ChannelIdData.getData().getBugReportChannelId()).retrieveMessageById(SelfData.get().getPrevBugHelpMsgId()).queue(m -> m.delete().queue());
-
-            // set id
-            GTools.runAsync(() -> {
-                MessageAction ma = BugReport.getBugReportChannel().sendMessage(createEmbed(warnCensor));
-                    if (!warnCensor && this.fileName != null) {
-                        ma = ma.addFile(new File(BugReport.getDownloadDir(), this.fileName));
-                    }
-                    ma.queue(m1 -> {
-                        this.setReportChannelId(m1.getIdLong());
-                        getBugReportChannel().sendMessage(ReportListener.createHowBugReportEmbed())
-                                .flatMap(m -> {
-                                    SelfData.get().setPrevBugEmbedId(m.getIdLong());
-                                    return getBugReportChannel().sendMessage(ReportListener.getFormatMessage());
-                                }).queue(m -> SelfData.get().setPrevBugHelpMsgId(m.getIdLong()));
-                    });
-            });
-        }
-
-        if (status == ReportStatus.DENIED) {
-            //if (this.receiveChannelId != 0)
-            //    getBugReceiveChannel().retrieveMessageById(this.receiveChannelId).queue(msg ->
-            //            msg.delete().queue());
-            if (this.reportChannelId != 0) {
-                getBugReportChannel().retrieveMessageById(this.reportChannelId).queue(msg ->
-                        msg.delete().queue());
-                setReportChannelId(0);
+                if (this.hidden)
+                    privateChannel.sendMessage("**Warning!** This bug report was marked as 'hidden' (probably because this bug can be abused). Sharing this bug with anyone may result in a cancellation of any rewards and/or further punishment!").complete();
             }
-        }
+            // update embed in the receive channel (if any and if not we create ones later if needed..)
+            try {
+                Message msg1 = getBugReceiveChannel().retrieveMessageById(this.receiveChannelId).complete();
+                msg1.editMessage(createEmbed(false)).complete();
+            } catch (ErrorResponseException ignored) {
+            }
+            // update embed in the bug report public channel (if any and if not we create ones later if needed..)
+            try {
+                Message msg2 = getBugReportChannel().retrieveMessageById(this.reportChannelId).complete();
+                msg2.editMessageEmbeds(createEmbed(this.hidden)).complete();
+            } catch (ErrorResponseException ignored) {
+            }
 
-        Data.storeData(Data.BUG_REPORTS, this, this.number);
+            if (status == ReportStatus.CONFIRMED_BUG || status == ReportStatus.PATCHED) {
+
+                // Get text channel
+                TextChannel bugChannel = guild.getTextChannelById(ChannelIdData.getData().getBugReportChannelId());
+                // Get if an instance of this bug report has already been posted in public bug reports
+                try {
+                    bugChannel.retrieveMessageById(this.getReportChannelId()).complete();
+                }
+                // if not, we will get an error
+                catch (ErrorResponseException ignored) {
+                    try {
+                        // so first delete the old bug report instruction msgs
+                        bugChannel.retrieveMessageById(BotData.LAST_BUG_EMBED_ID.getData(Long.TYPE)).queue(m -> m.delete().queue());
+                        bugChannel.retrieveMessageById(BotData.LAST_BUG_MSG_ID.getData(Long.TYPE)).queue(m -> m.delete().queue());
+
+                        // now post this new bug report
+                        Message msg = BugReport.getBugReportChannel().sendMessageEmbeds(createEmbed(this.hidden)).complete();
+                        this.setReportChannelId(msg.getIdLong());
+
+                        // and post back the instruction msgs and save there ids
+                        Message msg1 = getBugReportChannel().sendMessageEmbeds(ReportListener.createHowBugReportEmbed()).complete();
+                        BotData.LAST_BUG_EMBED_ID.setValue(msg1.getIdLong());
+                        Message msg2 = getBugReportChannel().sendMessage(ReportListener.getFormatMessage()).complete();
+                        BotData.LAST_BUG_MSG_ID.setValue(msg2.getIdLong());
+
+                    } catch (ErrorResponseException ex) {
+                        ex.printStackTrace(); //shouldn't get an error, but if we do...
+                    }
+                }
+
+                // award player for reporting bug if not already rewarded
+                if (!this.isAwarded()) {
+                    GTMUser.getGTMUser(this.reporterId).ifPresent(reporterGTMUser -> {
+                        JSONObject data = new JSONObject()
+                                .put("uuid", reporterGTMUser.getUuid());
+                        DiscordDAO.sendToGTM("bug_reported", data);
+                    });
+                    this.setAwarded(true);
+                }
+            }
+
+            if (status == ReportStatus.REJECTED_REPORT) {
+                if (this.reportChannelId != 0) {
+                    try {
+                        Message msg = getBugReportChannel().retrieveMessageById(this.reportChannelId).complete();
+                        msg.delete().complete();
+                        setReportChannelId(0);
+                    } catch (ErrorResponseException ignored) {
+                    }
+                }
+            }
+
+            save();
+        });
     }
 
     public enum ReportStatus {
-        PENDING_REVIEW(Color.YELLOW),
-        DENIED(Color.RED),
+        AWAITING_REVIEW(Color.YELLOW),
+        REJECTED_REPORT(Color.RED),
         CONFIRMED_BUG(Color.GREEN),
         PATCHED(Color.CYAN),
         DUPLICATE_REPORT(Color.BLACK)
         ;
-        private Color embedColor;
+        private final Color embedColor;
         ReportStatus (Color embedColor) {
            this.embedColor = embedColor;
         }
@@ -171,8 +216,8 @@ public class BugReport {
     public MessageEmbed createEmbed (boolean censor) {
         // Create suggestion embed
         EmbedBuilder embed = new EmbedBuilder();
-        String gtmLearnablesEmoji = jda.getEmotesByName("gtmlearnables", true).get(0).getAsMention();
-        embed.setTitle(gtmLearnablesEmoji + "  BUG REPORT ID: #" + this.number);
+        String gtmHelpfulEmoji = JDA.getEmotesByName("gtmhelpful", true).get(0).getAsMention();
+        embed.setTitle(gtmHelpfulEmoji + "  **BUG REPORT ID:** " + this.id);
         embed.setThumbnail(userById(this.reporterId).getAvatarUrl());
         if (censor) {
             embed.setDescription("\n\u200E||Sorry but the contents of this bug report are hidden from public view. This was likely done because this bug was considered 'exploitable' or contained other sensitive information.||\n\u200E");
@@ -197,4 +242,12 @@ public class BugReport {
         return new File("data/" + Data.BUG_REPORTS.getDataName() + "/downloads/");
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof BugReport) {
+            BugReport bugReport = (BugReport) o;
+            return bugReport.id.equals(this.id);
+        }
+        return false;
+    }
 }

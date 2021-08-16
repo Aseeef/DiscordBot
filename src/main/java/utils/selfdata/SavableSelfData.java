@@ -3,7 +3,7 @@ package utils.selfdata;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import utils.tools.GTools;
+import utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,7 +48,7 @@ public abstract class SavableSelfData {
         try {
             om.writerWithDefaultPrettyPrinter().writeValue(file, this);
         } catch (IOException e) {
-            GTools.printStackError(e);
+            Utils.printStackError(e);
         }
 
         //debug
@@ -81,7 +81,7 @@ public abstract class SavableSelfData {
         try {
             return file.createNewFile();
         } catch (IOException e) {
-            GTools.printStackError(e);
+            Utils.printStackError(e);
         }
 
         return false;
@@ -104,7 +104,7 @@ public abstract class SavableSelfData {
             ObjectMapper mapper = new ObjectMapper();
             return mapper.readValue(file, dataType.aClass);
         } catch (IllegalStateException | IOException | NullPointerException e ) {
-            GTools.printStackError(e);
+            Utils.printStackError(e);
         }
 
         return null;

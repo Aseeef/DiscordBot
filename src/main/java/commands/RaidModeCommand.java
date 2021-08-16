@@ -9,7 +9,7 @@ import utils.selfdata.ChannelIdData;
 import utils.users.GTMUser;
 import utils.users.Rank;
 
-import static utils.tools.GTools.sendThenDelete;
+import static utils.Utils.sendThenDelete;
 import static utils.tools.RaidModeTools.*;
 
 public class RaidModeCommand extends Command {

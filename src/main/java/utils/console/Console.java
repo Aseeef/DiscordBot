@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import static utils.console.Logs.log;
-import static utils.tools.GTools.jda;
-import static utils.tools.GTools.jedisManager;
+import static utils.Utils.JDA;
+import static utils.Utils.jedisManager;
 
 public class Console {
 
@@ -99,10 +99,10 @@ public class Console {
     public static void loadShutdownHook() {
         Runtime.getRuntime().addShutdownHook(new Thread( () -> {
             // close jda
-            if (jda != null) {
+            if (JDA != null) {
                 // Shut down JDA
                 log("Shutting down discord bot...");
-                jda.shutdownNow();
+                JDA.shutdownNow();
             }
             // Close database pool connection
             log("Closing connections to databases...");

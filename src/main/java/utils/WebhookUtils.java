@@ -1,13 +1,10 @@
-package utils.webhooks;
+package utils;
 
 import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookEmbed;
-import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.Webhook;
 
@@ -15,7 +12,7 @@ import javax.annotation.Nullable;
 import java.io.File;
 import java.util.concurrent.CompletableFuture;
 
-import static utils.tools.GTools.jda;
+import static utils.Utils.JDA;
 
 public class WebhookUtils {
 
@@ -26,7 +23,7 @@ public class WebhookUtils {
      */
     public static CompletableFuture<String> retrieveWebhookUrl (TextChannel channel) {
         CompletableFuture<String> futureHookUrl = new CompletableFuture<>();
-        jda.getGuilds().get(0).retrieveWebhooks().queue( (webhooks -> {
+        JDA.getGuilds().get(0).retrieveWebhooks().queue( (webhooks -> {
             Webhook hook = webhooks.stream().filter((webhook -> webhook.getChannel().getIdLong() == channel.getIdLong())).findFirst().orElse(null);
             if (hook != null)
                 futureHookUrl.complete(hook.getUrl());

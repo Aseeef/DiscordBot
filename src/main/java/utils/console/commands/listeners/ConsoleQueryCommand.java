@@ -3,7 +3,7 @@ package utils.console.commands.listeners;
 import utils.console.Logs;
 import utils.console.commands.ConsoleCommandListener;
 import utils.database.sql.BaseDatabase;
-import utils.tools.GTools;
+import utils.Utils;
 
 import java.sql.*;
 import java.util.Arrays;
@@ -86,7 +86,7 @@ public class ConsoleQueryCommand implements ConsoleCommandListener {
             }
 
         } catch (SQLException e) {
-            GTools.printStackError(e);
+            Utils.printStackError(e);
         }
 
     }

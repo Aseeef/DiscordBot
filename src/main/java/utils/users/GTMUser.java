@@ -2,20 +2,20 @@ package utils.users;
 
 import com.fasterxml.jackson.annotation.*;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import utils.Data;
 import utils.MembersCache;
 import utils.console.Logs;
 import utils.database.DiscordDAO;
 import utils.database.sql.BaseDatabase;
-import utils.tools.GTools;
+import utils.Utils;
+import utils.threads.ThreadUtil;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
 
-import static utils.tools.GTools.guild;
+import static utils.Utils.guild;
 
 public class GTMUser {
 
@@ -78,7 +78,7 @@ public class GTMUser {
                     return Optional.empty();
                 }
             } catch (SQLException e) {
-                GTools.printStackError(e);
+                Utils.printStackError(e);
             }
 
             if (gtmUser != null) gtmUser.updateUserDataIfTime();;
@@ -94,8 +94,8 @@ public class GTMUser {
 
     @JsonIgnore
     public static void loadUsers() {
-        for (long dataId : Data.getDataList(Data.USER)) {
-            userCache.putIfAbsent(dataId, (GTMUser) Data.obtainData(Data.USER, dataId));
+        for (Object dataId : Data.getDataList(Data.USER)) {
+            userCache.putIfAbsent((Long) dataId, (GTMUser) Data.obtainData(Data.USER, dataId));
         }
         System.out.println("Successfully loaded all " + userCache.size() + " GTM Discord Users!");
     }
@@ -147,7 +147,7 @@ public class GTMUser {
         long start = System.currentTimeMillis();
 
         try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
-            String newUsername = GTools.getUsername(this.getUuid()).orElse(null);
+            String newUsername = Utils.getUsername(this.getUuid()).orElse(null);
             Rank newRank = DiscordDAO.getRank(conn, this.getUuid());
 
             if (newRank != null && newRank != this.getRank()) {
@@ -191,7 +191,7 @@ public class GTMUser {
             DiscordDAO.updateDiscordTag(conn, this.discordId, discordMember.getUser().getAsTag());
 
         } catch (SQLException e) {
-            GTools.printStackError(e);
+            Utils.printStackError(e);
         }
 
         System.out.println("Updated user data for GTM Player " + this.getUsername() + " in " + (System.currentTimeMillis() - start) + " ms!");
@@ -200,7 +200,7 @@ public class GTMUser {
     @JsonIgnore
     public void updateUserDataIfTime() {
         if (this.lastUpdated + (UPDATE_TIME * 1000 * 60) < System.currentTimeMillis())
-            GTools.runAsync(this::updateUserDataNow);
+            ThreadUtil.runAsync(this::updateUserDataNow);
     }
 
     @JsonGetter

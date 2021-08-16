@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import static utils.tools.GTools.guild;
+import static utils.Utils.guild;
 
 public class MembersCache extends ListenerAdapter {
 
@@ -87,7 +87,7 @@ public class MembersCache extends ListenerAdapter {
         guild.loadMembers().onSuccess( (list) -> {
             members = list;
             futureList.complete(list);
-            Logs.log("Successfully cached all members in " + (System.currentTimeMillis() - cacheStart) + " ms!");
+            Logs.log("Successfully cached all " + list.size() + " members in " + (System.currentTimeMillis() - cacheStart) + " ms!");
         });
         return futureList;
     }

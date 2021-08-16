@@ -3,8 +3,8 @@ package utils.database;
 import net.grandtheftmc.jedisnew.NewJedisManager;
 import org.json.JSONObject;
 import utils.database.sql.BaseDatabase;
-import utils.tools.GTools;
-import utils.tools.UUIDUtil;
+import utils.Utils;
+import utils.UUIDUtil;
 import utils.users.GTMUser;
 import utils.users.Rank;
 
@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import static utils.tools.GTools.jedisManager;
+import static utils.Utils.jedisManager;
 
 public class DiscordDAO {
 
@@ -59,7 +59,7 @@ public class DiscordDAO {
                 }
             }
         } catch (Exception e) {
-            GTools.printStackError(e);
+            Utils.printStackError(e);
         }
 
         return null;
@@ -68,7 +68,7 @@ public class DiscordDAO {
     public static void createDiscordProfile(Connection conn, GTMUser gtmUser) throws SQLException {
         String mention = gtmUser.getUser().get().getAsTag();
         mention = mention.replaceFirst("@", "");
-        mention = GTools.convertSpecialChar(mention); //changes character encoding to something accepted by database
+        mention = Utils.convertSpecialChar(mention); //changes character encoding to something accepted by database
 
         String query = "INSERT INTO `discord_users` (`uuid`, `discord_tag`, `discord_id`, `verify_active`, `verify_time`) VALUES (UNHEX(?),?,?,?,?) ON DUPLICATE KEY UPDATE `discord_tag`=?, `discord_id`=?, `verify_active`=?, `verify_time`=?;";
 
@@ -92,7 +92,7 @@ public class DiscordDAO {
 
     public static void updateDiscordTag(Connection conn, long discordId, String tag) {
         tag = tag.replaceFirst("@", "");
-        tag = GTools.convertSpecialChar(tag); //changes character encoding to something accepted by database
+        tag = Utils.convertSpecialChar(tag); //changes character encoding to something accepted by database
 
         if (!discordProfileExists(conn, discordId)) return;
 
@@ -103,7 +103,7 @@ public class DiscordDAO {
             ps.setLong(2, discordId);
             ps.executeUpdate();
         } catch (Exception e) {
-            GTools.printStackError(e);
+            Utils.printStackError(e);
         }
     }
 
@@ -119,7 +119,7 @@ public class DiscordDAO {
                 }
             }
         } catch (SQLException e) {
-            GTools.printStackError(e);
+            Utils.printStackError(e);
         }
 
     }
@@ -147,7 +147,7 @@ public class DiscordDAO {
                 }
             }
         } catch (SQLException e) {
-            GTools.printStackError(e);
+            Utils.printStackError(e);
         }
 
         return gtmUsersWithRank;
@@ -155,7 +155,7 @@ public class DiscordDAO {
     }
 
     public static long getDiscordIdFromName (Connection conn, String username) {
-        UUID uuid = GTools.getUUID(username).orElse(null);
+        UUID uuid = Utils.getUUID(username).orElse(null);
         if (uuid == null) return -1;
         return getDiscordIdFromUUID(conn, uuid);
     }
@@ -172,7 +172,7 @@ public class DiscordDAO {
                 }
             }
         } catch (SQLException e) {
-            GTools.printStackError(e);
+            Utils.printStackError(e);
         }
 
         return -1;
@@ -191,7 +191,7 @@ public class DiscordDAO {
                     }
                 }
             } catch (SQLException e) {
-                GTools.printStackError(e);
+                Utils.printStackError(e);
             }
 
         return false;
