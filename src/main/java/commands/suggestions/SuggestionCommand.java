@@ -11,8 +11,8 @@ import utils.selfdata.ChannelIdData;
 import utils.users.GTMUser;
 import utils.users.Rank;
 
-import static utils.tools.GTools.sendThenDelete;
-import static utils.tools.GTools.userById;
+import static utils.Utils.sendThenDelete;
+import static utils.Utils.userById;
 import static commands.suggestions.SuggestionTools.*;
 
 public class SuggestionCommand extends Command {

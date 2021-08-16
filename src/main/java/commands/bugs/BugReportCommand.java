@@ -2,28 +2,52 @@ package commands.bugs;
 
 import commands.Command;
 import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.grandtheftmc.jedisnew.RedisEvent;
-import org.json.JSONObject;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import utils.Data;
-import utils.SelfData;
-import utils.database.DiscordDAO;
+import utils.BotData;
+import utils.StringUtils;
 import utils.selfdata.ChannelIdData;
-import utils.tools.GTools;
+import utils.Utils;
+import utils.threads.CallbackThread;
+import utils.threads.ThreadUtil;
 import utils.users.GTMUser;
 import utils.users.Rank;
+import utils.web.ImgurUploader;
+import utils.web.clickup.CUTask;
 
-import static utils.tools.GTools.guild;
-import static utils.tools.GTools.sendThenDelete;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.regex.Matcher;
+
+import static utils.Utils.*;
 
 public class BugReportCommand extends Command {
 
     public BugReportCommand() {
-        super("bugreports", "Manage bug reports", Rank.ADMIN, Type.DISCORD_ONLY);
+        super("BugReports", "Manage bug reports", Rank.ADMIN, Type.DISCORD_ONLY);
+
     }
+
+    public void buildCommandData() {
+
+        SubcommandData setChannel = new SubcommandData("SetChannel", "Set the bug reports channels.");
+        OptionData optionData = new OptionData(OptionType.STRING, "Type", "Are you setting the report receive channel or the report send channel?");
+        optionData.addChoice("Receive", "Send");
+        setChannel.addOptions(optionData);
+
+        SubcommandData deny = new SubcommandData("Deny", "Deny the selected bug report");
+        deny.addOption(OptionType.STRING, "Bug Report ID", "Whats the bug report you want to deny?");
+
+        SubcommandData approve = new SubcommandData("Deny", "Deny the selected bug report");
+        deny.addOption(OptionType.STRING, "Bug Report ID", "Whats the bug report you want to approve?");
+    }
+
 
     @Override
     public void onCommandUse(Message message, Member member, GTMUser gtmUser, MessageChannel channel, String[] args) {
@@ -32,7 +56,7 @@ public class BugReportCommand extends Command {
         TextChannel textChannel = (TextChannel) channel;
 
         if (args.length < 1) {
-            GTools.sendThenDelete(channel, getHelpMsg());
+            Utils.sendThenDelete(channel, getHelpMsg());
             return;
         }
 
@@ -40,7 +64,7 @@ public class BugReportCommand extends Command {
 
             case "setchannel": {
                 if (args.length < 2) {
-                    GTools.sendThenDelete(channel, getHelpMsg());
+                    Utils.sendThenDelete(channel, getHelpMsg());
                     return;
                 }
                 if (args[1].equalsIgnoreCase("report")) {
@@ -48,42 +72,52 @@ public class BugReportCommand extends Command {
                     ChannelIdData.get().setBugReportChannelId(channel.getIdLong());
                     sendThenDelete(channel, "**" + textChannel.getAsMention() + " has been set as the bug reports channel!**");
                     // Delete previous msg
-                    if (SelfData.get().getPrevBugEmbedId() != 0)
-                        guild.getTextChannelById(ChannelIdData.getData().getBugReportChannelId()).retrieveMessageById(SelfData.get().getPrevBugEmbedId()).queue(m -> m.delete().queue());
-                    if (SelfData.get().getPrevBugHelpMsgId() != 0)
-                        guild.getTextChannelById(ChannelIdData.getData().getBugReportChannelId()).retrieveMessageById(SelfData.get().getPrevBugHelpMsgId()).queue(m -> m.delete().queue());
+                    try {
+                        guild.getTextChannelById(ChannelIdData.getData().getBugReportChannelId()).retrieveMessageById(BotData.LAST_BUG_EMBED_ID.getData(Number.class).longValue()).queue(m -> m.delete().queue());
+                        guild.getTextChannelById(ChannelIdData.getData().getBugReportChannelId()).retrieveMessageById(BotData.LAST_BUG_MSG_ID.getData(Number.class).longValue()).queue(m -> m.delete().queue());
+                    } catch (ErrorResponseException ignored) {}
+
                     // Send how to make a bug report instruction
                     channel.sendMessage(ReportListener.createHowBugReportEmbed())
                             .flatMap(m -> {
-                                SelfData.get().setPrevBugEmbedId(m.getIdLong());
+                                BotData.LAST_BUG_EMBED_ID.setValue(m.getIdLong());
                                 return channel.sendMessage(ReportListener.getFormatMessage());
-                            }).queue(m -> SelfData.get().setPrevBugHelpMsgId(m.getIdLong()));
+                            })
+                            .queue(m -> BotData.LAST_BUG_MSG_ID.setValue(m.getIdLong()));
+
                 } else if (args[1].equalsIgnoreCase("receive")) {
                     // Set settings
                     ChannelIdData.get().setBugReceiveChannelId(channel.getIdLong());
                     sendThenDelete(channel, "**" + textChannel.getAsMention() + " has been set as the bug receive channel!**");
-                } else GTools.sendThenDelete(channel, getHelpMsg());
+                } else Utils.sendThenDelete(channel, getHelpMsg());
                 break;
             }
+
             case "deny": {
                 if (!isValidArgs(textChannel, args)) return;
-                BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, Integer.parseInt(args[1]));
-                report.updateStatus(BugReport.ReportStatus.DENIED, args.length > 2 ? GTools.joinArgsAfter(args, 2) : null, report.isHidden());
-                sendThenDelete(channel, "**Success!** You set bug report id " + Integer.parseInt(args[1]) + " to " + BugReport.ReportStatus.DENIED + "!");
+                BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, args[1].toLowerCase());
+                report.setStatus(BugReport.ReportStatus.REJECTED_REPORT);
+                report.sendUpdate(args.length > 2 ? Utils.joinArgsAfter(args, 2) : null);
+                CUTask.editTask(report.getId(), BugReport.ReportStatus.REJECTED_REPORT);
+                sendThenDelete(channel, "**Success!** You set bug report id " + args[1] + " to " + BugReport.ReportStatus.REJECTED_REPORT + "!");
                 break;
             }
             case "complete": {
                 if (!isValidArgs(textChannel, args)) return;
                 BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, Integer.parseInt(args[1]));
-                report.updateStatus(BugReport.ReportStatus.PATCHED, args.length > 2 ? GTools.joinArgsAfter(args, 2) : null, report.isHidden());
+                report.setStatus(BugReport.ReportStatus.PATCHED);
+                report.sendUpdate(args.length > 2 ? Utils.joinArgsAfter(args, 2) : null);
+                CUTask.editTask(report.getId(), BugReport.ReportStatus.PATCHED);
                 sendThenDelete(channel, "**Success!** You set bug report id " + Integer.parseInt(args[1]) + " to " + BugReport.ReportStatus.PATCHED + "!");
                 break;
             }
             case "duplicate": {
                 if (!isValidArgs(textChannel, args)) return;
-                BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, Integer.parseInt(args[1]));
-                report.updateStatus(BugReport.ReportStatus.DUPLICATE_REPORT, args.length > 2 ? GTools.joinArgsAfter(args, 2) : null, report.isHidden());
-                sendThenDelete(channel, "**Success!** You set bug report id " + Integer.parseInt(args[1]) + " to " + BugReport.ReportStatus.DUPLICATE_REPORT + "!");
+                BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, args[1]);
+                report.setStatus(BugReport.ReportStatus.DUPLICATE_REPORT);
+                report.sendUpdate(args.length > 2 ? Utils.joinArgsAfter(args, 2) : null);
+                CUTask.editTask(report.getId(), BugReport.ReportStatus.DUPLICATE_REPORT);
+                sendThenDelete(channel, "**Success!** You set bug report id " + args[1] + " to " + BugReport.ReportStatus.DUPLICATE_REPORT + "!");
                 break;
             }
             case "approve": {
@@ -97,21 +131,17 @@ public class BugReportCommand extends Command {
                         return;
                     }
                 }
-                BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, Integer.parseInt(args[1]));
-
-                report.updateStatus(BugReport.ReportStatus.CONFIRMED_BUG, args.length > 3 ? GTools.joinArgsAfter(args, 3) : null, b);
+                BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, args[1]);
+                report.setStatus(BugReport.ReportStatus.CONFIRMED_BUG);
                 report.setHidden(b);
+                report.sendUpdate(args.length > 3 ? Utils.joinArgsAfter(args, 3) : null);
+                CUTask.editTask(report.getId(), BugReport.ReportStatus.CONFIRMED_BUG);
 
-                GTMUser.getGTMUser(report.getReporterId()).ifPresent(reporterGTMUser -> {
-                    JSONObject data = new JSONObject()
-                            .put("uuid", reporterGTMUser.getUuid());
-                    DiscordDAO.sendToGTM("bug_reported", data);
-                });
-                sendThenDelete(channel, "**Success!** You set bug report id " + Integer.parseInt(args[1]) + " to " + BugReport.ReportStatus.CONFIRMED_BUG + "!");
+                sendThenDelete(channel, "**Success!** You set bug report id " + args[1] + " to " + BugReport.ReportStatus.CONFIRMED_BUG + "!");
                 break;
             }
             default: {
-                GTools.sendThenDelete(channel, getHelpMsg());
+                Utils.sendThenDelete(channel, getHelpMsg());
                 break;
             }
 
@@ -121,17 +151,17 @@ public class BugReportCommand extends Command {
 
     private boolean isValidArgs(TextChannel channel, String[] args) {
         if (args.length < 2) {
-            GTools.sendThenDelete(channel, getHelpMsg());
+            Utils.sendThenDelete(channel, getHelpMsg());
             return false;
         }
         boolean exists = false;
         try {
-            exists = Data.doesNumberExist(Data.BUG_REPORTS, Integer.parseInt(args[1]));
+            exists = Data.doesNumberExist(Data.BUG_REPORTS, args[1].toLowerCase());
         } catch (NumberFormatException ignored) {
         }
 
         if (!exists) {
-            sendThenDelete(channel, "**No bug report with id " + args[1] + " exists!");
+            sendThenDelete(channel, "**Error!** No bug report with id " + args[1] + " was found.");
             return false;
         }
         return true;

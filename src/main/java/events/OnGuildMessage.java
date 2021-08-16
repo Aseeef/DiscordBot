@@ -7,8 +7,8 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import utils.selfdata.AnnoyData;
-import utils.tools.GTools;
-import utils.webhooks.WebhookUtils;
+import utils.Utils;
+import utils.WebhookUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -20,7 +20,7 @@ public class OnGuildMessage extends ListenerAdapter {
         Member member = e.getMember();
         final Message message = e.getMessage();
 
-        if (member == null || user.isBot() || message.isWebhookMessage() || GTools.isCommand(message.getContentRaw(), user)) return;
+        if (member == null || user.isBot() || message.isWebhookMessage() || Utils.isCommand(message.getContentRaw(), user)) return;
 
         final Map<Long, String> annoyMap = AnnoyData.get().getEmojiAnnoyMap();
         final Map<Long, Character> scrabbleMap = AnnoyData.get().getScrabbleAnnoyMap();

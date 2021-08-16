@@ -16,7 +16,7 @@ import utils.MembersCache;
 import utils.confighelpers.Config;
 import utils.selfdata.ChannelData;
 import utils.selfdata.ChannelIdData;
-import utils.tools.GTools;
+import utils.threads.ThreadUtil;
 import utils.users.Rank;
 
 import java.util.ArrayList;
@@ -27,8 +27,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import static utils.tools.GTools.guild;
-import static utils.tools.GTools.jda;
+import static utils.Utils.guild;
+import static utils.Utils.JDA;
 
 public class CustomChannel extends ListenerAdapter {
 
@@ -67,7 +67,7 @@ public class CustomChannel extends ListenerAdapter {
         this.voiceChannel = guild.getVoiceChannelById(this.voiceChannelId);
 
         if (this.voiceChannel == null) {
-            GTools.runDelayedTask( () -> {
+            ThreadUtil.runDelayedTask( () -> {
                 ChannelData.get().getChannelMap().remove(this.ownerId);
                 ChannelData.get().save();
             }, 10);
@@ -94,7 +94,7 @@ public class CustomChannel extends ListenerAdapter {
             this.owner = optionalOwner.get();
         }
         else {
-            GTools.runDelayedTask( () -> {
+            ThreadUtil.runDelayedTask( () -> {
                 ChannelData.get().getChannelMap().remove(this.ownerId);
                 ChannelData.get().save();
             }, 10);
@@ -105,7 +105,7 @@ public class CustomChannel extends ListenerAdapter {
         if (this.voiceChannel.getMembers().size() == 0)
             this.deleteTimer = startDeleteTimer();
 
-        jda.addEventListener(this);
+        JDA.addEventListener(this);
 
     }
 
@@ -119,7 +119,7 @@ public class CustomChannel extends ListenerAdapter {
         // start delete timer in case no one ends up joining
         this.deleteTimer = startDeleteTimer();
 
-        jda.addEventListener(this);
+        JDA.addEventListener(this);
     }
 
 
@@ -146,8 +146,8 @@ public class CustomChannel extends ListenerAdapter {
     /**
      * This method starts a timer to delete this channel after a time as configured in config if no players are in the channel
      */
-    private ScheduledFuture startDeleteTimer() {
-        return GTools.runDelayedTask( () -> {
+    private ScheduledFuture<?> startDeleteTimer() {
+        return ThreadUtil.runDelayedTask( () -> {
 
             if (this.voiceChannel.getMembers().size() == 0) {
                 this.remove();

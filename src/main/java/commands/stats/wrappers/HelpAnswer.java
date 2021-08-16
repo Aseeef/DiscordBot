@@ -3,7 +3,7 @@ package commands.stats.wrappers;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import utils.tools.UUIDUtil;
+import utils.UUIDUtil;
 
 import java.util.LinkedList;
 import java.util.UUID;

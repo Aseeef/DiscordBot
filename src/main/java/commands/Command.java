@@ -1,23 +1,32 @@
 package commands;
 
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.requests.restaction.interactions.ReplyAction;
+import org.jetbrains.annotations.NotNull;
 import utils.confighelpers.Config;
-import utils.tools.GTools;
+import utils.Utils;
 import utils.users.GTMUser;
 import utils.users.Rank;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static utils.console.Logs.log;
-import static utils.tools.GTools.jda;
-import static utils.tools.GTools.sendThenDelete;
+import static utils.Utils.JDA;
+import static utils.Utils.sendThenDelete;
 
 public abstract class Command extends ListenerAdapter {
 
     private final static int COMMAND_MS_DELAY = 1250;
+
+    private CommandData commandData;
 
     private final String name;
     private final String description;
@@ -34,64 +43,53 @@ public abstract class Command extends ListenerAdapter {
      * @param description - The command description displayed in /help
      * @param rank - The rank required to use this rank
      */
-    public Command(String name, String description, Rank rank, Type type) {
+    public Command(String name, String description, Rank rank, Type type, OptionData... argUsage) {
         this.name = name;
         this.description = description;
         this.rank = rank;
         this.type = type;
         commandList.add(this);
 
-        // TODO: jda.upsertCommand(name, description).queue();
+        this.commandData = new CommandData(name.toLowerCase(), description);
     }
 
-    /* TODO - Gettings args
+    //todo discord interaction commands
+
     @Override
     public void onSlashCommand (@NotNull SlashCommandEvent e) {
 
+        e.deferReply(true).queue(); // acknowledge command
+        e.getHook().setEphemeral(false); // msgs visible to everyone
+
         User user = e.getUser();
+        Member member = e.getMember();
         GTMUser gtmUser = GTMUser.getGTMUser(user.getIdLong()).orElse(null);
-        String[] args = e.get.split("/");
         MessageChannel channel = e.getChannel();
 
-        jda.getGuilds().get(0).retrieveMember(user).queue((member -> {
+        if (e.getName().equals(name)) {
 
-            if (e.getName().equals(name)) {
-                // anti command spam
-                if (antiSpamMap.containsKey(user) && antiSpamMap.get(user) > System.currentTimeMillis() - COMMAND_MS_DELAY) {
-                    sendThenDelete(channel, "**Slow down! Please do not spam commands!**");
-                    return;
-                }
+            log("User " + user.getAsTag() +
+                    "(" + user.getId() + ") issued command: " + e.getCommandPath());
 
-                log("User " + user.getAsTag() +
-                        "(" + user.getId() + ") issued command: " + e.getCommandPath());
-
-                // Check perms
-                if (!Rank.hasRolePerms(member, rank)) {
-                    sendThenDelete(channel, "**Sorry but you must be " + getRank().name() + " or higher to use this command! Use `/help` to list all commands you can use.**");
-                    return;
-                }
-
-                // Check type
-                if (type == Type.DISCORD_ONLY && e.getChannelType() == ChannelType.PRIVATE) {
-                    sendThenDelete(channel, "**Sorry but this command can only be executed on the GTM discord!**");
-                    return;
-                }
-
-                else if (type == Type.DMS_ONLY && e.getChannelType() != ChannelType.PRIVATE) {
-                    sendThenDelete(channel, "**Sorry but this command can only be executed in direct messages with me!**");
-                    return;
-                }
-
-                onCommandUse(e, member, gtmUser, channel, args);
-                e.acknowledge(true).queue();
-
-                antiSpamMap.put(user, System.currentTimeMillis()); // set last command use
+            // Check perms
+            if (!Rank.hasRolePerms(member, rank)) {
+                e.reply("**Sorry but you must be " + getRank().name() + " or higher to use this command! Use `/help` to list all commands you can use.**").setEphemeral(true).queue();
+                return;
             }
 
-        }));
+            // Check type
+            if (type == Type.DISCORD_ONLY && e.getChannelType() == ChannelType.PRIVATE) {
+                e.reply("**Sorry but this command can only be executed on the GTM discord!**").setEphemeral(true).queue();
+                return;
+            } else if (type == Type.DMS_ONLY && e.getChannelType() != ChannelType.PRIVATE) {
+                e.reply("**Sorry but this command can only be executed in direct messages with me!**").setEphemeral(true).queue();
+                return;
+            }
+
+            //onCommandUse(e, member, gtmUser, channel, e.getOptions());
+        }
 
     }
-     */
 
     @Override
     public void onPrivateMessageReceived(PrivateMessageReceivedEvent e) {
@@ -102,8 +100,8 @@ public abstract class Command extends ListenerAdapter {
         String[] args = getArgs(msg);
         PrivateChannel channel = e.getChannel();
 
-        jda.getGuilds().get(0).retrieveMember(user).queue( (member -> {
-            if (GTools.isCommand(msg, user, name)) {
+        JDA.getGuilds().get(0).retrieveMember(user).queue( (member -> {
+            if (Utils.isCommand(msg, user, name)) {
 
                 // anti command spam
                 if (antiSpamMap.containsKey(e.getAuthor()) && antiSpamMap.get(e.getAuthor()) > System.currentTimeMillis() - COMMAND_MS_DELAY) {
@@ -147,7 +145,7 @@ public abstract class Command extends ListenerAdapter {
 
         GTMUser gtmUser = GTMUser.getGTMUser(member.getIdLong()).orElse(null);
 
-        if (GTools.isCommand(msg, member.getUser(), name)) {
+        if (Utils.isCommand(msg, member.getUser(), name)) {
 
             // anti command spam
             if (antiSpamMap.containsKey(e.getAuthor()) && antiSpamMap.get(e.getAuthor()) > System.currentTimeMillis() - COMMAND_MS_DELAY) {
@@ -193,6 +191,10 @@ public abstract class Command extends ListenerAdapter {
         return type;
     }
 
+    public CommandData getCommandData() {
+        return commandData;
+    }
+
     public static List<Command> getCommands() {
         return commandList;
     }
@@ -204,7 +206,8 @@ public abstract class Command extends ListenerAdapter {
     /** This is the logic that occurs when this command is used
      * Note: To use TextChannel or PrivateChannel methods, use casting
      */
-    public abstract void onCommandUse(@Deprecated Message message, Member member, GTMUser gtmUser, MessageChannel channel, String[] args);
+    public abstract void onCommandUse(Message message, Member member, GTMUser gtmUser, MessageChannel channel, String[] args);
+    //public abstract ReplyAction onCommandUse(SlashCommandEvent slashCommandEvent, Member member, GTMUser gtmUser, MessageChannel channel, List<OptionMapping> args);
 
     // -- Commands static methods -- //
 
@@ -242,7 +245,7 @@ public abstract class Command extends ListenerAdapter {
                     .split(" ")[0];
 
             // If is any command, delete it
-            if (GTools.isCommand(msg, user)) {
+            if (Utils.isCommand(msg, user)) {
                 if (channel instanceof TextChannel)
                     message.delete().queue();
 
@@ -251,7 +254,7 @@ public abstract class Command extends ListenerAdapter {
                     log("User "+ user.getAsTag()+
                             "("+user.getId()+") issued unknown command: " + msg);
 
-                    GTools.sendThenDelete(channel, "**Unknown command! Do `/help` for a list of all commands that you can use!**");
+                    Utils.sendThenDelete(channel, "**Unknown command! Do `/help` for a list of all commands that you can use!**");
                 }
             }
         }

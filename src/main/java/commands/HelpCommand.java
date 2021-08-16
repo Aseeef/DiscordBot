@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static utils.tools.GTools.sendThenDelete;
+import static utils.Utils.sendThenDelete;
 
 public class HelpCommand extends Command {
 

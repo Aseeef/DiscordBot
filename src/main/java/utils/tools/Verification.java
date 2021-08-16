@@ -2,8 +2,10 @@ package utils.tools;
 
 import org.json.JSONObject;
 import utils.Data;
+import utils.Utils;
 import utils.database.DiscordDAO;
 import utils.database.sql.BaseDatabase;
+import utils.threads.ThreadUtil;
 import utils.users.GTMUser;
 import net.dv8tion.jda.api.entities.Member;
 import utils.users.Rank;
@@ -62,13 +64,13 @@ public class Verification {
                 JSONObject data = new JSONObject()
                         .put("uuid", gtmUser.getUuid())
                         .put("discordId", m.getIdLong())
-                        .put("tag", GTools.convertSpecialChar(m.getUser().getAsTag()));
+                        .put("tag", Utils.convertSpecialChar(m.getUser().getAsTag()));
                 DiscordDAO.sendToGTM("verified", data);
-                GTools.runAsync(gtmUser::updateUserDataNow);
+                ThreadUtil.runAsync(gtmUser::updateUserDataNow);
                 // remove code
                 verifyHashMap.remove(code);
             } catch (SQLException e) {
-                GTools.printStackError(e);
+                Utils.printStackError(e);
                 return false;
             }
             return true;
@@ -76,11 +78,11 @@ public class Verification {
     }
 
     public static void unVerifyUser(GTMUser gtmUser) {
-        GTools.runAsync( () -> {
+        ThreadUtil.runAsync( () -> {
             try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
                 DiscordDAO.deleteDiscordProfile(conn, gtmUser.getUuid());
             } catch (SQLException e) {
-                GTools.printStackError(e);
+                Utils.printStackError(e);
             }
         });
         DiscordDAO.sendToGTM("unverify", new JSONObject().put("uuid", gtmUser.getUuid()));

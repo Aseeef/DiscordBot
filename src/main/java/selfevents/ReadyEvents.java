@@ -9,7 +9,7 @@ import utils.console.Logs;
 import utils.selfdata.AnnoyData;
 import utils.selfdata.ChannelData;
 import utils.selfdata.ChannelIdData;
-import utils.tools.GTools;
+import utils.Utils;
 import utils.users.GTMUser;
 
 import java.util.Map;
@@ -17,7 +17,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static utils.console.Logs.log;
-import static utils.tools.GTools.*;
+import static utils.Utils.*;
 
 public class ReadyEvents extends ListenerAdapter {
 
@@ -26,12 +26,12 @@ public class ReadyEvents extends ListenerAdapter {
         // Make sure bot is only on one server
         if (!inOnlyOneGuild()) {
             Logs.log("The GTM Discord bot may not be in more then one server at a time!", Logs.ERROR);
-            Logs.log(jda.getGuilds().toString(), Logs.ERROR);
+            Logs.log(JDA.getGuilds().toString(), Logs.ERROR);
             System.exit(0);
         }
 
         // set static guild variable
-        guild = jda.getGuilds().get(0);
+        guild = JDA.getGuilds().get(0);
 
         // cache all members and once done
         MembersCache.reloadMembersAsync().thenAccept( members -> {
@@ -54,8 +54,6 @@ public class ReadyEvents extends ListenerAdapter {
 
             // load all GTM users in to memory
             GTMUser.loadUsers();
-
-            // @Prez, your stuff here:
 
         });
 
@@ -114,8 +112,8 @@ public class ReadyEvents extends ListenerAdapter {
                     long hours = value[0];
                     long lastUpdated = value[1];
                     if (lastUpdated < System.currentTimeMillis() - 1000 * 60 * 60 * hours) {
-                        int index = GTools.randomNumber(0, wiseQuotes.length - 1);
-                        jda.retrieveUserById(key)
+                        int index = Utils.randomNumber(0, wiseQuotes.length - 1);
+                        JDA.retrieveUserById(key)
                                 .flatMap(User::openPrivateChannel)
                                 .flatMap(privateChannel -> privateChannel.sendMessage(wiseQuotes[index]))
                                 .queue();
@@ -143,21 +141,21 @@ public class ReadyEvents extends ListenerAdapter {
 
     // Check if suggestions channel not configured
     private void checkSuggestionsSettings() {
-        if (jda.getTextChannelById(ChannelIdData.get().getSuggestionChannelId()) == null)
+        if (JDA.getTextChannelById(ChannelIdData.get().getSuggestionChannelId()) == null)
             log("The suggestion channel has not been properly configured yet!",
                     Logs.WARNING);
         // Player count channel not configured
-        if (jda.getVoiceChannelById(ChannelIdData.get().getPlayerCountChannelId()) == null)
+        if (JDA.getVoiceChannelById(ChannelIdData.get().getPlayerCountChannelId()) == null)
             log("The player count display channel has not been properly configured yet!",
                     Logs.WARNING);
         // Raid alerts channel not configured
-        if (jda.getTextChannelById(ChannelIdData.get().getRaidAlertChannelId()) == null)
+        if (JDA.getTextChannelById(ChannelIdData.get().getRaidAlertChannelId()) == null)
             log("The raid alerts channel has not been properly configured yet!",
                     Logs.WARNING);
     }
 
     private static boolean inOnlyOneGuild() {
-        return jda.getGuilds().size() <= 1;
+        return JDA.getGuilds().size() <= 1;
     }
 
 }

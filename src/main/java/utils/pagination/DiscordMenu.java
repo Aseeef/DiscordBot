@@ -9,14 +9,11 @@ import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemove
 import net.dv8tion.jda.api.events.message.priv.react.PrivateMessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.priv.react.PrivateMessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import utils.console.Logs;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import static utils.tools.GTools.jda;
+import static utils.Utils.JDA;
 
 public class DiscordMenu extends ListenerAdapter {
 
@@ -41,7 +38,7 @@ public class DiscordMenu extends ListenerAdapter {
      * @param allowChangeFromAll
      */
     protected DiscordMenu (Message message, int maxPages, User user, boolean allowChangeFromAll) {
-        jda.addEventListener(this);
+        JDA.addEventListener(this);
         this.message = message;
         this.channel = message.getChannel();
         this.maxPages = maxPages;
@@ -52,7 +49,7 @@ public class DiscordMenu extends ListenerAdapter {
     }
 
     protected DiscordMenu (Message message, int maxPages) {
-        jda.addEventListener(this);
+        JDA.addEventListener(this);
         this.message = message;
         this.channel = message.getChannel();
         this.maxPages = maxPages;
@@ -134,7 +131,7 @@ public class DiscordMenu extends ListenerAdapter {
 
     private void onReactionAdd(long messageIdLong, User reactingUser, MessageReaction.ReactionEmote reactionEmote) {
 
-        if (this.message != null && this.message.getIdLong() == messageIdLong && !(reactingUser == jda.getSelfUser())) {
+        if (this.message != null && this.message.getIdLong() == messageIdLong && !(reactingUser == JDA.getSelfUser())) {
 
             // remove the reaction
             if (this.channel == null || this.channel instanceof PrivateChannel || (reactionEmote.isEmoji() && reactionEmote.getEmoji().equals(CLOSE))) {}
@@ -159,7 +156,7 @@ public class DiscordMenu extends ListenerAdapter {
                 this.message.delete().queue();
                 this.message = null;
                 this.menuAction.onAction(MenuAction.Type.DELETE, reactingUser);
-                jda.getEventManager().unregister(this);
+                JDA.getEventManager().unregister(this);
             }
 
             else if (reactionEmote.isEmoji() && reactionEmote.getEmoji().equals(FORWARD) && this.page + 1 <= this.maxPages) {

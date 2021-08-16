@@ -3,7 +3,7 @@ package utils.database;
 import me.kbrewster.exceptions.APIException;
 import me.kbrewster.mojangapi.MojangAPI;
 import utils.litebans.Ban;
-import utils.tools.GTools;
+import utils.Utils;
 
 import java.io.IOException;
 import java.sql.*;
@@ -43,7 +43,7 @@ public class LitebansDAO {
                 }
             }
         } catch (SQLException | APIException | IOException e) {
-            GTools.printStackError(e);
+            Utils.printStackError(e);
         }
 
         return null;

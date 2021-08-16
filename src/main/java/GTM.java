@@ -5,26 +5,25 @@ import commands.stats.StatsCommand;
 import commands.suggestions.SuggestionListener;
 import commands.suggestions.SuggestionCommand;
 import events.*;
-import me.cadox8.xenapi.XenAPI;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Icon;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.grandtheftmc.jedisnew.NewJedisManager;
 import selfevents.CloseEvent;
 import selfevents.ReadyEvents;
 import utils.MembersCache;
-import utils.SelfData;
 import utils.confighelpers.Config;
 import utils.console.Console;
 import utils.console.Logs;
 import utils.database.redis.OnRedisMessageReceive;
 import utils.database.sql.BaseDatabase;
-import utils.tools.GTools;
+import utils.BotData;
+import utils.Utils;
 import utils.tools.MineStat;
+import utils.web.clickup.ClickUpPollTask;
 import xenforo.Xenforo;
 
 import javax.security.auth.login.LoginException;
@@ -32,9 +31,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import static utils.tools.GTools.*;
+import static utils.Utils.*;
 
-public class GTM extends ListenerAdapter {
+public class GTM {
 
     public static void main (String[] args) {
 
@@ -56,7 +55,8 @@ public class GTM extends ListenerAdapter {
 
         // Load Self Data
         System.out.println("Loading bot data....");
-        SelfData.load();
+        BotData.load();
+
 
         // Load Databases
         System.out.println("Connecting to databases...");
@@ -65,15 +65,8 @@ public class GTM extends ListenerAdapter {
 
         // Load JDA & Xenforo and start bot
         loadJDA();
-        loadXen();
-    }
-
-
-    private static void loadXen() {
-        System.out.println("Initializing Xenforo API...");
-        new XenAPI("c1230035-cf85-4e3d-add8-f4457b641d1e", "https://grandtheftmc.net/");
-        //Xenforo.login();
         Xenforo.dbPollTickets();
+        new ClickUpPollTask().run();
     }
 
     private static void loadJDA() {
@@ -85,7 +78,7 @@ public class GTM extends ListenerAdapter {
         gtm = new MineStat(Config.get().getMineStatSettings().getServerIp(), Config.get().getMineStatSettings().getServerPort());
 
         try {
-            jda = JDABuilder.createDefault(Config.get().getBotToken())
+            JDA = JDABuilder.createDefault(Config.get().getBotToken())
                     .setEnabledIntents(
                             GatewayIntent.DIRECT_MESSAGE_REACTIONS,
                             GatewayIntent.DIRECT_MESSAGE_TYPING,
@@ -103,69 +96,69 @@ public class GTM extends ListenerAdapter {
                     .build();
 
             // Set presence
-            jda.getPresence().setStatus(OnlineStatus.ONLINE);
-            jda.getPresence().setActivity(Activity.playing("mc-gtm.net"));
-            jda.getPresence().setIdle(false);
+            JDA.getPresence().setStatus(OnlineStatus.ONLINE);
+            JDA.getPresence().setActivity(Activity.playing("play.mc-gtm.net"));
+            JDA.getPresence().setIdle(false);
 
             // JDA Events
-            jda.addEventListener(new SuggestionListener());
-            jda.addEventListener(new Command.CommandsTools());
-            jda.addEventListener(new ReadyEvents());
-            jda.addEventListener(new CloseEvent());
-            jda.addEventListener(new OnJoin());
-            jda.addEventListener(new GuildReaction());
-            jda.addEventListener(new OnGuildMessage());
-            jda.addEventListener(new MembersCache());
-            jda.addEventListener(new GuildMessageStash());
-            jda.addEventListener(new ReportListener());
+            JDA.addEventListener(new SuggestionListener());
+            JDA.addEventListener(new Command.CommandsTools());
+            JDA.addEventListener(new ReadyEvents());
+            JDA.addEventListener(new CloseEvent());
+            JDA.addEventListener(new OnJoin());
+            JDA.addEventListener(new GuildReaction());
+            JDA.addEventListener(new OnGuildMessage());
+            JDA.addEventListener(new MembersCache());
+            JDA.addEventListener(new GuildMessageStash());
+            JDA.addEventListener(new ReportListener());
 
             // JDA Commands
-            jda.addEventListener(new SuggestionCommand());
-            jda.addEventListener(new PlayerCountCommand());
-            jda.addEventListener(new RaidModeCommand());
+            JDA.addEventListener(new SuggestionCommand());
+            JDA.addEventListener(new PlayerCountCommand());
+            JDA.addEventListener(new RaidModeCommand());
             //jda.addEventListener(new SeniorsCommand());
-            jda.addEventListener(new HelpCommand());
-            jda.addEventListener(new DiscordAccountCommand());
-            jda.addEventListener(new StaffAccountCommand());
-            jda.addEventListener(new RebootCommand());
-            jda.addEventListener(new PingCommand());
-            jda.addEventListener(new HarryCommand());
-            jda.addEventListener(new StaffCommand());
-            jda.addEventListener(new AnnoyCommand());
-            jda.addEventListener(new ChannelCommand());
-            jda.addEventListener(new StatsCommand());
-            jda.addEventListener(new BugReportCommand());
+            JDA.addEventListener(new HelpCommand());
+            JDA.addEventListener(new DiscordAccountCommand());
+            JDA.addEventListener(new StaffAccountCommand());
+            JDA.addEventListener(new RebootCommand());
+            JDA.addEventListener(new PingCommand());
+            JDA.addEventListener(new HarryCommand());
+            JDA.addEventListener(new StaffCommand());
+            JDA.addEventListener(new AnnoyCommand());
+            JDA.addEventListener(new ChannelCommand());
+            JDA.addEventListener(new StatsCommand());
+            JDA.addEventListener(new BugReportCommand());
 
             // Self user settings functions to check if there was utils.config change to prevent
             // unnecessary calls to the discord api which may result in us getting rate limited
             setBotName();
             setAvatar();
 
-        } catch (LoginException | IllegalArgumentException e) {
-            GTools.printStackError(e);
+        } catch (LoginException | IllegalArgumentException | IllegalStateException e) {
+            Utils.printStackError(e);
         }
     }
 
     private static void setAvatar() {
         File avatar = new File("avatar.png");
         long avatarLastEdit = avatar.lastModified();
-        if (avatarLastEdit != SelfData.get().getPreviousAvatarEdited()) {
+        if (avatarLastEdit != BotData.AVATAR_LAST_EDIT.getData(Long.TYPE)) {
             try {
                 System.out.println("Detected avatar change! Updating bot avatar...");
-                jda.getSelfUser().getManager().setAvatar(Icon.from(avatar)).queueAfter(5, TimeUnit.SECONDS);
-                SelfData.get().setPreviousAvatarEdited(avatarLastEdit);
+                JDA.getSelfUser().getManager().setAvatar(Icon.from(avatar)).queueAfter(5, TimeUnit.SECONDS);
+                BotData.AVATAR_LAST_EDIT.setValue(avatarLastEdit);
             } catch (IOException e) {
-                GTools.printStackError(e);
+                Utils.printStackError(e);
             }
         }
     }
 
     private static void setBotName() {
         // If previous bot name doesn't match utils.config bot name, update bot name
-        if (!Config.get().getBotName().equals(SelfData.get().getPreviousBotName())) {
+        if (!Config.get().getBotName().equals(BotData.LAST_BOT_NAME)) {
             System.out.println("Detected utils.config name change! Updating bot name...");
-            jda.getSelfUser().getManager().setName(Config.get().getBotName()).queueAfter(5, TimeUnit.SECONDS);
-            SelfData.get().setPreviousBotName(Config.get().getBotName());
+            JDA.getSelfUser().getManager().setName(Config.get().getBotName()).queueAfter(5, TimeUnit.SECONDS);
+            BotData.LAST_BOT_NAME.setValue(Config.get().getBotName());
         }
     }
 

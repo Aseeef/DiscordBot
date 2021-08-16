@@ -3,6 +3,7 @@ package utils.tools;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
+import utils.Utils;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.awt.*;
@@ -13,7 +14,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 
-import static utils.tools.GTools.jda;
+import static utils.Utils.JDA;
 import static utils.console.Logs.log;
 
 public class WelcomeTools {
@@ -21,9 +22,9 @@ public class WelcomeTools {
     public static MessageEmbed getRuleReactEmbed() {
 
         EmbedBuilder embed = new EmbedBuilder();
-        String gtmCheeky = jda.getEmotesByName("gtmcheeky", true).get(0).getAsMention();
-        String gtmAgree = jda.getEmotesByName("gtmagree", true).get(0).getAsMention();
-        String gtmDisagree = jda.getEmotesByName("gtmdisagree", true).get(0).getAsMention();
+        String gtmCheeky = JDA.getEmotesByName("gtmcheeky", true).get(0).getAsMention();
+        String gtmAgree = JDA.getEmotesByName("gtmagree", true).get(0).getAsMention();
+        String gtmDisagree = JDA.getEmotesByName("gtmdisagree", true).get(0).getAsMention();
 
         embed.setTitle("Welcome to the Grand Theft Minecart Discord!");
         embed.setDescription(
@@ -31,7 +32,7 @@ public class WelcomeTools {
                 "\n\n" + "**DISCORD RULES:** https://grandtheftmc.net/threads/discord-rules.10052/#post-36895"
         );
         embed.setColor(new Color(133, 186, 101));
-        embed.setFooter("Simply click one of the below reactions to respond!", jda.getSelfUser().getAvatarUrl());
+        embed.setFooter("Simply click one of the below reactions to respond!", JDA.getSelfUser().getAvatarUrl());
 
         return embed.build();
     }
@@ -52,7 +53,7 @@ public class WelcomeTools {
                         "\uD83D\uDD30 **Support Tickets** » https://grandtheftmc.net/appeal/"
         );
         embed.setColor(new Color(133, 186, 101));
-        embed.setFooter("Grand Theft Minecart", jda.getSelfUser().getAvatarUrl());
+        embed.setFooter("Grand Theft Minecart", JDA.getSelfUser().getAvatarUrl());
 
         return embed.build();
     }
@@ -129,7 +130,7 @@ public class WelcomeTools {
                 log(l);
 
         } catch (IOException e) {
-            GTools.printStackError(e);
+            Utils.printStackError(e);
         }
 
         return lines;

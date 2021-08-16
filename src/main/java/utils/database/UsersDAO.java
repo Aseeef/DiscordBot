@@ -1,7 +1,7 @@
 package utils.database;
 
-import utils.tools.GTools;
-import utils.tools.UUIDUtil;
+import utils.Utils;
+import utils.UUIDUtil;
 import utils.users.GTMUser;
 
 import java.sql.Connection;
@@ -62,7 +62,7 @@ public class UsersDAO {
             }
 
         } catch (Exception e) {
-            GTools.printStackError(e);
+            Utils.printStackError(e);
         }
 
         return new Object[] {gangName, gangMembers};
