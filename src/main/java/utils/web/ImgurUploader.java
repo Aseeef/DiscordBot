@@ -58,9 +58,15 @@ public class ImgurUploader {
             CloseableHttpResponse response = httpClient.execute(uploadFile);
             HttpEntity responseEntity = response.getEntity();
 
-            JsonElement json = JsonParser.parseString(Utils.convertStreamToString(responseEntity.getContent())).getAsJsonObject().get("data");
+            JsonElement json = JsonParser.parseString(Utils.convertStreamToString(responseEntity.getContent()));
 
-            return json.getAsJsonObject().get("link").getAsString();
+
+            if (json.getAsJsonObject().has("data")) {
+                JsonElement data = json.getAsJsonObject().get("data");
+                return data.getAsJsonObject().get("link").getAsString();
+            } else {
+                throw new NullPointerException(json.toString());
+            }
 
         }
 

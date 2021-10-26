@@ -57,7 +57,6 @@ public class GTM {
         System.out.println("Loading bot data....");
         BotData.load();
 
-
         // Load Databases
         System.out.println("Connecting to databases...");
         loadMySQL();
@@ -66,7 +65,7 @@ public class GTM {
         // Load JDA & Xenforo and start bot
         loadJDA();
         Xenforo.dbPollTickets();
-        new ClickUpPollTask().run();
+        new ClickUpPollTask();
     }
 
     private static void loadJDA() {
@@ -97,7 +96,7 @@ public class GTM {
 
             // Set presence
             JDA.getPresence().setStatus(OnlineStatus.ONLINE);
-            JDA.getPresence().setActivity(Activity.playing("play.mc-gtm.net"));
+            JDA.getPresence().setActivity(Activity.playing("gtm.network"));
             JDA.getPresence().setIdle(false);
 
             // JDA Events

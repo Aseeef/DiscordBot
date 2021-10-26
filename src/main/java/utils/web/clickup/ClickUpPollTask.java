@@ -13,17 +13,18 @@ import utils.BotData;
 import utils.Data;
 import utils.confighelpers.Config;
 import utils.Utils;
+import utils.threads.ThreadUtil;
 
-import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
+import javax.annotation.Nullable;
+import java.util.*;
 
-public class ClickUpPollTask extends TimerTask {
+public class ClickUpPollTask implements Runnable {
 
     private static final String URL = "https://api.clickup.com/api/v2/list/126053131/task?include_closed=true";
+    private static final String COMMENT_URL = "https://api.clickup.com/api/v2/task/INSERT_TASK_ID/comment/";
 
     public ClickUpPollTask() {
-        new Timer().scheduleAtFixedRate(this, 1000 * 10, 1000L * Config.get().getClickUpRefreshFrequency()); //todo config
+        ThreadUtil.runTaskTimer(this, 1000 * 10, 1000L * Config.get().getClickUpRefreshFrequency());
     }
 
     @Override @SuppressWarnings("unchecked")
@@ -33,13 +34,21 @@ public class ClickUpPollTask extends TimerTask {
 
         // process pending bugs: if the updated bug reports haven't had any further updates for 30+ seconds, we process them
         dataMap.entrySet().removeIf((pair) -> {
+            System.out.println("[Debug] [ClickUpPollTask] Finishing processing bug report id=" + pair.getKey());
+            try {
+                BugReport bugReport = (BugReport) Data.obtainData(Data.BUG_REPORTS, pair.getKey());
+                long lastUpdated = pair.getValue();
+                if (lastUpdated < System.currentTimeMillis() - (1000L * Config.get().getClickUpWaitDuration())) {
 
-            BugReport bugReport = (BugReport) Data.obtainData(Data.BUG_REPORTS, pair.getKey());
-            long lastUpdated = pair.getValue();
-            if (lastUpdated < System.currentTimeMillis() - 1000 * 30) {
-                bugReport.sendUpdate(null);
-                return true;
-            } else return false;
+                    CUComment comment = getLastComment(bugReport.getId());
+                    bugReport.sendUpdate(comment == null ? null : comment.getComment());
+
+                    return true;
+                } else return false;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return false;
+            }
         });
 
         // check if any new updates have occurred to bug reports on clickup
@@ -67,12 +76,13 @@ public class ClickUpPollTask extends TimerTask {
                     // otherwise remove this entry and proceed as planned
                     else {
                         ignoreMap.remove(id);
+                        BotData.save();
                     }
                 }
 
                 if (entryLastUpdated > botLastUpdate && entryCreated != entryLastUpdated) {
                     try {
-                        System.out.println("[Debug] [ClickUpPollTask] Received an update for bug report id " + id + "! Processing...");
+                        System.out.println("[Debug] [ClickUpPollTask] Received an update for bug report id " + id + "!");
 
                         BugReport.ReportStatus status = BugReport.ReportStatus.valueOf(jo.getJSONObject("status").getString("status").replace(" ", "_").toUpperCase());
                         JSONObject customFields = jo.getJSONArray("custom_fields").getJSONObject(0);
@@ -91,7 +101,7 @@ public class ClickUpPollTask extends TimerTask {
                             bugReport.setReportMessage(description);
                         }
 
-                        dataMap.put(bugReport.getId(), System.currentTimeMillis());
+                        dataMap.put(bugReport.getId(), entryLastUpdated);
 
                     } catch (NumberFormatException | JSONException ignored) {}
                 }
@@ -103,6 +113,33 @@ public class ClickUpPollTask extends TimerTask {
 
         BotData.LAST_CLICKUP_REFRESH.setValue(System.currentTimeMillis());
         BotData.save();
+    }
+
+    private static @Nullable CUComment getLastComment(String task) {
+
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            HttpGet get = new HttpGet(COMMENT_URL.replace("INSERT_TASK_ID", task));
+            get.addHeader("Content-Type", "application/json");
+            get.addHeader("Authorization", Config.get().getClickUpKey());
+            CloseableHttpResponse response = httpClient.execute(get);
+            HttpEntity responseEntity = response.getEntity();
+            JSONArray json = new JSONObject(Utils.convertStreamToString(responseEntity.getContent())).getJSONArray("comments");
+
+            System.out.println("[Debug] [ClickUpPollTask] " + json.length() + " report comments found for bug report id " + task + "! Processing latest...");
+            for (Object o : json) {
+                JSONObject jo = (JSONObject) o;
+                String id = jo.getString("id");
+                String comment = jo.getString("comment_text");
+                String commenter = jo.getJSONObject("user").getString("username");
+                long commentTime = jo.getLong("date");
+
+                return new CUComment(id, comment, commentTime, commenter);
+            }
+        }  catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return null;
     }
 
 }

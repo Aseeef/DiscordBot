@@ -3,9 +3,10 @@ package xenforo.objects;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
 import xenforo.objects.tickets.SupportTicket;
 
-@Deprecated
+@Deprecated @Getter
 @JsonIgnoreProperties ({"extra_data", "extra", "alerted_user_id", "new", "unviewed", "view_date"})
 public class Alert {
 
@@ -32,34 +33,6 @@ public class Alert {
         this.eventDate = eventDate;
         this.supportTicket = supportTicket;
         this.user = user;
-    }
-
-    public int getAlertId() {
-        return alertId;
-    }
-
-    public String getContentType() {
-        return contentType;
-    }
-
-    public int getContentId() {
-        return contentId;
-    }
-
-    public String getAction() {
-        return action;
-    }
-
-    public long getEventDate() {
-        return eventDate;
-    }
-
-    public SupportTicket getSupportTicket() {
-        return supportTicket;
-    }
-
-    public XenforoUserJson getUser() {
-        return user;
     }
 
 }

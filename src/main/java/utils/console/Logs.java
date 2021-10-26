@@ -44,8 +44,22 @@ public enum Logs {
     public static void logToFile(String output) {
         // Save logs to file
         String date = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDateTime.now());
-        File file = new File("logs/", date+".txt");
+        File dir = new File("logs");
+        dir.mkdirs();
+        File file = new File(dir, date+".txt");
+        writeOutput(file, output);
+    }
 
+    public static void logToErrFile (String output) {
+        // Save logs to file
+        String date = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDateTime.now());
+        File dir = new File("logs/error");
+        dir.mkdirs();
+        File file = new File(dir, date+".txt");
+        writeOutput(file, output);
+    }
+
+    public static void writeOutput(File file, String output) {
         try {
             // Create new log file if one doesn't exist already
             if (file.createNewFile())
@@ -137,6 +151,7 @@ public enum Logs {
             }
 
             Logs.logToFile(output);
+            Logs.logToErrFile(output);
 
             return coloredOutput;
         }

@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.User;
 import utils.chart.PlaytimeChart;
 import utils.database.DiscordDAO;
 import utils.database.XenforoDAO;
+import utils.threads.ThreadUtil;
 import utils.web.ImgurUploader;
 import utils.pagination.DiscordMenu;
 import utils.pagination.MenuAction;
@@ -80,8 +81,7 @@ public class StatsMenu implements MenuAction {
         pu = StatsDAO.getPlanUser(uuid);
         if (pu == null) return false;
 
-        Thread thread = new Thread(() -> {
-
+        ThreadUtil.runAsync(() -> {
             CompletableFuture<DiscordMenu> futureMenu = DiscordMenu.create(channel, getPendingEmbed(1), 1);
             loadRawData();
 
@@ -109,9 +109,7 @@ public class StatsMenu implements MenuAction {
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
-
         });
-        thread.start();
 
         return true;
     }

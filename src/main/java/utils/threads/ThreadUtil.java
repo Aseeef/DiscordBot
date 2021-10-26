@@ -7,24 +7,35 @@ import java.util.concurrent.TimeUnit;
 
 public class ThreadUtil {
 
-    public static CallbackThread runAsync(Runnable target) {
-        return runAsync(target, null);
-    }
-
-    public static CallbackThread runAsync(Runnable target, Callback<?> callback) {
-        CallbackThread thread = new CallbackThread(target, callback);
+    public static Thread runAsync(Runnable target) {
+        Thread thread = new Thread(target);
         thread.start();
+        thread.setUncaughtExceptionHandler((thread1, err) -> {
+            err.printStackTrace();
+        });
         return thread;
     }
 
-    public static ScheduledFuture<?> runTaskTimer(Runnable task, int startDelay, int period) {
+    public static ScheduledFuture<?> runTaskTimer(Runnable task, long startDelayMillis, long periodMillis) {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        return executor.scheduleAtFixedRate(task, startDelay, period, TimeUnit.MILLISECONDS);
+        return executor.scheduleAtFixedRate(() -> {
+            try {
+                task.run();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }, startDelayMillis, periodMillis, TimeUnit.MILLISECONDS);
     }
 
-    public static ScheduledFuture<?> runDelayedTask(Runnable task, int startDelay) {
+    public static ScheduledFuture<?> runDelayedTask(Runnable task, long startDelayMillis) {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        return executor.schedule(task, startDelay, TimeUnit.MILLISECONDS);
+        return executor.schedule(() -> {
+            try {
+                task.run();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }, startDelayMillis, TimeUnit.MILLISECONDS);
     }
 
 

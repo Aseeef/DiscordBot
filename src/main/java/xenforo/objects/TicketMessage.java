@@ -1,7 +1,9 @@
 package xenforo.objects;
 
+import lombok.Getter;
 import utils.database.XenforoDAO;
 
+@Getter
 public class TicketMessage {
 
     int messageId;
@@ -22,35 +24,8 @@ public class TicketMessage {
         this.message = message;
     }
 
-    public int getMessageId() {
-        return messageId;
-    }
-
-    public int getTicketId() {
-        return ticketId;
-    }
-
-    public int getMessageDate() {
-        return messageDate;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
     public XenforoUser getUser() {
         return XenforoDAO.xenforoUserFromId(userId);
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public String getMessage() {
-        return message;
-    }
 }

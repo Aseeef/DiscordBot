@@ -9,21 +9,11 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import utils.Data;
 import utils.BotData;
-import utils.StringUtils;
 import utils.selfdata.ChannelIdData;
 import utils.Utils;
-import utils.threads.CallbackThread;
-import utils.threads.ThreadUtil;
 import utils.users.GTMUser;
 import utils.users.Rank;
-import utils.web.ImgurUploader;
 import utils.web.clickup.CUTask;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import java.util.regex.Matcher;
 
 import static utils.Utils.*;
 
