@@ -4,31 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="* Fixed bug report&#10;* bug report sends tasks to click up&#10;* Utility improvements">
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/web/clickup/CUComment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GTM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GTM.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/bugs/BugReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/bugs/BugReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/bugs/BugReportCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/bugs/BugReportCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/bugs/ReportListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/bugs/ReportListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/stats/StatsMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/stats/StatsMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/selfevents/ReadyEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/selfevents/ReadyEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/Utils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/confighelpers/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/confighelpers/Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/console/Logs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/console/Logs.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/threads/Callback.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/Callback.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/threads/CallbackThread.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/threads/ThreadUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/threads/ThreadUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/users/GTMUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/users/GTMUser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/web/ImgurUploader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/web/ImgurUploader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/web/clickup/ClickUpPollTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/web/clickup/ClickUpPollTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/objects/Alert.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xenforo/objects/Alert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/objects/TicketMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xenforo/objects/TicketMessage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/objects/XenforoUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xenforo/objects/XenforoUser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/objects/tickets/Department.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xenforo/objects/tickets/Department.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/objects/tickets/SupportTicket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xenforo/objects/tickets/SupportTicket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
+    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="* bugs fixes&#10;* new thread util&#10;* added lombok&#10;* updated ip&#10;* code cleanup &amp; util improvements">
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/channels/CustomChannel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/channels/CustomChannel.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -512,13 +489,7 @@
       <workItem from="1634493305472" duration="743000" />
       <workItem from="1634679525125" duration="175000" />
       <workItem from="1634877538832" duration="1809000" />
-    </task>
-    <task id="LOCAL-00015" summary="Commands bug fixes">
-      <created>1591512396271</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1591512396271</updated>
+      <workItem from="1635218892273" duration="324000" />
     </task>
     <task id="LOCAL-00016" summary="Discord verification system completed!">
       <created>1591603033630</created>
@@ -856,7 +827,14 @@
       <option name="project" value="LOCAL" />
       <updated>1629084692738</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="* bugs fixes&#10;* new thread util&#10;* added lombok&#10;* updated ip&#10;* code cleanup &amp; util improvements">
+      <created>1635219014582</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1635219014586</updated>
+    </task>
+    <option name="localTasksCounter" value="65" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -875,7 +853,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="* removed default config" />
     <MESSAGE value="* Now updating user data anytime a player types&#10;* Xenforo dummy account creds now defined through config&#10;* Partially redid account verification&#10;* Attempting to fix an issue where suggestion embeds are in the wrong order&#10;* Now including guilty plea in ticket details" />
     <MESSAGE value="*Fixed verify time not updated" />
     <MESSAGE value="* Removed rules reaction channel &amp; players no longer have to react to rules to join. This is now handled by a discord feature&#10;* Removed references to the UNVERIFIED user role as its no longer needed" />
@@ -900,7 +877,8 @@
     <MESSAGE value="* Fixed NPE" />
     <MESSAGE value="* downgraded version (old one caused issues)" />
     <MESSAGE value="* Fixed bug report&#10;* bug report sends tasks to click up&#10;* Utility improvements" />
-    <option name="LAST_COMMIT_MESSAGE" value="* Fixed bug report&#10;* bug report sends tasks to click up&#10;* Utility improvements" />
+    <MESSAGE value="* bugs fixes&#10;* new thread util&#10;* added lombok&#10;* updated ip&#10;* code cleanup &amp; util improvements" />
+    <option name="LAST_COMMIT_MESSAGE" value="* bugs fixes&#10;* new thread util&#10;* added lombok&#10;* updated ip&#10;* code cleanup &amp; util improvements" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -144,11 +144,9 @@ public class BugReportCommand extends Command {
             Utils.sendThenDelete(channel, getHelpMsg());
             return false;
         }
-        boolean exists = false;
-        try {
-            exists = Data.doesNumberExist(Data.BUG_REPORTS, args[1].toLowerCase());
-        } catch (NumberFormatException ignored) {
-        }
+
+        boolean exists;
+        exists = Data.doesDataExist(Data.BUG_REPORTS, args[1].toLowerCase());
 
         if (!exists) {
             sendThenDelete(channel, "**Error!** No bug report with id " + args[1] + " was found.");

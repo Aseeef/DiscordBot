@@ -74,7 +74,12 @@ public class CustomChannel extends ListenerAdapter {
             return;
         }
 
-        this.voiceChannel.retrieveInvites().queue( (invites -> this.invite = invites.get(0)));
+        List<Invite> invites = this.voiceChannel.retrieveInvites().complete();
+        if (invites.size() == 0) {
+            this.voiceChannel.createInvite().queue( c -> this.invite = c);
+        } else {
+            this.invite = invites.get(0);
+        }
 
         this.whitelistIds.forEach( (id) -> {
             MembersCache.getMember(id).ifPresent( (member) -> {
