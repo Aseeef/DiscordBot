@@ -1,8 +1,11 @@
 package commands.stats.wrappers;
 
+import lombok.Getter;
+
 import java.util.List;
 import java.util.UUID;
 
+@Getter
 public class GTMGang {
 
     private int gangId;
@@ -21,27 +24,4 @@ public class GTMGang {
         this.members = members;
     }
 
-    public int getGangId() {
-        return gangId;
-    }
-
-    public String getServer() {
-        return server;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public List<String> getMembers() {
-        return members;
-    }
-
-    public List<UUID> getMembersUUID() {
-        return membersUUID;
-    }
 }

@@ -42,7 +42,10 @@ public class DBTicketEvent {
             Logs.log("[DEBUG] [EventType] Received a new support ticket with title '" + ticket.getTitle() + "' in " + department.getDepartmentName() + "!");
 
             TextChannel channel = JDA.getGuilds().get(0).getTextChannelById(ChannelIdData.get().getModChannelId());
-            if (channel == null) return;
+            if (channel == null) {
+                Logs.log("[DEBUG] [DBTicketEvent] Warning. A channel for tickets to be received is not set!", Logs.WARNING);
+                return;
+            }
 
             switch (department) {
 

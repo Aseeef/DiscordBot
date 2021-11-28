@@ -68,9 +68,10 @@ public class CustomChannel extends ListenerAdapter {
 
         if (this.voiceChannel == null) {
             ThreadUtil.runDelayedTask( () -> {
+                //todo: causing npe?
                 ChannelData.get().getChannelMap().remove(this.ownerId);
                 ChannelData.get().save();
-            }, 10);
+            }, 100);
             return;
         }
 
@@ -161,7 +162,7 @@ public class CustomChannel extends ListenerAdapter {
                                 .queue());
             }
 
-        }, 1000 * 60 * Config.get().getCustomChannelDeleteTime());
+        }, 1000L * 60 * Config.get().getCustomChannelDeleteTime());
     }
 
     @JsonGetter

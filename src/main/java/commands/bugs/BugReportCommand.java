@@ -94,11 +94,11 @@ public class BugReportCommand extends Command {
             }
             case "complete": {
                 if (!isValidArgs(textChannel, args)) return;
-                BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, Integer.parseInt(args[1]));
+                BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, args[1]);
                 report.setStatus(BugReport.ReportStatus.PATCHED);
                 report.sendUpdate(args.length > 2 ? Utils.joinArgsAfter(args, 2) : null);
                 CUTask.editTask(report.getId(), BugReport.ReportStatus.PATCHED);
-                sendThenDelete(channel, "**Success!** You set bug report id " + Integer.parseInt(args[1]) + " to " + BugReport.ReportStatus.PATCHED + "!");
+                sendThenDelete(channel, "**Success!** You set bug report id " + args[1] + " to " + BugReport.ReportStatus.PATCHED + "!");
                 break;
             }
             case "duplicate": {

@@ -96,6 +96,7 @@ public class StatsMenu implements MenuAction {
                 playtimeStats = getPlaytimeStats();
                 gangStats = getGangStats();
 
+                // todo: help questions per hour rate
                 if (rank.isHigherOrEqualTo(Rank.HELPER)) {
                     staffBanStats = getStaffBanStats();
                     staffHelpStats = getStaffHelpStats();
@@ -179,6 +180,7 @@ public class StatsMenu implements MenuAction {
         rank = DiscordDAO.getRank(uuid);
         rank = rank == null ? Rank.NORANK : rank;
         if (rank.isHigherOrEqualTo(Rank.HELPER)) {
+            // todo load allll help questions
             helpQuestions = StatsDAO.getHelpQuestions(System.currentTimeMillis() - (1000L * 60 * 60 * 24 * 30), uuid);
             bansGiven = StatsDAO.getPunishments(uuid, WrappedPunishment.PunishmentType.BAN, true);
             mutesGiven = StatsDAO.getPunishments(uuid, WrappedPunishment.PunishmentType.MUTE, true);
@@ -191,7 +193,11 @@ public class StatsMenu implements MenuAction {
 
         EmbedBuilder eb = new EmbedBuilder();
 
-
+        eb.setTitle("**Staff Help Stats for `" + pu.getUsername() + "`:**");
+        eb.addField("Questions Answered","", true);
+        eb.addField("Questions Answered (30d)","", true);
+        eb.addField("Questions Answered (7d)","", true);
+        eb.addField("Questions/Hour Rate","", true);
 
         return eb;
 
@@ -201,7 +207,7 @@ public class StatsMenu implements MenuAction {
 
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setTitle("**Staff Statistics for `" + pu.getUsername() + "`:**");
+        eb.setTitle("**Staff Punishment Stats for `" + pu.getUsername() + "`:**");
 
         LinkedList<WrappedPunishment> allPunishments = new LinkedList<>();
         allPunishments.addAll(bansGiven);

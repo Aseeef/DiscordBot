@@ -5,22 +5,19 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-import net.dv8tion.jda.api.requests.restaction.interactions.ReplyAction;
 import org.jetbrains.annotations.NotNull;
-import utils.confighelpers.Config;
 import utils.Utils;
+import utils.confighelpers.Config;
 import utils.users.GTMUser;
 import utils.users.Rank;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-import static utils.console.Logs.log;
 import static utils.Utils.JDA;
 import static utils.Utils.sendThenDelete;
+import static utils.console.Logs.log;
 
 public abstract class Command extends ListenerAdapter {
 
