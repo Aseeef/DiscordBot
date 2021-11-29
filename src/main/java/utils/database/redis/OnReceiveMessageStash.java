@@ -78,25 +78,6 @@ public class OnReceiveMessageStash implements RedisEventListener {
 
     }
 
-    /*
-    .put(PULL_REQUEST_OPENED, "pullrequest:created")
-.put(PULL_REQUEST_UPDATED, "pullrequest:updated")
-.put(PULL_REQUEST_RESCOPED, "pullrequest:updated")
-.put(PULL_REQUEST_REOPENED, "pullrequest:updated")
-.put(PULL_REQUEST_MERGED, "pullrequest:fulfilled")
-.put(PULL_REQUEST_DECLINED, "pullrequest:rejected")
-.put(PULL_REQUEST_COMMENT, "pullrequest:comment")
-.put(PULL_REQUEST_DELETED, "pullrequest:deleted")
-.put(PULL_REQUEST_CANCELABLE_COMMENT, "pullrequest:comment")
-.put(PULL_REQUEST_COMMENT_ACTIVITY, "pullrequest:comment")
-.put(BUILD_STATUS_SET, "build:status")
-.put(TAG_CREATED, "repo:push")
-.put(BRANCH_CREATED, "repo:push")
-.put(BRANCH_DELETED, "repo:push")
-.put(REPOSITORY_MIRROR_SYNCHRONIZED, "repo:push")
-.put(ABSTRACT_REPOSITORY_REFS_CHANGED, "repo:push")
-     */
-
     enum EventType {
         //todo color code
         CODE_PUSHED("repo:refs_changed"),
@@ -111,10 +92,6 @@ public class OnReceiveMessageStash implements RedisEventListener {
         PR_DECLINED("pr:declined"),
         PR_DELETED("pr:deleted"),
         PR_COMMENT("pr:comment:added"),
-
-        //new
-        PULL_REQUEST_UPDATED("pullrequest:created"),
-
         ;
         private String eventKey;
         EventType(String eventKey) {
