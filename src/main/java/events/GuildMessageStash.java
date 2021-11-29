@@ -118,7 +118,8 @@ public class GuildMessageStash extends ListenerAdapter {
 
                     }
 
-                    WebhookUtils.sendMessage(sender, icon, " ", web.build(), url);
+                    if (sender.equals("Jenkins")) // no longer posting for stash sender
+                        WebhookUtils.sendMessage(sender, icon, " ", web.build(), url);
                 });
             }
         }

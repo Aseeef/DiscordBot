@@ -18,7 +18,8 @@ import utils.MembersCache;
 import utils.confighelpers.Config;
 import utils.console.Console;
 import utils.console.Logs;
-import utils.database.redis.OnRedisMessageReceive;
+import utils.database.redis.OnReceiveMessageStash;
+import utils.database.redis.OnRecieveMessageGTM;
 import utils.database.sql.BaseDatabase;
 import utils.BotData;
 import utils.Utils;
@@ -197,7 +198,8 @@ public class GTM {
                 Config.get().getRedisDatabase().getHostname(),
                 Config.get().getRedisDatabase().getPort(),
                 Config.get().getRedisDatabase().getPassword()
-        ).addRedisEventListener(new OnRedisMessageReceive());
+        ).addRedisEventListener(new OnRecieveMessageGTM())
+                .addRedisEventListener(new OnReceiveMessageStash());
         jedisManager.init();
 
         System.out.println("Established connection to Redis!");
