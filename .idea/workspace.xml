@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="* test2">
+    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="* more work on stash alerts">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GTM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GTM.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/events/GuildMessageStash.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnReceiveMessageStash.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnReceiveMessageStash.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -502,14 +504,7 @@
       <workItem from="1638147008695" duration="1119000" />
       <workItem from="1638149179958" duration="4477000" />
       <workItem from="1638165215232" duration="1073000" />
-      <workItem from="1638198372942" duration="5695000" />
-    </task>
-    <task id="LOCAL-00031" summary="- Improvement to console &amp; logging&#10;- Added a console memory command&#10;- Changed calls to GTMUser#updateUserDataNow() to be async&#10;- Improvements to accounts refreshall command&#10;- Added frame work for custom channels which will allow donors in future to create private channels like on team speak&#10;- Fixed error caused by player have too many past tickets (since embeds have a max field length limit)&#10;- Util improvement: Easily create timer tasks&#10;- Upon unverification, a GTMUser will now loose thier discord rank (prevents abuse)">
-      <created>1594248474336</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1594248474336</updated>
+      <workItem from="1638198372942" duration="7849000" />
     </task>
     <task id="LOCAL-00032" summary="- Custom channels command which will allow donors to create private channels like on team speak&#10;- Made scabble annoy harder to bypass">
       <created>1594272835114</created>
@@ -847,7 +842,14 @@
       <option name="project" value="LOCAL" />
       <updated>1638210502936</updated>
     </task>
-    <option name="localTasksCounter" value="80" />
+    <task id="LOCAL-00080" summary="* more work on stash alerts">
+      <created>1638211341847</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1638211341847</updated>
+    </task>
+    <option name="localTasksCounter" value="81" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -866,7 +868,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="* Added missing departments" />
     <MESSAGE value="* Added the ability to &quot;complete&quot; suggestions&#10;* Webhook utils improvements&#10;* Listener that listens to a zapier webhook to post stash/jenkins pushes&#10;* Improved the reliability to ticket parser" />
     <MESSAGE value="* Fixed a bug with msg parsing stash" />
     <MESSAGE value="* Removed debugs" />
@@ -891,7 +892,8 @@
     <MESSAGE value="* color support" />
     <MESSAGE value="* test1" />
     <MESSAGE value="* test2" />
-    <option name="LAST_COMMIT_MESSAGE" value="* test2" />
+    <MESSAGE value="* more work on stash alerts" />
+    <option name="LAST_COMMIT_MESSAGE" value="* more work on stash alerts" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

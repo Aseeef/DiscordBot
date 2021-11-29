@@ -109,7 +109,6 @@ public class GTM {
             JDA.addEventListener(new GuildReaction());
             JDA.addEventListener(new OnGuildMessage());
             JDA.addEventListener(new MembersCache());
-            JDA.addEventListener(new GuildMessageStash());
             JDA.addEventListener(new ReportListener());
 
             // JDA Commands

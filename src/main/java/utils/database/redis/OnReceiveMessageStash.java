@@ -130,14 +130,14 @@ public class OnReceiveMessageStash implements RedisEventListener {
         REPO_MODIFIED("repo:modified", Color.YELLOW),
         REPO_FORKED("repo:forked", Color.YELLOW),
         REPO_COMMENT("repo:comment:added", Color.YELLOW),
-        PR_OPENED("pr:opened", Color.GREEN),
-        PR_APPROVED("pr:reviewer:approved", Color.GREEN),
-        PR_UNAPPROVED("pr:reviewer:unapproved", Color.GREEN),
-        PR_NEEDS_WORK("pr:reviewer:needs_work", Color.GREEN),
-        PR_MERGED("pr:merged", Color.GREEN),
-        PR_DECLINED("pr:declined", Color.GREEN),
-        PR_DELETED("pr:deleted", Color.GREEN),
-        PR_COMMENT("pr:comment:added", Color.GREEN),
+        PR_OPENED("pr:opened", Color.RED),
+        PR_APPROVED("pr:reviewer:approved", Color.RED),
+        PR_UNAPPROVED("pr:reviewer:unapproved", Color.RED),
+        PR_NEEDS_WORK("pr:reviewer:needs_work", Color.RED),
+        PR_MERGED("pr:merged", Color.RED),
+        PR_DECLINED("pr:declined", Color.RED),
+        PR_DELETED("pr:deleted", Color.RED),
+        PR_COMMENT("pr:comment:added", Color.RED),
         ;
 
         private final String eventKey;
