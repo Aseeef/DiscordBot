@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import utils.Utils;
 import utils.WebhookUtils;
 
-//todo finish and check out alt
+//todo finish
 public class OnReceiveMessageStash implements RedisEventListener {
 
     @Override
@@ -75,6 +75,24 @@ public class OnReceiveMessageStash implements RedisEventListener {
 
     }
 
+    /*
+    .put(PULL_REQUEST_OPENED, "pullrequest:created")
+.put(PULL_REQUEST_UPDATED, "pullrequest:updated")
+.put(PULL_REQUEST_RESCOPED, "pullrequest:updated")
+.put(PULL_REQUEST_REOPENED, "pullrequest:updated")
+.put(PULL_REQUEST_MERGED, "pullrequest:fulfilled")
+.put(PULL_REQUEST_DECLINED, "pullrequest:rejected")
+.put(PULL_REQUEST_COMMENT, "pullrequest:comment")
+.put(PULL_REQUEST_DELETED, "pullrequest:deleted")
+.put(PULL_REQUEST_CANCELABLE_COMMENT, "pullrequest:comment")
+.put(PULL_REQUEST_COMMENT_ACTIVITY, "pullrequest:comment")
+.put(BUILD_STATUS_SET, "build:status")
+.put(TAG_CREATED, "repo:push")
+.put(BRANCH_CREATED, "repo:push")
+.put(BRANCH_DELETED, "repo:push")
+.put(REPOSITORY_MIRROR_SYNCHRONIZED, "repo:push")
+.put(ABSTRACT_REPOSITORY_REFS_CHANGED, "repo:push")
+     */
     enum EventType {
         //todo color code
         CODE_PUSHED("repo:refs_changed"),
