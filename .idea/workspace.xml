@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="* another test">
+    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="* test2">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnReceiveMessageStash.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnReceiveMessageStash.java" afterDir="false" />
     </list>
@@ -502,70 +502,7 @@
       <workItem from="1638147008695" duration="1119000" />
       <workItem from="1638149179958" duration="4477000" />
       <workItem from="1638165215232" duration="1073000" />
-      <workItem from="1638198372942" duration="2391000" />
-    </task>
-    <task id="LOCAL-00022" summary="Xenforo integration expansion">
-      <created>1593308240004</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1593308240004</updated>
-    </task>
-    <task id="LOCAL-00023" summary="More GTM integrations:&#10;- Managers get notified is staff may be cheating&#10;- Discord ticket detection improvements with DAO">
-      <created>1593308335584</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1593308335584</updated>
-    </task>
-    <task id="LOCAL-00024" summary="Added an &quot;annoy&quot; command and tools to utilize discord webhooks">
-      <created>1593308370374</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1593308370374</updated>
-    </task>
-    <task id="LOCAL-00025" summary="Added a new parser to support ticket fields">
-      <created>1593372492918</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1593372492918</updated>
-    </task>
-    <task id="LOCAL-00026" summary="Various bugs and imporvements">
-      <created>1593835835639</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1593835835639</updated>
-    </task>
-    <task id="LOCAL-00027" summary="Renamed account command to /discord to match gtm">
-      <created>1593835976660</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1593835976660</updated>
-    </task>
-    <task id="LOCAL-00028" summary="Improved commands:&#10;- Pm commands will now say when command not found&#10;- /account renamed to /discord&#10;- /harry will now give feedback on success too.">
-      <created>1594105501756</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1594105501756</updated>
-    </task>
-    <task id="LOCAL-00029" summary="Various bug fixes with verification">
-      <created>1594105615432</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1594105615432</updated>
-    </task>
-    <task id="LOCAL-00030" summary="- Typo fix in DiscordAccountCommand which still was using the old /account in its help&#10;- Moved Rank.class into users package&#10;- Added an easy to use discord embed menu api&#10;- Added a members cache that stores a list of all members with many useful methods&#10;- Replaced previous blocking retrieve member operations with the new member cache&#10;- Fixed NPE in GTMUser when updating user data for a player who left the discord&#10;- Added a command for staff to be able to look up who a discord user is in-game">
-      <created>1594182946488</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1594182946488</updated>
+      <workItem from="1638198372942" duration="5695000" />
     </task>
     <task id="LOCAL-00031" summary="- Improvement to console &amp; logging&#10;- Added a console memory command&#10;- Changed calls to GTMUser#updateUserDataNow() to be async&#10;- Improvements to accounts refreshall command&#10;- Added frame work for custom channels which will allow donors in future to create private channels like on team speak&#10;- Fixed error caused by player have too many past tickets (since embeds have a max field length limit)&#10;- Util improvement: Easily create timer tasks&#10;- Upon unverification, a GTMUser will now loose thier discord rank (prevents abuse)">
       <created>1594248474336</created>
@@ -847,7 +784,70 @@
       <option name="project" value="LOCAL" />
       <updated>1638201517249</updated>
     </task>
-    <option name="localTasksCounter" value="71" />
+    <task id="LOCAL-00071" summary="* debug msg imprvment">
+      <created>1638207787035</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1638207787035</updated>
+    </task>
+    <task id="LOCAL-00072" summary="* test">
+      <created>1638207872958</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1638207872958</updated>
+    </task>
+    <task id="LOCAL-00073" summary="* test 2">
+      <created>1638208132497</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1638208132497</updated>
+    </task>
+    <task id="LOCAL-00074" summary="* test 3">
+      <created>1638208846101</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1638208846101</updated>
+    </task>
+    <task id="LOCAL-00075" summary="* test 3">
+      <created>1638209072877</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1638209072877</updated>
+    </task>
+    <task id="LOCAL-00076" summary="* test 5">
+      <created>1638209451308</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1638209451308</updated>
+    </task>
+    <task id="LOCAL-00077" summary="* color support">
+      <created>1638210291466</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1638210291466</updated>
+    </task>
+    <task id="LOCAL-00078" summary="* test1">
+      <created>1638210491675</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1638210491675</updated>
+    </task>
+    <task id="LOCAL-00079" summary="* test2">
+      <created>1638210502936</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1638210502936</updated>
+    </task>
+    <option name="localTasksCounter" value="80" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -866,14 +866,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="* Removed rules reaction" />
-    <MESSAGE value="* Updated pom" />
-    <MESSAGE value="* Updated statistics" />
-    <MESSAGE value="forgot to remove debug" />
-    <MESSAGE value="* added gitignore" />
-    <MESSAGE value="* Added basic staff stats&#10;* Improved ticket event system&#10;* Tickets not replied to in 3d+ reminder&#10;* Fixed PHP parser (hence fixed staff report alerts)&#10;* Depreciated old support ticket alert event system" />
-    <MESSAGE value="* Fixed version for discord jda" />
-    <MESSAGE value="* test" />
     <MESSAGE value="* Added missing departments" />
     <MESSAGE value="* Added the ability to &quot;complete&quot; suggestions&#10;* Webhook utils improvements&#10;* Listener that listens to a zapier webhook to post stash/jenkins pushes&#10;* Improved the reliability to ticket parser" />
     <MESSAGE value="* Fixed a bug with msg parsing stash" />
@@ -891,7 +883,15 @@
     <MESSAGE value="* Fixing" />
     <MESSAGE value="* todo" />
     <MESSAGE value="* another test" />
-    <option name="LAST_COMMIT_MESSAGE" value="* another test" />
+    <MESSAGE value="* debug msg imprvment" />
+    <MESSAGE value="* test" />
+    <MESSAGE value="* test 2" />
+    <MESSAGE value="* test 3" />
+    <MESSAGE value="* test 5" />
+    <MESSAGE value="* color support" />
+    <MESSAGE value="* test1" />
+    <MESSAGE value="* test2" />
+    <option name="LAST_COMMIT_MESSAGE" value="* test2" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

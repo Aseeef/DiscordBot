@@ -9,7 +9,7 @@ import utils.WebhookUtils;
 
 import java.awt.*;
 
-//todo finish
+//todo finish using https://confluence.atlassian.com/bitbucketserver059/event-payload-949255022.html
 public class OnReceiveMessageStash implements RedisEventListener {
 
     @Override
@@ -44,6 +44,8 @@ public class OnReceiveMessageStash implements RedisEventListener {
         String actorName = actor.getString("name");
         String actorEmail = actor.getString("emailAddress");
 
+        String timestamp = jsonObject.getString("date");
+
         switch (eventType) {
 
             case CODE_PUSHED: {
@@ -55,23 +57,63 @@ public class OnReceiveMessageStash implements RedisEventListener {
                 web.setTitle(new WebhookEmbed.EmbedTitle("Incoming Commit(s) on " + repository.getString("repository") + "!", null));
                 web.addField(new WebhookEmbed.EmbedField(true, "Project", project.getString("key") + "/" + repository.getString("name")));
                 web.addField(new WebhookEmbed.EmbedField(true, "Branch", changes.getJSONObject("ref").getString("displayId")));
-                web.addField(new WebhookEmbed.EmbedField(false, "User", actorName + " - " + actorEmail));
+                web.addField(new WebhookEmbed.EmbedField(true, "User", actorName));
+                web.addField(new WebhookEmbed.EmbedField(true, "Timestamp", timestamp));
                 web.addField(new WebhookEmbed.EmbedField(false, "Project URL", BASE_URL + project.getString("key") + "/repos/" + repository.getString("slug") + "/browse"));
                 web.addField(new WebhookEmbed.EmbedField(false, "View Commits", BASE_URL + project.getString("key") + "/repos/" + repository.getString("slug") + "/commits?until=" + changes.getString("refId")));
                 break;
             }
-            case REPO_FORKED:
-            case REPO_COMMENT:
-            case REPO_MODIFIED:
-            case PR_MERGED:
-            case PR_OPENED:
-            case PR_COMMENT:
-            case PR_DELETED:
-            case PR_APPROVED:
-            case PR_DECLINED:
-            case PR_NEEDS_WORK:
-            case PR_UNAPPROVED:
+            case REPO_FORKED: {
+
                 break;
+            }
+            case REPO_COMMENT: {
+
+                break;
+            }
+            case REPO_MODIFIED: {
+                JSONObject oldData = jsonObject.getJSONObject("old");
+                JSONObject newData = jsonObject.getJSONObject("new");
+
+                web.setTitle(new WebhookEmbed.EmbedTitle("Repository Renamed!", null));
+                web.addField(new WebhookEmbed.EmbedField(true, "From", oldData.getJSONObject("project").getString("key") + "/" + oldData.getString("name")));
+                web.addField(new WebhookEmbed.EmbedField(true, "To", newData.getJSONObject("project").getString("key") + "/" + newData.getString("name")));
+                web.addField(new WebhookEmbed.EmbedField(true, "User", actorName));
+                web.addField(new WebhookEmbed.EmbedField(true, "Timestamp", timestamp));
+                break;
+            }
+            case PR_MERGED: {
+
+                break;
+            }
+            case PR_OPENED: {
+
+                break;
+            }
+            case PR_COMMENT: {
+
+                break;
+            }
+            case PR_DELETED: {
+
+                break;
+            }
+            case PR_APPROVED: {
+
+                break;
+            }
+            case PR_DECLINED: {
+
+                break;
+            }
+            case PR_NEEDS_WORK: {
+
+                break;
+            }
+            case PR_UNAPPROVED: {
+
+                break;
+            }
 
         }
 
@@ -84,7 +126,6 @@ public class OnReceiveMessageStash implements RedisEventListener {
     }
 
     enum EventType {
-        //todo color code
         CODE_PUSHED("repo:refs_changed", Color.BLUE),
         REPO_MODIFIED("repo:modified", Color.YELLOW),
         REPO_FORKED("repo:forked", Color.YELLOW),
@@ -98,6 +139,7 @@ public class OnReceiveMessageStash implements RedisEventListener {
         PR_DELETED("pr:deleted", Color.GREEN),
         PR_COMMENT("pr:comment:added", Color.GREEN),
         ;
+
         private final String eventKey;
         private final Color color;
         EventType(String eventKey, Color color) {
@@ -115,7 +157,7 @@ public class OnReceiveMessageStash implements RedisEventListener {
 
         public static EventType getEventType(String key) {
             for (EventType eventType : EventType.values()) {
-                if (eventType.eventKey.equals(key)) {
+                if (eventType.getEventKey().equals(key)) {
                     return eventType;
                 }
             }
