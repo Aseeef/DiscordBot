@@ -303,4 +303,113 @@ PR UPDATED:
 
 --------------
 
+PR MERGE:
+
+{
+   "actor":{
+      "displayName":"SkylixMC",
+      "username":"SkylixMC"
+   },
+   "pullrequest":{
+      "link":"https://stash.grandtheftmc.net/projects/GRAN/repos/core/pull-requests/223",
+      "authorLogin":"SkylixMC",
+      "fromRef":{
+         "commit":{
+            "date":null,
+            "authorTimestamp":0,
+            "message":null,
+            "hash":"68a34912983c6683e91abfce67a2ca820c742706"
+         },
+         "repository":{
+            "owner":{
+               "displayName":"GRAN",
+               "username":"GRAN"
+            },
+            "public":false,
+            "ownerName":"GRAN",
+            "project":{
+               "name":"GrandTheftMC",
+               "key":"GRAN"
+            },
+            "fullName":"GRAN/core",
+            "links":{
+               "self":[
+                  {
+                     "href":"https://stash.grandtheftmc.net/projects/GRAN/repos/core/browse"
+                  }
+               ]
+            },
+            "scmId":"git",
+            "slug":"core"
+         },
+         "branch":{
+            "rawNode":"68a34912983c6683e91abfce67a2ca820c742706",
+            "name":"skylix_qa"
+         }
+      },
+      "id":"223",
+      "title":"Skylix qa",
+      "toRef":{
+         "commit":{
+            "date":null,
+            "authorTimestamp":0,
+            "message":null,
+            "hash":"cce78ed97eb6959b4648017dd3f4bce6c6ab342d"
+         },
+         "repository":{
+            "owner":{
+               "displayName":"GRAN",
+               "username":"GRAN"
+            },
+            "public":false,
+            "ownerName":"GRAN",
+            "project":{
+               "name":"GrandTheftMC",
+               "key":"GRAN"
+            },
+            "fullName":"GRAN/core",
+            "links":{
+               "self":[
+                  {
+                     "href":"https://stash.grandtheftmc.net/projects/GRAN/repos/core/browse"
+                  }
+               ]
+            },
+            "scmId":"git",
+            "slug":"core"
+         },
+         "branch":{
+            "rawNode":"cce78ed97eb6959b4648017dd3f4bce6c6ab342d",
+            "name":"skylix_todo"
+         }
+      }
+   },
+   "eventKey":"pullrequest:fulfilled",
+   "repository":{
+      "owner":{
+         "displayName":"GRAN",
+         "username":"GRAN"
+      },
+      "public":false,
+      "ownerName":"GRAN",
+      "project":{
+         "name":"GrandTheftMC",
+         "key":"GRAN"
+      },
+      "fullName":"GRAN/core",
+      "links":{
+         "self":[
+            {
+               "href":"https://stash.grandtheftmc.net/projects/GRAN/repos/core/browse"
+            }
+         ]
+      },
+      "scmId":"git",
+      "slug":"core"
+   }
+}
+
+---------------
+
+
  */
