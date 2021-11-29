@@ -17,7 +17,7 @@ public class OnReceiveMessageStash implements RedisEventListener {
 
     @Override
     public void onRedisEvent(String s, JSONObject jsonObject) {
-        if (!jsonObject.has("eventKey")) {
+        if (!jsonObject.has("eventKey") || !(jsonObject.get("eventKey") instanceof String)) {
             System.err.println("[Debug] Received an unsupported message from BitBucket!");
             System.err.println(jsonObject);
             return;
@@ -33,11 +33,11 @@ public class OnReceiveMessageStash implements RedisEventListener {
         WebhookEmbedBuilder web = new WebhookEmbedBuilder();
         final String STASH_ICON = "https://img.favpng.com/5/6/10/bitbucket-portable-network-graphics-logo-github-repository-png-favpng-C52i9LPss9RJt5zsvs6EXNfpW.jpg";
         final String BASE_URL = "https://stash.grandtheftmc.net/projects/";
+        System.out.println(jsonObject);
 
         JSONObject actor = jsonObject.getJSONObject("actor");
         String actorName = actor.getString("name");
         String actorEmail = actor.getString("emailAddress");
-        System.out.println(jsonObject);
 
         switch (eventType) {
 
@@ -93,6 +93,7 @@ public class OnReceiveMessageStash implements RedisEventListener {
 .put(REPOSITORY_MIRROR_SYNCHRONIZED, "repo:push")
 .put(ABSTRACT_REPOSITORY_REFS_CHANGED, "repo:push")
      */
+
     enum EventType {
         //todo color code
         CODE_PUSHED("repo:refs_changed"),
@@ -128,3 +129,172 @@ public class OnReceiveMessageStash implements RedisEventListener {
         }
     }
 }
+/*
+
+REPO PUSH:
+
+{
+   "actor":{
+      "displayName":"SkylixMC",
+      "username":"SkylixMC"
+   },
+   "eventKey":"repo:push",
+   "repository":{
+      "owner":{
+         "displayName":"GRAN",
+         "username":"GRAN"
+      },
+      "public":false,
+      "ownerName":"GRAN",
+      "project":{
+         "name":"GrandTheftMC",
+         "key":"GRAN"
+      },
+      "fullName":"GRAN/discordbot",
+      "links":{
+         "self":[
+            {
+               "href":"https://stash.grandtheftmc.net/projects/GRAN/repos/d$scordbot/browse"
+            }
+         ]
+      },
+      "scmId":"git",
+      "slug":"discordbot"
+   },
+   "push":{
+      "changes":[
+         {
+            "new":{
+               "name":"skylix_qa",
+               "type":"branch",
+               "target":{
+                  "type":"commit",
+                  "hash":"646897d01088c23a5fad3b87$981caa8a2dc8150"
+               }
+            },
+            "created":false,
+            "old":{
+               "name":"skylix_qa",
+               "type":"branch",
+               "target":{
+                  "type":"commit",
+                  "hash":"ded665775aa15941cb3e886cb136637bd45f5245"
+               }
+            },
+            "closed":false
+         }
+      ]
+   }
+}
+
+-----------
+
+PR UPDATED:
+{
+   "actor":{
+      "displayName":"SkylixMC",
+      "username":"SkylixMC"
+   },
+   "pullrequest":{
+      "link":"https://stash.grandtheftmc.net/projects/GRAN/repos/discordbot/pull-requests/21",
+      "authorLogin":"SkylixMC",
+      "fromRef":{
+         "commit":{
+            "date":null,
+            "authorTimestamp":0,
+            "message":null,
+            "hash":"646897d01088c23a5fad3b874981caa8a2dc8150"
+         },
+         "repository":{
+            "owner":{
+               "displayName":"GRAN",
+               "username":"GRAN"
+            },
+            "public":false,
+            "ownerName":"GRAN",
+            "project":{
+               "name":"GrandTheftMC",
+               "key":"GRAN"
+            },
+            "fullName":"GRAN/discordbot",
+            "links":{
+               "self":[
+                  {
+                     "href":"https://stash.grandtheftmc.net/projects/GRAN/repos/discordbot/browse"
+                  }
+               ]
+            },
+            "scmId":"git",
+            "slug":"discordbot"
+         },
+         "branch":{
+            "rawNode":"646897d01088c23a5fad3b874981caa8a2dc8150",
+            "name":"skylix_qa"
+         }
+      },
+      "id":"21",
+      "title":"Skylix qa",
+      "toRef":{
+         "commit":{
+            "date":null,
+            "authorTimestamp":0,
+            "message":null,
+            "hash":"e775be5fa0ab50bb3bba35ed95d9ee15207c9fbd"
+         },
+         "repository":{
+            "owner":{
+               "displayName":"GRAN",
+               "username":"GRAN"
+            },
+            "public":false,
+            "ownerName":"GRAN",
+            "project":{
+               "name":"GrandTheftMC",
+               "key":"GRAN"
+            },
+            "fullName":"GRAN/discordbot",
+            "links":{
+               "self":[
+                  {
+                     "href":"https://stash.grandtheftmc.net/projects/GRAN/repos/discordbot/browse"
+                  }
+               ]
+            },
+            "scmId":"git",
+            "slug":"discordbot"
+         },
+         "branch":{
+            "rawNode":"e775be5fa0ab50bb3bba35ed95d9ee15207c9fbd",
+            "name":"develop"
+         }
+      }
+   },
+   "eventKey":"pullrequest:updated",
+   "repository":{
+      "owner":{
+         "displayName":"GRAN",
+         "username":"GRAN"
+      },
+      "public":false,
+      "ownerName":"GRAN",
+      "project":{
+         "name":"GrandTheftMC",
+         "key":"GRAN"
+      },
+      "fullName":"GRAN/discordbot",
+      "links":{
+         "self":[
+            {
+               "href":"https://stash.grandtheftmc.net/projects/GRAN/repos/discordbot/browse"
+            }
+         ]
+      },
+      "scmId":"git",
+      "slug":"discordbot"
+   }
+}
+
+
+--------------
+
+ */
