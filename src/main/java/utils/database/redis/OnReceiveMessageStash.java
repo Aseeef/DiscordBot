@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import utils.Utils;
 import utils.WebhookUtils;
 
+//todo finish and check out alt
 public class OnReceiveMessageStash implements RedisEventListener {
 
     @Override
@@ -16,6 +17,12 @@ public class OnReceiveMessageStash implements RedisEventListener {
 
     @Override
     public void onRedisEvent(String s, JSONObject jsonObject) {
+        if (!jsonObject.has("eventKey")) {
+            System.err.println("[Debug] Received an unsupported message from BitBucket!");
+            System.err.println(jsonObject);
+            return;
+        }
+
         EventType eventType = EventType.getEventType(jsonObject.getString("eventKey"));
         if (eventType == null) {
             System.err.println("[Debug] Received an unsupported Event Type from BitBucket!");

@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="* Code clean up&#10;* thread improvements">
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnReceiveMessageStash.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="* Connected Stash to webhook directly">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GTM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GTM.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/events/GuildMessageStash.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/events/GuildMessageStash.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnRedisMessageReceive.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnRecieveMessageGTM.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnReceiveMessageStash.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnReceiveMessageStash.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -504,14 +500,7 @@
       <workItem from="1636773826446" duration="617000" />
       <workItem from="1638123300088" duration="1715000" />
       <workItem from="1638147008695" duration="1119000" />
-      <workItem from="1638149179958" duration="3995000" />
-    </task>
-    <task id="LOCAL-00018" summary="Adds Xenforo integration">
-      <created>1591863917164</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1591863917164</updated>
+      <workItem from="1638149179958" duration="4477000" />
     </task>
     <task id="LOCAL-00019" summary="Bug fixes with xenforo">
       <created>1591865784877</created>
@@ -849,7 +838,14 @@
       <option name="project" value="LOCAL" />
       <updated>1638125022365</updated>
     </task>
-    <option name="localTasksCounter" value="67" />
+    <task id="LOCAL-00067" summary="* Connected Stash to webhook directly">
+      <created>1638153620639</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1638153620639</updated>
+    </task>
+    <option name="localTasksCounter" value="68" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -868,7 +864,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="* Removed rules reaction channel &amp; players no longer have to react to rules to join. This is now handled by a discord feature&#10;* Removed references to the UNVERIFIED user role as its no longer needed" />
     <MESSAGE value="* GTMUsers are now loaded in sync" />
     <MESSAGE value="* Blocking actions are actually not permitted in gateway thread" />
     <MESSAGE value="* Should fix channel mentions" />
@@ -893,7 +888,8 @@
     <MESSAGE value="* bugs fixes&#10;* new thread util&#10;* added lombok&#10;* updated ip&#10;* code cleanup &amp; util improvements" />
     <MESSAGE value="* bugs fixes&#10;* new thread util&#10;* added lombok&#10;* updated ip&#10;* code cleanup &amp; util improvements&#10;* bug reports fix&#10;* voice channel outofbound error fix" />
     <MESSAGE value="* Code clean up&#10;* thread improvements" />
-    <option name="LAST_COMMIT_MESSAGE" value="* Code clean up&#10;* thread improvements" />
+    <MESSAGE value="* Connected Stash to webhook directly" />
+    <option name="LAST_COMMIT_MESSAGE" value="* Connected Stash to webhook directly" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
