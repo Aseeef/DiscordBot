@@ -42,7 +42,7 @@ public class SuggestionCommand extends Command {
         }
 
         else if (args[0].equalsIgnoreCase("delete")) {
-            if (Data.doesNumberExist(Data.SUGGESTIONS, Integer.parseInt(args[1]))) {
+            if (Data.doesDataExist(Data.SUGGESTIONS, Integer.parseInt(args[1]))) {
                 Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(args[1]));
                 getSuggestionsChannel().deleteMessageById(suggestion.getId()).queue();
                 Data.deleteData(Data.SUGGESTIONS, Integer.parseInt(args[1]));
@@ -55,7 +55,7 @@ public class SuggestionCommand extends Command {
 
         // Suggestions Deny Command
         else if (args[0].equalsIgnoreCase("deny")) {
-            if (Data.doesNumberExist(Data.SUGGESTIONS, Integer.parseInt(args[1]))) {
+            if (Data.doesDataExist(Data.SUGGESTIONS, Integer.parseInt(args[1]))) {
 
                 // Get suggestion instance
                 Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(args[1]));
@@ -90,7 +90,7 @@ public class SuggestionCommand extends Command {
 
         // Suggestions Approve Command
         else if (args[0].equalsIgnoreCase("approve")) {
-            if (Data.doesNumberExist(Data.SUGGESTIONS, Integer.parseInt(args[1]))) {
+            if (Data.doesDataExist(Data.SUGGESTIONS, Integer.parseInt(args[1]))) {
 
                 Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(args[1]));
                 // Set new data
@@ -120,7 +120,7 @@ public class SuggestionCommand extends Command {
 
         // Suggestions Approve Command
         else if (args[0].equalsIgnoreCase("complete")) {
-            if (Data.doesNumberExist(Data.SUGGESTIONS, Integer.parseInt(args[1]))) {
+            if (Data.doesDataExist(Data.SUGGESTIONS, Integer.parseInt(args[1]))) {
 
                 Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(args[1]));
                 // Set new data
@@ -150,7 +150,7 @@ public class SuggestionCommand extends Command {
 
         // Suggestions Hold Command
         else if (args[0].equalsIgnoreCase("hold")) {
-            if (Data.doesNumberExist(Data.SUGGESTIONS, Integer.parseInt(args[1]))) {
+            if (Data.doesDataExist(Data.SUGGESTIONS, Integer.parseInt(args[1]))) {
 
                 Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(args[1]));
                 // Set new data

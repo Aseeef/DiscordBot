@@ -3,6 +3,7 @@ package xenforo.objects.tickets;
 import com.fasterxml.jackson.annotation.*;
 import com.github.ooxi.phparser.SerializedPhpParser;
 import com.github.ooxi.phparser.SerializedPhpParserException;
+import lombok.Getter;
 import org.json.JSONObject;
 import utils.console.Logs;
 import utils.database.XenforoDAO;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Getter
 @JsonRootName("content") @JsonIgnoreProperties ({"guest_password", "is_primary_close", "last_message_id", "last_message_user_id", "last_message_username", "is_piping_email", "user_name"})
 public class SupportTicket {
 
@@ -89,37 +91,9 @@ public class SupportTicket {
         this.participants = participants;
     }
 
-    public int getSupportTicketId() {
-        return supportTicketId;
-    }
-
-    public String getTicketId() {
-        return ticketId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
     @JsonIgnore
     public XenforoUser getUser() {
         return XenforoDAO.xenforoUserFromId(userId);
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public int getOpeningUserId() {
-        return openingUserId;
     }
 
     @JsonIgnore
@@ -127,28 +101,8 @@ public class SupportTicket {
         return XenforoDAO.xenforoUserFromId(openingUserId);
     }
 
-    public String getOpeningUserName() {
-        return openingUserName;
-    }
-
-    public int getOpenDate() {
-        return openDate;
-    }
-
     public Urgency getUrgency() {
         return Urgency.fromId(Integer.parseInt(urgency));
-    }
-
-    public int getReplyCount() {
-        return replyCount;
-    }
-
-    public int getParticipantCount() {
-        return participantCount;
-    }
-
-    public int getDepartmentId() {
-        return departmentId;
     }
 
     @JsonIgnore
@@ -156,17 +110,9 @@ public class SupportTicket {
         return Department.getDepartment(this.departmentId);
     }
 
-    public int getAssignedUserId() {
-        return assignedUserId;
-    }
-
     @JsonIgnore
     public XenforoUser getAssignedUser() {
         return XenforoDAO.xenforoUserFromId(assignedUserId);
-    }
-
-    public int getTicketStatusId() {
-        return ticketStatusId;
     }
 
     @JsonIgnore
@@ -174,34 +120,14 @@ public class SupportTicket {
         return TicketStatus.fromId(ticketStatusId);
     }
 
-    public int getFirstMessageId() {
-        return firstMessageId;
-    }
-
-    public int getLastUpdate() {
-        return lastUpdate;
-    }
-
     @JsonIgnore
     public TicketMessage getMessage(int messageId) {
         return XenforoDAO.getTicketMessage(this.supportTicketId, messageId);
     }
 
-    public int getLastMessageDate() {
-        return lastMessageDate;
-    }
-
-    public int getLastMessageId() {
-        return lastMessageId;
-    }
-
     @JsonIgnore
     public TicketMessage getLastMessage() {
         return XenforoDAO.getTicketMessage(this.supportTicketId, this.lastMessageId);
-    }
-
-    public float getSubmittedRating() {
-        return submittedRating;
     }
 
     public JSONObject getTicketFields() {
@@ -216,10 +142,6 @@ public class SupportTicket {
             // sometimes, the php parser i made is still able to decipher php better than this
             return convertToMapOld(this.ticketFields);
         }
-    }
-
-    public String getParticipants() {
-        return participants;
     }
 
     @JsonIgnore

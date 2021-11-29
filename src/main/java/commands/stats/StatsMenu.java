@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.User;
 import utils.chart.PlaytimeChart;
 import utils.database.DiscordDAO;
 import utils.database.XenforoDAO;
+import utils.threads.ThreadUtil;
 import utils.web.ImgurUploader;
 import utils.pagination.DiscordMenu;
 import utils.pagination.MenuAction;
@@ -80,8 +81,7 @@ public class StatsMenu implements MenuAction {
         pu = StatsDAO.getPlanUser(uuid);
         if (pu == null) return false;
 
-        Thread thread = new Thread(() -> {
-
+        ThreadUtil.runAsync(() -> {
             CompletableFuture<DiscordMenu> futureMenu = DiscordMenu.create(channel, getPendingEmbed(1), 1);
             loadRawData();
 
@@ -96,6 +96,7 @@ public class StatsMenu implements MenuAction {
                 playtimeStats = getPlaytimeStats();
                 gangStats = getGangStats();
 
+                // todo: help questions per hour rate
                 if (rank.isHigherOrEqualTo(Rank.HELPER)) {
                     staffBanStats = getStaffBanStats();
                     staffHelpStats = getStaffHelpStats();
@@ -109,9 +110,7 @@ public class StatsMenu implements MenuAction {
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
-
         });
-        thread.start();
 
         return true;
     }
@@ -181,6 +180,7 @@ public class StatsMenu implements MenuAction {
         rank = DiscordDAO.getRank(uuid);
         rank = rank == null ? Rank.NORANK : rank;
         if (rank.isHigherOrEqualTo(Rank.HELPER)) {
+            // todo load allll help questions
             helpQuestions = StatsDAO.getHelpQuestions(System.currentTimeMillis() - (1000L * 60 * 60 * 24 * 30), uuid);
             bansGiven = StatsDAO.getPunishments(uuid, WrappedPunishment.PunishmentType.BAN, true);
             mutesGiven = StatsDAO.getPunishments(uuid, WrappedPunishment.PunishmentType.MUTE, true);
@@ -193,7 +193,11 @@ public class StatsMenu implements MenuAction {
 
         EmbedBuilder eb = new EmbedBuilder();
 
-
+        eb.setTitle("**Staff Help Stats for `" + pu.getUsername() + "`:**");
+        eb.addField("Questions Answered","", true);
+        eb.addField("Questions Answered (30d)","", true);
+        eb.addField("Questions Answered (7d)","", true);
+        eb.addField("Questions/Hour Rate","", true);
 
         return eb;
 
@@ -203,7 +207,7 @@ public class StatsMenu implements MenuAction {
 
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setTitle("**Staff Statistics for `" + pu.getUsername() + "`:**");
+        eb.setTitle("**Staff Punishment Stats for `" + pu.getUsername() + "`:**");
 
         LinkedList<WrappedPunishment> allPunishments = new LinkedList<>();
         allPunishments.addAll(bansGiven);

@@ -1,5 +1,8 @@
 package xenforo.objects.tickets;
 
+import lombok.Getter;
+
+@Getter
 public enum Department {
 
     BUY_AN_UNBAN(6, "Buy an Unban"),
@@ -17,14 +20,6 @@ public enum Department {
     Department(int departmentId, String departmentName) {
         this.departmentId = departmentId;
         this.departmentName = departmentName;
-    }
-
-    public int getDepartmentId() {
-        return departmentId;
-    }
-
-    public String getDepartmentName() {
-        return departmentName;
     }
 
     public static Department getDepartment(int departmentId) {

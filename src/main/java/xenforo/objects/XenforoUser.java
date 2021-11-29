@@ -1,5 +1,8 @@
 package xenforo.objects;
 
+import lombok.Getter;
+
+@Getter
 public class XenforoUser {
 
     private int userId;
@@ -20,38 +23,6 @@ public class XenforoUser {
         this.gender = gender;
         this.userState = userState;
         this.registerDate = registerDate;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getTimezone() {
-        return timezone;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public String getUserState() {
-        return userState;
-    }
-
-    public int getRegisterDate() {
-        return registerDate;
-    }
-
-    public String getCustomTitle() {
-        return customTitle;
     }
 
     public String getProfileLink() {

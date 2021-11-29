@@ -177,3 +177,6 @@ clickUpKey: "insert key"
 
 # How often to refresh click up in seconds?
 clickUpRefreshFrequency: 10
+
+# How long to wait in seconds for any additional edits to be made once we detect that a bug report was updated?
+clickUpWaitDuration: 45

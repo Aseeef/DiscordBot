@@ -1,7 +1,10 @@
 package commands.stats.wrappers;
 
+import lombok.Getter;
+
 import java.util.UUID;
 
+@Getter
 public class PlanUser {
 
     private UUID uuid;
@@ -14,21 +17,5 @@ public class PlanUser {
         this.username = username;
         this.registered = registered;
         this.timesKicked = timesKicked;
-    }
-
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public long getRegistered() {
-        return registered;
-    }
-
-    public int getTimesKicked() {
-        return timesKicked;
     }
 }

@@ -68,13 +68,19 @@ public class CustomChannel extends ListenerAdapter {
 
         if (this.voiceChannel == null) {
             ThreadUtil.runDelayedTask( () -> {
+                //todo: causing npe?
                 ChannelData.get().getChannelMap().remove(this.ownerId);
                 ChannelData.get().save();
-            }, 10);
+            }, 100);
             return;
         }
 
-        this.voiceChannel.retrieveInvites().queue( (invites -> this.invite = invites.get(0)));
+        List<Invite> invites = this.voiceChannel.retrieveInvites().complete();
+        if (invites.size() == 0) {
+            this.voiceChannel.createInvite().queue( c -> this.invite = c);
+        } else {
+            this.invite = invites.get(0);
+        }
 
         this.whitelistIds.forEach( (id) -> {
             MembersCache.getMember(id).ifPresent( (member) -> {
@@ -156,7 +162,7 @@ public class CustomChannel extends ListenerAdapter {
                                 .queue());
             }
 
-        }, 1000 * 60 * Config.get().getCustomChannelDeleteTime());
+        }, 1000L * 60 * Config.get().getCustomChannelDeleteTime());
     }
 
     @JsonGetter

@@ -96,13 +96,20 @@ public class ReportListener extends ListenerAdapter {
                 Matcher matcher = getFormatMatcher(rawMsg);
                 matcher.find();
                 String priority = matcher.group(4);
-                int p = 3;
+                int p = 2;
                 for (char c : priority.toCharArray()) {
                     if (Character.isDigit(c)) {
                         p = Character.getNumericValue(c);
                     }
                 }
-                p = Math.min(p, 4);
+                if (p > 4 || p < 1) p = 2;
+
+                int cuPriority;
+                if (p == 1) cuPriority = 4;
+                else if (p == 2) cuPriority = 3;
+                else if (p == 3) cuPriority = 2;
+                else cuPriority = 1;
+
                 if (attachmentUrl != null) {
                     updatedMsg = StringUtils.replaceLast(updatedMsg, matcher.group(5), "\n");
                     updatedMsg = updatedMsg + "\n(" + attachmentUrl + ")";
@@ -110,7 +117,7 @@ public class ReportListener extends ListenerAdapter {
 
                 BugReport report = new BugReport(0L, 0L, updatedMsg, false, user.getIdLong(), BugReport.ReportStatus.AWAITING_REVIEW);
 
-                new CUTask(GTMUser.getGTMUser(user.getIdLong()).get().getUsername(), user.getIdLong(), updatedMsg, BugReport.ReportStatus.AWAITING_REVIEW, p).createTask().thenAccept((id) -> {
+                new CUTask(GTMUser.getGTMUser(user.getIdLong()).get().getUsername(), user.getIdLong(), updatedMsg, BugReport.ReportStatus.AWAITING_REVIEW, cuPriority).createTask().thenAccept((id) -> {
                    report.setId(id);
                    report.save();
 
@@ -156,7 +163,7 @@ public class ReportListener extends ListenerAdapter {
                         ".+)" +
                         "\\*\\*What should be happening / What should be fixed\\?\\*\\*(" +
                         ".*)" +
-                        "\\*\\*On a scale of 1-5, urgent is this bug?\\?\\*\\*(" +
+                        "\\*\\*On a scale of 1-4, urgent is this bug?\\?\\*\\*(" +
                         ".*)" +
                         "\\*\\*Video / Screenshot:\\*\\*(" +
                         ".*)", Pattern.DOTALL
@@ -204,9 +211,9 @@ public class ReportListener extends ListenerAdapter {
                 .append("\n")
                 .append("[Explain the expected behavior here (If not applicable, type \"N/A\")]")
                 .append("\n\u200E\n")
-                .append("**On a scale of 1-5, urgent is this bug?**")
+                .append("**On a scale of 1-4, urgent is this bug?**")
                 .append("\n")
-                .append("[1=Not Urgent, minor bug ; 5=Major bug, please fix now]")
+                .append("[1=Not Urgent, 2=Normal, 3=Urgent 4=CRITIAL]")
                 .append("\n\u200E\n")
                 .append("**Video / Screenshot:**")
                 .append("\n")

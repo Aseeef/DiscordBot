@@ -2,8 +2,10 @@ package commands.bugs;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Getter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.exceptions.ContextException;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import org.json.JSONObject;
@@ -17,10 +19,12 @@ import utils.users.GTMUser;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.io.File;
+import java.util.Collections;
+import java.util.List;
 
 import static utils.Utils.*;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Getter
 public class BugReport {
 
     private String id;
@@ -49,16 +53,9 @@ public class BugReport {
         Data.storeData(Data.BUG_REPORTS, this, id);
     }
 
-    public String getId() {
-        return id;
-    }
-
     public void setId(String id) {
         this.id = id;
-    }
-
-    public long getReceiveChannelId() {
-        return receiveChannelId;
+        Data.storeData(Data.BUG_REPORTS, this, this.id);
     }
 
     public void setReceiveChannelId(long receiveChannelId) {
@@ -66,17 +63,9 @@ public class BugReport {
         Data.storeData(Data.BUG_REPORTS, this, this.id);
     }
 
-    public long getReportChannelId() {
-        return reportChannelId;
-    }
-
     public void setReportChannelId(long reportChannelId) {
         this.reportChannelId = reportChannelId;
         Data.storeData(Data.BUG_REPORTS, this, this.id);
-    }
-
-    public String getReportMessage() {
-        return reportMessage;
     }
 
     public void setReportMessage(String reportMessage) {
@@ -84,30 +73,14 @@ public class BugReport {
         Data.storeData(Data.BUG_REPORTS, this, this.id);
     }
 
-    public boolean isHidden() {
-        return hidden;
-    }
-
     public void setHidden(boolean hidden) {
         this.hidden = hidden;
         Data.storeData(Data.BUG_REPORTS, this, this.id);
     }
 
-    public long getReporterId() {
-        return reporterId;
-    }
-
-    public ReportStatus getStatus() {
-        return status;
-    }
-
     public void setStatus(ReportStatus status) {
         this.status = status;
         Data.storeData(Data.BUG_REPORTS, this, this.id);
-    }
-
-    public boolean isAwarded() {
-        return awarded;
     }
 
     public void setAwarded(boolean awarded) {
@@ -116,19 +89,23 @@ public class BugReport {
     }
 
     @JsonIgnore
-    public void sendUpdate(@Nullable String statusReason) {
+    public void sendUpdate(@Nullable String adminComment) {
         ThreadUtil.runAsync(() -> {
             // dm user about an update
             User reporter = userById(this.reporterId);
             if (reporter != null) {
-                PrivateChannel privateChannel = reporter.openPrivateChannel().complete();
-                MessageAction ma = privateChannel.sendMessage("An update has been received on the following bug report:").setEmbeds(this.createEmbed(false));
-                ma.complete();
-                if (statusReason != null) {
-                    privateChannel.sendMessage("**Additional info from an admin:** \n" + statusReason).complete();
-                }
-                if (this.hidden)
-                    privateChannel.sendMessage("**Warning!** This bug report was marked as 'hidden' (probably because this bug can be abused). Sharing this bug with anyone may result in a cancellation of any rewards and/or further punishment!").complete();
+                try {
+                    PrivateChannel privateChannel = reporter.openPrivateChannel().complete();
+                    MessageAction ma = privateChannel.sendMessage("An update has been received on the following bug report:").setEmbeds(this.createEmbed(false));
+                    ma.complete();
+                    if (adminComment != null) {
+                        StringBuilder comment = new StringBuilder("**Additional comments:**\n");
+                        comment.append(adminComment);
+                        privateChannel.sendMessage(comment).complete();
+                    }
+                    if (this.hidden)
+                        privateChannel.sendMessage("**Warning!** This bug report was marked as 'hidden' (probably because this bug can be abused). Sharing this bug with anyone may result in a cancellation of any rewards and/or further punishment!").complete();
+                } catch (ErrorResponseException ignored) {} // if user has dms closed
             }
             // update embed in the receive channel (if any and if not we create ones later if needed..)
             try {

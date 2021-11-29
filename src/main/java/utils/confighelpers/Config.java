@@ -2,11 +2,14 @@ package utils.confighelpers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import lombok.Getter;
+import lombok.extern.jackson.Jacksonized;
 import utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
 
+@Getter
 public class Config {
 
     private String botToken;
@@ -27,6 +30,7 @@ public class Config {
     private String dummyAccountPassword;
     private String clickUpKey;
     private int clickUpRefreshFrequency;
+    private int clickUpWaitDuration;
 
     private static Config config;
 
@@ -50,75 +54,4 @@ public class Config {
         }
     }
 
-    public String getBotToken() {
-        return botToken;
-    }
-
-    public String getBotName() {
-        return botName;
-    }
-
-    public String getCommandPrefix() {
-        return commandPrefix;
-    }
-
-    public int getMsgDeleteTime() {
-        return msgDeleteTime;
-    }
-
-    public int getCustomChannelDeleteTime() {
-        return customChannelDeleteTime;
-    }
-
-    public DatabaseCreds getUsersDatabase() {
-        return usersDatabase;
-    }
-
-    public DatabaseCreds getPlanDatabase() {
-        return planDatabase;
-    }
-
-    public DatabaseCreds getBansDatabase() {
-        return bansDatabase;
-    }
-
-    public DatabaseCreds getXenDatabase() {
-        return xenDatabase;
-    }
-
-    public DatabaseCreds getRedisDatabase() {
-        return redisDatabase;
-    }
-
-    public MineStatSettings getMineStatSettings() {
-        return mineStatSettings;
-    }
-
-    public RaidmodeSettings getRaidmodeSettings() {
-        return raidmodeSettings;
-    }
-
-    public RankSettings getRankSettings() {
-        return rankSettings;
-    }
-
-    public int getTicketPollingRate() {
-        return ticketPollingRate;
-    }
-
-    public String getDummyAccountUsername() {
-        return dummyAccountUsername;
-    }
-
-    public String getDummyAccountPassword() {
-        return dummyAccountPassword;
-    }
-
-    public String getClickUpKey() {
-        return clickUpKey;
-    }
-
-    public int getClickUpRefreshFrequency() {
-        return clickUpRefreshFrequency;
-    }
 }
