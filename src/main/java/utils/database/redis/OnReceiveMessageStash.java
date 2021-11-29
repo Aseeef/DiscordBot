@@ -51,6 +51,7 @@ public class OnReceiveMessageStash implements RedisEventListener {
                 JSONObject project = repository.getJSONObject("project");
                 JSONObject changes = jsonObject.getJSONArray("changes").getJSONObject(0);
 
+
                 web.setTitle(new WebhookEmbed.EmbedTitle("Incoming Commit(s) on " + repository.getString("repository") + "!", null));
                 web.addField(new WebhookEmbed.EmbedField(true, "Project", project.getString("key") + "/" + repository.getString("name")));
                 web.addField(new WebhookEmbed.EmbedField(true, "Branch", changes.getJSONObject("ref").getString("displayId")));
