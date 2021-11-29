@@ -17,6 +17,7 @@ public class OnReceiveMessageStash implements RedisEventListener {
 
     @Override
     public void onRedisEvent(String s, JSONObject jsonObject) {
+
         if (!jsonObject.has("eventKey") || !(jsonObject.get("eventKey") instanceof String)) {
             System.err.println("[Debug] Received an unsupported message from BitBucket!");
             System.err.println(jsonObject);
