@@ -33,6 +33,8 @@ public class OnReceiveMessageStash implements RedisEventListener {
         WebhookEmbedBuilder web = new WebhookEmbedBuilder();
         final String STASH_ICON = "https://img.favpng.com/5/6/10/bitbucket-portable-network-graphics-logo-github-repository-png-favpng-C52i9LPss9RJt5zsvs6EXNfpW.jpg";
         final String BASE_URL = "https://stash.grandtheftmc.net/projects/";
+
+        System.out.println("[Debug] Received a " + eventType + " event from BitBucket!");
         System.out.println(jsonObject);
 
         JSONObject actor = jsonObject.getJSONObject("actor");
@@ -108,6 +110,9 @@ public class OnReceiveMessageStash implements RedisEventListener {
         PR_DECLINED("pr:declined"),
         PR_DELETED("pr:deleted"),
         PR_COMMENT("pr:comment:added"),
+
+        //new
+        PULL_REQUEST_UPDATED("pullrequest:created"),
 
         ;
         private String eventKey;
