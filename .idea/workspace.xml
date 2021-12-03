@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="* more work on stash alerts">
+    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="* deleted messy stash listener">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GTM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GTM.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/events/GuildMessageStash.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/confighelpers/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/confighelpers/Config.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnReceiveMessageStash.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnReceiveMessageStash.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -504,14 +503,8 @@
       <workItem from="1638147008695" duration="1119000" />
       <workItem from="1638149179958" duration="4477000" />
       <workItem from="1638165215232" duration="1073000" />
-      <workItem from="1638198372942" duration="7849000" />
-    </task>
-    <task id="LOCAL-00032" summary="- Custom channels command which will allow donors to create private channels like on team speak&#10;- Made scabble annoy harder to bypass">
-      <created>1594272835114</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1594272835114</updated>
+      <workItem from="1638198372942" duration="7900000" />
+      <workItem from="1638431503817" duration="2384000" />
     </task>
     <task id="LOCAL-00033" summary="- Split up self data in to categories for organization and added an easy to use data storage class called SavableSelfData&#10;- Depreciated old self data&#10;- In PMs, GTM user calls will now only be made once we know which command is being ran&#10;- Discord menu class now allows us to configure whether we want everyone to be able to modify the menu&#10;- Member reloading now returns a completable future&#10;- Added a auto deleter for custom channels &amp; more&#10;- Fix /channel addgang&#10;- Made the last updated variable in GTM user volatile&#10;- Added a util to run delayed tasks">
       <created>1594440589021</created>
@@ -849,7 +842,14 @@
       <option name="project" value="LOCAL" />
       <updated>1638211341847</updated>
     </task>
-    <option name="localTasksCounter" value="81" />
+    <task id="LOCAL-00081" summary="* deleted messy stash listener">
+      <created>1638213744929</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1638213744929</updated>
+    </task>
+    <option name="localTasksCounter" value="82" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -868,7 +868,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="* Added the ability to &quot;complete&quot; suggestions&#10;* Webhook utils improvements&#10;* Listener that listens to a zapier webhook to post stash/jenkins pushes&#10;* Improved the reliability to ticket parser" />
     <MESSAGE value="* Fixed a bug with msg parsing stash" />
     <MESSAGE value="* Removed debugs" />
     <MESSAGE value="* BugReporter bug fix" />
@@ -893,7 +892,8 @@
     <MESSAGE value="* test1" />
     <MESSAGE value="* test2" />
     <MESSAGE value="* more work on stash alerts" />
-    <option name="LAST_COMMIT_MESSAGE" value="* more work on stash alerts" />
+    <MESSAGE value="* deleted messy stash listener" />
+    <option name="LAST_COMMIT_MESSAGE" value="* deleted messy stash listener" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

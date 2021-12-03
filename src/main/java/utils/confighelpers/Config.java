@@ -3,7 +3,6 @@ package utils.confighelpers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import lombok.Getter;
-import lombok.extern.jackson.Jacksonized;
 import utils.Utils;
 
 import java.io.File;

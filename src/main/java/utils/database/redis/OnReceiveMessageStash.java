@@ -9,7 +9,7 @@ import utils.WebhookUtils;
 
 import java.awt.*;
 
-//todo finish using https://confluence.atlassian.com/bitbucketserver059/event-payload-949255022.html
+//TODO finish using https://confluence.atlassian.com/bitbucketserver059/event-payload-949255022.html
 public class OnReceiveMessageStash implements RedisEventListener {
 
     @Override
@@ -54,7 +54,7 @@ public class OnReceiveMessageStash implements RedisEventListener {
                 JSONObject changes = jsonObject.getJSONArray("changes").getJSONObject(0);
 
 
-                web.setTitle(new WebhookEmbed.EmbedTitle("Incoming Commit(s) on " + repository.getString("repository") + "!", null));
+                web.setTitle(new WebhookEmbed.EmbedTitle("Incoming Commit(s) on " + repository.getString("name") + "!", null));
                 web.addField(new WebhookEmbed.EmbedField(true, "Project", project.getString("key") + "/" + repository.getString("name")));
                 web.addField(new WebhookEmbed.EmbedField(true, "Branch", changes.getJSONObject("ref").getString("displayId")));
                 web.addField(new WebhookEmbed.EmbedField(true, "User", actorName));
