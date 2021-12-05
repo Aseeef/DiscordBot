@@ -20,7 +20,8 @@ public enum BotData {
     LAST_CLICKUP_REFRESH(1628887011000L),
     // string is bug id, long is insert time
     CLICKUP_PENDING_BUGS(new HashMap<String, Long>()),
-    CLICKUP_TO_IGNORE(new HashMap<String, Long>())
+    CLICKUP_TO_IGNORE(new HashMap<String, Long>()),
+    LAST_COMMIT_POLL(0L);
     ;
 
     private static HashMap<String, Object> dataList = new HashMap<>();

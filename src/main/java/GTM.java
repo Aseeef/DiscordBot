@@ -67,6 +67,7 @@ public class GTM {
         loadJDA();
         Xenforo.dbPollTickets();
         new ClickUpPollTask();
+        BotData.LAST_COMMIT_POLL.setValue(System.currentTimeMillis());
     }
 
     private static void loadJDA() {

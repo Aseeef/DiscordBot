@@ -56,15 +56,13 @@ public class OnReceiveMessageStash implements RedisEventListener {
         switch (eventType) {
 
             case CODE_PUSHED: {
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss+SSSS");
-                long time = df.parse(timestamp).toInstant().toEpochMilli();
                 JSONObject repo = jsonObject.getJSONObject("repository");
                 String projKey = repo.getJSONObject("project").getString("key");
                 String repoSlug = repo.getString("slug");
                 int authorId = actor.getInt("id");
                 jsonObject.getJSONArray("changes").forEach( change -> {
                     String refId = ((JSONObject) change).getString("refId");
-                    List<Commit> commits = new BitbucketPushes(projKey, repoSlug, authorId, refId, time).getCommits();
+                    List<Commit> commits = new BitbucketPushes(projKey, repoSlug, authorId, refId).getCommits();
                     web.setTitle(new WebhookEmbed.EmbedTitle(commits.size() + " incoming Commit(s) on [" + projKey + "/" + repoSlug + "]!", null));
                     web.addField(new WebhookEmbed.EmbedField(true, "Project", repo.getJSONObject("project").getString("name")));
                     web.addField(new WebhookEmbed.EmbedField(true, "Repository", repoSlug));

@@ -12,15 +12,12 @@ import utils.BotData;
 import utils.Utils;
 import utils.confighelpers.Config;
 import utils.database.redis.bitbucket.wrappers.Commit;
-import utils.database.redis.bitbucket.wrappers.GitUser;
 import utils.database.redis.bitbucket.wrappers.Repository;
-import utils.threads.ThreadUtil;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class BitbucketPushes {
@@ -31,21 +28,22 @@ public class BitbucketPushes {
     private String repoSlug;
     private int authorId;
     private String branchRef;
-    private long time;
 
-    public BitbucketPushes(String projKey, String repoSlug, int authorId, String branchRef, long time) {
+    public BitbucketPushes(String projKey, String repoSlug, int authorId, String branchRef) {
         this.projKey = projKey;
         this.repoSlug = repoSlug;
         this.authorId = authorId;
         this.branchRef = branchRef;
-        this.time = time;
     }
 
     public List<Commit> getCommits() {
+        // Get all commits matching the parameters
         Commit[] commits = getRecentCommits(this.projKey, this.repoSlug, this.branchRef, 50);
-        // filter commits to the ones the were just pushed, then divide list by their author
+        // Get all commits pushed after the time we last checked
+        long time = BotData.LAST_COMMIT_POLL.getData(Long.TYPE);
+        BotData.LAST_COMMIT_POLL.setValue(System.currentTimeMillis());
         return Arrays.stream(commits)
-                .filter(c -> c.getCommitterTimestamp() == this.time && c.getCommitter().getId() == this.authorId)
+                .filter(c -> c.getCommitterTimestamp() > time && c.getCommitter().getId() == this.authorId)
                 .collect(Collectors.toList());
     }
 
@@ -56,7 +54,7 @@ public class BitbucketPushes {
     public Commit[] getRecentCommits(String project, String repo, String branchRef, int limit) {
         try {
 
-            JSONObject json = executeJsonGet(getProjectURL(project, repo) + "commits?until=" + branchRef + "limit=" + limit);
+            JSONObject json = executeJsonGet(getProjectURL(project, repo) + "commits?until=" + branchRef + "&limit=" + limit);
             JSONArray vals = json.getJSONArray("values");
 
             Commit[] commits = new Commit[vals.length()];
@@ -96,6 +94,17 @@ public class BitbucketPushes {
 
         return new Repository[0];
     }
+
+    /*
+    {
+         "id":"refs/heads/master",
+         "displayId":"master",
+         "type":"BRANCH",
+         "latestCommit":"7e66f400401dd74ff1af65a65f3bf04beddadeda",
+         "latestChangeset":"7e66f400401dd74ff1af65a65f3bf04beddadeda",
+         "isDefault":true
+      },
+     */
 
     public JSONObject executeJsonGet(String url) throws IOException {
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
