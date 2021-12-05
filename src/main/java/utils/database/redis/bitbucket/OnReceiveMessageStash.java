@@ -60,7 +60,7 @@ public class OnReceiveMessageStash implements RedisEventListener {
                 String projKey = repo.getJSONObject("project").getString("key");
                 String repoSlug = repo.getString("slug");
                 int authorId = actor.getInt("id");
-                jsonObject.getJSONArray("changes").forEach( change -> {
+                for (Object change : jsonObject.getJSONArray("changes")) {
                     String refId = ((JSONObject) change).getString("refId");
                     List<Commit> commits = new BitbucketPushes(projKey, repoSlug, authorId, refId).getCommits();
                     web.setTitle(new WebhookEmbed.EmbedTitle(commits.size() + " incoming Commit(s) on [" + projKey + "/" + repoSlug + "]!", null));
@@ -72,7 +72,12 @@ public class OnReceiveMessageStash implements RedisEventListener {
                     for (Commit commit : commits) {
                         web.addField(new WebhookEmbed.EmbedField(false, commit.getDisplayId(), "`" + commit.getMessage() + "`"));
                     }
-                });
+
+                    System.out.println(web);
+                    System.out.println(jsonObject.getJSONArray("changes"));
+                    System.out.println(commits);
+                }
+
                 break;
             }
             case REPO_FORKED: {
