@@ -18,7 +18,7 @@ import utils.MembersCache;
 import utils.confighelpers.Config;
 import utils.console.Console;
 import utils.console.Logs;
-import utils.database.redis.OnReceiveMessageStash;
+import utils.database.redis.bitbucket.OnReceiveMessageStash;
 import utils.database.redis.OnRecieveMessageGTM;
 import utils.database.sql.BaseDatabase;
 import utils.BotData;

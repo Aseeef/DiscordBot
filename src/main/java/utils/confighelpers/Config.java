@@ -30,6 +30,8 @@ public class Config {
     private String clickUpKey;
     private int clickUpRefreshFrequency;
     private int clickUpWaitDuration;
+    private String bitbucketToken;
+    private int commitRefreshFrequency;
 
     private static Config config;
 

@@ -4,8 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="* fixed error with redismsg reciever">
+    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="test">
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/BitbucketPushes.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/wrappers/Commit.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/wrappers/GitUser.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/wrappers/Parent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/wrappers/Project.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/wrappers/Repository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/wrappers/links/CloneLink.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/wrappers/links/Links.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/wrappers/links/SelfLink.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GTM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GTM.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/BotData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/BotData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/confighelpers/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/confighelpers/Config.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnReceiveMessageStash.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/OnReceiveMessageStash.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,6 +102,29 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="DiscordBotLib" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="DiscordBotLib" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="DiscordBotLib" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="DiscordBotLib" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="publishing" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="DiscordBotLib" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="shadow" type="c8890929:TasksNode$1" />
               </path>
             </expand>
             <select />
@@ -189,27 +226,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="DiscordBot [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="build" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
     <configuration name="DiscordBot [knows]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -243,6 +259,27 @@
         <option name="taskNames">
           <list>
             <option value="shadowJar" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="DiscordBotLib [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/../DiscordBotLib" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -297,10 +334,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.DiscordBot [shadowJar]" />
-        <item itemvalue="Gradle.DiscordBot [knows]" />
-        <item itemvalue="Gradle.DiscordBot [build]" />
-        <item itemvalue="Gradle.DiscordBotLib [publish]" />
         <item itemvalue="Gradle.DiscordBotLib [shadowJar]" />
+        <item itemvalue="Gradle.DiscordBotLib [publish]" />
+        <item itemvalue="Gradle.DiscordBotLib [build]" />
+        <item itemvalue="Gradle.DiscordBot [knows]" />
       </list>
     </recent_temporary>
   </component>
@@ -504,13 +541,10 @@
       <workItem from="1638198372942" duration="7900000" />
       <workItem from="1638431503817" duration="2384000" />
       <workItem from="1638511559281" duration="1618000" />
-    </task>
-    <task id="LOCAL-00034" summary="- Only allows verified users to make suggestions&#10;- Various improvements / bug fixes with custom channels">
-      <created>1602954916147</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1602954916147</updated>
+      <workItem from="1638520457346" duration="648000" />
+      <workItem from="1638588324643" duration="5528000" />
+      <workItem from="1638670938872" duration="5401000" />
+      <workItem from="1638724998728" duration="10443000" />
     </task>
     <task id="LOCAL-00035" summary="WIP:&#10;- Comprehensive user statistics command for seniors&#10;- Now loading all GTM users to memory on startup&#10;- Util improvements">
       <created>1607652604733</created>
@@ -848,7 +882,14 @@
       <option name="project" value="LOCAL" />
       <updated>1638511806712</updated>
     </task>
-    <option name="localTasksCounter" value="83" />
+    <task id="LOCAL-00083" summary="test">
+      <created>1638520502057</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1638520502058</updated>
+    </task>
+    <option name="localTasksCounter" value="84" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -867,7 +908,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="* Removed debugs" />
     <MESSAGE value="* BugReporter bug fix" />
     <MESSAGE value="* Command feedback" />
     <MESSAGE value="* Error fix" />
@@ -892,7 +932,8 @@
     <MESSAGE value="* more work on stash alerts" />
     <MESSAGE value="* deleted messy stash listener" />
     <MESSAGE value="* fixed error with redismsg reciever" />
-    <option name="LAST_COMMIT_MESSAGE" value="* fixed error with redismsg reciever" />
+    <MESSAGE value="test" />
+    <option name="LAST_COMMIT_MESSAGE" value="test" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

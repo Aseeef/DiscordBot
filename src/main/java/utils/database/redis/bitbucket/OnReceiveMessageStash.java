@@ -1,13 +1,19 @@
-package utils.database.redis;
+package utils.database.redis.bitbucket;
 
 import club.minnced.discord.webhook.send.WebhookEmbed;
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
+import lombok.SneakyThrows;
 import net.grandtheftmc.jedisnew.RedisEventListener;
 import org.json.JSONObject;
 import utils.Utils;
 import utils.WebhookUtils;
+import utils.database.redis.bitbucket.wrappers.Commit;
+import utils.database.redis.bitbucket.wrappers.GitUser;
+import utils.database.redis.bitbucket.wrappers.Repository;
 
 import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 //TODO finish using https://confluence.atlassian.com/bitbucketserver059/event-payload-949255022.html
 public class OnReceiveMessageStash implements RedisEventListener {
@@ -17,6 +23,7 @@ public class OnReceiveMessageStash implements RedisEventListener {
         return "bitbucket";
     }
 
+    @SneakyThrows
     @Override
     public void onRedisEvent(String s, JSONObject jsonObject) {
 
@@ -49,17 +56,25 @@ public class OnReceiveMessageStash implements RedisEventListener {
         switch (eventType) {
 
             case CODE_PUSHED: {
-                JSONObject repository = jsonObject.getJSONObject("repository");
-                JSONObject project = repository.getJSONObject("project");
-                JSONObject changes = jsonObject.getJSONArray("changes").getJSONObject(0);
-
-                web.setTitle(new WebhookEmbed.EmbedTitle("Incoming Commit(s) on " + repository.getString("name") + "!", null));
-                web.addField(new WebhookEmbed.EmbedField(true, "Project", project.getString("key") + "/" + repository.getString("name")));
-                web.addField(new WebhookEmbed.EmbedField(true, "Branch", changes.getJSONObject("ref").getString("displayId")));
-                web.addField(new WebhookEmbed.EmbedField(true, "User", actorName));
-                web.addField(new WebhookEmbed.EmbedField(true, "Timestamp", timestamp));
-                web.addField(new WebhookEmbed.EmbedField(false, "Project URL", BASE_URL + project.getString("key") + "/repos/" + repository.getString("slug") + "/browse"));
-                web.addField(new WebhookEmbed.EmbedField(false, "View Commits", BASE_URL + project.getString("key") + "/repos/" + repository.getString("slug") + "/commits?until=" + changes.getString("refId")));
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss+SSSS");
+                long time = df.parse(timestamp).toInstant().toEpochMilli();
+                JSONObject repo = jsonObject.getJSONObject("repository");
+                String projKey = repo.getJSONObject("project").getString("key");
+                String repoSlug = repo.getString("slug");
+                int authorId = actor.getInt("id");
+                jsonObject.getJSONArray("changes").forEach( change -> {
+                    String refId = ((JSONObject) change).getString("refId");
+                    List<Commit> commits = new BitbucketPushes(projKey, repoSlug, authorId, refId, time).getCommits();
+                    web.setTitle(new WebhookEmbed.EmbedTitle(commits.size() + " incoming Commit(s) on [" + projKey + "/" + repoSlug + "]!", null));
+                    web.addField(new WebhookEmbed.EmbedField(true, "Project", repo.getJSONObject("project").getString("name")));
+                    web.addField(new WebhookEmbed.EmbedField(true, "Repository", repoSlug));
+                    web.addField(new WebhookEmbed.EmbedField(true, "Branch", refId));
+                    web.addField(new WebhookEmbed.EmbedField(true, "User", actorName));
+                    web.addField(new WebhookEmbed.EmbedField(true, "Timestamp", timestamp));
+                    for (Commit commit : commits) {
+                        web.addField(new WebhookEmbed.EmbedField(false, commit.getDisplayId(), "`" + commit.getMessage() + "`"));
+                    }
+                });
                 break;
             }
             case REPO_FORKED: {
