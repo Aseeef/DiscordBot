@@ -13,6 +13,25 @@ targetCompatibility = 1.8
 compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"
 
+// make sure maven creds are set
+def mavenUser;
+def mavenPassword;
+if (!project.hasProperty("mavenUser") || !project.hasProperty("mavenPassword")) {
+    if (System.getenv("MAVEN_REPO_USER") != null && System.getenv("MAVEN_REPO_PASS")) {
+        mavenUser = System.getenv("MAVEN_REPO_USER")
+        mavenPassword = System.getenv("MAVEN_REPO_PASS")
+    }
+    else {
+        logger.error("Unable to access the GTM Repositories. No credentials were found. You must either:")
+        logger.error(" - Define a 'mavenUser' and 'mavenPassword' property in your ~/.gradle/gradle.properties")
+        logger.error(" - Set a system variable for 'MAVEN_REPO_USER' and 'MAVEN_REPO_PASS'")
+        throw new GradleException('Unable to access the GTM Repositories. No credentials were found. You must either:\n' +
+                ' - Define a \'mavenUser\' and \'mavenPassword\' property in your ~/.gradle/gradle.properties\n' +
+                ' - Set a system variable for \'MAVEN_REPO_USER\' and \'MAVEN_REPO_PASS\''
+        )
+    }
+}
+
 repositories {
     maven {
         url 'https://nexus.grandtheftmc.net/content/repositories/releases/'
