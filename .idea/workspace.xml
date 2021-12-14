@@ -4,74 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="* downgraded version (old one caused issues)">
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/BotData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/StringUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/threads/Callback.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/threads/CallbackThread.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/threads/ThreadUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/web/ImgurUploader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/web/clickup/CUTask.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/web/clickup/ClickUpPollTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="test">
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/BitbucketPushes.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/wrappers/Commit.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/wrappers/GitUser.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/wrappers/Parent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/wrappers/Project.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/wrappers/Repository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/wrappers/links/CloneLink.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/wrappers/links/Links.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/wrappers/links/SelfLink.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/GTM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GTM.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/AnnoyCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/AnnoyCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/ChannelCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/ChannelCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/Command.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/Command.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/DiscordAccountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/DiscordAccountCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/HarryCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/HarryCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/HelpCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/HelpCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/PlayerCountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/PlayerCountCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/RaidModeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/RaidModeCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/StaffAccountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/StaffAccountCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/StaffCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/StaffCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/bugs/BugReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/bugs/BugReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/bugs/BugReportCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/bugs/BugReportCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/bugs/ReportListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/bugs/ReportListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/stats/StatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/stats/StatsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/stats/StatsDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/stats/StatsDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/stats/StatsMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/stats/StatsMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/stats/wrappers/HelpAnswer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/stats/wrappers/HelpAnswer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/suggestions/SuggestionCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/suggestions/SuggestionCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/suggestions/SuggestionListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/suggestions/SuggestionListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/suggestions/SuggestionTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/suggestions/SuggestionTools.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/events/GuildMessageStash.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/events/GuildMessageStash.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/events/OnGuildMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/events/OnGuildMessage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/selfevents/ReadyEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/selfevents/ReadyEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/Data.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/Data.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/MembersCache.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/MembersCache.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/SelfData.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/channels/CustomChannel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/channels/CustomChannel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/BotData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/BotData.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/utils/confighelpers/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/confighelpers/Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/console/Console.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/console/Console.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/console/Logs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/console/Logs.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/console/commands/ConsoleCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/console/commands/ConsoleCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/console/commands/listeners/ConsoleQueryCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/console/commands/listeners/ConsoleQueryCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/DiscordDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/DiscordDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/LitebansDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/LitebansDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/UsersDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/UsersDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/XenforoDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/XenforoDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnRedisMessageReceive.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnRedisMessageReceive.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/sql/DatabaseHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/sql/DatabaseHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/pagination/DiscordMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/pagination/DiscordMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/selfdata/ChannelData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/selfdata/ChannelData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/selfdata/ChannelIdData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/selfdata/ChannelIdData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/selfdata/SavableSelfData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/selfdata/SavableSelfData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/GTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/Utils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/RaidModeTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/tools/RaidModeTools.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/UUIDUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/UUIDUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/Verification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/tools/Verification.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/WelcomeTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/tools/WelcomeTools.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/users/GTMUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/users/GTMUser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/users/Rank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/users/Rank.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/webhooks/WebhookUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/WebhookUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/Xenforo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xenforo/Xenforo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/events/DBTicketEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xenforo/events/DBTicketEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/events/TicketEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/xenforo/events/TicketEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnReceiveMessageStash.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/OnReceiveMessageStash.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -145,29 +93,6 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="DiscordBot" type="f1a62948:ProjectNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="DiscordBot" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="DiscordBot" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="build" type="c8890929:TasksNode$1" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="DiscordBot" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="publishing" type="c8890929:TasksNode$1" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="DiscordBot" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="shadow" type="c8890929:TasksNode$1" />
               </path>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
@@ -250,7 +175,7 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="jdk.selected.JAVA_MODULE" value="1.8" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../BackupBot" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -343,7 +268,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="DiscordBotLib [knows]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="DiscordBotLib [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/../DiscordBotLib" />
@@ -354,7 +279,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="knows" />
+            <option value="build" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -409,10 +334,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.DiscordBot [shadowJar]" />
-        <item itemvalue="Gradle.DiscordBot [knows]" />
-        <item itemvalue="Gradle.DiscordBotLib [publish]" />
         <item itemvalue="Gradle.DiscordBotLib [shadowJar]" />
-        <item itemvalue="Gradle.DiscordBotLib [knows]" />
+        <item itemvalue="Gradle.DiscordBotLib [publish]" />
+        <item itemvalue="Gradle.DiscordBotLib [build]" />
+        <item itemvalue="Gradle.DiscordBot [knows]" />
       </list>
     </recent_temporary>
   </component>
@@ -580,154 +505,46 @@
       <workItem from="1628779126934" duration="1189000" />
       <workItem from="1628813283807" duration="1192000" />
       <workItem from="1628884769148" duration="50614000" />
-      <workItem from="1629047956052" duration="23976000" />
-    </task>
-    <task id="LOCAL-00014" summary="Added Redis support">
-      <created>1591507861394</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1591507861394</updated>
-    </task>
-    <task id="LOCAL-00015" summary="Commands bug fixes">
-      <created>1591512396271</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1591512396271</updated>
-    </task>
-    <task id="LOCAL-00016" summary="Discord verification system completed!">
-      <created>1591603033630</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1591603033630</updated>
-    </task>
-    <task id="LOCAL-00017" summary="Improvements to verification system">
-      <created>1591767628643</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1591767628643</updated>
-    </task>
-    <task id="LOCAL-00018" summary="Adds Xenforo integration">
-      <created>1591863917164</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1591863917164</updated>
-    </task>
-    <task id="LOCAL-00019" summary="Bug fixes with xenforo">
-      <created>1591865784877</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1591865784877</updated>
-    </task>
-    <task id="LOCAL-00020" summary="Added console commands">
-      <created>1593307978716</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1593307978716</updated>
-    </task>
-    <task id="LOCAL-00021" summary="Package rename &amp; config reorganization">
-      <created>1593308182005</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1593308182005</updated>
-    </task>
-    <task id="LOCAL-00022" summary="Xenforo integration expansion">
-      <created>1593308240004</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1593308240004</updated>
-    </task>
-    <task id="LOCAL-00023" summary="More GTM integrations:&#10;- Managers get notified is staff may be cheating&#10;- Discord ticket detection improvements with DAO">
-      <created>1593308335584</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1593308335584</updated>
-    </task>
-    <task id="LOCAL-00024" summary="Added an &quot;annoy&quot; command and tools to utilize discord webhooks">
-      <created>1593308370374</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1593308370374</updated>
-    </task>
-    <task id="LOCAL-00025" summary="Added a new parser to support ticket fields">
-      <created>1593372492918</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1593372492918</updated>
-    </task>
-    <task id="LOCAL-00026" summary="Various bugs and imporvements">
-      <created>1593835835639</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1593835835639</updated>
-    </task>
-    <task id="LOCAL-00027" summary="Renamed account command to /discord to match gtm">
-      <created>1593835976660</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1593835976660</updated>
-    </task>
-    <task id="LOCAL-00028" summary="Improved commands:&#10;- Pm commands will now say when command not found&#10;- /account renamed to /discord&#10;- /harry will now give feedback on success too.">
-      <created>1594105501756</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1594105501756</updated>
-    </task>
-    <task id="LOCAL-00029" summary="Various bug fixes with verification">
-      <created>1594105615432</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1594105615432</updated>
-    </task>
-    <task id="LOCAL-00030" summary="- Typo fix in DiscordAccountCommand which still was using the old /account in its help&#10;- Moved Rank.class into users package&#10;- Added an easy to use discord embed menu api&#10;- Added a members cache that stores a list of all members with many useful methods&#10;- Replaced previous blocking retrieve member operations with the new member cache&#10;- Fixed NPE in GTMUser when updating user data for a player who left the discord&#10;- Added a command for staff to be able to look up who a discord user is in-game">
-      <created>1594182946488</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1594182946488</updated>
-    </task>
-    <task id="LOCAL-00031" summary="- Improvement to console &amp; logging&#10;- Added a console memory command&#10;- Changed calls to GTMUser#updateUserDataNow() to be async&#10;- Improvements to accounts refreshall command&#10;- Added frame work for custom channels which will allow donors in future to create private channels like on team speak&#10;- Fixed error caused by player have too many past tickets (since embeds have a max field length limit)&#10;- Util improvement: Easily create timer tasks&#10;- Upon unverification, a GTMUser will now loose thier discord rank (prevents abuse)">
-      <created>1594248474336</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1594248474336</updated>
-    </task>
-    <task id="LOCAL-00032" summary="- Custom channels command which will allow donors to create private channels like on team speak&#10;- Made scabble annoy harder to bypass">
-      <created>1594272835114</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1594272835114</updated>
-    </task>
-    <task id="LOCAL-00033" summary="- Split up self data in to categories for organization and added an easy to use data storage class called SavableSelfData&#10;- Depreciated old self data&#10;- In PMs, GTM user calls will now only be made once we know which command is being ran&#10;- Discord menu class now allows us to configure whether we want everyone to be able to modify the menu&#10;- Member reloading now returns a completable future&#10;- Added a auto deleter for custom channels &amp; more&#10;- Fix /channel addgang&#10;- Made the last updated variable in GTM user volatile&#10;- Added a util to run delayed tasks">
-      <created>1594440589021</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1594440589021</updated>
-    </task>
-    <task id="LOCAL-00034" summary="- Only allows verified users to make suggestions&#10;- Various improvements / bug fixes with custom channels">
-      <created>1602954916147</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1602954916147</updated>
+      <workItem from="1629047956052" duration="39881000" />
+      <workItem from="1629177686781" duration="591000" />
+      <workItem from="1629304652244" duration="1861000" />
+      <workItem from="1629489056548" duration="2534000" />
+      <workItem from="1629773385310" duration="588000" />
+      <workItem from="1630015643345" duration="846000" />
+      <workItem from="1630299665149" duration="551000" />
+      <workItem from="1630301073321" duration="1975000" />
+      <workItem from="1630772025044" duration="762000" />
+      <workItem from="1631054621004" duration="1901000" />
+      <workItem from="1631374318017" duration="3915000" />
+      <workItem from="1631552814773" duration="609000" />
+      <workItem from="1632067846847" duration="613000" />
+      <workItem from="1632334286569" duration="760000" />
+      <workItem from="1632348274540" duration="1850000" />
+      <workItem from="1632360176556" duration="6252000" />
+      <workItem from="1632593857302" duration="1200000" />
+      <workItem from="1633359231242" duration="880000" />
+      <workItem from="1634493305472" duration="743000" />
+      <workItem from="1634679525125" duration="175000" />
+      <workItem from="1634877538832" duration="1809000" />
+      <workItem from="1635218892273" duration="626000" />
+      <workItem from="1636239675391" duration="720000" />
+      <workItem from="1636423608167" duration="1892000" />
+      <workItem from="1636432601964" duration="683000" />
+      <workItem from="1636582848788" duration="670000" />
+      <workItem from="1636583694819" duration="1164000" />
+      <workItem from="1636770367046" duration="934000" />
+      <workItem from="1636773826446" duration="617000" />
+      <workItem from="1638123300088" duration="1715000" />
+      <workItem from="1638147008695" duration="1119000" />
+      <workItem from="1638149179958" duration="4477000" />
+      <workItem from="1638165215232" duration="1073000" />
+      <workItem from="1638198372942" duration="7900000" />
+      <workItem from="1638431503817" duration="2384000" />
+      <workItem from="1638511559281" duration="1618000" />
+      <workItem from="1638520457346" duration="648000" />
+      <workItem from="1638588324643" duration="5528000" />
+      <workItem from="1638670938872" duration="5401000" />
+      <workItem from="1638724998728" duration="10443000" />
     </task>
     <task id="LOCAL-00035" summary="WIP:&#10;- Comprehensive user statistics command for seniors&#10;- Now loading all GTM users to memory on startup&#10;- Util improvements">
       <created>1607652604733</created>
@@ -925,7 +742,154 @@
       <option name="project" value="LOCAL" />
       <updated>1628746907747</updated>
     </task>
-    <option name="localTasksCounter" value="63" />
+    <task id="LOCAL-00063" summary="* Fixed bug report&#10;* bug report sends tasks to click up&#10;* Utility improvements">
+      <created>1629084692738</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1629084692738</updated>
+    </task>
+    <task id="LOCAL-00064" summary="* bugs fixes&#10;* new thread util&#10;* added lombok&#10;* updated ip&#10;* code cleanup &amp; util improvements">
+      <created>1635219014582</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1635219014586</updated>
+    </task>
+    <task id="LOCAL-00065" summary="* bugs fixes&#10;* new thread util&#10;* added lombok&#10;* updated ip&#10;* code cleanup &amp; util improvements&#10;* bug reports fix&#10;* voice channel outofbound error fix">
+      <created>1635219520763</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1635219520763</updated>
+    </task>
+    <task id="LOCAL-00066" summary="* Code clean up&#10;* thread improvements">
+      <created>1638125022364</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1638125022365</updated>
+    </task>
+    <task id="LOCAL-00067" summary="* Connected Stash to webhook directly">
+      <created>1638153620639</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1638153620639</updated>
+    </task>
+    <task id="LOCAL-00068" summary="* Fixing">
+      <created>1638165338509</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1638165338509</updated>
+    </task>
+    <task id="LOCAL-00069" summary="* todo">
+      <created>1638200119720</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1638200119721</updated>
+    </task>
+    <task id="LOCAL-00070" summary="* another test">
+      <created>1638201517248</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1638201517249</updated>
+    </task>
+    <task id="LOCAL-00071" summary="* debug msg imprvment">
+      <created>1638207787035</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1638207787035</updated>
+    </task>
+    <task id="LOCAL-00072" summary="* test">
+      <created>1638207872958</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1638207872958</updated>
+    </task>
+    <task id="LOCAL-00073" summary="* test 2">
+      <created>1638208132497</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1638208132497</updated>
+    </task>
+    <task id="LOCAL-00074" summary="* test 3">
+      <created>1638208846101</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1638208846101</updated>
+    </task>
+    <task id="LOCAL-00075" summary="* test 3">
+      <created>1638209072877</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1638209072877</updated>
+    </task>
+    <task id="LOCAL-00076" summary="* test 5">
+      <created>1638209451308</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1638209451308</updated>
+    </task>
+    <task id="LOCAL-00077" summary="* color support">
+      <created>1638210291466</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1638210291466</updated>
+    </task>
+    <task id="LOCAL-00078" summary="* test1">
+      <created>1638210491675</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1638210491675</updated>
+    </task>
+    <task id="LOCAL-00079" summary="* test2">
+      <created>1638210502936</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1638210502936</updated>
+    </task>
+    <task id="LOCAL-00080" summary="* more work on stash alerts">
+      <created>1638211341847</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1638211341847</updated>
+    </task>
+    <task id="LOCAL-00081" summary="* deleted messy stash listener">
+      <created>1638213744929</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1638213744929</updated>
+    </task>
+    <task id="LOCAL-00082" summary="* fixed error with redismsg reciever">
+      <created>1638511806712</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1638511806712</updated>
+    </task>
+    <task id="LOCAL-00083" summary="test">
+      <created>1638520502057</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1638520502058</updated>
+    </task>
+    <option name="localTasksCounter" value="84" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -944,32 +908,32 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="* More Comments&#10;* Fixed an issue where when inviting users to custom channel, uses the name of the recipient as the invitor&#10;* updated jda" />
-    <MESSAGE value="* removed default config" />
-    <MESSAGE value="* Now updating user data anytime a player types&#10;* Xenforo dummy account creds now defined through config&#10;* Partially redid account verification&#10;* Attempting to fix an issue where suggestion embeds are in the wrong order&#10;* Now including guilty plea in ticket details" />
-    <MESSAGE value="*Fixed verify time not updated" />
-    <MESSAGE value="* Removed rules reaction channel &amp; players no longer have to react to rules to join. This is now handled by a discord feature&#10;* Removed references to the UNVERIFIED user role as its no longer needed" />
-    <MESSAGE value="* GTMUsers are now loaded in sync" />
-    <MESSAGE value="* Blocking actions are actually not permitted in gateway thread" />
-    <MESSAGE value="* Should fix channel mentions" />
-    <MESSAGE value="* Removed rules reaction" />
-    <MESSAGE value="* Updated pom" />
-    <MESSAGE value="* Updated statistics" />
-    <MESSAGE value="forgot to remove debug" />
-    <MESSAGE value="* added gitignore" />
-    <MESSAGE value="* Added basic staff stats&#10;* Improved ticket event system&#10;* Tickets not replied to in 3d+ reminder&#10;* Fixed PHP parser (hence fixed staff report alerts)&#10;* Depreciated old support ticket alert event system" />
-    <MESSAGE value="* Fixed version for discord jda" />
-    <MESSAGE value="* test" />
-    <MESSAGE value="* Added missing departments" />
-    <MESSAGE value="* Added the ability to &quot;complete&quot; suggestions&#10;* Webhook utils improvements&#10;* Listener that listens to a zapier webhook to post stash/jenkins pushes&#10;* Improved the reliability to ticket parser" />
-    <MESSAGE value="* Fixed a bug with msg parsing stash" />
-    <MESSAGE value="* Removed debugs" />
     <MESSAGE value="* BugReporter bug fix" />
     <MESSAGE value="* Command feedback" />
     <MESSAGE value="* Error fix" />
     <MESSAGE value="* Fixed NPE" />
     <MESSAGE value="* downgraded version (old one caused issues)" />
-    <option name="LAST_COMMIT_MESSAGE" value="* downgraded version (old one caused issues)" />
+    <MESSAGE value="* Fixed bug report&#10;* bug report sends tasks to click up&#10;* Utility improvements" />
+    <MESSAGE value="* bugs fixes&#10;* new thread util&#10;* added lombok&#10;* updated ip&#10;* code cleanup &amp; util improvements" />
+    <MESSAGE value="* bugs fixes&#10;* new thread util&#10;* added lombok&#10;* updated ip&#10;* code cleanup &amp; util improvements&#10;* bug reports fix&#10;* voice channel outofbound error fix" />
+    <MESSAGE value="* Code clean up&#10;* thread improvements" />
+    <MESSAGE value="* Connected Stash to webhook directly" />
+    <MESSAGE value="* Fixing" />
+    <MESSAGE value="* todo" />
+    <MESSAGE value="* another test" />
+    <MESSAGE value="* debug msg imprvment" />
+    <MESSAGE value="* test" />
+    <MESSAGE value="* test 2" />
+    <MESSAGE value="* test 3" />
+    <MESSAGE value="* test 5" />
+    <MESSAGE value="* color support" />
+    <MESSAGE value="* test1" />
+    <MESSAGE value="* test2" />
+    <MESSAGE value="* more work on stash alerts" />
+    <MESSAGE value="* deleted messy stash listener" />
+    <MESSAGE value="* fixed error with redismsg reciever" />
+    <MESSAGE value="test" />
+    <option name="LAST_COMMIT_MESSAGE" value="test" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
