@@ -30,6 +30,9 @@ if (!project.hasProperty("mavenUser") || !project.hasProperty("mavenPassword")) 
                 ' - Set a system variable for \'MAVEN_REPO_USER\' and \'MAVEN_REPO_PASS\''
         )
     }
+} else {
+    mavenUser = project.property("mavenUser")
+    mavenUser = project.property("mavenPassword")
 }
 
 repositories {

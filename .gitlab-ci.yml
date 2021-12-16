@@ -25,6 +25,9 @@ build:
     paths:
       - build/*.jar
     expire_in: 1 week
+  only:
+    variables:
+      - $CI_COMMIT_REF_NAME == "master"
 
 test:
   stage: test
@@ -35,3 +38,6 @@ test:
     paths:
       - build
       - .gradle
+  only:
+    variables:
+      - $CI_COMMIT_REF_NAME == "master"
