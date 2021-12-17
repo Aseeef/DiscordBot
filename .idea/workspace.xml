@@ -333,10 +333,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.DiscordBot [shadowJar]" />
         <item itemvalue="Gradle.DiscordBotLib [shadowJar]" />
         <item itemvalue="Gradle.DiscordBotLib [publish]" />
         <item itemvalue="Gradle.DiscordBotLib [build]" />
+        <item itemvalue="Gradle.DiscordBot [shadowJar]" />
         <item itemvalue="Gradle.DiscordBot [knows]" />
       </list>
     </recent_temporary>
