@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Deprecated
 public class BitbucketPushes {
 
     protected final String BASE_URL = "https://stash.grandtheftmc.net/rest/api/1.0/";

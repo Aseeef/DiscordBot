@@ -8,14 +8,12 @@ import org.json.JSONObject;
 import utils.Utils;
 import utils.WebhookUtils;
 import utils.database.redis.bitbucket.wrappers.Commit;
-import utils.database.redis.bitbucket.wrappers.GitUser;
-import utils.database.redis.bitbucket.wrappers.Repository;
 
 import java.awt.*;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 //TODO finish using https://confluence.atlassian.com/bitbucketserver059/event-payload-949255022.html
+@Deprecated
 public class OnReceiveMessageStash implements RedisEventListener {
 
     @Override

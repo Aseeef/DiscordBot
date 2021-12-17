@@ -198,8 +198,7 @@ public class GTM {
                 Config.get().getRedisDatabase().getHostname(),
                 Config.get().getRedisDatabase().getPort(),
                 Config.get().getRedisDatabase().getPassword()
-        ).addRedisEventListener(new OnRecieveMessageGTM())
-                .addRedisEventListener(new OnReceiveMessageStash());
+        ).addRedisEventListener(new OnRecieveMessageGTM());
         jedisManager.init();
 
         System.out.println("Established connection to Redis!");

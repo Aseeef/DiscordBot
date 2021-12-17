@@ -21,7 +21,8 @@ public enum BotData {
     // string is bug id, long is insert time
     CLICKUP_PENDING_BUGS(new HashMap<String, Long>()),
     CLICKUP_TO_IGNORE(new HashMap<String, Long>()),
-    LAST_COMMIT_POLL(0L);
+    // TODO: 3 keys - 1. Project 2. Repo 3. Branch value: last known commit
+    LAST_COMMIT_POLL(new HashMap<String, String>());
     ;
 
     private static HashMap<String, Object> dataList = new HashMap<>();
