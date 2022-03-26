@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="gitlab stuff" />
+    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="removed bitbucket stuff">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/WelcomeTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/tools/WelcomeTools.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -83,6 +89,27 @@
                 <item name="DiscordBot" type="f1a62948:ProjectNode" />
                 <item name="Run Configurations" type="7b0102dc:RunConfigurationsNode" />
               </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="DiscordBotLib" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="DiscordBotLib" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="DiscordBotLib" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="publishing" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="DiscordBotLib" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="shadow" type="c8890929:TasksNode$1" />
+              </path>
             </expand>
             <select />
           </tree_state>
@@ -101,7 +128,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="skylix_qa" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -155,7 +182,7 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="jdk.selected.JAVA_MODULE" value="1.8" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../BackupBot" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -313,10 +340,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.DiscordBot [shadowJar]" />
         <item itemvalue="Gradle.DiscordBotLib [shadowJar]" />
         <item itemvalue="Gradle.DiscordBotLib [publish]" />
         <item itemvalue="Gradle.DiscordBotLib [build]" />
-        <item itemvalue="Gradle.DiscordBot [shadowJar]" />
         <item itemvalue="Gradle.DiscordBot [knows]" />
       </list>
     </recent_temporary>
@@ -525,13 +552,20 @@
       <workItem from="1638588324643" duration="5528000" />
       <workItem from="1638670938872" duration="5401000" />
       <workItem from="1638724998728" duration="10443000" />
-    </task>
-    <task id="LOCAL-00036" summary="* More Comments&#10;* Fixed an issue where when inviting users to custom channel, uses the name of the recipient as the invitor&#10;* updated jda">
-      <created>1610242323447</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1610242323447</updated>
+      <workItem from="1639807891781" duration="1313000" />
+      <workItem from="1639813808094" duration="182000" />
+      <workItem from="1639852104286" duration="2447000" />
+      <workItem from="1639858979562" duration="1946000" />
+      <workItem from="1639881282616" duration="219000" />
+      <workItem from="1640090672608" duration="1534000" />
+      <workItem from="1641868829223" duration="2228000" />
+      <workItem from="1641963405049" duration="2934000" />
+      <workItem from="1641991027093" duration="582000" />
+      <workItem from="1641994156499" duration="590000" />
+      <workItem from="1642281563153" duration="110000" />
+      <workItem from="1642479950325" duration="2628000" />
+      <workItem from="1646192983456" duration="1661000" />
+      <workItem from="1648308207393" duration="2114000" />
     </task>
     <task id="LOCAL-00037" summary="* removed default config">
       <created>1610245398760</created>
@@ -869,7 +903,14 @@
       <option name="project" value="LOCAL" />
       <updated>1639781972630</updated>
     </task>
-    <option name="localTasksCounter" value="85" />
+    <task id="LOCAL-00085" summary="removed bitbucket stuff">
+      <created>1639782280025</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1639782280025</updated>
+    </task>
+    <option name="localTasksCounter" value="86" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -888,7 +929,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="* Command feedback" />
     <MESSAGE value="* Error fix" />
     <MESSAGE value="* Fixed NPE" />
     <MESSAGE value="* downgraded version (old one caused issues)" />
@@ -913,7 +953,8 @@
     <MESSAGE value="* fixed error with redismsg reciever" />
     <MESSAGE value="test" />
     <MESSAGE value="gitlab stuff" />
-    <option name="LAST_COMMIT_MESSAGE" value="gitlab stuff" />
+    <MESSAGE value="removed bitbucket stuff" />
+    <option name="LAST_COMMIT_MESSAGE" value="removed bitbucket stuff" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

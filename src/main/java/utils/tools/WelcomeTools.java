@@ -45,7 +45,7 @@ public class WelcomeTools {
         embed.setDescription(
                 "Now that we are through the formalities, " + user.getAsMention() + ", you are now officially welcome to the **GTM discord**! We are happy to have you! Here on the discord, you can stay connected to the **latest announcements** from us, stay up to date with any **giveaways**, **get support** from our dedicated staff team,  **connect with awesome new people** from around the world, and oh **so much more**! Feel free to explore around the discord. See you around \uD83D\uDE0A!" +
                         "\n\n\n" + "__**Useful Server Links**__" + "\n" +
-                        "\uD83D\uDD30 **Server IP** » mc-gtm.net\n" +
+                        "\uD83D\uDD30 **Server IP** » gtm.network\n" +
                         "\uD83D\uDD30 **Website** » https://grandtheftmc.net/\n" +
                         "\uD83D\uDD30 **Store** » https://store.grandtheftmc.net/\n" +
                         "\uD83D\uDD30 **Wiki** » https://wiki.grandtheftmc.net/\n" +
