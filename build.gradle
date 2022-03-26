@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'net.grandtheftmc'
-version ''
+version '1.0.0'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -32,7 +32,7 @@ if (!project.hasProperty("mavenUser") || !project.hasProperty("mavenPassword")) 
     }
 } else {
     mavenUser = project.property("mavenUser")
-    mavenUser = project.property("mavenPassword")
+    mavenPassword = project.property("mavenPassword")
 }
 
 repositories {
