@@ -15,7 +15,6 @@ public enum PlanServer {
     HUB3(9, "2bcc6fca-0ebd-4f48-b856-939c8456d7fb"),
     CREATIVE1(7, "1d652294-eaaf-4091-82bd-f0f212433dff"),
     BUNGEE1(2, "9596a160-015a-4ffd-9df5-46ce6d2509e0"),
-    BUNGEE2(2, "9596a160-015a-4ffd-9df5-46ce6d2509e0"),
     UNKNOWN(-1, null)
     ;
 
