@@ -1,6 +1,6 @@
 package utils.database;
 
-import net.grandtheftmc.jedisnew.NewJedisManager;
+import net.grandtheftmc.simplejedis.SimpleJedisManager;
 import org.json.JSONObject;
 import utils.database.sql.BaseDatabase;
 import utils.Utils;
@@ -20,7 +20,7 @@ public class DiscordDAO {
 
     public static void sendToGTM(String action, HashMap<String, Object> data) {
         data.put("action", action);
-        jedisManager.sendData("discord_to_gtm", NewJedisManager.serialize(data));
+        jedisManager.sendData("discord_to_gtm", SimpleJedisManager.serialize(data));
     }
 
     public static void sendToGTM(String action, JSONObject data) {
@@ -30,7 +30,7 @@ public class DiscordDAO {
 
     public static void sendToBungee(String action, HashMap<String, Object> data) {
         data.put("action", action);
-        jedisManager.sendData("discord_to_bungee", NewJedisManager.serialize(data));
+        jedisManager.sendData("discord_to_bungee", SimpleJedisManager.serialize(data));
     }
 
     public static void sendToBungee(String action, JSONObject data) {
@@ -110,14 +110,10 @@ public class DiscordDAO {
     public static void deleteDiscordProfile(Connection conn, UUID uuid) {
         String query = "UPDATE `discord_users` SET `verify_active` = ? WHERE uuid=UNHEX(?);";
 
-        try (PreparedStatement statement = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
+        try (PreparedStatement statement = conn.prepareStatement(query)) {
             statement.setBoolean(1, false);
             statement.setString(2, uuid.toString().replaceAll("-", ""));
-            try (ResultSet result = statement.executeQuery()) {
-                if (result.next()) {
-                    result.deleteRow();
-                }
-            }
+            statement.executeUpdate();
         } catch (SQLException e) {
             Utils.printStackError(e);
         }

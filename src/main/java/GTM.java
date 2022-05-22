@@ -2,27 +2,28 @@ import commands.*;
 import commands.bugs.BugReportCommand;
 import commands.bugs.ReportListener;
 import commands.stats.StatsCommand;
-import commands.suggestions.SuggestionListener;
 import commands.suggestions.SuggestionCommand;
-import events.*;
+import commands.suggestions.SuggestionListener;
+import events.GuildReaction;
+import events.OnGuildMessage;
+import events.OnJoin;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Icon;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
-import net.grandtheftmc.jedisnew.NewJedisManager;
+import net.grandtheftmc.simplejedis.SimpleJedisManager;
 import selfevents.CloseEvent;
 import selfevents.ReadyEvents;
+import utils.BotData;
 import utils.MembersCache;
+import utils.Utils;
 import utils.confighelpers.Config;
 import utils.console.Console;
 import utils.console.Logs;
-import utils.database.redis.bitbucket.OnReceiveMessageStash;
 import utils.database.redis.OnRecieveMessageGTM;
 import utils.database.sql.BaseDatabase;
-import utils.BotData;
-import utils.Utils;
 import utils.tools.MineStat;
 import utils.web.clickup.ClickUpPollTask;
 import xenforo.Xenforo;
@@ -194,10 +195,11 @@ public class GTM {
     }
 
     private static void loadJedis() {
-        jedisManager = new NewJedisManager(
+        jedisManager = new SimpleJedisManager(
                 Config.get().getRedisDatabase().getHostname(),
                 Config.get().getRedisDatabase().getPort(),
-                Config.get().getRedisDatabase().getPassword()
+                Config.get().getRedisDatabase().getPassword(),
+                "discord-bot"
         ).addRedisEventListener(new OnRecieveMessageGTM());
         jedisManager.init();
 

@@ -3,6 +3,7 @@ package utils.users;
 import com.fasterxml.jackson.annotation.*;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.exceptions.HierarchyException;
 import utils.Data;
 import utils.MembersCache;
 import utils.console.Logs;
@@ -129,7 +130,11 @@ public class GTMUser {
                     }
                 }
                 // reset nick
-                member.modifyNickname("").queue();
+                try {
+                    member.modifyNickname("").queue();
+                } catch (HierarchyException ex) {
+                    System.out.println("[Debug] Unable to update the nick for " + member.getAsMention() + " because they are higher ranked than the bot!");
+                }
             });
         }
 

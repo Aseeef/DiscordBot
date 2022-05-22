@@ -4,12 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="removed bitbucket stuff">
+    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="fixed stats command&#10;fixed discord verify&#10;fixed console error&#10;switched to use simplejedismanager">
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/WelcomeTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/tools/WelcomeTools.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/GTM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/GTM.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/DiscordAccountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/DiscordAccountCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/stats/PlanServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/stats/PlanServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/commands/stats/StatsDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/stats/StatsDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/DiscordDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/DiscordDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnRecieveMessageGTM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnRecieveMessageGTM.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/Verification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/tools/Verification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/users/GTMUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/users/GTMUser.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,8 +115,7 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="DiscordBotLib" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="shadow" type="c8890929:TasksNode$1" />
+                <item name="Run Configurations" type="7b0102dc:RunConfigurationsNode" />
               </path>
             </expand>
             <select />
@@ -142,7 +149,7 @@
     </file-type-list>
   </component>
   <component name="GitToolBoxStore">
-    <option name="projectConfigVersion" value="2" />
+    <option name="projectConfigVersion" value="5" />
     <option name="recentBranches">
       <RecentBranches>
         <option name="branchesForRepo">
@@ -174,7 +181,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="DatabaseDriversLRU" value="mysql" />
+    <property name="DatabaseDriversLRU" value="mysql&#10;mariadb" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
@@ -341,8 +348,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.DiscordBot [shadowJar]" />
-        <item itemvalue="Gradle.DiscordBotLib [shadowJar]" />
         <item itemvalue="Gradle.DiscordBotLib [publish]" />
+        <item itemvalue="Gradle.DiscordBotLib [shadowJar]" />
         <item itemvalue="Gradle.DiscordBotLib [build]" />
         <item itemvalue="Gradle.DiscordBot [knows]" />
       </list>
@@ -565,21 +572,25 @@
       <workItem from="1642281563153" duration="110000" />
       <workItem from="1642479950325" duration="2628000" />
       <workItem from="1646192983456" duration="1661000" />
-      <workItem from="1648308207393" duration="2114000" />
-    </task>
-    <task id="LOCAL-00037" summary="* removed default config">
-      <created>1610245398760</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1610245398760</updated>
-    </task>
-    <task id="LOCAL-00038" summary="* Now updating user data anytime a player types&#10;* Xenforo dummy account creds now defined through config&#10;* Partially redid account verification&#10;* Attempting to fix an issue where suggestion embeds are in the wrong order&#10;* Now including guilty plea in ticket details">
-      <created>1612069686663</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1612069686663</updated>
+      <workItem from="1648308207393" duration="2759000" />
+      <workItem from="1648472179805" duration="678000" />
+      <workItem from="1650249963253" duration="2782000" />
+      <workItem from="1650300458957" duration="568000" />
+      <workItem from="1650302271729" duration="616000" />
+      <workItem from="1650316000641" duration="2962000" />
+      <workItem from="1651028516106" duration="1221000" />
+      <workItem from="1651949503633" duration="1661000" />
+      <workItem from="1651974639390" duration="841000" />
+      <workItem from="1652465209336" duration="3016000" />
+      <workItem from="1652538693279" duration="3163000" />
+      <workItem from="1652627276076" duration="609000" />
+      <workItem from="1652655296945" duration="2628000" />
+      <workItem from="1652713294469" duration="980000" />
+      <workItem from="1652728262377" duration="657000" />
+      <workItem from="1652742765897" duration="2380000" />
+      <workItem from="1652761133809" duration="1806000" />
+      <workItem from="1652896887893" duration="1239000" />
+      <workItem from="1653179945388" duration="2957000" />
     </task>
     <task id="LOCAL-00039" summary="*Fixed verify time not updated">
       <created>1612072842939</created>
@@ -910,7 +921,21 @@
       <option name="project" value="LOCAL" />
       <updated>1639782280025</updated>
     </task>
-    <option name="localTasksCounter" value="86" />
+    <task id="LOCAL-00086" summary="build.gradle issues">
+      <created>1648330559698</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1648330559699</updated>
+    </task>
+    <task id="LOCAL-00087" summary="update ip">
+      <created>1648330581132</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1648330581132</updated>
+    </task>
+    <option name="localTasksCounter" value="88" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -929,9 +954,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="* Error fix" />
-    <MESSAGE value="* Fixed NPE" />
-    <MESSAGE value="* downgraded version (old one caused issues)" />
     <MESSAGE value="* Fixed bug report&#10;* bug report sends tasks to click up&#10;* Utility improvements" />
     <MESSAGE value="* bugs fixes&#10;* new thread util&#10;* added lombok&#10;* updated ip&#10;* code cleanup &amp; util improvements" />
     <MESSAGE value="* bugs fixes&#10;* new thread util&#10;* added lombok&#10;* updated ip&#10;* code cleanup &amp; util improvements&#10;* bug reports fix&#10;* voice channel outofbound error fix" />
@@ -954,7 +976,10 @@
     <MESSAGE value="test" />
     <MESSAGE value="gitlab stuff" />
     <MESSAGE value="removed bitbucket stuff" />
-    <option name="LAST_COMMIT_MESSAGE" value="removed bitbucket stuff" />
+    <MESSAGE value="build.gradle issues" />
+    <MESSAGE value="update ip" />
+    <MESSAGE value="fixed stats command&#10;fixed discord verify&#10;fixed console error&#10;switched to use simplejedismanager" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed stats command&#10;fixed discord verify&#10;fixed console error&#10;switched to use simplejedismanager" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

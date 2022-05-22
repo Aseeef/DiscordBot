@@ -43,7 +43,7 @@ public class StatsDAO {
             to = System.currentTimeMillis();
 
         try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.PLAN).getConnection()) {
-            String query = "SELECT * FROM `plan_sessions` WHERE uuid=? AND session_start > ? AND session_start < ?";
+            String query = "SELECT session_start,session_end,afk_time,server_id FROM plan_sessions INNER JOIN plan_users ON plan_sessions.user_id=plan_users.id WHERE plan_users.uuid=? AND session_start > ? AND session_start < ?";
             try (PreparedStatement ps = conn.prepareStatement(query)) {
                 ps.setString(1, uuid.toString());
                 ps.setLong(2, from);
@@ -56,7 +56,7 @@ public class StatsDAO {
                         long start = rs.getLong("session_start");
                         long playtime = rs.getLong("session_end") - start;
                         long afkTime = rs.getLong("afk_time");
-                        PlanServer server = PlanServer.getFromUUID(rs.getString("server_uuid"));
+                        PlanServer server = PlanServer.getFromID(rs.getInt("server_id"));
                         sessionsList.add(new Session(start, playtime, afkTime, server));
                     }
 

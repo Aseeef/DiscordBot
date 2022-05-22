@@ -43,6 +43,7 @@ public class DiscordAccountCommand extends Command {
 
                 ThreadUtil.runAsync( () -> {
                     boolean success = Verification.verifyMember(member, args[1]);
+                    System.out.println("[Debug] Discord verification status for " + member.getAsMention() + ": Success=" + success);
 
                     if (success) {
                         GTMUser user = (GTMUser) Data.obtainData(Data.USER, member.getIdLong());

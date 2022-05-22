@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
-import net.grandtheftmc.jedisnew.NewJedisManager;
+import net.grandtheftmc.simplejedis.SimpleJedisManager;
 import org.json.JSONObject;
 import utils.confighelpers.Config;
 import utils.console.Logs;
@@ -31,7 +31,7 @@ public class Utils {
 
     public static Guild guild;
     public static MineStat gtm;
-    public static NewJedisManager jedisManager;
+    public static SimpleJedisManager jedisManager;
     public static final Random RANDOM = new Random();
     public static JDA JDA;
 

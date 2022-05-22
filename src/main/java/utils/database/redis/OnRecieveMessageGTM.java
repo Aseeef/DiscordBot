@@ -3,7 +3,7 @@ package utils.database.redis;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.grandtheftmc.jedisnew.RedisEventListener;
+import net.grandtheftmc.simplejedis.JedisEventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 import utils.MembersCache;
@@ -20,16 +20,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
-public class OnRecieveMessageGTM implements RedisEventListener {
+public class OnRecieveMessageGTM implements JedisEventListener {
 
     @Override
-    public String getChannel() {
-        return "gtm_to_discord";
+    public String[] getChannels() {
+        return new String[] {"gtm_to_discord"};
     }
 
     @Override
-    public void onRedisEvent(String s, JSONObject jsonObject) {
+    public void onJedisEvent(String channel, String senderId, CompletableFuture<Object> callback, JSONObject jsonObject) {
         try {
 
             String action = jsonObject.getString("action");
