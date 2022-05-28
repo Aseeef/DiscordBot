@@ -1,6 +1,7 @@
 package net.grandtheftmc.discordbot.utils.users;
 
 import com.fasterxml.jackson.annotation.*;
+import lombok.EqualsAndHashCode;
 import net.grandtheftmc.discordbot.utils.Utils;
 import net.grandtheftmc.discordbot.utils.database.DiscordDAO;
 import net.grandtheftmc.discordbot.utils.database.sql.BaseDatabase;
@@ -16,6 +17,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
 
+@EqualsAndHashCode
 public class GTMUser {
 
     /** A maximum of how often should the player's information be updated in minutes */

@@ -7,10 +7,10 @@ import java.util.Arrays;
 
 public enum ConditionalOption {
 
-    RANK(OptionType.STRING, "rank", "Controls what donator rank a user must be to receive the message."),
-    LEVEL(OptionType.INTEGER,"level", "Controls what game level a user must be to receive the message."),
-    PLAYTIME(OptionType.INTEGER,"playtime", "Controls how much playtime the user must have to receive the message."),
-    LAST_PLAYED(OptionType.STRING, "last-played", "Controls how long ago the user must have last played to receive the message."),
+    RANK(OptionType.STRING, "rank", "What donator rank should receive this message?"),
+    LEVEL(OptionType.INTEGER,"level", "What game level a user must be to receive the message?"),
+    PLAYTIME(OptionType.NUMBER,"playtime", "How much playtime (in hours) the user must have to receive the message."),
+    LAST_PLAYED(OptionType.STRING, "last-played", "How long ago must the user have last played to receive the message. (format: yyyy-mm-dd)"),
     MONEY(OptionType.INTEGER, "money", "Controls how much money (including from their bank) the user must have to receive the message."),
     ;
 
