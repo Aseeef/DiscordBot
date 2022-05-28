@@ -1,6 +1,8 @@
 package net.grandtheftmc.discordbot.commands.bugs;
 
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.grandtheftmc.discordbot.commands.Command;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -16,52 +18,58 @@ import net.grandtheftmc.discordbot.utils.users.GTMUser;
 import net.grandtheftmc.discordbot.utils.users.Rank;
 import net.grandtheftmc.discordbot.utils.web.clickup.CUTask;
 
+import java.util.List;
+
 import static net.grandtheftmc.discordbot.utils.Utils.*;
 
 public class BugReportCommand extends Command {
 
     public BugReportCommand() {
         super("BugReports", "Manage bug reports", Rank.ADMIN, Type.DISCORD_ONLY);
-
-    }
-
-    public void buildCommandData() {
-
-        SubcommandData setChannel = new SubcommandData("SetChannel", "Set the bug reports channels.");
-        OptionData optionData = new OptionData(OptionType.STRING, "Type", "Are you setting the report receive channel or the report send channel?");
-        optionData.addChoice("Receive", "Send");
-        setChannel.addOptions(optionData);
-
-        SubcommandData deny = new SubcommandData("Deny", "Deny the selected bug report");
-        deny.addOption(OptionType.STRING, "Bug Report ID", "Whats the bug report you want to deny?");
-
-        SubcommandData approve = new SubcommandData("Deny", "Deny the selected bug report");
-        deny.addOption(OptionType.STRING, "Bug Report ID", "Whats the bug report you want to approve?");
     }
 
 
     @Override
-    public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, Member member, GTMUser gtmUser, String[] args) {
+    public void buildCommandData(SlashCommandData slashCommandData) {
+        SubcommandData setChannel = new SubcommandData("setchannel", "Set the bug reports channels.");
+        OptionData typeOption = new OptionData(OptionType.STRING, "type", "Are you setting the report receive channel or the report send channel?", true);
+        typeOption.addChoice("receive", "receive");
+        typeOption.addChoice("send", "send");
+        OptionData channelOption = new OptionData(OptionType.CHANNEL, "channel-id", "The discord channel you want to assign for this purpose.");
+        channelOption.setChannelTypes(ChannelType.TEXT);
+        setChannel.addOptions(typeOption, channelOption);
 
-        if (!(channel instanceof TextChannel)) return;
-        TextChannel textChannel = (TextChannel) channel;
+        SubcommandData deny = new SubcommandData("deny", "Deny the selected bug report");
+        deny.addOption(OptionType.STRING, "id", "The ID of the bug report you want to deny.");
 
-        if (args.length < 1) {
-            Utils.sendThenDelete(channel, getHelpMsg());
-            return;
-        }
+        SubcommandData duplicate = new SubcommandData("duplicate", "Mark this bug report as a duplicate of an existing report.");
+        duplicate.addOption(OptionType.STRING, "id", "The ID of the bug report you want to set to duplicate.");
 
-        switch (args[0].toLowerCase()) {
+
+        SubcommandData approve = new SubcommandData("approve", "Approve this bug report");
+        approve.addOption(OptionType.STRING, "id", "The ID of the bug report you want to approve.", true);
+        approve.addOption(OptionType.BOOLEAN, "hide", "Whether you want to hide the contents of this report from public.", true);
+
+        SubcommandData complete = new SubcommandData("complete", "Mark this bug report as fully resolved.");
+        complete.addOption(OptionType.STRING, "id", "The ID of the bug report you want to mark complete.", true);
+        complete.addOption(OptionType.BOOLEAN, "hide", "Whether you want to hide the contents of this report from public.", false);
+
+
+        slashCommandData.addSubcommands(setChannel, deny, duplicate, approve, complete);
+    }
+
+    @Override
+    public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, List<OptionMapping> arguments, Member member, GTMUser gtmUser, String[] path) {
+
+        TextChannel textChannel = interaction.getTextChannel();
+
+        switch (path[0].toLowerCase()) {
 
             case "setchannel": {
-                if (args.length < 2) {
-                    Utils.sendThenDelete(channel, getHelpMsg());
-                    return;
-                }
-                if (args[1].equalsIgnoreCase("report")) {
+                if (arguments.get(0).getAsString().equalsIgnoreCase("send")) {
                     // Set settings
                     ChannelIdData.get().setBugReportChannelId(channel.getIdLong());
-                    sendThenDelete(channel, "**" + textChannel.getAsMention() + " has been set as the bug reports channel!**");
+                    interaction.reply("**" + textChannel.getAsMention() + " has been set as the bug reports channel!**").queue();
                     // Delete previous msg
                     try {
                         guild.getTextChannelById(ChannelIdData.getData().getBugReportChannelId()).retrieveMessageById(BotData.LAST_BUG_EMBED_ID.getData(Number.class).longValue()).queue(m -> m.delete().queue());
@@ -76,63 +84,62 @@ public class BugReportCommand extends Command {
                             })
                             .queue(m -> BotData.LAST_BUG_MSG_ID.setValue(m.getIdLong()));
 
-                } else if (args[1].equalsIgnoreCase("receive")) {
+                } else if (arguments.get(0).getAsString().equalsIgnoreCase("receive")) {
                     // Set settings
                     ChannelIdData.get().setBugReceiveChannelId(channel.getIdLong());
-                    sendThenDelete(channel, "**" + textChannel.getAsMention() + " has been set as the bug receive channel!**");
-                } else Utils.sendThenDelete(channel, getHelpMsg());
+                    interaction.reply("**" + textChannel.getAsMention() + " has been set as the bug receive channel!**").queue();
+                }
                 break;
             }
 
             case "deny": {
-                if (!isValidArgs(textChannel, args)) return;
-                BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, args[1].toLowerCase());
+                if (!isValidArgs(interaction, arguments))
+                    return;
+                BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, path[1].toLowerCase());
                 report.setStatus(BugReport.ReportStatus.REJECTED_REPORT);
-                report.sendUpdate(args.length > 2 ? Utils.joinArgsAfter(args, 2) : null);
+                report.sendUpdate(path.length > 2 ? Utils.joinArgsAfter(path, 2) : null);
                 CUTask.editTask(report.getId(), BugReport.ReportStatus.REJECTED_REPORT);
-                sendThenDelete(channel, "**Success!** You set bug report id " + args[1] + " to " + BugReport.ReportStatus.REJECTED_REPORT + "!");
+                sendThenDelete(channel, "**Success!** You set bug report id " + path[1] + " to " + BugReport.ReportStatus.REJECTED_REPORT + "!");
                 break;
             }
             case "complete": {
-                if (!isValidArgs(textChannel, args)) return;
-                BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, args[1]);
+                if (!isValidArgs(interaction, arguments))
+                    return;
+                BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, path[1]);
                 report.setStatus(BugReport.ReportStatus.PATCHED);
-                report.sendUpdate(args.length > 2 ? Utils.joinArgsAfter(args, 2) : null);
+                report.sendUpdate(path.length > 2 ? Utils.joinArgsAfter(path, 2) : null);
                 CUTask.editTask(report.getId(), BugReport.ReportStatus.PATCHED);
-                sendThenDelete(channel, "**Success!** You set bug report id " + args[1] + " to " + BugReport.ReportStatus.PATCHED + "!");
+                interaction.reply("**Success!** You set bug report id " + path[1] + " to " + BugReport.ReportStatus.PATCHED + "!").queue();
                 break;
             }
             case "duplicate": {
-                if (!isValidArgs(textChannel, args)) return;
-                BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, args[1]);
+                if (!isValidArgs(interaction, arguments))
+                    return;
+                BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, path[1]);
                 report.setStatus(BugReport.ReportStatus.DUPLICATE_REPORT);
-                report.sendUpdate(args.length > 2 ? Utils.joinArgsAfter(args, 2) : null);
+                report.sendUpdate(path.length > 2 ? Utils.joinArgsAfter(path, 2) : null);
                 CUTask.editTask(report.getId(), BugReport.ReportStatus.DUPLICATE_REPORT);
-                sendThenDelete(channel, "**Success!** You set bug report id " + args[1] + " to " + BugReport.ReportStatus.DUPLICATE_REPORT + "!");
+                interaction.reply("**Success!** You set bug report id " + path[1] + " to " + BugReport.ReportStatus.DUPLICATE_REPORT + "!").queue();
                 break;
             }
             case "approve": {
-                if (!isValidArgs(textChannel, args)) return;
+                if (!isValidArgs(interaction, arguments))
+                    return;
                 boolean b = false;
-                if (args.length > 2) {
-                    if (args[2].equalsIgnoreCase("true") || args[2].equalsIgnoreCase("false")) {
-                        b = Boolean.parseBoolean(args[2]);
+                if (path.length > 2) {
+                    if (path[2].equalsIgnoreCase("true") || path[2].equalsIgnoreCase("false")) {
+                        b = Boolean.parseBoolean(path[2]);
                     } else {
-                        sendThenDelete(channel, "**The hide boolean '" + args[2] + "' is not a true or false.**");
+                        interaction.reply("**The hide boolean '" + path[2] + "' is not a true or false.**").queue();
                         return;
                     }
                 }
-                BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, args[1]);
+                BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, path[1]);
                 report.setStatus(BugReport.ReportStatus.CONFIRMED_BUG);
                 report.setHidden(b);
-                report.sendUpdate(args.length > 3 ? Utils.joinArgsAfter(args, 3) : null);
+                report.sendUpdate(path.length > 3 ? Utils.joinArgsAfter(path, 3) : null);
                 CUTask.editTask(report.getId(), BugReport.ReportStatus.CONFIRMED_BUG);
 
-                sendThenDelete(channel, "**Success!** You set bug report id " + args[1] + " to " + BugReport.ReportStatus.CONFIRMED_BUG + "!");
-                break;
-            }
-            default: {
-                Utils.sendThenDelete(channel, getHelpMsg());
                 break;
             }
 
@@ -140,17 +147,12 @@ public class BugReportCommand extends Command {
 
     }
 
-    private boolean isValidArgs(TextChannel channel, String[] args) {
-        if (args.length < 2) {
-            Utils.sendThenDelete(channel, getHelpMsg());
-            return false;
-        }
-
+    private boolean isValidArgs(SlashCommandInteraction interaction, List<OptionMapping> arguments) {
         boolean exists;
-        exists = Data.doesDataExist(Data.BUG_REPORTS, args[1].toLowerCase());
+        exists = Data.doesDataExist(Data.BUG_REPORTS, arguments.get(0).getAsString().toLowerCase());
 
         if (!exists) {
-            sendThenDelete(channel, "**Error!** No bug report with id " + args[1] + " was found.");
+            interaction.reply("**Error!** No bug report with id " + arguments.get(0).getAsString() + " was found.").queue();
             return false;
         }
         return true;

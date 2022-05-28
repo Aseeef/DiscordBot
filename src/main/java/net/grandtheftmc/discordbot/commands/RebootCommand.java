@@ -1,12 +1,15 @@
 package net.grandtheftmc.discordbot.commands;
 
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.PrivateChannel;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.grandtheftmc.discordbot.utils.users.GTMUser;
 import net.grandtheftmc.discordbot.utils.users.Rank;
+
+import java.util.List;
 
 public class RebootCommand extends Command {
 
@@ -15,7 +18,12 @@ public class RebootCommand extends Command {
     }
 
     @Override
-    public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, Member member, GTMUser gtmUser, String[] args) {
+    public void buildCommandData(SlashCommandData slashCommandData) {
+
+    }
+
+    @Override
+    public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, List<OptionMapping> arguments, Member member, GTMUser gtmUser, String[] path) {
         // Only need to open a private channel if this isn't already dms
         if (channel instanceof PrivateChannel)
             channel.sendMessage("**Executed reboot. Please allow up to 30 seconds for the bot to come back up!**").queue();

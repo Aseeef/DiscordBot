@@ -5,11 +5,15 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.grandtheftmc.discordbot.GTMBot;
 import net.grandtheftmc.discordbot.utils.selfdata.ChannelIdData;
 import net.grandtheftmc.discordbot.utils.users.GTMUser;
 import net.grandtheftmc.discordbot.utils.users.Rank;
+
+import java.util.List;
 
 import static net.grandtheftmc.discordbot.utils.Utils.*;
 
@@ -20,23 +24,28 @@ public class PlayerCountCommand extends Command {
     }
 
     @Override
-    public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, Member member, GTMUser gtmUser, String[] args) {
+    public void buildCommandData(SlashCommandData slashCommandData) {
+
+    }
+
+    @Override
+    public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, List<OptionMapping> arguments, Member member, GTMUser gtmUser, String[] path) {
         // If there are no command arguments send sub command help list
-        if (args.length == 0) {
+        if (path.length == 0) {
             // Send msg then delete after defined time in utils.config
             sendThenDelete(channel, getPlayerCountHelpMsg());
         }
 
         // Suggestions SetChannel Command
-        else if (args[0].equalsIgnoreCase("setchannel")) {
+        else if (path[0].equalsIgnoreCase("setchannel")) {
 
-            VoiceChannel playerCountChannel = GTMBot.getJDA().getVoiceChannelById(Long.parseLong(args[1]));
+            VoiceChannel playerCountChannel = GTMBot.getJDA().getVoiceChannelById(Long.parseLong(path[1]));
 
             // If its a valid voice channel id
             if (playerCountChannel != null) {
 
                 // Set as player count channel
-                ChannelIdData.get().setPlayerCountChannelId(Long.parseLong(args[1]));
+                ChannelIdData.get().setPlayerCountChannelId(Long.parseLong(path[1]));
 
                 // Updates online players
                 updateOnlinePlayers();

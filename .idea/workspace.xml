@@ -4,142 +4,40 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="edit prev commit">
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/Command.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/message/MessageCondition.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/message/RankedMessageCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/selfevents/CloseEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="updated discord bot to jda 5">
+      <change afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/message/ConditionType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/message/ConditionalMessage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/message/ConditionalOption.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/GTM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/GTMBot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/AnnoyCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/AnnoyCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/ChannelCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/ChannelCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/Command.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/DiscordAccountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/DiscordAccountCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/HarryCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/HarryCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/HelpCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/HelpCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/PingCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/PingCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/PlayerCountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/PlayerCountCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/RaidModeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/RaidModeCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/RebootCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/RebootCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/SeniorsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/SeniorsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/StaffAccountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/StaffAccountCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/StaffCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/StaffCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/bugs/BugReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/bugs/BugReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/bugs/BugReportCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/bugs/BugReportCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/bugs/ReportListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/bugs/ReportListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/punishments/BanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/punishments/BanCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/punishments/KickCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/punishments/KickCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/punishments/MuteCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/punishments/MuteCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/punishments/WarnCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/punishments/WarnCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/stats/PlanServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/stats/PlanServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/stats/StatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/stats/StatsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/stats/StatsDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/stats/StatsDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/stats/StatsMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/stats/StatsMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/stats/wrappers/GTMGang.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/stats/wrappers/GTMGang.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/stats/wrappers/HelpAnswer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/stats/wrappers/HelpAnswer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/stats/wrappers/HelpQuestion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/stats/wrappers/HelpQuestion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/stats/wrappers/PlanUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/stats/wrappers/PlanUser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/stats/wrappers/Session.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/stats/wrappers/Session.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/stats/wrappers/WrappedIPData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/stats/wrappers/WrappedIPData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/stats/wrappers/WrappedPunishment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/stats/wrappers/WrappedPunishment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/suggestions/SuggestionCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/suggestions/SuggestionCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/suggestions/SuggestionListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/suggestions/SuggestionListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/suggestions/SuggestionTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/suggestions/SuggestionTools.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/suggestions/Suggestions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/suggestions/Suggestions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/events/GuildReaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/events/GuildReaction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/events/OnGuildMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/events/OnGuildMessage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/events/OnJoin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/events/OnJoin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/selfevents/CloseEvent.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/selfevents/ReadyEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/selfevents/ReadyEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/BotData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/BotData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/Callback.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/Callback.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/Data.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/Data.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/MembersCache.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/MembersCache.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/StringUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/StringUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/UUIDUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/UUIDUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/Utils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/WebhookUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/WebhookUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/channels/CustomChannel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/channels/CustomChannel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/chart/PlaytimeChart.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/chart/PlaytimeChart.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/chart/PlaytimeHourChart.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/chart/PlaytimeHourChart.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/confighelpers/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/confighelpers/Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/confighelpers/DatabaseCreds.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/confighelpers/DatabaseCreds.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/confighelpers/MineStatSettings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/confighelpers/MineStatSettings.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/confighelpers/RaidmodeSettings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/confighelpers/RaidmodeSettings.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/confighelpers/RankSettings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/confighelpers/RankSettings.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/console/Console.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/console/Console.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/console/Logs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/console/Logs.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/console/commands/ConsoleCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/console/commands/ConsoleCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/console/commands/ConsoleCommandListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/console/commands/ConsoleCommandListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/console/commands/listeners/ConsoleHelpCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/console/commands/listeners/ConsoleHelpCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/console/commands/listeners/ConsoleMemoryCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/console/commands/listeners/ConsoleMemoryCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/console/commands/listeners/ConsoleQueryCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/console/commands/listeners/ConsoleQueryCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/console/commands/listeners/ConsoleStopCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/console/commands/listeners/ConsoleStopCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/DiscordDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/database/DiscordDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/LitebansDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/database/LitebansDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/UsersDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/database/UsersDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/XenforoDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/database/XenforoDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnRecieveMessageGTM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/database/redis/OnRecieveMessageGTM.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/BitbucketPushes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/database/redis/bitbucket/BitbucketPushes.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/OnReceiveMessageStash.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/database/redis/bitbucket/OnReceiveMessageStash.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/wrappers/Commit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/database/redis/bitbucket/wrappers/Commit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/wrappers/GitUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/database/redis/bitbucket/wrappers/GitUser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/wrappers/Parent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/database/redis/bitbucket/wrappers/Parent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/wrappers/Project.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/database/redis/bitbucket/wrappers/Project.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/wrappers/Repository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/database/redis/bitbucket/wrappers/Repository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/wrappers/links/CloneLink.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/database/redis/bitbucket/wrappers/links/CloneLink.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/wrappers/links/Links.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/database/redis/bitbucket/wrappers/links/Links.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/redis/bitbucket/wrappers/links/SelfLink.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/database/redis/bitbucket/wrappers/links/SelfLink.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/sql/BaseDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/database/sql/BaseDatabase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/sql/DatabaseHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/database/sql/DatabaseHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/sql/component/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/database/sql/component/Database.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/sql/component/DatabaseCredentials.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/database/sql/component/DatabaseCredentials.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/litebans/Ban.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/litebans/Ban.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/pagination/DiscordMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/pagination/DiscordMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/pagination/MenuAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/pagination/MenuAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/selfdata/AnnoyData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/selfdata/AnnoyData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/selfdata/ChannelData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/selfdata/ChannelData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/selfdata/ChannelIdData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/selfdata/ChannelIdData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/selfdata/SavableSelfData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/selfdata/SavableSelfData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/threads/ErrorCatchingThreadFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/threads/ErrorCatchingThreadFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/threads/ThreadUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/threads/ThreadUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/MineStat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/tools/MineStat.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/RaidModeTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/tools/RaidModeTools.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/Verification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/tools/Verification.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/tools/WelcomeTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/tools/WelcomeTools.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/users/GTMUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/users/GTMUser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/users/Rank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/users/Rank.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/web/ImgurUploader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/web/ImgurUploader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/web/clickup/CUComment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/web/clickup/CUComment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/web/clickup/CUTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/web/clickup/CUTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/web/clickup/ClickUpPollTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/web/clickup/ClickUpPollTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/Xenforo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/xenforo/Xenforo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/events/DBTicketEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/xenforo/events/DBTicketEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/events/TicketEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/xenforo/events/TicketEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/objects/Alert.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/xenforo/objects/Alert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/objects/TicketMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/xenforo/objects/TicketMessage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/objects/XenforoUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/xenforo/objects/XenforoUser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/objects/XenforoUserJson.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/xenforo/objects/XenforoUserJson.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/objects/tickets/Department.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/xenforo/objects/tickets/Department.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/objects/tickets/EventType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/xenforo/objects/tickets/EventType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/xenforo/objects/tickets/SupportTicket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/xenforo/objects/tickets/SupportTicket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/.gradle/7.1.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/.gradle/7.1.1/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/.gradle/7.1.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/.gradle/7.1.1/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/.gradle/7.1.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/.gradle/7.1.1/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/.gradle/7.1.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/.gradle/7.1.1/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/.gradle/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/.gradle/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/.gradle/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/.gradle/checksums/md5-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/.gradle/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/.gradle/checksums/sha1-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/.gradle/checksums/sha256-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/.gradle/checksums/sha256-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/.gradle/checksums/sha512-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/.gradle/checksums/sha512-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/build/DiscordBotLib.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/build/DiscordBotLib.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/build/publications/maven/module.json" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/build/publications/maven/module.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/build/publications/maven/pom-default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/build/publications/maven/pom-default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/build/tmp/publishMavenPublicationToMavenRepository/module-maven-metadata.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/build/tmp/publishMavenPublicationToMavenRepository/module-maven-metadata.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/GTMBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/GTMBot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/AnnoyCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/AnnoyCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/ChannelCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/ChannelCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/Command.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/Command.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/DiscordAccountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/DiscordAccountCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/HarryCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/HarryCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/HelpCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/HelpCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/PingCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/PingCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/PlayerCountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/PlayerCountCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/RaidModeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/RaidModeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/RebootCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/RebootCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/SeniorsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/SeniorsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/StaffAccountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/StaffAccountCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/StaffCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/StaffCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/bugs/BugReportCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/bugs/BugReportCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/message/MessageCondition.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/message/RankedMessageCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/message/ConditionalMessageCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/punishments/BanCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/punishments/BanCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/punishments/KickCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/punishments/KickCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/punishments/MuteCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/punishments/MuteCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/punishments/WarnCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/punishments/WarnCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/stats/StatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/stats/StatsCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/suggestions/SuggestionCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/suggestions/SuggestionCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/selfevents/CloseEvent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/selfevents/ReadyEvents.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/users/Rank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/users/Rank.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -217,6 +115,11 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="DiscordBot" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="DiscordBot" type="f1a62948:ProjectNode" />
                 <item name="Run Configurations" type="7b0102dc:RunConfigurationsNode" />
               </path>
               <path>
@@ -233,6 +136,12 @@
                 <item name="DiscordBotLib" type="f1a62948:ProjectNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
                 <item name="publishing" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="DiscordBotLib" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="shadow" type="c8890929:TasksNode$1" />
               </path>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
@@ -730,14 +639,7 @@
       <workItem from="1653606408891" duration="1972000" />
       <workItem from="1653661030390" duration="766000" />
       <workItem from="1653675628548" duration="3206000" />
-      <workItem from="1653678879572" duration="4224000" />
-    </task>
-    <task id="LOCAL-00041" summary="* GTMUsers are now loaded in sync">
-      <created>1612129572711</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1612129572711</updated>
+      <workItem from="1653678879572" duration="21774000" />
     </task>
     <task id="LOCAL-00042" summary="* Blocking actions are actually not permitted in gateway thread">
       <created>1612129848345</created>
@@ -1075,7 +977,14 @@
       <option name="project" value="LOCAL" />
       <updated>1653197103817</updated>
     </task>
-    <option name="localTasksCounter" value="90" />
+    <task id="LOCAL-00090" summary="updated discord bot to jda 5">
+      <created>1653696857341</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1653696857341</updated>
+    </task>
+    <option name="localTasksCounter" value="91" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1094,7 +1003,8 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="* bugs fixes&#10;* new thread util&#10;* added lombok&#10;* updated ip&#10;* code cleanup &amp; util improvements" />
+    <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT_PROFILE" value="Project Default" />
+    <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <MESSAGE value="* bugs fixes&#10;* new thread util&#10;* added lombok&#10;* updated ip&#10;* code cleanup &amp; util improvements&#10;* bug reports fix&#10;* voice channel outofbound error fix" />
     <MESSAGE value="* Code clean up&#10;* thread improvements" />
     <MESSAGE value="* Connected Stash to webhook directly" />
@@ -1119,7 +1029,8 @@
     <MESSAGE value="update ip" />
     <MESSAGE value="fixed stats command&#10;fixed discord verify&#10;fixed console error&#10;switched to use simplejedismanager" />
     <MESSAGE value="edit prev commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="edit prev commit" />
+    <MESSAGE value="updated discord bot to jda 5" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated discord bot to jda 5" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

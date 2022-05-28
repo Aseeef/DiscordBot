@@ -1,6 +1,8 @@
 package net.grandtheftmc.discordbot.commands.suggestions;
 
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.grandtheftmc.discordbot.commands.Command;
 import net.grandtheftmc.discordbot.utils.Data;
 import net.grandtheftmc.discordbot.utils.Utils;
@@ -13,6 +15,8 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 
+import java.util.List;
+
 import static net.grandtheftmc.discordbot.utils.Utils.sendThenDelete;
 import static net.grandtheftmc.discordbot.utils.Utils.userById;
 
@@ -23,14 +27,19 @@ public class SuggestionCommand extends Command {
     }
 
     @Override
-    public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, Member member, GTMUser gtmUser, String[] args) {
+    public void buildCommandData(SlashCommandData slashCommandData) {
+
+    }
+
+    @Override
+    public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, List<OptionMapping> arguments, Member member, GTMUser gtmUser, String[] path) {
         // If there are no command arguments send sub command help list
-        if (args.length == 0) {
+        if (path.length == 0) {
             Utils.sendThenDelete(channel, getSuggestionsHelpMsg());
         }
 
         // Suggestions SetChannel Command
-        else if (args[0].equalsIgnoreCase("setchannel")) {
+        else if (path[0].equalsIgnoreCase("setchannel")) {
 
             // Set suggestions settings
             ChannelIdData.get().setSuggestionChannelId(channel.getIdLong());
@@ -42,12 +51,12 @@ public class SuggestionCommand extends Command {
 
         }
 
-        else if (args[0].equalsIgnoreCase("delete")) {
-            if (Data.doesDataExist(Data.SUGGESTIONS, Integer.parseInt(args[1]))) {
-                Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(args[1]));
+        else if (path[0].equalsIgnoreCase("delete")) {
+            if (Data.doesDataExist(Data.SUGGESTIONS, Integer.parseInt(path[1]))) {
+                Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(path[1]));
                 SuggestionTools.getSuggestionsChannel().deleteMessageById(suggestion.getId()).queue();
-                Data.deleteData(Data.SUGGESTIONS, Integer.parseInt(args[1]));
-                Utils.sendThenDelete(channel, "**Suggestion #" + Integer.parseInt(args[1]) + " has been deleted!**");
+                Data.deleteData(Data.SUGGESTIONS, Integer.parseInt(path[1]));
+                Utils.sendThenDelete(channel, "**Suggestion #" + Integer.parseInt(path[1]) + " has been deleted!**");
             }
             else {
                 Utils.sendThenDelete(channel, "**Suggestion not found. Please check your command!**");
@@ -55,15 +64,15 @@ public class SuggestionCommand extends Command {
         }
 
         // Suggestions Deny Command
-        else if (args[0].equalsIgnoreCase("deny")) {
-            if (Data.doesDataExist(Data.SUGGESTIONS, Integer.parseInt(args[1]))) {
+        else if (path[0].equalsIgnoreCase("deny")) {
+            if (Data.doesDataExist(Data.SUGGESTIONS, Integer.parseInt(path[1]))) {
 
                 // Get suggestion instance
-                Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(args[1]));
+                Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(path[1]));
 
                 // Set it to denied
                 suggestion.setStatus("DENIED");
-                suggestion.setStatusReason(generateStatusReason(args));
+                suggestion.setStatusReason(generateStatusReason(path));
 
                 // Build and edit denied suggestion embed
                 SuggestionTools.getSuggestionsChannel().editMessageEmbedsById(suggestion.getId(), SuggestionTools.createSuggestionEmbed(suggestion)).queue();
@@ -90,13 +99,13 @@ public class SuggestionCommand extends Command {
         }
 
         // Suggestions Approve Command
-        else if (args[0].equalsIgnoreCase("approve")) {
-            if (Data.doesDataExist(Data.SUGGESTIONS, Integer.parseInt(args[1]))) {
+        else if (path[0].equalsIgnoreCase("approve")) {
+            if (Data.doesDataExist(Data.SUGGESTIONS, Integer.parseInt(path[1]))) {
 
-                Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(args[1]));
+                Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(path[1]));
                 // Set new data
                 suggestion.setStatus("APPROVED");
-                suggestion.setStatusReason(generateStatusReason(args));
+                suggestion.setStatusReason(generateStatusReason(path));
                 // Build and edit denied suggestion embed
                 SuggestionTools.getSuggestionsChannel().editMessageEmbedsById(suggestion.getId(), SuggestionTools.createSuggestionEmbed(suggestion)).queue();
 
@@ -120,13 +129,13 @@ public class SuggestionCommand extends Command {
         }
 
         // Suggestions Approve Command
-        else if (args[0].equalsIgnoreCase("complete")) {
-            if (Data.doesDataExist(Data.SUGGESTIONS, Integer.parseInt(args[1]))) {
+        else if (path[0].equalsIgnoreCase("complete")) {
+            if (Data.doesDataExist(Data.SUGGESTIONS, Integer.parseInt(path[1]))) {
 
-                Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(args[1]));
+                Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(path[1]));
                 // Set new data
                 suggestion.setStatus("COMPLETED");
-                suggestion.setStatusReason(generateStatusReason(args));
+                suggestion.setStatusReason(generateStatusReason(path));
                 // Build and edit denied suggestion embed
                 SuggestionTools.getSuggestionsChannel().editMessageEmbedsById(suggestion.getId(), SuggestionTools.createSuggestionEmbed(suggestion)).queue();
 
@@ -150,13 +159,13 @@ public class SuggestionCommand extends Command {
         }
 
         // Suggestions Hold Command
-        else if (args[0].equalsIgnoreCase("hold")) {
-            if (Data.doesDataExist(Data.SUGGESTIONS, Integer.parseInt(args[1]))) {
+        else if (path[0].equalsIgnoreCase("hold")) {
+            if (Data.doesDataExist(Data.SUGGESTIONS, Integer.parseInt(path[1]))) {
 
-                Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(args[1]));
+                Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(path[1]));
                 // Set new data
                 suggestion.setStatus("PENDING");
-                suggestion.setStatusReason(generateStatusReason(args));
+                suggestion.setStatusReason(generateStatusReason(path));
                 // Build and edit denied suggestion embed
                 SuggestionTools.getSuggestionsChannel().editMessageEmbedsById(suggestion.getId(), SuggestionTools.createSuggestionEmbed(suggestion)).queue();
 

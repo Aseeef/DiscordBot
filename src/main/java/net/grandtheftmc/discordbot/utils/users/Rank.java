@@ -45,6 +45,11 @@ public enum Rank {
         return this.getIndex() <= role.getIndex();
     }
 
+    public boolean isHigher(Rank role) {
+        // works because enums are defined in rank order
+        return this.getIndex() < role.getIndex();
+    }
+
     // lower index = higher role
     public int getIndex() {
         int index = 0;

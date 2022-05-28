@@ -5,19 +5,23 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Icon;
+import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.events.ShutdownEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.grandtheftmc.discordbot.commands.*;
 import net.grandtheftmc.discordbot.commands.bugs.BugReportCommand;
 import net.grandtheftmc.discordbot.commands.bugs.ReportListener;
+import net.grandtheftmc.discordbot.commands.message.ConditionalMessageCommand;
 import net.grandtheftmc.discordbot.commands.stats.StatsCommand;
 import net.grandtheftmc.discordbot.commands.suggestions.SuggestionCommand;
 import net.grandtheftmc.discordbot.commands.suggestions.SuggestionListener;
 import net.grandtheftmc.discordbot.events.GuildReaction;
 import net.grandtheftmc.discordbot.events.OnGuildMessage;
 import net.grandtheftmc.discordbot.events.OnJoin;
-import net.grandtheftmc.discordbot.selfevents.CloseEvent;
-import net.grandtheftmc.discordbot.selfevents.ReadyEvents;
 import net.grandtheftmc.discordbot.utils.BotData;
 import net.grandtheftmc.discordbot.utils.MembersCache;
 import net.grandtheftmc.discordbot.utils.Utils;
@@ -26,7 +30,12 @@ import net.grandtheftmc.discordbot.utils.console.Console;
 import net.grandtheftmc.discordbot.utils.console.Logs;
 import net.grandtheftmc.discordbot.utils.database.redis.OnRecieveMessageGTM;
 import net.grandtheftmc.discordbot.utils.database.sql.BaseDatabase;
+import net.grandtheftmc.discordbot.utils.selfdata.AnnoyData;
+import net.grandtheftmc.discordbot.utils.selfdata.ChannelData;
+import net.grandtheftmc.discordbot.utils.selfdata.ChannelIdData;
+import net.grandtheftmc.discordbot.utils.threads.ThreadUtil;
 import net.grandtheftmc.discordbot.utils.tools.MineStat;
+import net.grandtheftmc.discordbot.utils.users.GTMUser;
 import net.grandtheftmc.discordbot.utils.web.clickup.ClickUpPollTask;
 import net.grandtheftmc.discordbot.xenforo.Xenforo;
 import net.grandtheftmc.simplejedis.SimpleJedisManager;
@@ -34,9 +43,16 @@ import net.grandtheftmc.simplejedis.SimpleJedisManager;
 import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
-public class GTMBot {
+import static net.grandtheftmc.discordbot.utils.console.Logs.log;
+
+public class GTMBot extends ListenerAdapter {
 
     private static JDA jda;
     private static MineStat mineStat;
@@ -81,8 +97,8 @@ public class GTMBot {
         System.out.println("Initializing JDA...");
 
         // Initialize GTM MineStat
-        System.out.println("Loading MineStat data on GTM...");
-        mineStat = new MineStat(Config.get().getMineStatSettings().getServerIp(), Config.get().getMineStatSettings().getServerPort());
+        System.out.println("Loading MineStat data for GTM...");
+        //todo: mineStat = new MineStat(Config.get().getMineStatSettings().getServerIp(), Config.get().getMineStatSettings().getServerPort());
 
         try {
             jda = JDABuilder.createDefault(Config.get().getBotToken())
@@ -108,31 +124,13 @@ public class GTMBot {
             jda.getPresence().setIdle(false);
 
             // JDA Events
+            jda.addEventListener(new GTMBot());
             jda.addEventListener(new SuggestionListener());
-            jda.addEventListener(new ReadyEvents());
-            jda.addEventListener(new CloseEvent());
             jda.addEventListener(new OnJoin());
             jda.addEventListener(new GuildReaction());
             jda.addEventListener(new OnGuildMessage());
             jda.addEventListener(new MembersCache());
             jda.addEventListener(new ReportListener());
-
-            // JDA Commands
-            jda.addEventListener(new SuggestionCommand());
-            jda.addEventListener(new PlayerCountCommand());
-            jda.addEventListener(new RaidModeCommand());
-            //jda.addEventListener(new SeniorsCommand());
-            jda.addEventListener(new HelpCommand());
-            jda.addEventListener(new DiscordAccountCommand());
-            jda.addEventListener(new StaffAccountCommand());
-            jda.addEventListener(new RebootCommand());
-            jda.addEventListener(new PingCommand());
-            jda.addEventListener(new HarryCommand());
-            jda.addEventListener(new StaffCommand());
-            jda.addEventListener(new AnnoyCommand());
-            jda.addEventListener(new ChannelCommand());
-            jda.addEventListener(new StatsCommand());
-            jda.addEventListener(new BugReportCommand());
 
             // Self user settings functions to check if there was utils.config change to prevent
             // unnecessary calls to the discord api which may result in us getting rate limited
@@ -142,6 +140,123 @@ public class GTMBot {
         } catch (LoginException | IllegalArgumentException | IllegalStateException e) {
             Utils.printStackError(e);
         }
+    }
+
+    @Override
+    public void onReady(ReadyEvent event) {
+
+        // Make sure bot is only on one server
+        if (GTMBot.getJDA().getGuilds().size() > 1) {
+            Logs.log("The GTM Discord bot may not be in more then one server at a time!", Logs.ERROR);
+            Logs.log(GTMBot.getJDA().getGuilds().toString(), Logs.ERROR);
+            System.exit(0);
+        }
+
+        // set static guild variable
+        Utils.guild = GTMBot.getJDA().getGuilds().get(0);
+
+        // JDA Commands - All Commands MUST BE REGISTERED HERE
+        new SuggestionCommand();
+        new PlayerCountCommand();
+        new RaidModeCommand();
+        //new SeniorsCommand();
+        new HelpCommand();
+        new DiscordAccountCommand();
+        new StaffAccountCommand();
+        new RebootCommand();
+        new PingCommand();
+        new HarryCommand();
+        new StaffCommand();
+        new AnnoyCommand();
+        new ChannelCommand();
+        new StatsCommand();
+        new BugReportCommand();
+        new ConditionalMessageCommand();
+
+        List<CommandData> commands = Command.getCommands().stream().map(Command::getCommandData).collect(Collectors.toList());
+        Utils.guild.updateCommands().addCommands(commands).queue();
+
+        // cache all members and once done
+        MembersCache.reloadMembersAsync().thenAccept( members -> {
+
+            // load self datas
+            ChannelIdData.load();
+            AnnoyData.load();
+            ChannelData.load();
+
+            // Print finished loading msg
+            log("Bot is now online!");
+
+            startTasks();
+
+            log("Player count channel updater task initialized!");
+
+            // INVALID CONFIG OR DATA WARNINGS
+            checkRaidModeSettings();
+            checkSuggestionsSettings();
+
+            // load all GTM users in to memory
+            GTMUser.loadUsers();
+
+        });
+
+    }
+
+    public void onShutdown (ShutdownEvent e) {
+        Logs.log("Bot has now been disabled.");
+    }
+
+    private void startTasks() {
+        // Start updater repeating task to update player count
+        ThreadUtil.runTaskTimer(Utils::updateOnlinePlayers, 5000, 1000L * Config.get().getMineStatSettings().getRefreshFrequency());
+
+        // Start wisdom annoy task
+        Timer wisdomAnnoyTask = new Timer();
+        wisdomAnnoyTask.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Map<Long, Long[]> map = AnnoyData.get().getQuoteAnnoyMap();
+                map.forEach( (key, value) -> {
+                    long hours = value[0];
+                    long lastUpdated = value[1];
+                    if (lastUpdated < System.currentTimeMillis() - 1000 * 60 * 60 * hours) {
+                        int index = Utils.randomNumber(0, Utils.wiseQuotes.length - 1);
+                        GTMBot.getJDA().retrieveUserById(key)
+                                .flatMap(User::openPrivateChannel)
+                                .flatMap(privateChannel -> privateChannel.sendMessage(Utils.wiseQuotes[index]))
+                                .queue();
+                        map.put(key, new Long[] {hours, System.currentTimeMillis()});
+                        AnnoyData.get().save();
+                    }
+
+                });
+            }
+        }, 5000, 1000 * 60);
+    }
+
+    // Invalid raid mode punishment type settings
+    private void checkRaidModeSettings() {
+        String raidModePunishType = Config.get().getRaidmodeSettings().getRaidModePunishType();
+        if (!raidModePunishType.equalsIgnoreCase("BAN") &&
+                !raidModePunishType.equalsIgnoreCase("KICK") &&
+                !raidModePunishType.equalsIgnoreCase("NOTIFY")) {
+            log("Invalid raid mode punishment type configured in the utils.config!" +
+                    " Valid punishment types are: NOTIFY, BAN, KICK", Logs.WARNING);
+            log("Setting raid punishment type to \"KICK\" for now...", Logs.WARNING);
+            Config.get().getRaidmodeSettings().setRaidModePunishType("KICK");
+        }
+    }
+
+    // Check if suggestions channel not configured
+    private void checkSuggestionsSettings() {
+        if (GTMBot.getJDA().getTextChannelById(ChannelIdData.get().getSuggestionChannelId()) == null)
+            log("The suggestion channel has not been properly configured yet!", Logs.WARNING);
+        // Player count channel not configured
+        if (GTMBot.getJDA().getVoiceChannelById(ChannelIdData.get().getPlayerCountChannelId()) == null)
+            log("The player count display channel has not been properly configured yet!", Logs.WARNING);
+        // Raid alerts channel not configured
+        if (GTMBot.getJDA().getTextChannelById(ChannelIdData.get().getRaidAlertChannelId()) == null)
+            log("The raid alerts channel has not been properly configured yet!", Logs.WARNING);
     }
 
     private static void setAvatar() {

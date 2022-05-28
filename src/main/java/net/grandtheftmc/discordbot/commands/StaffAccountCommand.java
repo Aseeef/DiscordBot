@@ -5,7 +5,9 @@ import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.grandtheftmc.discordbot.utils.MembersCache;
 import net.grandtheftmc.discordbot.utils.pagination.DiscordMenu;
 import net.grandtheftmc.discordbot.utils.Utils;
@@ -27,23 +29,28 @@ public class StaffAccountCommand extends Command {
     }
 
     @Override
-    public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, Member member, GTMUser gtmUser, String[] args) {
+    public void buildCommandData(SlashCommandData slashCommandData) {
 
-        if (args.length < 1) {
+    }
+
+    @Override
+    public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, List<OptionMapping> arguments, Member member, GTMUser gtmUser, String[] path) {
+
+        if (path.length < 1) {
             Utils.sendThenDelete(channel, getCommandHelpMsg());
             return;
         }
 
-        switch (args[0].toLowerCase()) {
+        switch (path[0].toLowerCase()) {
 
             case "check": {
 
-                if (args.length < 2) {
+                if (path.length < 2) {
                     Utils.sendThenDelete(channel, "`/Accounts Check <Member ID / Tag>` - *Verify your discord account with GTM*");
                     return;
                 }
 
-                Optional<Member> optionalTarget = MembersCache.getMember(args[1]);
+                Optional<Member> optionalTarget = MembersCache.getMember(path[1]);
 
                 if (!optionalTarget.isPresent()) {
                     Utils.sendThenDelete(channel, "**Target user not found!**");
@@ -63,12 +70,12 @@ public class StaffAccountCommand extends Command {
 
             case "refresh": {
 
-                if (args.length < 2) {
+                if (path.length < 2) {
                     Utils.sendThenDelete(channel, "`/Accounts Refresh <Member ID / Tag>` - *Verify your discord account with GTM*");
                     return;
                 }
 
-                Optional<Member> optionalTarget = MembersCache.getMember(args[1]);
+                Optional<Member> optionalTarget = MembersCache.getMember(path[1]);
 
                 if (!optionalTarget.isPresent()) {
                     Utils.sendThenDelete(channel, "**Target user not found!**");

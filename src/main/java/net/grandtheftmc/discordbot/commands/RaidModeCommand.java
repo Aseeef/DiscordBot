@@ -5,10 +5,14 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.grandtheftmc.discordbot.utils.selfdata.ChannelIdData;
 import net.grandtheftmc.discordbot.utils.users.GTMUser;
 import net.grandtheftmc.discordbot.utils.users.Rank;
+
+import java.util.List;
 
 import static net.grandtheftmc.discordbot.utils.Utils.sendThenDelete;
 import static net.grandtheftmc.discordbot.utils.tools.RaidModeTools.*;
@@ -20,14 +24,19 @@ public class RaidModeCommand extends Command {
     }
 
     @Override
-    public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, Member member, GTMUser gtmUser, String[] args) {
+    public void buildCommandData(SlashCommandData slashCommandData) {
+
+    }
+
+    @Override
+    public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, List<OptionMapping> arguments, Member member, GTMUser gtmUser, String[] path) {
         // If there are no command arguments send sub command help list
-        if (args.length == 0) {
+        if (path.length == 0) {
             sendThenDelete(channel, getRaidModeHelpMsg());
         }
 
         // RaidMode SetChannel Command
-        else if (args[0].equalsIgnoreCase("setchannel")) {
+        else if (path[0].equalsIgnoreCase("setchannel")) {
 
             // Set as raid mode channel
             ChannelIdData.get().setRaidAlertChannelId(channel.getIdLong());
@@ -37,13 +46,13 @@ public class RaidModeCommand extends Command {
 
         }
 
-        else if (args[0].equalsIgnoreCase("enable")) {
+        else if (path[0].equalsIgnoreCase("enable")) {
             if (!raidMode[0])
                 activateRaidMode(member.getUser());
             else sendThenDelete(channel, "**Raid mode is already enabled!**");
         }
 
-        else if (args[0].equalsIgnoreCase("disable")) {
+        else if (path[0].equalsIgnoreCase("disable")) {
             if (raidMode[0])
                 disableRaidMode(member.getUser());
             else sendThenDelete(channel, "**Raid mode is already disabled!**");

@@ -4,7 +4,9 @@ import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.grandtheftmc.discordbot.utils.MembersCache;
 import net.grandtheftmc.discordbot.utils.channels.CustomChannel;
 import net.grandtheftmc.discordbot.utils.database.UsersDAO;
@@ -31,14 +33,19 @@ public class ChannelCommand extends Command {
     }
 
     @Override
-    public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, Member member, GTMUser gtmUser, String[] args) {
+    public void buildCommandData(SlashCommandData slashCommandData) {
 
-        if (args.length < 1) {
+    }
+
+    @Override
+    public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, List<OptionMapping> arguments, Member member, GTMUser gtmUser, String[] path) {
+
+        if (path.length < 1) {
             Utils.sendThenDelete(channel, getCommandHelp(member));
             return;
         }
 
-        switch (args[0].toLowerCase()) {
+        switch (path[0].toLowerCase()) {
 
             case "create": {
 
@@ -53,9 +60,9 @@ public class ChannelCommand extends Command {
                 }
 
                 String name;
-                if (args.length == 1)
+                if (path.length == 1)
                     name = member.getEffectiveName() + "'s Private Channel";
-                else name = stringFromArgsAfter(args, 1);
+                else name = stringFromArgsAfter(path, 1);
 
                 CustomChannel customChannel = new CustomChannel(name, member, false);
                 customChannel.create().thenAccept( (vc) -> {
@@ -91,7 +98,7 @@ public class ChannelCommand extends Command {
 
             case "setpublic": {
 
-                if (args.length < 2) {
+                if (path.length < 2) {
                     Utils.sendThenDelete(channel, "`/Channel SetPublic <True/False>` - *Configure whether everyone should be able to join your channel.*");
                     return;
                 }
@@ -103,12 +110,12 @@ public class ChannelCommand extends Command {
                     return;
                 }
 
-                if (!args[1].equalsIgnoreCase("true") && !args[1].equalsIgnoreCase("false")) {
+                if (!path[1].equalsIgnoreCase("true") && !path[1].equalsIgnoreCase("false")) {
                     Utils.sendThenDelete(channel, "**Please type either `true` to set your channel to public or `false` to set it to private.**");
                     return;
                 }
 
-                boolean publicChannel = Boolean.parseBoolean(args[1]);
+                boolean publicChannel = Boolean.parseBoolean(path[1]);
                 optionalChannel.get().setPublicChannel(publicChannel);
                 Utils.sendThenDelete(channel, "**Setting your custom channel to " + (publicChannel ? "public" : "private") + "!**");
 
@@ -117,7 +124,7 @@ public class ChannelCommand extends Command {
 
             case "setmax": {
 
-                if (args.length < 2) {
+                if (path.length < 2) {
                     Utils.sendThenDelete(channel, "`/Channel SetMax <Limit>` - *Set the maximum about of people allowed in your channel; 0 is unlimited.*");
                     return;
                 }
@@ -131,21 +138,21 @@ public class ChannelCommand extends Command {
 
                 int limit;
                 try {
-                    limit = Integer.parseInt(args[1]);
+                    limit = Integer.parseInt(path[1]);
                 } catch (NumberFormatException e) {
-                    Utils.sendThenDelete(channel, "**`" + args[1] + "` is not a number!**");
+                    Utils.sendThenDelete(channel, "**`" + path[1] + "` is not a number!**");
                     return;
                 }
 
                 optionalChannel.get().setChannelMax(limit);
-                Utils.sendThenDelete(channel, "**Setting max channel user limit to " + args[1] + " users...!**");
+                Utils.sendThenDelete(channel, "**Setting max channel user limit to " + path[1] + " users...!**");
 
                 break;
             }
 
             case "add": {
 
-                if (args.length < 2) {
+                if (path.length < 2) {
                     Utils.sendThenDelete(channel, "`/Channel Add <Member ID / Tag>` - *Add the selected discord member to your custom channel.*");
                     return;
                 }
@@ -157,7 +164,7 @@ public class ChannelCommand extends Command {
                     return;
                 }
 
-                Optional<Member> optionalTarget = MembersCache.getMember(args[1]);
+                Optional<Member> optionalTarget = MembersCache.getMember(path[1]);
 
                 if (!optionalTarget.isPresent()) {
                     Utils.sendThenDelete(channel, "**Target not found!**");
@@ -179,7 +186,7 @@ public class ChannelCommand extends Command {
 
             case "remove": {
 
-                if (args.length < 2) {
+                if (path.length < 2) {
                     Utils.sendThenDelete(channel, "`/Channel Remove <Member ID / Tag>` - *Remove the selected discord member from your custom channel.*");
                     return;
                 }
@@ -191,7 +198,7 @@ public class ChannelCommand extends Command {
                     return;
                 }
 
-                Optional<Member> optionalTarget = MembersCache.getMember(args[1]);
+                Optional<Member> optionalTarget = MembersCache.getMember(path[1]);
 
                 if (!optionalTarget.isPresent()) {
                     Utils.sendThenDelete(channel, "**Target not found!**");
@@ -224,12 +231,12 @@ public class ChannelCommand extends Command {
 
             case "addgang": {
 
-                if (args.length < 2) {
+                if (path.length < 2) {
                     Utils.sendThenDelete(channel, "`/Channel AddGang <Server Key>` - *Add all verified discord members in your gang on the specified server to this private voice channel*");
                     return;
                 }
 
-                if (!args[1].equalsIgnoreCase("gtm1") && !args[1].equalsIgnoreCase("gtm4") && !args[1].equalsIgnoreCase("gtm7")) {
+                if (!path[1].equalsIgnoreCase("gtm1") && !path[1].equalsIgnoreCase("gtm4") && !path[1].equalsIgnoreCase("gtm7")) {
                     Utils.sendThenDelete(channel, "**Unknown server key! Acceptable server keys are: `GTM1` [Minesantos], `GTM4` [Sanktburg], `GTM7` [New Mineport]**");
                     return;
                 }
@@ -248,12 +255,12 @@ public class ChannelCommand extends Command {
 
                 ThreadUtil.runAsync( () -> {
                     try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()){
-                        Object[] gangData = UsersDAO.getGangMembersFor(conn, gtmUser, args[1]);
+                        Object[] gangData = UsersDAO.getGangMembersFor(conn, gtmUser, path[1]);
                         String gangName = (String) gangData[0];
                         List<GTMUser> gangMembers = (List<GTMUser>) gangData[1];
 
                         if (gangMembers.size() == 0) {
-                            Utils.sendThenDelete(channel, "**No gang members of `" + gangName + "` were found that are linked to the discord on Server " + args[1].toUpperCase() + "!**");
+                            Utils.sendThenDelete(channel, "**No gang members of `" + gangName + "` were found that are linked to the discord on Server " + path[1].toUpperCase() + "!**");
                             return;
                         }
 
@@ -319,14 +326,14 @@ public class ChannelCommand extends Command {
                     return;
                 }
 
-                if (args.length < 2) {
+                if (path.length < 2) {
                     Utils.sendThenDelete(channel, "`/Channel SetCategory <ID>` - *Sets the selected category id as the custom channel category.*");
                     return;
                 }
 
                 long categoryId;
                 try {
-                    categoryId = Long.parseLong(args[1]);
+                    categoryId = Long.parseLong(path[1]);
                 } catch (NumberFormatException e) {
                     Utils.sendThenDelete(channel, "**You provided an invalid channel id!**");
                     return;

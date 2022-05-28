@@ -1,27 +1,33 @@
 package net.grandtheftmc.discordbot.commands;
 
-import net.dv8tion.jda.api.entities.*;
+import com.google.common.collect.Lists;
+import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-import net.dv8tion.jda.internal.interactions.CommandDataImpl;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.grandtheftmc.discordbot.GTMBot;
-import org.jetbrains.annotations.NotNull;
+import net.grandtheftmc.discordbot.utils.StringUtils;
 import net.grandtheftmc.discordbot.utils.confighelpers.Config;
 import net.grandtheftmc.discordbot.utils.users.GTMUser;
 import net.grandtheftmc.discordbot.utils.users.Rank;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static net.grandtheftmc.discordbot.utils.console.Logs.log;
 
 public abstract class Command extends ListenerAdapter {
 
-    private final static int COMMAND_MS_DELAY = 1250;
-
-    private final CommandDataImpl commandData;
+    private final SlashCommandData commandData;
 
     private final String name;
     private final String description;
@@ -30,24 +36,23 @@ public abstract class Command extends ListenerAdapter {
 
     private static final List<Command> commandList = new ArrayList<>();
 
-    private static final Map<User, Long> antiSpamMap = new HashMap<>();
-
     /** The constructor for discord commands for the GTM bot
      *
      * @param name - The name of the command as used in the command (eg /name)
      * @param description - The command description displayed in /help
      * @param rank - The rank required to use this rank
      */
-    public Command(String name, String description, Rank rank, Type type, OptionData... argUsage) {
+    public Command(String name, String description, Rank rank, Type type) {
         this.name = name;
         this.description = description;
         this.rank = rank;
         this.type = type;
         commandList.add(this);
 
-        this.commandData = new CommandDataImpl(name.toLowerCase(), description);
-        this.commandData.addOptions(argUsage);
-        GTMBot.getJDA().getGuilds().forEach(g -> g.upsertCommand(this.commandData).queue());
+        this.commandData = Commands.slash(name.toLowerCase(), description);
+        this.buildCommandData(this.commandData);
+
+        GTMBot.getJDA().addEventListener(this);
     }
 
     @Override
@@ -59,13 +64,16 @@ public abstract class Command extends ListenerAdapter {
         Member member = e.getMember();
         GTMUser gtmUser = GTMUser.getGTMUser(user.getIdLong()).orElse(null);
         MessageChannel channel = e.getChannel();
-        String commandMessage = e.getInteraction().getCommandString();
-        String[] args = commandMessage.split(" ");
+        String commandMessage = e.getInteraction().getCommandPath();
+        List<String> listPath = new LinkedList<>(Arrays.asList(commandMessage.split("/")));
+        listPath.remove(0);
+        listPath.addAll(e.getOptions().stream().map(OptionMapping::getAsString).collect(Collectors.toList()));
+        String[] path = listPath.toArray(new String[0]);
 
-        if (e.getName().equals(name)) {
+        if (e.getName().equalsIgnoreCase(name)) {
 
             log("User " + user.getAsTag() +
-                    "(" + user.getId() + ") issued command: " + commandMessage);
+                    "(" + user.getId() + ") issued command: /" + e.getName() + " " + StringUtils.join(path, " "));
 
             // Check perms
             if (!Rank.hasRolePerms(member, rank)) {
@@ -82,10 +90,7 @@ public abstract class Command extends ListenerAdapter {
                 return;
             }
 
-            // acknowledge command
-            e.deferReply(true).queue();
-
-            onCommandUse(e.getInteraction(), channel, member, gtmUser, args);
+            onCommandUse(e.getInteraction(), channel, e.getOptions(), member, gtmUser, path);
         }
 
     }
@@ -118,10 +123,15 @@ public abstract class Command extends ListenerAdapter {
         return commandList.stream().filter( (command) -> command.getName().equals(commandName)).findFirst().orElse(null);
     }
 
+    /**
+     * Build the slash command data such as accepted command arguments
+     */
+    public abstract void buildCommandData(SlashCommandData slashCommandData);
+
     /** This is the logic that occurs when this command is used
      * Note: To use TextChannel or PrivateChannel methods, use casting
      */
-    public abstract void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, Member member, GTMUser gtmUser, String[] args);
+    public abstract void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, List<OptionMapping> arguments, Member member, GTMUser gtmUser, String[] path);
 
     // -- Commands static methods -- //
 
