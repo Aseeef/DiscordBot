@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'net.grandtheftmc'
-version '1.0.0'
+version '1.1.0'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -14,8 +14,8 @@ compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"
 
 // make sure maven creds are set
-def mavenUser;
-def mavenPassword;
+def mavenUser
+def mavenPassword
 if (!project.hasProperty("mavenUser") || !project.hasProperty("mavenPassword")) {
     if (System.getenv("MAVEN_REPO_USER") != null && System.getenv("MAVEN_REPO_PASS")) {
         mavenUser = System.getenv("MAVEN_REPO_USER")
@@ -43,11 +43,9 @@ repositories {
             password mavenPassword
         }
     }
+    mavenCentral()
     maven {
         url 'https://jitpack.io'
-    }
-    maven {
-        url 'https://jcenter.bintray.com'
     }
     maven {
         url 'https://mvnrepository.com/artifact/org.json/'
@@ -64,9 +62,11 @@ repositories {
 }
 
 dependencies {
-    compileOnly ('net.grandtheftmc:discordbotlib:latest.release') {
+
+    compileOnly ('net.grandtheftmc:discordbotlib:1.0.4') {
         changing = true
     }
+
 }
 
 shadowJar {
@@ -76,7 +76,7 @@ shadowJar {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'GTM'
+        attributes 'Main-Class': 'net.grandtheftmc.GTMBot'
         attributes 'Class-Path': 'DiscordBotLib.jar'
     }
 }
