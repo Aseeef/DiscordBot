@@ -95,6 +95,7 @@ public class SuggestionTools {
                                         "What is this suggest for?",
                                         TextInputStyle.SHORT
                                 ).setMinLength(3)
+                                .setRequired(true)
                                 .setPlaceholder("(e.i. for discord, for gtm1, for all gtms...?)")
                                 .build()
                 )
@@ -104,6 +105,7 @@ public class SuggestionTools {
                                         "What is your Suggestion? Be concise!",
                                         TextInputStyle.PARAGRAPH
                                 ).setMinLength(12)
+                                .setRequired(true)
                                 .setPlaceholder("My suggestion is that we...")
                                 .build()
                 )
@@ -113,6 +115,7 @@ public class SuggestionTools {
                                         "Why should we implement this suggestion?",
                                         TextInputStyle.PARAGRAPH
                                 ).setMinLength(18)
+                                .setRequired(true)
                                 .setPlaceholder("You should add this suggestion because...")
                                 .build()
                 )

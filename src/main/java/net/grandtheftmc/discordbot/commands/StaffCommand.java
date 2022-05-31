@@ -30,10 +30,9 @@ public class StaffCommand extends Command {
     @Override
     public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, List<OptionMapping> arguments, Member member, GTMUser gtmUser, String[] path) {
 
-        if (path.length < 1) {
-            sendThenDelete(channel, getHelpPage());
+        interaction.reply("This command is not completed").setEphemeral(true).queue();
+        if (true)
             return;
-        }
 
         switch (path[0].toLowerCase()) {
 

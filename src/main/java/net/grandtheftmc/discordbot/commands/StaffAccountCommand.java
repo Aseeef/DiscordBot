@@ -36,7 +36,7 @@ public class StaffAccountCommand extends Command {
         check.addOption(OptionType.STRING, "target-id", "The ingame name, discord id, or discord tag of the target user");
 
         SubcommandData refresh = new SubcommandData("refresh", "Refreshes the target's information (if they are linked to GTM)");
-        check.addOption(OptionType.STRING, "target-id", "The ingame name, discord id, or discord tag of the target user");
+        refresh.addOption(OptionType.STRING, "target-id", "The ingame name, discord id, or discord tag of the target user");
 
         SubcommandData refreshAll = new SubcommandData("refreshall", "Refreshes account data for all verified users");
 

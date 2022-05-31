@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.grandtheftmc.discordbot.commands.*;
-import net.grandtheftmc.discordbot.commands.bugs.BugReportCommand;
+import net.grandtheftmc.discordbot.commands.bugs.BugAdminCommand;
 import net.grandtheftmc.discordbot.commands.bugs.ReportListener;
 import net.grandtheftmc.discordbot.commands.message.ConditionalMessageCommand;
 import net.grandtheftmc.discordbot.commands.stats.StatsCommand;
@@ -97,7 +97,7 @@ public class GTMBot extends ListenerAdapter {
 
         // Initialize GTM MineStat
         System.out.println("Loading MineStat data for GTM...");
-        //todo: mineStat = new MineStat(Config.get().getMineStatSettings().getServerIp(), Config.get().getMineStatSettings().getServerPort());
+        mineStat = new MineStat(Config.get().getMineStatSettings().getServerIp(), Config.get().getMineStatSettings().getServerPort());
 
         try {
             jda = JDABuilder.createDefault(Config.get().getBotToken())
@@ -169,15 +169,15 @@ public class GTMBot extends ListenerAdapter {
         new AnnoyCommand();
         new ChannelCommand();
         new StatsCommand();
-        new BugReportCommand();
+        new BugAdminCommand();
         new ConditionalMessageCommand();
 
         List<CommandData> commandsData = Command.getCommands().stream().map(Command::getCommandData).collect(Collectors.toList());
-
         // update commands across guilds (quicker for debugging)
-        List<net.dv8tion.jda.api.interactions.commands.Command> jdaCommandList = getGTMGuild().updateCommands().addCommands(commandsData).complete();
+        //getGTMGuild().updateCommands().addCommands(commandsData).complete();
+        getGTMGuild().updateCommands().addCommands().complete();
         // update commands across everything
-        jdaCommandList = jda.updateCommands().addCommands(commandsData).complete();
+        jda.updateCommands().addCommands(commandsData).complete();
 
         // cache all members and once done
         MembersCache.reloadMembersAsync().thenAccept(members -> {

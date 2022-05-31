@@ -58,9 +58,8 @@ public class HelpCommand extends Command {
                 .setDescription(help.toString())
                 .build();
 
-        // Send help embed and unless this is dms, delete later
-        if (channel instanceof PrivateChannel) channel.sendMessageEmbeds(helpEmbed).queue();
-        else sendThenDelete(channel, helpEmbed);
+        // Send help embed
+        interaction.replyEmbeds(helpEmbed).setEphemeral(true).queue();
     }
 
     private String getChannelMessage(Command c) {

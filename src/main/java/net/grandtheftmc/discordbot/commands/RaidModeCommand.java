@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.grandtheftmc.discordbot.utils.selfdata.ChannelIdData;
 import net.grandtheftmc.discordbot.utils.users.GTMUser;
 import net.grandtheftmc.discordbot.utils.users.Rank;
@@ -25,43 +26,39 @@ public class RaidModeCommand extends Command {
 
     @Override
     public void buildCommandData(SlashCommandData slashCommandData) {
+        SubcommandData setChannel = new SubcommandData("setchannel", "Sets current channel as the Raid mode alerts channel");
+        SubcommandData enable = new SubcommandData("enable", "Manually enables raid mode");
+        SubcommandData disable = new SubcommandData("disable", "Manually disables raid mode");
 
+        slashCommandData.addSubcommands(setChannel, enable, disable);
     }
 
     @Override
     public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, List<OptionMapping> arguments, Member member, GTMUser gtmUser, String[] path) {
-        // If there are no command arguments send sub command help list
-        if (path.length == 0) {
-            sendThenDelete(channel, getRaidModeHelpMsg());
-        }
 
         // RaidMode SetChannel Command
-        else if (path[0].equalsIgnoreCase("setchannel")) {
+        if (path[0].equalsIgnoreCase("setchannel")) {
 
             // Set as raid mode channel
             ChannelIdData.get().setRaidAlertChannelId(channel.getIdLong());
 
             // Send success msg
-            sendThenDelete(channel, raidChannelSet((TextChannel) channel));
+            interaction.reply(raidChannelSet((TextChannel) channel)).queue();
 
         }
 
         else if (path[0].equalsIgnoreCase("enable")) {
             if (!raidMode[0])
                 activateRaidMode(member.getUser());
-            else sendThenDelete(channel, "**Raid mode is already enabled!**");
+            else interaction.reply("**Raid mode is already enabled!**").queue();
         }
 
         else if (path[0].equalsIgnoreCase("disable")) {
             if (raidMode[0])
                 disableRaidMode(member.getUser());
-            else sendThenDelete(channel, "**Raid mode is already disabled!**");
+            else interaction.reply("**Raid mode is already disabled!**").queue();
         }
 
-        // If no sub commands match
-        else {
-            sendThenDelete(channel, getRaidModeHelpMsg());
-        }
     }
 
     private static Message raidChannelSet(TextChannel channel) {
@@ -71,15 +68,6 @@ public class RaidModeCommand extends Command {
                 .append(" has been set as the raid mode alerts channel!")
                 .append("**")
         .build();
-    }
-
-    private Message getRaidModeHelpMsg() {
-        return new MessageBuilder()
-                .append("> **Please enter a valid command argument:**\n")
-                .append("> `/RaidMode SetChannel` - *Sets current channel as the Raid mode alerts channel*\n")
-                .append("> `/RaidMode Enable` - *Manually enables raid mode*\n")
-                .append("> `/RaidMode Disable` - *Manually disables raid mode*\n")
-                .build();
     }
 
 }

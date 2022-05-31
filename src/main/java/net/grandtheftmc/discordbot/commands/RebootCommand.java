@@ -24,13 +24,10 @@ public class RebootCommand extends Command {
 
     @Override
     public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, List<OptionMapping> arguments, Member member, GTMUser gtmUser, String[] path) {
-        // Only need to open a private channel if this isn't already dms
-        if (channel instanceof PrivateChannel)
-            channel.sendMessage("**Executed reboot. Please allow up to 30 seconds for the bot to come back up!**").queue();
-        else
-        member.getUser().openPrivateChannel().queue( (privateChannel) ->
-            privateChannel.sendMessage("**Executed reboot. Please allow up to 30 seconds for the bot to come back up!**")
-                    .queue( (m) -> System.exit(1)));
+        interaction.reply("**Executed reboot. Please allow up to 30 seconds for the bot to come back up!**")
+                .setEphemeral(true).queue(hook -> {
+                    System.exit(1);
+                });
     }
 
 }

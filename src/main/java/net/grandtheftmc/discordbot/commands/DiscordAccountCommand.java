@@ -1,5 +1,8 @@
 package net.grandtheftmc.discordbot.commands;
 
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
@@ -10,11 +13,6 @@ import net.grandtheftmc.discordbot.utils.Utils;
 import net.grandtheftmc.discordbot.utils.threads.ThreadUtil;
 import net.grandtheftmc.discordbot.utils.tools.Verification;
 import net.grandtheftmc.discordbot.utils.users.GTMUser;
-import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
 
 import java.awt.*;
 import java.util.List;
@@ -22,7 +20,7 @@ import java.util.List;
 public class DiscordAccountCommand extends Command {
 
     public DiscordAccountCommand() {
-        super("discord", "Manage your gtm-discord account link", null, Type.DMS_ONLY);
+        super("discord", "Manage your gtm-discord account link", null, Type.ANYWHERE);
     }
 
     @Override

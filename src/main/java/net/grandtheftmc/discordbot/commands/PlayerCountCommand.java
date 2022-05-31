@@ -1,13 +1,13 @@
 package net.grandtheftmc.discordbot.commands;
 
 import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.grandtheftmc.discordbot.GTMBot;
 import net.grandtheftmc.discordbot.utils.selfdata.ChannelIdData;
 import net.grandtheftmc.discordbot.utils.users.GTMUser;
@@ -25,21 +25,19 @@ public class PlayerCountCommand extends Command {
 
     @Override
     public void buildCommandData(SlashCommandData slashCommandData) {
+        SubcommandData setChannel = new SubcommandData("setchannel", "Displays GTM's player count at the target channel");
+        OptionData setChannelData = new OptionData(OptionType.CHANNEL, "channel", "The channel which we will display the player count in").setChannelTypes(ChannelType.VOICE);
+        setChannel.addOptions(setChannelData);
 
+        slashCommandData.addSubcommands(setChannel);
     }
 
     @Override
     public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, List<OptionMapping> arguments, Member member, GTMUser gtmUser, String[] path) {
-        // If there are no command arguments send sub command help list
-        if (path.length == 0) {
-            // Send msg then delete after defined time in utils.config
-            sendThenDelete(channel, getPlayerCountHelpMsg());
-        }
 
         // Suggestions SetChannel Command
-        else if (path[0].equalsIgnoreCase("setchannel")) {
-
-            VoiceChannel playerCountChannel = GTMBot.getJDA().getVoiceChannelById(Long.parseLong(path[1]));
+        if (path[0].equalsIgnoreCase("setchannel")) {
+            VoiceChannel playerCountChannel = interaction.getOption("channel").getAsVoiceChannel();
 
             // If its a valid voice channel id
             if (playerCountChannel != null) {
@@ -51,30 +49,17 @@ public class PlayerCountCommand extends Command {
                 updateOnlinePlayers();
 
                 // Send success msg
-                sendThenDelete(channel, "**<`"+playerCountChannel.getIdLong()+"`>"+
-                        " has been set as the Player Count channel!**");
+                interaction.reply("**<`"+playerCountChannel.getIdLong()+"`>"+
+                        " has been set as the Player Count channel!**").setEphemeral(true).queue();
 
             }
 
             // If channel id is invalid
             else {
-                sendThenDelete(channel, "**Invalid voice channel Id! Channel not set.**");
+                interaction.reply("**Invalid voice channel Id! Channel not set.**").setEphemeral(true).queue();
             }
 
         }
-
-        // If none of the sub arguments match
-        else {
-            // Send msg then delete after defined time in utils.config
-            sendThenDelete(channel, getPlayerCountHelpMsg());
-        }
-    }
-
-    private static Message getPlayerCountHelpMsg() {
-        return new MessageBuilder()
-                .append("> **Please enter a valid command argument:**\n")
-                .append("> `/PlayerCount SetChannel <ID>` - *Displays GTM's player count at the given channel*\n")
-                .build();
     }
 
 }

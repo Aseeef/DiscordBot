@@ -47,7 +47,7 @@ public abstract class Command extends ListenerAdapter {
 
         this.commandData = Commands.slash(name.toLowerCase(), description);
         this.buildCommandData(this.commandData);
-        this.commandData.setDefaultEnabled(false);
+        this.commandData.setDefaultEnabled(rank == null);
 
         GTMBot.getJDA().addEventListener(this);
     }

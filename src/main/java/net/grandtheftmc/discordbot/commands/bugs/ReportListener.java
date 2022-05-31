@@ -5,14 +5,17 @@ import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.components.Modal;
+import net.dv8tion.jda.api.interactions.components.text.TextInput;
+import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.grandtheftmc.discordbot.GTMBot;
-import org.jetbrains.annotations.NotNull;
 import net.grandtheftmc.discordbot.utils.StringUtils;
 import net.grandtheftmc.discordbot.utils.Utils;
 import net.grandtheftmc.discordbot.utils.threads.ThreadUtil;
 import net.grandtheftmc.discordbot.utils.users.GTMUser;
 import net.grandtheftmc.discordbot.utils.web.ImgurUploader;
 import net.grandtheftmc.discordbot.utils.web.clickup.CUTask;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.io.IOException;
@@ -21,8 +24,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static net.grandtheftmc.discordbot.utils.console.Logs.log;
 import static net.grandtheftmc.discordbot.utils.Utils.sendThenDelete;
+import static net.grandtheftmc.discordbot.utils.console.Logs.log;
 
 public class ReportListener extends ListenerAdapter {
 
@@ -220,6 +223,56 @@ public class ReportListener extends ListenerAdapter {
                 .append("[Upload or post the link to a video / screenshot of the bug (Required)]")
                 .append("```");
         return msg.build();
+    }
+
+    //todo
+    public static Modal getReportsModal() {
+        return Modal.create("create-bugreport", "Submit a New Bug Report")
+                .addActionRow(
+                        TextInput.create(
+                                "server", "What is this Bug Report for?", TextInputStyle.SHORT
+                        ).setRequired(true)
+                        .setPlaceholder("[Explain what servers does this issue affect (e.i gtm1, discord, all hubs..?)]")
+                        .build()
+                )
+                .addActionRow(
+                        TextInput.create(
+                                "issue", "What is going wrong?", TextInputStyle.PARAGRAPH
+                        ).setMinLength(10)
+                        .setPlaceholder("[Explain the issue here in detail]")
+                        .setRequired(true)
+                        .build()
+                )
+                .addActionRow(
+                        TextInput.create(
+                                        "expected-behavior",
+                                        "What should be happening?",
+                                        TextInputStyle.PARAGRAPH
+                                ).setMinLength(3)
+                                .setRequired(false)
+                                .setPlaceholder("[Explain the expected behavior here (If applicable)")
+                                .build()
+                )
+                .addActionRow(
+                        TextInput.create(
+                                "urgency",
+                                "On a scale of 1-4, how urgent is this Bug?",
+                                TextInputStyle.SHORT
+                        ).setRequired(true)
+                                .setRequiredRange(1, 1)
+                                .setPlaceholder("[1=Not Urgent, 2=Normal, 3=Urgent 4=CRITIAL]")
+                                .build()
+                )
+                .addActionRow(
+                        TextInput.create(
+                                        "proof",
+                                        "Video / Screenshot",
+                                        TextInputStyle.SHORT
+                                ).setRequired(false)
+                                .setPlaceholder("[Upload or post the link to a video / screenshot of the bug (Required)]")
+                                .build()
+                )
+                .build();
     }
 
 }
