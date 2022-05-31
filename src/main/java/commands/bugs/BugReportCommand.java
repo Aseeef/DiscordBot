@@ -9,21 +9,11 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import utils.Data;
 import utils.BotData;
-import utils.StringUtils;
 import utils.selfdata.ChannelIdData;
 import utils.Utils;
-import utils.threads.CallbackThread;
-import utils.threads.ThreadUtil;
 import utils.users.GTMUser;
 import utils.users.Rank;
-import utils.web.ImgurUploader;
 import utils.web.clickup.CUTask;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.concurrent.ExecutionException;
-import java.util.regex.Matcher;
 
 import static utils.Utils.*;
 
@@ -104,11 +94,11 @@ public class BugReportCommand extends Command {
             }
             case "complete": {
                 if (!isValidArgs(textChannel, args)) return;
-                BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, Integer.parseInt(args[1]));
+                BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, args[1]);
                 report.setStatus(BugReport.ReportStatus.PATCHED);
                 report.sendUpdate(args.length > 2 ? Utils.joinArgsAfter(args, 2) : null);
                 CUTask.editTask(report.getId(), BugReport.ReportStatus.PATCHED);
-                sendThenDelete(channel, "**Success!** You set bug report id " + Integer.parseInt(args[1]) + " to " + BugReport.ReportStatus.PATCHED + "!");
+                sendThenDelete(channel, "**Success!** You set bug report id " + args[1] + " to " + BugReport.ReportStatus.PATCHED + "!");
                 break;
             }
             case "duplicate": {
@@ -154,11 +144,9 @@ public class BugReportCommand extends Command {
             Utils.sendThenDelete(channel, getHelpMsg());
             return false;
         }
-        boolean exists = false;
-        try {
-            exists = Data.doesNumberExist(Data.BUG_REPORTS, args[1].toLowerCase());
-        } catch (NumberFormatException ignored) {
-        }
+
+        boolean exists;
+        exists = Data.doesDataExist(Data.BUG_REPORTS, args[1].toLowerCase());
 
         if (!exists) {
             sendThenDelete(channel, "**Error!** No bug report with id " + args[1] + " was found.");

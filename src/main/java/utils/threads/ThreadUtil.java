@@ -1,30 +1,35 @@
 package utils.threads;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class ThreadUtil {
 
-    public static CallbackThread runAsync(Runnable target) {
-        return runAsync(target, null);
+    private static final ExecutorService service = Executors.newFixedThreadPool(8, new ErrorCatchingThreadFactory());
+
+    public static void runAsync(Runnable target) {
+        service.submit(target);
     }
 
-    public static CallbackThread runAsync(Runnable target, Callback<?> callback) {
-        CallbackThread thread = new CallbackThread(target, callback);
-        thread.start();
-        return thread;
-    }
-
-    public static ScheduledFuture<?> runTaskTimer(Runnable task, int startDelay, int period) {
+    public static ScheduledFuture<?> runTaskTimer(Runnable task, long startDelayMillis, long periodMillis) {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        return executor.scheduleAtFixedRate(task, startDelay, period, TimeUnit.MILLISECONDS);
+        return executor.scheduleAtFixedRate(() -> {
+            try {
+                task.run();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }, startDelayMillis, periodMillis, TimeUnit.MILLISECONDS);
     }
 
-    public static ScheduledFuture<?> runDelayedTask(Runnable task, int startDelay) {
+    public static ScheduledFuture<?> runDelayedTask(Runnable task, long startDelayMillis) {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        return executor.schedule(task, startDelay, TimeUnit.MILLISECONDS);
+        return executor.schedule(() -> {
+            try {
+                task.run();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }, startDelayMillis, TimeUnit.MILLISECONDS);
     }
 
 

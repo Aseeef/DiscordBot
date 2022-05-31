@@ -48,7 +48,7 @@ public enum Data {
         return getNextNumber(type)-1;
     }
 
-    public static boolean doesNumberExist (Data type, Object id) {
+    public static boolean doesDataExist(Data type, Object id) {
         File file = new File("data/"+type.getDataName(), id+".json");
         return file.exists();
     }

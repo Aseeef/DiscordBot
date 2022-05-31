@@ -15,7 +15,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
 
-import static utils.Utils.guild;
+import static utils.Utils.*;
 
 public class GTMUser {
 
@@ -95,7 +95,15 @@ public class GTMUser {
     @JsonIgnore
     public static void loadUsers() {
         for (Object dataId : Data.getDataList(Data.USER)) {
-            userCache.putIfAbsent((Long) dataId, (GTMUser) Data.obtainData(Data.USER, dataId));
+            GTMUser gtmUser = (GTMUser) Data.obtainData(Data.USER, dataId);
+            if (gtmUser == null) {
+                System.err.println("Warning! dataId=" + dataId + " contains corrupt data!");
+                continue;
+            }
+            if (gtmUser.getRank().isHigherOrEqualTo(Rank.BUILDTEAM)) {
+                gtmUser.updateUserDataIfTime();
+            }
+            userCache.putIfAbsent((Long) dataId, gtmUser);
         }
         System.out.println("Successfully loaded all " + userCache.size() + " GTM Discord Users!");
     }

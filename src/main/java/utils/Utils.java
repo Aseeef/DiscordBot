@@ -83,7 +83,7 @@ public class Utils {
                     .append("\uD83E\uDD3C Server is Offline!")
                     .build().getContentRaw();
             log("Failed to updating online player count server is offline", Logs.WARNING);
-            channel.getManager().setName(msg).queue();
+            channel.getManager().setName(msg).complete();
             return;
         }
 

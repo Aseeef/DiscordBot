@@ -10,7 +10,9 @@ import utils.selfdata.AnnoyData;
 import utils.selfdata.ChannelData;
 import utils.selfdata.ChannelIdData;
 import utils.Utils;
+import utils.threads.ThreadUtil;
 import utils.users.GTMUser;
+import utils.users.Rank;
 
 import java.util.Map;
 import java.util.Timer;
@@ -61,13 +63,7 @@ public class ReadyEvents extends ListenerAdapter {
 
     private void startTasks() {
         // Start updater repeating task to update player count
-        Timer playerCountUpdater = new Timer();
-        playerCountUpdater.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                updateOnlinePlayers();
-            }
-        }, 5000, 1000 * Config.get().getMineStatSettings().getRefreshFrequency());
+        ThreadUtil.runTaskTimer(Utils::updateOnlinePlayers, 5000, 1000L * Config.get().getMineStatSettings().getRefreshFrequency());
 
 
         // Start wisdom annoy task
