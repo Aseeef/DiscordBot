@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'net.grandtheftmc'
-version ''
+version '2.0.0'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -14,12 +14,12 @@ compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"
 
 // make sure maven creds are set
-def mavenUserCred;
-def mavenPassCred;
+def mavenUser
+def mavenPassword
 if (!project.hasProperty("mavenUser") || !project.hasProperty("mavenPassword")) {
     if (System.getenv("MAVEN_REPO_USER") != null && System.getenv("MAVEN_REPO_PASS")) {
-        mavenUserCred = System.getenv("MAVEN_REPO_USER")
-        mavenPassCred = System.getenv("MAVEN_REPO_PASS")
+        mavenUser = System.getenv("MAVEN_REPO_USER")
+        mavenPassword = System.getenv("MAVEN_REPO_PASS")
     }
     else {
         logger.error("Unable to access the GTM Repositories. No credentials were found. You must either:")
@@ -31,23 +31,21 @@ if (!project.hasProperty("mavenUser") || !project.hasProperty("mavenPassword")) 
         )
     }
 } else {
-    mavenUserCred = project.property("mavenUser")
-    mavenUserCred = project.property("mavenPassword")
+    mavenUser = project.property("mavenUser")
+    mavenPassword = project.property("mavenPassword")
 }
 
 repositories {
     maven {
         url 'https://nexus.grandtheftmc.net/content/repositories/releases/'
         credentials {
-            username mavenUserCred
-            password mavenPassCred
+            username mavenUser
+            password mavenPassword
         }
     }
+    mavenCentral()
     maven {
         url 'https://jitpack.io'
-    }
-    maven {
-        url 'https://jcenter.bintray.com'
     }
     maven {
         url 'https://mvnrepository.com/artifact/org.json/'
@@ -64,7 +62,11 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'net.grandtheftmc:discordbotlib:1.0.2'
+
+    compileOnly ('net.grandtheftmc:discordbotlib:1.0.4') {
+        changing = true
+    }
+
 }
 
 shadowJar {
@@ -74,7 +76,7 @@ shadowJar {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'GTM'
+        attributes 'Main-Class': 'net.grandtheftmc.discordbot.GTMBot'
         attributes 'Class-Path': 'DiscordBotLib.jar'
     }
 }
@@ -95,8 +97,8 @@ publishing {
         maven {
             url 'https://nexus.grandtheftmc.net/content/repositories/releases/'
             credentials {
-                username mavenUserCred
-                password mavenPassCred
+                username mavenUser
+                password mavenPassword
             }
         }
     }

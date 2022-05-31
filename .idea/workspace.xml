@@ -4,9 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="* another test">
+    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="discord bot 2.0 more progress...">
+      <change afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/bugs/BugAdminCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnReceiveMessageStash.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/database/redis/OnReceiveMessageStash.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/GTMBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/GTMBot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/Command.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/Command.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/HelpCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/HelpCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/PlayerCountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/PlayerCountCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/RaidModeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/RaidModeCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/RebootCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/RebootCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/SeniorsCommand.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/StaffAccountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/StaffAccountCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/StaffCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/StaffCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/bugs/BugReportCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/bugs/BugReportCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/bugs/ReportListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/bugs/ReportListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/suggestions/SuggestionTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/suggestions/SuggestionTools.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,11 +96,51 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="DiscordBot" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="DiscordBot" type="f1a62948:ProjectNode" />
                 <item name="Run Configurations" type="7b0102dc:RunConfigurationsNode" />
               </path>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="DiscordBotLib" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="DiscordBotLib" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="DiscordBotLib" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="publishing" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="DiscordBotLib" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="shadow" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="DiscordBotLib" type="f1a62948:ProjectNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="DiscordBotLib" type="f1a62948:ProjectNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+                <item name="compileClasspath" type="62daadca:ExternalSystemViewDefaultContributor$DependencyScopeExternalSystemNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="DiscordBotLib" type="f1a62948:ProjectNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+                <item name="compileClasspath" type="62daadca:ExternalSystemViewDefaultContributor$DependencyScopeExternalSystemNode" />
+                <item name="com.github.ironpinguin:serialized-php-parser:version-0.4.3" type="b3323d55:ExternalSystemViewDefaultContributor$DependencyExternalSystemNode" />
               </path>
             </expand>
             <select />
@@ -101,6 +153,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
+        <option value="Enum" />
         <option value="Class" />
       </list>
     </option>
@@ -122,7 +175,30 @@
     </file-type-list>
   </component>
   <component name="GitToolBoxStore">
-    <option name="projectConfigVersion" value="2" />
+    <option name="projectConfigVersion" value="5" />
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="skylix_qa" />
+                    <option name="lastUsedInstant" value="1639782146" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="master" />
+                    <option name="lastUsedInstant" value="1639781855" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$" />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
   </component>
   <component name="ProjectId" id="1YplmcKc1xSxFTqjIPBr0wRiY3s" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -131,7 +207,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="DatabaseDriversLRU" value="mysql" />
+    <property name="DatabaseDriversLRU" value="mysql&#10;mariadb" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
@@ -139,7 +215,8 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="extract.method.default.visibility" value="private" />
     <property name="jdk.selected.JAVA_MODULE" value="1.8" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../BackupBot" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/src/main/java" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../DiscordBotLib" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -161,9 +238,11 @@
       <recent name="C:\Users\aseef\IdeaProjects\GTMBot\src\main\resources\Configuration" />
     </key>
     <key name="MoveMembersDialog.RECENTS_KEY">
+      <recent name="net.grandtheftmc.discordbot.GTMBot" />
+      <recent name="GTMBot.g" />
+      <recent name="GTMBot.ge" />
       <recent name="utils.Utils" />
       <recent name="GTM" />
-      <recent name="utils.threads.ThreadUtil" />
     </key>
     <key name="ExtractSuperBase.RECENT_KEYS">
       <recent name="events" />
@@ -189,27 +268,6 @@
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
-    </configuration>
-    <configuration name="DiscordBot [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="build" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
     </configuration>
     <configuration name="DiscordBot [knows]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
@@ -244,6 +302,27 @@
         <option name="taskNames">
           <list>
             <option value="shadowJar" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="DiscordBotLib [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/../DiscordBotLib" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -299,9 +378,9 @@
       <list>
         <item itemvalue="Gradle.DiscordBot [shadowJar]" />
         <item itemvalue="Gradle.DiscordBot [knows]" />
-        <item itemvalue="Gradle.DiscordBot [build]" />
-        <item itemvalue="Gradle.DiscordBotLib [publish]" />
         <item itemvalue="Gradle.DiscordBotLib [shadowJar]" />
+        <item itemvalue="Gradle.DiscordBotLib [publish]" />
+        <item itemvalue="Gradle.DiscordBotLib [build]" />
       </list>
     </recent_temporary>
   </component>
@@ -502,189 +581,55 @@
       <workItem from="1638147008695" duration="1119000" />
       <workItem from="1638149179958" duration="4477000" />
       <workItem from="1638165215232" duration="1073000" />
-      <workItem from="1638198372942" duration="2391000" />
-    </task>
-    <task id="LOCAL-00022" summary="Xenforo integration expansion">
-      <created>1593308240004</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1593308240004</updated>
-    </task>
-    <task id="LOCAL-00023" summary="More GTM integrations:&#10;- Managers get notified is staff may be cheating&#10;- Discord ticket detection improvements with DAO">
-      <created>1593308335584</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1593308335584</updated>
-    </task>
-    <task id="LOCAL-00024" summary="Added an &quot;annoy&quot; command and tools to utilize discord webhooks">
-      <created>1593308370374</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1593308370374</updated>
-    </task>
-    <task id="LOCAL-00025" summary="Added a new parser to support ticket fields">
-      <created>1593372492918</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1593372492918</updated>
-    </task>
-    <task id="LOCAL-00026" summary="Various bugs and imporvements">
-      <created>1593835835639</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1593835835639</updated>
-    </task>
-    <task id="LOCAL-00027" summary="Renamed account command to /discord to match gtm">
-      <created>1593835976660</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1593835976660</updated>
-    </task>
-    <task id="LOCAL-00028" summary="Improved commands:&#10;- Pm commands will now say when command not found&#10;- /account renamed to /discord&#10;- /harry will now give feedback on success too.">
-      <created>1594105501756</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1594105501756</updated>
-    </task>
-    <task id="LOCAL-00029" summary="Various bug fixes with verification">
-      <created>1594105615432</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1594105615432</updated>
-    </task>
-    <task id="LOCAL-00030" summary="- Typo fix in DiscordAccountCommand which still was using the old /account in its help&#10;- Moved Rank.class into users package&#10;- Added an easy to use discord embed menu api&#10;- Added a members cache that stores a list of all members with many useful methods&#10;- Replaced previous blocking retrieve member operations with the new member cache&#10;- Fixed NPE in GTMUser when updating user data for a player who left the discord&#10;- Added a command for staff to be able to look up who a discord user is in-game">
-      <created>1594182946488</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1594182946488</updated>
-    </task>
-    <task id="LOCAL-00031" summary="- Improvement to console &amp; logging&#10;- Added a console memory command&#10;- Changed calls to GTMUser#updateUserDataNow() to be async&#10;- Improvements to accounts refreshall command&#10;- Added frame work for custom channels which will allow donors in future to create private channels like on team speak&#10;- Fixed error caused by player have too many past tickets (since embeds have a max field length limit)&#10;- Util improvement: Easily create timer tasks&#10;- Upon unverification, a GTMUser will now loose thier discord rank (prevents abuse)">
-      <created>1594248474336</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1594248474336</updated>
-    </task>
-    <task id="LOCAL-00032" summary="- Custom channels command which will allow donors to create private channels like on team speak&#10;- Made scabble annoy harder to bypass">
-      <created>1594272835114</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1594272835114</updated>
-    </task>
-    <task id="LOCAL-00033" summary="- Split up self data in to categories for organization and added an easy to use data storage class called SavableSelfData&#10;- Depreciated old self data&#10;- In PMs, GTM user calls will now only be made once we know which command is being ran&#10;- Discord menu class now allows us to configure whether we want everyone to be able to modify the menu&#10;- Member reloading now returns a completable future&#10;- Added a auto deleter for custom channels &amp; more&#10;- Fix /channel addgang&#10;- Made the last updated variable in GTM user volatile&#10;- Added a util to run delayed tasks">
-      <created>1594440589021</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1594440589021</updated>
-    </task>
-    <task id="LOCAL-00034" summary="- Only allows verified users to make suggestions&#10;- Various improvements / bug fixes with custom channels">
-      <created>1602954916147</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1602954916147</updated>
-    </task>
-    <task id="LOCAL-00035" summary="WIP:&#10;- Comprehensive user statistics command for seniors&#10;- Now loading all GTM users to memory on startup&#10;- Util improvements">
-      <created>1607652604733</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1607652604733</updated>
-    </task>
-    <task id="LOCAL-00036" summary="* More Comments&#10;* Fixed an issue where when inviting users to custom channel, uses the name of the recipient as the invitor&#10;* updated jda">
-      <created>1610242323447</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1610242323447</updated>
-    </task>
-    <task id="LOCAL-00037" summary="* removed default config">
-      <created>1610245398760</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1610245398760</updated>
-    </task>
-    <task id="LOCAL-00038" summary="* Now updating user data anytime a player types&#10;* Xenforo dummy account creds now defined through config&#10;* Partially redid account verification&#10;* Attempting to fix an issue where suggestion embeds are in the wrong order&#10;* Now including guilty plea in ticket details">
-      <created>1612069686663</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1612069686663</updated>
-    </task>
-    <task id="LOCAL-00039" summary="*Fixed verify time not updated">
-      <created>1612072842939</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1612072842939</updated>
-    </task>
-    <task id="LOCAL-00040" summary="* Removed rules reaction channel &amp; players no longer have to react to rules to join. This is now handled by a discord feature&#10;* Removed references to the UNVERIFIED user role as its no longer needed">
-      <created>1612125769292</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1612125769292</updated>
-    </task>
-    <task id="LOCAL-00041" summary="* GTMUsers are now loaded in sync">
-      <created>1612129572711</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1612129572711</updated>
-    </task>
-    <task id="LOCAL-00042" summary="* Blocking actions are actually not permitted in gateway thread">
-      <created>1612129848345</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1612129848345</updated>
-    </task>
-    <task id="LOCAL-00043" summary="* Should fix channel mentions">
-      <created>1620417931676</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1620417931676</updated>
-    </task>
-    <task id="LOCAL-00044" summary="* Removed rules reaction">
-      <created>1620418513159</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1620418513159</updated>
-    </task>
-    <task id="LOCAL-00045" summary="* Updated pom">
-      <created>1620418721725</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1620418721725</updated>
-    </task>
-    <task id="LOCAL-00046" summary="* Updated statistics">
-      <created>1620602095683</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1620602095683</updated>
-    </task>
-    <task id="LOCAL-00047" summary="forgot to remove debug">
-      <created>1620602491135</created>
-      <option name="number" value="00047" />
-      <option name="presentableId" value="LOCAL-00047" />
-      <option name="project" value="LOCAL" />
-      <updated>1620602491135</updated>
+      <workItem from="1638198372942" duration="7900000" />
+      <workItem from="1638431503817" duration="2384000" />
+      <workItem from="1638511559281" duration="1618000" />
+      <workItem from="1638520457346" duration="648000" />
+      <workItem from="1638588324643" duration="5528000" />
+      <workItem from="1638670938872" duration="5401000" />
+      <workItem from="1638724998728" duration="10443000" />
+      <workItem from="1639807891781" duration="1313000" />
+      <workItem from="1639813808094" duration="182000" />
+      <workItem from="1639852104286" duration="2447000" />
+      <workItem from="1639858979562" duration="1946000" />
+      <workItem from="1639881282616" duration="219000" />
+      <workItem from="1640090672608" duration="1534000" />
+      <workItem from="1641868829223" duration="2228000" />
+      <workItem from="1641963405049" duration="2934000" />
+      <workItem from="1641991027093" duration="582000" />
+      <workItem from="1641994156499" duration="590000" />
+      <workItem from="1642281563153" duration="110000" />
+      <workItem from="1642479950325" duration="2628000" />
+      <workItem from="1646192983456" duration="1661000" />
+      <workItem from="1648308207393" duration="2759000" />
+      <workItem from="1648472179805" duration="678000" />
+      <workItem from="1650249963253" duration="2782000" />
+      <workItem from="1650300458957" duration="568000" />
+      <workItem from="1650302271729" duration="616000" />
+      <workItem from="1650316000641" duration="2962000" />
+      <workItem from="1651028516106" duration="1221000" />
+      <workItem from="1651949503633" duration="1661000" />
+      <workItem from="1651974639390" duration="841000" />
+      <workItem from="1652465209336" duration="3016000" />
+      <workItem from="1652538693279" duration="3163000" />
+      <workItem from="1652627276076" duration="609000" />
+      <workItem from="1652655296945" duration="2628000" />
+      <workItem from="1652713294469" duration="980000" />
+      <workItem from="1652728262377" duration="657000" />
+      <workItem from="1652742765897" duration="2380000" />
+      <workItem from="1652761133809" duration="1806000" />
+      <workItem from="1652896887893" duration="1239000" />
+      <workItem from="1653179945388" duration="3812000" />
+      <workItem from="1653231061431" duration="1202000" />
+      <workItem from="1653606408891" duration="1972000" />
+      <workItem from="1653661030390" duration="766000" />
+      <workItem from="1653675628548" duration="3206000" />
+      <workItem from="1653678879572" duration="21974000" />
+      <workItem from="1653753063920" duration="483000" />
+      <workItem from="1653753565555" duration="19644000" />
+      <workItem from="1653847495473" duration="4395000" />
+      <workItem from="1653934956092" duration="14315000" />
+      <workItem from="1654011983520" duration="11768000" />
     </task>
     <task id="LOCAL-00048" summary="* added gitignore">
       <created>1620602589937</created>
@@ -847,7 +792,189 @@
       <option name="project" value="LOCAL" />
       <updated>1638201517249</updated>
     </task>
-    <option name="localTasksCounter" value="71" />
+    <task id="LOCAL-00071" summary="* debug msg imprvment">
+      <created>1638207787035</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1638207787035</updated>
+    </task>
+    <task id="LOCAL-00072" summary="* test">
+      <created>1638207872958</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1638207872958</updated>
+    </task>
+    <task id="LOCAL-00073" summary="* test 2">
+      <created>1638208132497</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1638208132497</updated>
+    </task>
+    <task id="LOCAL-00074" summary="* test 3">
+      <created>1638208846101</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1638208846101</updated>
+    </task>
+    <task id="LOCAL-00075" summary="* test 3">
+      <created>1638209072877</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1638209072877</updated>
+    </task>
+    <task id="LOCAL-00076" summary="* test 5">
+      <created>1638209451308</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1638209451308</updated>
+    </task>
+    <task id="LOCAL-00077" summary="* color support">
+      <created>1638210291466</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1638210291466</updated>
+    </task>
+    <task id="LOCAL-00078" summary="* test1">
+      <created>1638210491675</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1638210491675</updated>
+    </task>
+    <task id="LOCAL-00079" summary="* test2">
+      <created>1638210502936</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1638210502936</updated>
+    </task>
+    <task id="LOCAL-00080" summary="* more work on stash alerts">
+      <created>1638211341847</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1638211341847</updated>
+    </task>
+    <task id="LOCAL-00081" summary="* deleted messy stash listener">
+      <created>1638213744929</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1638213744929</updated>
+    </task>
+    <task id="LOCAL-00082" summary="* fixed error with redismsg reciever">
+      <created>1638511806712</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1638511806712</updated>
+    </task>
+    <task id="LOCAL-00083" summary="test">
+      <created>1638520502057</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1638520502058</updated>
+    </task>
+    <task id="LOCAL-00084" summary="gitlab stuff">
+      <created>1639781972630</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1639781972630</updated>
+    </task>
+    <task id="LOCAL-00085" summary="removed bitbucket stuff">
+      <created>1639782280025</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1639782280025</updated>
+    </task>
+    <task id="LOCAL-00086" summary="build.gradle issues">
+      <created>1648330559698</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1648330559699</updated>
+    </task>
+    <task id="LOCAL-00087" summary="update ip">
+      <created>1648330581132</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1648330581132</updated>
+    </task>
+    <task id="LOCAL-00088" summary="fixed stats command&#10;fixed discord verify&#10;fixed console error&#10;switched to use simplejedismanager">
+      <created>1653197086915</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1653197086915</updated>
+    </task>
+    <task id="LOCAL-00089" summary="edit prev commit">
+      <created>1653197103817</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1653197103817</updated>
+    </task>
+    <task id="LOCAL-00090" summary="updated discord bot to jda 5">
+      <created>1653696857341</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1653696857341</updated>
+    </task>
+    <task id="LOCAL-00091" summary="progress on conditional message command&#10;also fixed SOME commands">
+      <created>1653715779344</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1653715779344</updated>
+    </task>
+    <task id="LOCAL-00092" summary="conditional message command (pre-debugging and qa) finished.">
+      <created>1653761762709</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1653761762709</updated>
+    </task>
+    <task id="LOCAL-00093" summary="updated gitignore">
+      <created>1653761889346</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1653761889346</updated>
+    </task>
+    <task id="LOCAL-00094" summary="updated to mariadb">
+      <created>1653945010750</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1653945010750</updated>
+    </task>
+    <task id="LOCAL-00095" summary="discord bot 2.0 progress...">
+      <created>1653971997492</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1653971997492</updated>
+    </task>
+    <task id="LOCAL-00096" summary="discord bot 2.0 more progress...">
+      <created>1654020898425</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1654020898425</updated>
+    </task>
+    <option name="localTasksCounter" value="97" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -866,32 +993,33 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="* Removed rules reaction" />
-    <MESSAGE value="* Updated pom" />
-    <MESSAGE value="* Updated statistics" />
-    <MESSAGE value="forgot to remove debug" />
-    <MESSAGE value="* added gitignore" />
-    <MESSAGE value="* Added basic staff stats&#10;* Improved ticket event system&#10;* Tickets not replied to in 3d+ reminder&#10;* Fixed PHP parser (hence fixed staff report alerts)&#10;* Depreciated old support ticket alert event system" />
-    <MESSAGE value="* Fixed version for discord jda" />
+    <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT_PROFILE" value="Project Default" />
     <MESSAGE value="* test" />
-    <MESSAGE value="* Added missing departments" />
-    <MESSAGE value="* Added the ability to &quot;complete&quot; suggestions&#10;* Webhook utils improvements&#10;* Listener that listens to a zapier webhook to post stash/jenkins pushes&#10;* Improved the reliability to ticket parser" />
-    <MESSAGE value="* Fixed a bug with msg parsing stash" />
-    <MESSAGE value="* Removed debugs" />
-    <MESSAGE value="* BugReporter bug fix" />
-    <MESSAGE value="* Command feedback" />
-    <MESSAGE value="* Error fix" />
-    <MESSAGE value="* Fixed NPE" />
-    <MESSAGE value="* downgraded version (old one caused issues)" />
-    <MESSAGE value="* Fixed bug report&#10;* bug report sends tasks to click up&#10;* Utility improvements" />
-    <MESSAGE value="* bugs fixes&#10;* new thread util&#10;* added lombok&#10;* updated ip&#10;* code cleanup &amp; util improvements" />
-    <MESSAGE value="* bugs fixes&#10;* new thread util&#10;* added lombok&#10;* updated ip&#10;* code cleanup &amp; util improvements&#10;* bug reports fix&#10;* voice channel outofbound error fix" />
-    <MESSAGE value="* Code clean up&#10;* thread improvements" />
-    <MESSAGE value="* Connected Stash to webhook directly" />
-    <MESSAGE value="* Fixing" />
-    <MESSAGE value="* todo" />
-    <MESSAGE value="* another test" />
-    <option name="LAST_COMMIT_MESSAGE" value="* another test" />
+    <MESSAGE value="* test 2" />
+    <MESSAGE value="* test 3" />
+    <MESSAGE value="* test 5" />
+    <MESSAGE value="* color support" />
+    <MESSAGE value="* test1" />
+    <MESSAGE value="* test2" />
+    <MESSAGE value="* more work on stash alerts" />
+    <MESSAGE value="* deleted messy stash listener" />
+    <MESSAGE value="* fixed error with redismsg reciever" />
+    <MESSAGE value="test" />
+    <MESSAGE value="gitlab stuff" />
+    <MESSAGE value="removed bitbucket stuff" />
+    <MESSAGE value="build.gradle issues" />
+    <MESSAGE value="update ip" />
+    <MESSAGE value="fixed stats command&#10;fixed discord verify&#10;fixed console error&#10;switched to use simplejedismanager" />
+    <MESSAGE value="edit prev commit" />
+    <MESSAGE value="updated discord bot to jda 5" />
+    <MESSAGE value="progress on conditional message command" />
+    <MESSAGE value="progress on conditional message command&#10;also fixed SOME commands" />
+    <MESSAGE value="conditional message command (pre-debugging and qa) finished." />
+    <MESSAGE value="updated gitignore" />
+    <MESSAGE value="updated to mariadb" />
+    <MESSAGE value="discord bot 2.0 progress..." />
+    <MESSAGE value="discord bot 2.0 more progress..." />
+    <option name="LAST_COMMIT_MESSAGE" value="discord bot 2.0 more progress..." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

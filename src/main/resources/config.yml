@@ -92,7 +92,7 @@ redisDatabase:
 #########################
 mineStatSettings:
 
-  # The IP of the server Minestat should refresh (VPS can't ping mc-gtm.net for some reason)
+  # The IP of the server Minestat should refresh (VPS can't ping gtm.network directly for some reason)
   serverIp: "insert ip"
 
   # The port of the server Minestat should refresh (Will almost always be 25565)
