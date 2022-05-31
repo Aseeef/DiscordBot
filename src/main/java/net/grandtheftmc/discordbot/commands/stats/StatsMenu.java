@@ -46,7 +46,7 @@ public class StatsMenu implements MenuAction {
     private final MessageChannel channel;
 
     private UUID uuid;
-    private PlanUser pu;
+    private UserProfile up;
     private Rank rank;
     private List<Session> sessions;
     private WrappedIPData lastIp;
@@ -78,8 +78,8 @@ public class StatsMenu implements MenuAction {
         uuid = Utils.getUUID(username).orElse(null);
         if (uuid == null) return false;
 
-        pu = StatsDAO.getPlanUser(uuid);
-        if (pu == null) return false;
+        up = StatsDAO.getUserProfile(uuid);
+        if (up == null) return false;
 
         ThreadUtil.runAsync(() -> {
             CompletableFuture<DiscordMenu> futureMenu = DiscordMenu.create(channel, getPendingEmbed(1), 1);
@@ -193,7 +193,7 @@ public class StatsMenu implements MenuAction {
 
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setTitle("**Staff Help Stats for `" + pu.getUsername() + "`:**");
+        eb.setTitle("**Staff Help Stats for `" + up.getUsername() + "`:**");
         eb.addField("Questions Answered","", true);
         eb.addField("Questions Answered (30d)","", true);
         eb.addField("Questions Answered (7d)","", true);
@@ -207,7 +207,7 @@ public class StatsMenu implements MenuAction {
 
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setTitle("**Staff Punishment Stats for `" + pu.getUsername() + "`:**");
+        eb.setTitle("**Staff Punishment Stats for `" + up.getUsername() + "`:**");
 
         LinkedList<WrappedPunishment> allPunishments = new LinkedList<>();
         allPunishments.addAll(bansGiven);
@@ -232,8 +232,8 @@ public class StatsMenu implements MenuAction {
 
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setTitle("**Gang Info for `" + pu.getUsername() + "`:**");
-        eb.setDescription("*The following is the gang information for " + pu.getUsername() + " on all GTM servers.*");
+        eb.setTitle("**Gang Info for `" + up.getUsername() + "`:**");
+        eb.setDescription("*The following is the gang information for " + up.getUsername() + " on all GTM servers.*");
 
         if (gangs != null) {
             eb.addBlankField(false);
@@ -275,7 +275,7 @@ public class StatsMenu implements MenuAction {
 
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setTitle("**Playtime Statistics for `" + pu.getUsername() + "`:**");
+        eb.setTitle("**Playtime Statistics for `" + up.getUsername() + "`:**");
 
         List<Session> sessions30 = new ArrayList<>(sessions);
         sessions30.removeIf(session ->
@@ -337,7 +337,7 @@ public class StatsMenu implements MenuAction {
 
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setTitle("**Punishment Statistics for `" + pu.getUsername() + "`:**");
+        eb.setTitle("**Punishment Statistics for `" + up.getUsername() + "`:**");
 
         LinkedList<WrappedPunishment> allPunishments = new LinkedList<>();
         allPunishments.addAll(bans);
@@ -346,7 +346,7 @@ public class StatsMenu implements MenuAction {
         allPunishments.addAll(kicks);
         allPunishments.sort(Comparator.comparing(WrappedPunishment::getIssueDate));
 
-        eb.setDescription("*Please note that these punishment statistics are only for the account `" + pu.getUsername() + "`. They do not include any punishments on alts.*");
+        eb.setDescription("*Please note that these punishment statistics are only for the account `" + up.getUsername() + "`. They do not include any punishments on alts.*");
         eb.addField("Total Punishments", String.valueOf(allPunishments.size()), true)
                 .addField("Total Bans", String.valueOf(bans.size()), true)
                 .addField("Total Mutes", String.valueOf(mutes.size()), true)
@@ -392,7 +392,7 @@ public class StatsMenu implements MenuAction {
 
     private EmbedBuilder getGeneralStats() {
         if (usernames != null)
-            usernames.remove(pu.getUsername());
+            usernames.remove(up.getUsername());
         String prevUsernames = usernames == null || usernames.size() == 0 ? "None" : usernames.toString().replaceAll("\\[", "").replaceAll("]", "");
         if (prevUsernames.length() >= MessageEmbed.VALUE_MAX_LENGTH) {
             prevUsernames = prevUsernames.substring(0, MessageEmbed.VALUE_MAX_LENGTH - 6);
@@ -413,17 +413,17 @@ public class StatsMenu implements MenuAction {
 
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setTitle("**General Statistics for `" + pu.getUsername() + "`:**");
+        eb.setTitle("**General Statistics for `" + up.getUsername() + "`:**");
 
         eb.setThumbnail(skullURL);
 
-        eb.addField("Username", "`" + pu.getUsername() + "`", true)
+        eb.addField("Username", "`" + up.getUsername() + "`", true)
                 .addField("User Rank", rank.n(), true)
                 .addField("Linked Discord", targetUser == null || !targetUser.getDiscordMember().isPresent() ? "None" : targetUser.getDiscordMember().get().getAsMention(), true)
                 .addField("Previous Username(s)", "`" + prevUsernames  + "`", false)
                 .addField("Current Alts", "`" + recentAltsString + "`", false)
                 .addField("All Linked Alts", "`" + altString + "`", false)
-                .addField("First Join Date", Utils.epochToDate(pu.getRegistered()), true)
+                .addField("First Join Date", Utils.epochToDate(up.getFirstJoin().getTime()), true)
                 .addField("Total Playtime", Utils.epochToTime(Session.getTotalPlaytime(sessions)), true)
                 .addField("Active Playtime", Utils.epochToTime(Session.getActivePlaytime(sessions)), true)
                 .addField("AFK Playtime", Utils.epochToTime(Session.getTotalAFK(sessions)), true)

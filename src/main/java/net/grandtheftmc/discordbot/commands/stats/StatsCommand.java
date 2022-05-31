@@ -31,7 +31,9 @@ public class StatsCommand extends Command {
         boolean success = menu.load();
 
         if (!success) {
-            Utils.sendThenDelete(channel, "**Invalid Player!** The player '" + path[0] + "' does not exist / has never played GTM!");
+            interaction.reply("**Invalid Player!** The player '" + path[0] + "' does not exist / has never played GTM!").queue();
+        } else {
+            interaction.reply("").queue();
         }
 
     }

@@ -30,7 +30,6 @@ import static net.grandtheftmc.discordbot.utils.console.Logs.log;
 
 public class Utils {
 
-    public static Guild guild;
     public static final Random RANDOM = new Random();
 
     public static final String[] wiseQuotes = {

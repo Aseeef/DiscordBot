@@ -3,7 +3,6 @@ package net.grandtheftmc.discordbot.commands.message;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -16,9 +15,8 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.grandtheftmc.discordbot.commands.Command;
-import net.grandtheftmc.discordbot.commands.stats.PlanServer;
+import net.grandtheftmc.discordbot.commands.stats.Server;
 import net.grandtheftmc.discordbot.utils.StringUtils;
-import net.grandtheftmc.discordbot.utils.threads.ThreadUtil;
 import net.grandtheftmc.discordbot.utils.users.GTMUser;
 import net.grandtheftmc.discordbot.utils.users.Rank;
 import org.jetbrains.annotations.NotNull;
@@ -26,8 +24,8 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.*;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ConditionalMessageCommand extends Command {
@@ -41,7 +39,7 @@ public class ConditionalMessageCommand extends Command {
     @Override
     public void buildCommandData(SlashCommandData slashCommandData) {
         for (ConditionalOption co : ConditionalOption.values()) {
-            slashCommandData.addOption(co.getOptionType(), co.getDisplay(), co.getDescription(), false);
+            slashCommandData.addOption(OptionType.STRING, co.getDisplay(), co.getDescription(), false);
         }
     }
 
@@ -57,11 +55,15 @@ public class ConditionalMessageCommand extends Command {
             String conditionString = om.getAsString().toLowerCase().trim();
 
             ConditionType conditionType = null;
-            PlanServer targetServer = null;
+            Server targetServer = null;
             Object value = null;
 
             // right now the conditionString looks something like this: ">=100:gtm1"
-            for (ConditionType ct : ConditionType.values()) {
+
+            // must sort by string length because we don't want something like ">" to match for a condition thats really ">="
+            List<ConditionType> sortedConditions = Arrays.stream(ConditionType.values()).sorted(Comparator.comparingInt(ct -> ct.getConditionString().length())).collect(Collectors.toList());
+            Collections.reverse(sortedConditions);
+            for (ConditionType ct : sortedConditions) {
                 if (conditionString.startsWith(ct.getConditionString())) {
                     conditionType = ct;
                     conditionString = conditionString.replaceFirst(ct.getConditionString(), "").trim();
@@ -82,66 +84,55 @@ public class ConditionalMessageCommand extends Command {
 
             // now the conditionString looks something like this: "100:gtm1"
             String[] condStringSplit = conditionString.split(":");
-            if (condStringSplit.length < 2) {
+            if (condStringSplit.length != 2) {
                 interaction.reply(
                         "Conditional message construction **failed**! " +
                                 "Invalid message formatting! Here are some examples of correctly formatted conditions:\n" +
                                 "__Playtime Condition__: `<15:gtm1` - filter to players with less than 15 hrs of playtime on gtm1.\n" +
                                 "__Money Condition__: `>=2500000:global` - filter to players with greater than or equal to 2.5 mil combined on all gtm servers.\n" +
                                 "__Rank Condition__: `>=ELITE:gtm4` - filter to players or have a rank greater than or equal to ELITE on gtm4.\n" +
-                                "__Level Condition__: `==100:global` - filter to players that have EXACTLY level 100 on ANY gtm server."
+                                "__Level Condition__: `==100:global` - filter to players that have EXACTLY level 100 on ANY gtm server.\n" +
+                                "__Last-Played Condition__: `>=2022-20-04:global` - filter to all players that played on or after April 20, 2022 across the network."
                 ).queue();
                 return;
             }
 
-            for (PlanServer ps : PlanServer.values()) {
-                if (condStringSplit[condStringSplit.length - 1].equals(ps.toString())) {
+            for (Server ps : Server.values()) {
+                if (condStringSplit[1].equalsIgnoreCase(ps.toString())) {
                     targetServer = ps;
                 }
             }
-            if (targetServer == null) {
+            // string must either be "GLOBAL" ORR match a server name
+            if (targetServer == null && !condStringSplit[1].equalsIgnoreCase("GLOBAL")) {
+                List<String> knownServers = Arrays.stream(Server.values()).filter(ps -> ps != Server.UNKNOWN).map(Server::toString).collect(Collectors.toList());
+                knownServers.add("GLOBAL");
+
                 interaction.reply(
                         "Conditional message construction **failed**! " +
                                 "You specified an unknown server called `" + condStringSplit[condStringSplit.length - 1] + "`!" +
                                 "Known servers are:\n" +
-                                StringUtils.join(Arrays.stream(PlanServer.values()).map(PlanServer::toString).collect(Collectors.toList()), "`, `")
+                                "`" + StringUtils.join(knownServers, "`, `") + "`"
 
                 ).queue();
                 return;
             }
 
-            switch (om.getType()) {
-                case NUMBER:
-                    value = om.getAsDouble();
-                    break;
-                case STRING:
-                    value = om.getAsString();
-                    break;
-                case ROLE:
-                    value = om.getAsRole();
-                    break;
-                case USER:
-                    value = om.getAsUser();
-                    break;
-                case BOOLEAN:
-                    value = om.getAsBoolean();
-                    break;
-                case CHANNEL:
-                    value = om.getAsGuildChannel();
-                    break;
-                case INTEGER:
-                    value = om.getAsLong();
-                    break;
-                case MENTIONABLE:
-                    value = om.getAsMentionable();
-                    break;
-                case ATTACHMENT:
-                    value = om.getAsAttachment();
-                    break;
-                default:
-                    interaction.reply("An internal **error** occured. Please check logs.").queue();
-                    System.err.println("[ConditionalMessageCommand] Received an unsupported data type!");
-                    return;
+            condStringSplit[0] = condStringSplit[0].trim();
+            if (co.getOptionType() == Double.class || co.getOptionType() == Float.class) {
+                value = Double.parseDouble(condStringSplit[0]);
+            }
+            else if (co.getOptionType() == String.class) {
+                value = condStringSplit[0];
+            }
+            else if (co.getOptionType() == Boolean.class) {
+                value = Boolean.parseBoolean(condStringSplit[0]);
+            }
+            else if (co.getOptionType() == Integer.class || co.getOptionType() == Long.class) {
+                value = Long.parseLong(condStringSplit[0]);
+            } else {
+                interaction.reply("An internal **error** occurred. Please check logs.").queue();
+                System.err.println("[ConditionalMessageCommand] Received an unsupported data type!");
+                return;
             }
 
             // need to convert into epoch time for the "last-played" condition
@@ -158,8 +149,22 @@ public class ConditionalMessageCommand extends Command {
         if (messageConditionSet.size() > 0) {
             embedBuilders.setDescription("Please review the message conditions you specified below.");
             for (ConditionalMessage.MessageCondition mc : messageConditionSet) {
-                embedBuilders.addField(mc.getOption() + " (" + mc.getTargetServer() + ")", mc.getValue().toString(), false);
+                embedBuilders
+                        .addField(mc.getOption() + " (" + (mc.getTargetServer() == null ? "GLOBAL" : mc.getTargetServer()) + ")",
+                                "[" + mc.getType().getConditionString() + "] " + mc.getValue().toString().toUpperCase(), false);
             }
+        } else {
+            embedBuilders.setDescription("No conditions were specified. Did you know, you can only message certain people by specifying conditions?")
+                    .addField("Support Conditions", StringUtils.join(ConditionalOption.displayValues(), ", "), false)
+                    .addField("Condition Format", "[>,>=,<,<=,==][condition_name]:[server_id/global]", false)
+                    .addField("Examples",
+                            "__Playtime Condition__: `<15:gtm1` - filter to players with less than 15 hrs of playtime on gtm1.\n" +
+                                    "__Money Condition__: `>=2500000:global` - filter to players with greater than or equal to 2.5 mil combined on all gtm servers.\n" +
+                                    "__Rank Condition__: `>=ELITE:gtm4` - filter to players or have a rank greater than or equal to ELITE on gtm4.\n" +
+                                    "__Level Condition__: `==100:global` - filter to players that have EXACTLY level 100 on ANY gtm server.\n" +
+                                    "__Last-Played Condition__: `>=2022-20-04:global` - filter to all players that played on or after April 20, 2022 across the network.",
+                            false
+                    );
         }
         interaction.replyEmbeds(embedBuilders.build())
                 .addActionRow(Button.success("cm-confirm", "Looks Good!"), Button.danger("cm-cancel", "No! Cancel!"))
@@ -175,21 +180,28 @@ public class ConditionalMessageCommand extends Command {
 
             Modal modal = modalBuilder
                     .addActionRow(
-                            TextInput.create("color", "Hex-Color Code", TextInputStyle.SHORT)
-                                    .setRequiredRange(6, 8)
-                                    .setRequired(false)
-                                    .build()
-                    )
-                    .addActionRow(
-                            TextInput.create("title", "Message Title", TextInputStyle.SHORT)
+                            TextInput.create("title", "Message Title [Required]", TextInputStyle.SHORT)
                                     .setMinLength(3)
                                     .setRequired(true)
                                     .build()
                     )
                     .addActionRow(
-                            TextInput.create("content", "Message Content", TextInputStyle.PARAGRAPH)
+                            TextInput.create("content", "Message Content [Required]", TextInputStyle.PARAGRAPH)
                                     .setMinLength(10)
                                     .setRequired(true)
+                                    .build()
+                    )
+                    .addActionRow(
+                            TextInput.create("color", "Hex-Color Code [Not Required]", TextInputStyle.SHORT)
+                                    .setRequiredRange(6, 8)
+                                    .setRequired(false)
+                                    .build()
+                    )
+                    .addActionRow(
+                            TextInput.create("image", "Message Image [Not Required]", TextInputStyle.SHORT)
+                                    .setMinLength(3)
+                                    .setPlaceholder("https://grandtheftmc.net/styles/ndzn/logo.png")
+                                    .setRequired(false)
                                     .build()
                     )
                     .build();
@@ -198,7 +210,7 @@ public class ConditionalMessageCommand extends Command {
         }
 
         else if (Objects.equals(event.getButton().getId(), "cm-cancel")) {
-            event.getInteraction().editMessageEmbeds().queue();
+            event.getInteraction().getMessage().delete().queue();
             userConfirmationMap.remove(event.getUser());
         }
 
@@ -207,17 +219,34 @@ public class ConditionalMessageCommand extends Command {
     @Override
     public void onModalInteraction(@NotNull ModalInteractionEvent event) {
         if (event.getModalId().equals("cm-msg-builder")) {
+            String imageUrl = event.getValue("image") == null ? null : event.getValue("image").getAsString();
             String title = event.getValue("title").getAsString();
             String description = event.getValue("content").getAsString();
-            Color color = event.getValue("color") != null ? Color.decode(event.getValue("color").getAsString()) : Color.GREEN;
-            event.deferReply().queue();
+            Color color = Color.GREEN;
+            try {
+                color = event.getValue("color") != null ? Color.decode(event.getValue("color").getAsString()) : color;
+            } catch (NumberFormatException ignored) {
+            }
 
-            ConditionalMessage cm = new ConditionalMessage(event.getMember(), title, description, color, userConfirmationMap.get(event.getUser()));
-            cm.sendMessage();
+            event.deferReply().complete();
 
-            event.reply("Successfully sent the following conditional message to " + cm.getTargetUsers().size() + " players!").queue(
-                    followUp -> followUp.sendMessageEmbeds(cm.getEmbed()).queue()
-            );
+            ConditionalMessage cm = new ConditionalMessage(event.getMember(), title, description, color, imageUrl, userConfirmationMap.get(event.getUser()));
+            try {
+                cm.sendMessage().thenAccept((success) -> {
+                    if (success)
+                        event.getHook().editOriginal("Successfully sent the following conditional message to `" + cm.getSuccessfullyMessaged() + "`/`" + cm.getTargetUsers().size() + "` of the target users!").queue(
+                                followUp -> event.getHook().sendMessageEmbeds(cm.getEmbed(null)).queue()
+                        );
+                    else
+                        event.getHook().editOriginal("An unknown error occurred when processing messages. Only `" + cm.getSuccessfullyMessaged() + "`/`" + cm.getTargetUsers().size() + "` of the target users were messaged. Please check console!").queue(
+                                followUp -> event.getHook().sendMessageEmbeds(cm.getEmbed(null)).queue()
+                        );
+                });
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                event.getHook().editOriginal("Something went wrong. Please check console logs. Messaged `" + cm.getSuccessfullyMessaged() + "` because running into this error.").queue();
+            }
+
         }
     }
 

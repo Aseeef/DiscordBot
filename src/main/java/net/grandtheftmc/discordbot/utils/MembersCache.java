@@ -1,5 +1,6 @@
 package net.grandtheftmc.discordbot.utils;
 
+import net.grandtheftmc.discordbot.GTMBot;
 import net.grandtheftmc.discordbot.utils.console.Logs;
 import net.grandtheftmc.discordbot.utils.users.GTMUser;
 import net.grandtheftmc.discordbot.utils.users.Rank;
@@ -84,7 +85,7 @@ public class MembersCache extends ListenerAdapter {
     public static CompletableFuture<List<Member>> reloadMembersAsync() {
         CompletableFuture<List<Member>> futureList = new CompletableFuture<>();
         long cacheStart = System.currentTimeMillis();
-        Utils.guild.loadMembers().onSuccess( (list) -> {
+        GTMBot.getGTMGuild().loadMembers().onSuccess( (list) -> {
             members = list;
             futureList.complete(list);
             Logs.log("Successfully cached all " + list.size() + " members in " + (System.currentTimeMillis() - cacheStart) + " ms!");
@@ -95,7 +96,7 @@ public class MembersCache extends ListenerAdapter {
     public static void reloadMembers() {
         long cacheStart = System.currentTimeMillis();
         members.clear();
-        members.addAll(Utils.guild.loadMembers().get());
+        members.addAll(GTMBot.getGTMGuild().loadMembers().get());
         Logs.log("Successfully cached all members in " + (System.currentTimeMillis() - cacheStart) + " ms!");
     }
 

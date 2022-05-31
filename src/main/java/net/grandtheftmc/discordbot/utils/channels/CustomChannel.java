@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import net.grandtheftmc.discordbot.GTMBot;
 import net.grandtheftmc.discordbot.utils.MembersCache;
-import net.grandtheftmc.discordbot.utils.Utils;
 import net.grandtheftmc.discordbot.utils.confighelpers.Config;
 import net.grandtheftmc.discordbot.utils.selfdata.ChannelData;
 import net.grandtheftmc.discordbot.utils.selfdata.ChannelIdData;
@@ -63,7 +62,7 @@ public class CustomChannel extends ListenerAdapter {
         this.blacklistIds = blacklistIds;
         this.isPublicChannel = isPublicChannel;
 
-        this.voiceChannel = Utils.guild.getVoiceChannelById(this.voiceChannelId);
+        this.voiceChannel = GTMBot.getGTMGuild().getVoiceChannelById(this.voiceChannelId);
 
         if (this.voiceChannel == null) {
             ThreadUtil.runDelayedTask( () -> {
@@ -333,7 +332,7 @@ public class CustomChannel extends ListenerAdapter {
         });
 
         // set public channel stats
-        PermissionOverrideAction publicPerms = this.voiceChannel.upsertPermissionOverride(Utils.guild.getPublicRole());
+        PermissionOverrideAction publicPerms = this.voiceChannel.upsertPermissionOverride(GTMBot.getGTMGuild().getPublicRole());
         if (this.isPublicChannel)
             publicPerms = publicPerms.setAllowed(Permission.VOICE_CONNECT);
         else publicPerms = publicPerms.setDenied(Permission.VOICE_CONNECT);

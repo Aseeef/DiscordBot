@@ -3,6 +3,7 @@ package net.grandtheftmc.discordbot.commands.bugs;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import net.grandtheftmc.discordbot.GTMBot;
 import net.grandtheftmc.discordbot.commands.Command;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -72,8 +73,8 @@ public class BugReportCommand extends Command {
                     interaction.reply("**" + textChannel.getAsMention() + " has been set as the bug reports channel!**").queue();
                     // Delete previous msg
                     try {
-                        guild.getTextChannelById(ChannelIdData.getData().getBugReportChannelId()).retrieveMessageById(BotData.LAST_BUG_EMBED_ID.getData(Number.class).longValue()).queue(m -> m.delete().queue());
-                        guild.getTextChannelById(ChannelIdData.getData().getBugReportChannelId()).retrieveMessageById(BotData.LAST_BUG_MSG_ID.getData(Number.class).longValue()).queue(m -> m.delete().queue());
+                        GTMBot.getGTMGuild().getTextChannelById(ChannelIdData.getData().getBugReportChannelId()).retrieveMessageById(BotData.LAST_BUG_EMBED_ID.getData(Number.class).longValue()).queue(m -> m.delete().queue());
+                        GTMBot.getGTMGuild().getTextChannelById(ChannelIdData.getData().getBugReportChannelId()).retrieveMessageById(BotData.LAST_BUG_MSG_ID.getData(Number.class).longValue()).queue(m -> m.delete().queue());
                     } catch (ErrorResponseException ignored) {}
 
                     // Send how to make a bug report instruction

@@ -1,6 +1,6 @@
 package net.grandtheftmc.discordbot.commands.stats.wrappers;
 
-import net.grandtheftmc.discordbot.commands.stats.PlanServer;
+import net.grandtheftmc.discordbot.commands.stats.Server;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
@@ -15,9 +15,9 @@ public class Session {
     long startTime;
     long playtime;
     long afkTime;
-    PlanServer server;
+    Server server;
 
-    public Session(long startTime, long playtime, long afkTime, PlanServer server) {
+    public Session(long startTime, long playtime, long afkTime, Server server) {
         this.startTime = startTime;
         this.playtime = playtime;
         this.afkTime = afkTime;
@@ -40,7 +40,7 @@ public class Session {
         return afkTime;
     }
 
-    public PlanServer getServer() {
+    public Server getServer() {
         return server;
     }
 
@@ -48,7 +48,7 @@ public class Session {
         return getActivePlaytime(sessions, null);
     }
 
-    public static long getActivePlaytime(List<Session> sessions, @Nullable PlanServer server) {
+    public static long getActivePlaytime(List<Session> sessions, @Nullable Server server) {
         long activePlaytime = 0;
         for (Session session : sessions) {
             if (server != null && session.getServer() != server)
@@ -62,7 +62,7 @@ public class Session {
         return getTotalPlaytime(sessions, null);
     }
 
-    public static long getTotalPlaytime(List<Session> sessions, @Nullable PlanServer server) {
+    public static long getTotalPlaytime(List<Session> sessions, @Nullable Server server) {
         long playtime = 0;
         for (Session session : sessions) {
             if (server != null && session.getServer() != server)
@@ -76,7 +76,7 @@ public class Session {
         return getTotalAFK(sessions, null);
     }
 
-    public static long getTotalAFK(List<Session> sessions, @Nullable PlanServer server) {
+    public static long getTotalAFK(List<Session> sessions, @Nullable Server server) {
         long afk = 0;
         for (Session session : sessions) {
             if (server != null && session.getServer() != server)
@@ -126,15 +126,15 @@ public class Session {
         return false;
     }
 
-    public static PlanServer getFavoriteServer (List<Session> sessions) {
-        HashMap<PlanServer, Long> serverPlaytime = new HashMap<>();
-        for (PlanServer server : PlanServer.values()) {
+    public static Server getFavoriteServer (List<Session> sessions) {
+        HashMap<Server, Long> serverPlaytime = new HashMap<>();
+        for (Server server : Server.values()) {
             serverPlaytime.put(server, getActivePlaytime(sessions, server));
         }
 
-        Map.Entry<PlanServer,Long> maxEntry = null;
+        Map.Entry<Server,Long> maxEntry = null;
 
-        for (Map.Entry<PlanServer,Long> set : serverPlaytime.entrySet()) {
+        for (Map.Entry<Server,Long> set : serverPlaytime.entrySet()) {
             if (maxEntry == null || set.getValue() > maxEntry.getValue()) {
                 maxEntry = set;
             }

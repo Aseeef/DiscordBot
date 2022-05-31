@@ -18,7 +18,7 @@ import static net.grandtheftmc.discordbot.utils.Utils.*;
 public class SuggestionTools {
 
     public static TextChannel getSuggestionsChannel () {
-        return Utils.guild.getTextChannelById(ChannelIdData.get().getSuggestionChannelId());
+        return GTMBot.getGTMGuild().getTextChannelById(ChannelIdData.get().getSuggestionChannelId());
     }
 
     public static MessageEmbed createSuggestionEmbed (Suggestions s) {

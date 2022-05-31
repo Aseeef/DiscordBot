@@ -2,6 +2,7 @@ package net.grandtheftmc.discordbot.utils.users;
 
 import com.fasterxml.jackson.annotation.*;
 import lombok.EqualsAndHashCode;
+import net.grandtheftmc.discordbot.GTMBot;
 import net.grandtheftmc.discordbot.utils.Utils;
 import net.grandtheftmc.discordbot.utils.database.DiscordDAO;
 import net.grandtheftmc.discordbot.utils.database.sql.BaseDatabase;
@@ -126,7 +127,7 @@ public class GTMUser {
                 // remove donor roles if any
                 for (Rank r : Rank.values()) {
                     if (!r.isHigherOrEqualTo(Rank.HELPER) && member.getRoles().contains(r.getRole())) {
-                        Utils.guild.removeRoleFromMember(member.getUser(), r.getRole()).queue();
+                        GTMBot.getGTMGuild().removeRoleFromMember(member.getUser(), r.getRole()).queue();
                     }
                 }
                 // reset nick
@@ -180,7 +181,7 @@ public class GTMUser {
                     // msg admins TODO
                 } else {
                     // set new role on discord
-                    Utils.guild.addRoleToMember(this.getDiscordMember().get(), rank.getRole()).queue();
+                    GTMBot.getGTMGuild().addRoleToMember(this.getDiscordMember().get(), rank.getRole()).queue();
                 }
             }
             // remove old role(s)
@@ -191,7 +192,7 @@ public class GTMUser {
                     } else if (r.isHigherOrEqualTo(Rank.BUILDTEAM)) {
                         // msg admins TODO
                     } else
-                        Utils.guild.removeRoleFromMember(this.optionalMember.get(), r.getRole()).queue();
+                        GTMBot.getGTMGuild().removeRoleFromMember(this.optionalMember.get(), r.getRole()).queue();
                 }
             }
 

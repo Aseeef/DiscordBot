@@ -120,7 +120,7 @@ public class BugReport {
             if (status == ReportStatus.CONFIRMED_BUG || status == ReportStatus.PATCHED) {
 
                 // Get text channel
-                TextChannel bugChannel = guild.getTextChannelById(ChannelIdData.getData().getBugReportChannelId());
+                TextChannel bugChannel = GTMBot.getGTMGuild().getTextChannelById(ChannelIdData.getData().getBugReportChannelId());
                 // Get if an instance of this bug report has already been posted in public bug reports
                 try {
                     bugChannel.retrieveMessageById(this.getReportChannelId()).complete();
@@ -205,11 +205,11 @@ public class BugReport {
     }
 
     public static TextChannel getBugReportChannel() {
-        return guild.getTextChannelById(ChannelIdData.get().getBugReportChannelId());
+        return GTMBot.getGTMGuild().getTextChannelById(ChannelIdData.get().getBugReportChannelId());
     }
 
     public static TextChannel getBugReceiveChannel() {
-        return guild.getTextChannelById(ChannelIdData.get().getBugReceiveChannelId());
+        return GTMBot.getGTMGuild().getTextChannelById(ChannelIdData.get().getBugReceiveChannelId());
     }
 
     public static File getDownloadDir() {

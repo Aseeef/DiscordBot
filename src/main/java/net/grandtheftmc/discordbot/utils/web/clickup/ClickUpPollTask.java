@@ -51,6 +51,8 @@ public class ClickUpPollTask implements Runnable {
             }
         });
 
+        String rawResponse = null;
+
         // check if any new updates have occurred to bug reports on clickup
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             HttpGet get = new HttpGet(URL);
@@ -58,7 +60,8 @@ public class ClickUpPollTask implements Runnable {
             get.addHeader("Authorization", Config.get().getClickUpKey());
             CloseableHttpResponse response = httpClient.execute(get);
             HttpEntity responseEntity = response.getEntity();
-            JSONArray json = new JSONObject(Utils.convertStreamToString(responseEntity.getContent())).getJSONArray("tasks");
+            rawResponse = Utils.convertStreamToString(responseEntity.getContent());
+            JSONArray json = new JSONObject(rawResponse).getJSONArray("tasks");
             json.forEach(entry -> {
                 JSONObject jo = (JSONObject) entry;
                 String id = jo.getString("id");
@@ -108,6 +111,10 @@ public class ClickUpPollTask implements Runnable {
 
             });
         }  catch (Exception ex) {
+            if (rawResponse != null) {
+                System.err.println("An error occurred while processing the following http response:");
+                System.err.println(rawResponse);
+            }
             ex.printStackTrace();
         }
 

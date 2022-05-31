@@ -1,7 +1,7 @@
 package net.grandtheftmc.discordbot.utils.selfdata;
 
 import com.fasterxml.jackson.annotation.*;
-import net.grandtheftmc.discordbot.utils.Utils;
+import net.grandtheftmc.discordbot.GTMBot;
 import net.dv8tion.jda.api.entities.Category;
 
 public class ChannelIdData extends SavableSelfData {
@@ -113,7 +113,7 @@ public class ChannelIdData extends SavableSelfData {
 
     @JsonIgnore
     public Category getPrivateChannelsCategory() {
-        return Utils.guild.getCategoryById(this.privateChannelsCategoryId);
+        return GTMBot.getGTMGuild().getCategoryById(this.privateChannelsCategoryId);
     }
 
     @JsonSetter

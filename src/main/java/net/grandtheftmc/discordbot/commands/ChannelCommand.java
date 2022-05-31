@@ -1,12 +1,17 @@
 package net.grandtheftmc.discordbot.commands;
 
 import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import net.grandtheftmc.discordbot.GTMBot;
 import net.grandtheftmc.discordbot.utils.MembersCache;
 import net.grandtheftmc.discordbot.utils.channels.CustomChannel;
 import net.grandtheftmc.discordbot.utils.database.UsersDAO;
@@ -23,9 +28,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static net.grandtheftmc.discordbot.utils.Utils.guild;
-import static net.grandtheftmc.discordbot.utils.Utils.stringFromArgsAfter;
-
 public class ChannelCommand extends Command {
 
     public ChannelCommand() {
@@ -33,42 +35,85 @@ public class ChannelCommand extends Command {
     }
 
     @Override
+    /*
+    .append("> **Please enter a valid command argument:**\n")
+                .append("> `/Channel Create (name)` - **\n")
+                //.append("> `/Channel Rename <name>` - *Rename your custom channel to the given argument.*\n")
+                .append("> `/Channel SetPublic <True/False>` - **\n")
+                .append("> `/Channel SetMax <Limit>` - **\n")
+                .append("> `/Channel Add <Member ID / Tag>` - **\n")
+                .append("> `/Channel Remove <Member ID / Tag>` - **\n")
+                .append("> `/Channel AddGang <Server Key>` - *Add all verified discord members in your gang on the specified server to this private voice channel*\n")
+                .append("> `/Channel Reset` - **\n")
+                .append("> `/Channel Delete` - **\n");
+                if (Rank.hasRolePerms(member, Rank.ADMIN)) {
+                    mb.append("> `/Channel SetCategory <ID>` - **\n");
+                }
+     */
     public void buildCommandData(SlashCommandData slashCommandData) {
+        SubcommandData create = new SubcommandData("create", "Create a new custom channel with the selected name.");
+        create.addOption(OptionType.STRING, "channel-name", "The name that you want to give to your channel", false);
 
+        SubcommandData setPublic = new SubcommandData("setpublic", "Configure whether everyone should be able to join your channel.");
+        setPublic.addOption(OptionType.BOOLEAN, "public", "Should this be a public channel? (true=yes, false=no)", true);
+
+        SubcommandData setMax = new SubcommandData("setmax", "Set the maximum about of people allowed in your channel; 0 is unlimited.");
+        setMax.addOption(OptionType.INTEGER, "max-users", "The maximum people allowed in your channel at anytime.", true);
+
+        SubcommandData add = new SubcommandData("add", "Add the selected discord member to your custom channel.");
+        add.addOption(OptionType.USER, "user", "The user you want to add or whitelist to your channel", true);
+
+        SubcommandData addGang = new SubcommandData("addgang", "Add all verified discord members in your gang on the specified server to this private voice channel");
+        OptionData gangOption = new OptionData(OptionType.STRING, "server", "Which GTM server is your gang on?", true);
+        gangOption.addChoice("gtm1", "gtm1");
+        gangOption.addChoice("gtm4", "gtm4");
+        add.addOptions(gangOption);
+
+        SubcommandData remove = new SubcommandData("remove", "Remove the selected discord member from your custom channel.");
+        remove.addOption(OptionType.USER, "user", "The user you want to remove or blacklist from your channel", true);
+
+        SubcommandData reset = new SubcommandData("reset", "Reset your custom channel to default removing all whitelisted and blacklisted users.");
+
+        SubcommandData delete = new SubcommandData("delete", "Delete your custom channel.");
+
+        SubcommandData setCategory = new SubcommandData("setcategory", "Sets the selected category id as the custom channel category.");
+        OptionData optionData = new OptionData(OptionType.CHANNEL, "category", "The category id for the category to be used for custom channels", true);
+        optionData.setChannelTypes(ChannelType.CATEGORY);
+        setCategory.addOptions(optionData);
+
+        slashCommandData.addSubcommands(create, setPublic, setMax, add, addGang, remove, reset, delete, setCategory);
     }
 
     @Override
     public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, List<OptionMapping> arguments, Member member, GTMUser gtmUser, String[] path) {
 
-        if (path.length < 1) {
-            Utils.sendThenDelete(channel, getCommandHelp(member));
-            return;
-        }
+        // only sender sees replies
+        interaction.getHook().setEphemeral(true);
 
         switch (path[0].toLowerCase()) {
 
             case "create": {
 
                 if (!CustomChannel.canCreateChannels()) {
-                    Utils.sendThenDelete(channel, "**The custom channel category is not configured yet! Please ask an admin to configure this.**");
+                    interaction.reply("**The custom channel category is not configured yet! Please ask an admin to configure this.**").queue();
                     return;
                 }
 
                 if (CustomChannel.get(member).isPresent()) {
-                    Utils.sendThenDelete(channel, "**You can only have `1` private channel at a time!**");
+                    interaction.reply("**You can only have `1` private channel at a time!**").queue();
                     return;
                 }
 
                 String name;
-                if (path.length == 1)
+                if (interaction.getOption("channel-name") == null)
                     name = member.getEffectiveName() + "'s Private Channel";
-                else name = stringFromArgsAfter(path, 1);
+                else name = interaction.getOption("channel-name").getAsString();
 
                 CustomChannel customChannel = new CustomChannel(name, member, false);
                 customChannel.create().thenAccept( (vc) -> {
                     String msg = "**Successfully created your private channel `" + vc.getName() + "`!**\n";
                     msg += customChannel.getInvite().getUrl();
-                    Utils.sendThenDelete(channel, msg);
+                    interaction.reply(msg).queue();
                 });
 
                 break;
@@ -98,122 +143,77 @@ public class ChannelCommand extends Command {
 
             case "setpublic": {
 
-                if (path.length < 2) {
-                    Utils.sendThenDelete(channel, "`/Channel SetPublic <True/False>` - *Configure whether everyone should be able to join your channel.*");
-                    return;
-                }
-
                 Optional<CustomChannel> optionalChannel = CustomChannel.get(member);
 
                 if (!optionalChannel.isPresent()) {
-                    Utils.sendThenDelete(channel, "**You don't own a custom channel! Do `/channel create` to make one.**");
+                    interaction.reply("**You don't own a custom channel! Do `/channel create` to make one.**").queue();
                     return;
                 }
 
-                if (!path[1].equalsIgnoreCase("true") && !path[1].equalsIgnoreCase("false")) {
-                    Utils.sendThenDelete(channel, "**Please type either `true` to set your channel to public or `false` to set it to private.**");
-                    return;
-                }
-
-                boolean publicChannel = Boolean.parseBoolean(path[1]);
+                boolean publicChannel = interaction.getOption("public").getAsBoolean();
                 optionalChannel.get().setPublicChannel(publicChannel);
-                Utils.sendThenDelete(channel, "**Setting your custom channel to " + (publicChannel ? "public" : "private") + "!**");
+                interaction.reply("**Setting your custom channel to " + (publicChannel ? "public" : "private") + "!**").queue();
 
                 break;
             }
 
             case "setmax": {
 
-                if (path.length < 2) {
-                    Utils.sendThenDelete(channel, "`/Channel SetMax <Limit>` - *Set the maximum about of people allowed in your channel; 0 is unlimited.*");
-                    return;
-                }
-
                 Optional<CustomChannel> optionalChannel = CustomChannel.get(member);
 
                 if (!optionalChannel.isPresent()) {
-                    Utils.sendThenDelete(channel, "**You don't own a custom channel! Do `/channel create` to make one.**");
+                    interaction.reply("**You don't own a custom channel! Do `/channel create` to make one.**").queue();
                     return;
                 }
 
-                int limit;
-                try {
-                    limit = Integer.parseInt(path[1]);
-                } catch (NumberFormatException e) {
-                    Utils.sendThenDelete(channel, "**`" + path[1] + "` is not a number!**");
-                    return;
-                }
+                int limit = interaction.getOption("max-users").getAsInt();
 
                 optionalChannel.get().setChannelMax(limit);
-                Utils.sendThenDelete(channel, "**Setting max channel user limit to " + path[1] + " users...!**");
+                interaction.reply("**Setting max channel user limit to " + limit + " users...!**").queue();
 
                 break;
             }
 
             case "add": {
 
-                if (path.length < 2) {
-                    Utils.sendThenDelete(channel, "`/Channel Add <Member ID / Tag>` - *Add the selected discord member to your custom channel.*");
-                    return;
-                }
-
                 Optional<CustomChannel> optionalChannel = CustomChannel.get(member);
 
                 if (!optionalChannel.isPresent()) {
-                    Utils.sendThenDelete(channel, "**You don't own a custom channel! Do `/channel create` to make one.**");
+                    interaction.reply("**You don't own a custom channel! Do `/channel create` to make one.**").queue();
                     return;
                 }
 
-                Optional<Member> optionalTarget = MembersCache.getMember(path[1]);
+                Member target = interaction.getOption("user").getAsMember();
 
-                if (!optionalTarget.isPresent()) {
-                    Utils.sendThenDelete(channel, "**Target not found!**");
-                    return;
-                }
-
-                Member target = optionalTarget.get();
-
-                if (target == member) {
-                    Utils.sendThenDelete(channel, "**You can't add yourself to your channel because you own it!**");
+                if (target.equals(member)) {
+                    interaction.reply("**You can't add yourself to your channel because you own it!**").queue();
                     return;
                 }
 
                 optionalChannel.get().addMember(target);
-                Utils.sendThenDelete(channel, "**Inviting " + target.getAsMention() + " to your custom channel!**");
+                interaction.reply("**Inviting " + target.getAsMention() + " to your custom channel!**").queue();
 
                 break;
             }
 
             case "remove": {
 
-                if (path.length < 2) {
-                    Utils.sendThenDelete(channel, "`/Channel Remove <Member ID / Tag>` - *Remove the selected discord member from your custom channel.*");
-                    return;
-                }
-
                 Optional<CustomChannel> optionalChannel = CustomChannel.get(member);
 
                 if (!optionalChannel.isPresent()) {
-                    Utils.sendThenDelete(channel, "**You don't own a custom channel! Do `/channel create` to make one.**");
+                    interaction.reply("**You don't own a custom channel! Do `/channel create` to make one.**").queue();
                     return;
                 }
 
-                Optional<Member> optionalTarget = MembersCache.getMember(path[1]);
+                Member target = interaction.getOption("user").getAsMember();
 
-                if (!optionalTarget.isPresent()) {
-                    Utils.sendThenDelete(channel, "**Target not found!**");
-                    return;
-                }
-
-                Member target = optionalTarget.get();
-
-                if (target == member) {
-                    Utils.sendThenDelete(channel, "**You can't remove yourself from your own channel!**");
+                if (target.equals(member)) {
+                    interaction.reply("**You can't remove yourself from your own channel!**").queue();
                     return;
                 }
 
                 if (Rank.hasRolePerms(target, Rank.ADMIN)) {
-                    Utils.sendThenDelete(channel, "**Sorry but it is not possible to block admins from your custom channel!**");
+                    interaction.reply("**Sorry but it is not possible to block admins from your custom channel!**").queue();
                     return;
                 }
 
@@ -221,46 +221,37 @@ public class ChannelCommand extends Command {
 
                 if (target.getVoiceState() != null && target.getVoiceState().inAudioChannel() &&
                         target.getVoiceState().getChannel().getIdLong() == optionalChannel.get().getVoiceChannel().getIdLong()) {
-                    guild.kickVoiceMember(target).queue();
+                    GTMBot.getGTMGuild().kickVoiceMember(target).queue();
                 }
 
-                Utils.sendThenDelete(channel, "**" + target.getAsMention() + " has been removed from your custom voice channel!**");
-
+                interaction.reply("**" + target.getAsMention() + " has been removed from your custom voice channel!**").queue();
                 break;
             }
 
             case "addgang": {
 
-                if (path.length < 2) {
-                    Utils.sendThenDelete(channel, "`/Channel AddGang <Server Key>` - *Add all verified discord members in your gang on the specified server to this private voice channel*");
-                    return;
-                }
-
-                if (!path[1].equalsIgnoreCase("gtm1") && !path[1].equalsIgnoreCase("gtm4") && !path[1].equalsIgnoreCase("gtm7")) {
-                    Utils.sendThenDelete(channel, "**Unknown server key! Acceptable server keys are: `GTM1` [Minesantos], `GTM4` [Sanktburg], `GTM7` [New Mineport]**");
-                    return;
-                }
+                String server = interaction.getOption("server").getAsString();
 
                 Optional<CustomChannel> optionalChannel = CustomChannel.get(member);
 
                 if (!optionalChannel.isPresent()) {
-                    Utils.sendThenDelete(channel, "**You don't own a custom channel! Do `/channel create` to make one.**");
+                    interaction.reply("**You don't own a custom channel! Do `/channel create` to make one.**").queue();
                     return;
                 }
 
                 if (gtmUser == null) {
-                    Utils.sendThenDelete(channel, "**Your discord account is not linked to GTM so I can not find your gang members!**");
+                    interaction.reply("**Your discord account is not linked to GTM so I can not find your gang members!**").queue();
                     return;
                 }
 
                 ThreadUtil.runAsync( () -> {
                     try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()){
-                        Object[] gangData = UsersDAO.getGangMembersFor(conn, gtmUser, path[1]);
+                        Object[] gangData = UsersDAO.getGangMembersFor(conn, gtmUser, server);
                         String gangName = (String) gangData[0];
                         List<GTMUser> gangMembers = (List<GTMUser>) gangData[1];
 
                         if (gangMembers.size() == 0) {
-                            Utils.sendThenDelete(channel, "**No gang members of `" + gangName + "` were found that are linked to the discord on Server " + path[1].toUpperCase() + "!**");
+                            interaction.reply("**No gang members of `" + gangName + "` were found that are linked to the discord on Server " + server.toUpperCase() + "!**").queue();
                             return;
                         }
 
@@ -279,7 +270,7 @@ public class ChannelCommand extends Command {
                         });
                         sb.append(" to your custom channel!**");
 
-                        Utils.sendThenDelete(channel, sb.toString());
+                        interaction.reply(sb.toString()).queue();
 
                     } catch (SQLException e) {
                         Utils.printStackError(e);
@@ -294,12 +285,12 @@ public class ChannelCommand extends Command {
                 Optional<CustomChannel> optionalChannel = CustomChannel.get(member);
 
                 if (!optionalChannel.isPresent()) {
-                    Utils.sendThenDelete(channel, "**You don't own a custom channel! Do `/channel create` to make one.**");
+                    interaction.reply("**You don't own a custom channel! Do `/channel create` to make one.**").queue();
                     return;
                 }
 
                 optionalChannel.get().reset();
-                Utils.sendThenDelete(channel, "**Resetting your custom channel " + optionalChannel.get().getChannelName() + " has been reset to default settings...!**");
+                interaction.reply("**Resetting your custom channel " + optionalChannel.get().getChannelName() + " has been reset to default settings...!**").queue();
 
                 break;
             }
@@ -309,12 +300,12 @@ public class ChannelCommand extends Command {
                 Optional<CustomChannel> optionalChannel = CustomChannel.get(member);
 
                 if (!optionalChannel.isPresent()) {
-                    Utils.sendThenDelete(channel, "**You don't own a custom channel! Do `/channel create` to make one.**");
+                    interaction.reply("**You don't own a custom channel! Do `/channel create` to make one.**").queue();
                     return;
                 }
 
                 optionalChannel.get().remove();
-                Utils.sendThenDelete(channel, "**Deleting your custom channel `" + optionalChannel.get().getChannelName() + "`...!**");
+                interaction.reply("**Deleting your custom channel `" + optionalChannel.get().getChannelName() + "`...!**").queue();
 
                 break;
             }
@@ -322,59 +313,24 @@ public class ChannelCommand extends Command {
             case "setcategory": {
 
                 if (!Rank.hasRolePerms(member, Rank.ADMIN)) {
-                    Utils.sendThenDelete(channel, "**Sorry but only Admins+ can use this sub-command!**");
+                    interaction.reply("**Sorry but only Admins+ can use this sub-command!**").queue();
                     return;
                 }
 
-                if (path.length < 2) {
-                    Utils.sendThenDelete(channel, "`/Channel SetCategory <ID>` - *Sets the selected category id as the custom channel category.*");
-                    return;
-                }
-
-                long categoryId;
-                try {
-                    categoryId = Long.parseLong(path[1]);
-                } catch (NumberFormatException e) {
-                    Utils.sendThenDelete(channel, "**You provided an invalid channel id!**");
-                    return;
-                }
-
-                if (guild.getCategoryById(categoryId) == null) {
-                    Utils.sendThenDelete(channel, "**You provided an invalid channel id!**");
-                    return;
-                }
+                long categoryId = interaction.getOption("category").getAsGuildChannel().getIdLong();
 
                 ChannelIdData.get().setPrivateChannelsCategoryId(categoryId);
-                Utils.sendThenDelete(channel, "**<@" + categoryId + "> has been successfully set as the private channels category.**");
+                interaction.reply("**<@" + categoryId + "> has been successfully set as the private channels category.**").queue();
 
                 break;
             }
 
             default: {
-                Utils.sendThenDelete(channel, getCommandHelp(member));
-                return;
+                throw new IllegalArgumentException();
             }
 
         }
 
-    }
-
-    private Message getCommandHelp(Member member) {
-        MessageBuilder mb = new MessageBuilder()
-                .append("> **Please enter a valid command argument:**\n")
-                .append("> `/Channel Create (name)` - *Create a new custom channel with the selected name.*\n")
-                //.append("> `/Channel Rename <name>` - *Rename your custom channel to the given argument.*\n")
-                .append("> `/Channel SetPublic <True/False>` - *Configure whether everyone should be able to join your channel.*\n")
-                .append("> `/Channel SetMax <Limit>` - *Set the maximum about of people allowed in your channel; 0 is unlimited.*\n")
-                .append("> `/Channel Add <Member ID / Tag>` - *Add the selected discord member to your custom channel.*\n")
-                .append("> `/Channel Remove <Member ID / Tag>` - *Remove the selected discord member from your custom channel.*\n")
-                .append("> `/Channel AddGang <Server Key>` - *Add all verified discord members in your gang on the specified server to this private voice channel*\n")
-                .append("> `/Channel Reset` - *Reset your custom channel to default removing all whitelisted and blacklisted users.*\n")
-                .append("> `/Channel Delete` - *Delete your custom channel.*\n");
-                if (Rank.hasRolePerms(member, Rank.ADMIN)) {
-                    mb.append("> `/Channel SetCategory <ID>` - *Sets the selected category id as the custom channel category.*\n");
-                }
-                return mb.build();
     }
 
 }

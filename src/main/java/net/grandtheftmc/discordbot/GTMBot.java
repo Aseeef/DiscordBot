@@ -3,13 +3,12 @@ package net.grandtheftmc.discordbot;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
-import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.Icon;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.privileges.CommandPrivilege;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.grandtheftmc.discordbot.commands.*;
@@ -55,6 +54,7 @@ import static net.grandtheftmc.discordbot.utils.console.Logs.log;
 public class GTMBot extends ListenerAdapter {
 
     private static JDA jda;
+    private static Guild guild;
     private static MineStat mineStat;
     private static SimpleJedisManager jedisManager;
 
@@ -153,7 +153,7 @@ public class GTMBot extends ListenerAdapter {
         }
 
         // set static guild variable
-        Utils.guild = GTMBot.getJDA().getGuilds().get(0);
+        guild = GTMBot.getJDA().getGuilds().get(0);
 
         // JDA Commands - All Commands MUST BE REGISTERED HERE
         new SuggestionCommand();
@@ -173,11 +173,15 @@ public class GTMBot extends ListenerAdapter {
         new BugReportCommand();
         new ConditionalMessageCommand();
 
-        List<CommandData> commands = Command.getCommands().stream().map(Command::getCommandData).collect(Collectors.toList());
-        Utils.guild.updateCommands().addCommands(commands).queue();
+        List<CommandData> commandsData = Command.getCommands().stream().map(Command::getCommandData).collect(Collectors.toList());
+
+        // update commands across guilds (quicker for debugging)
+        List<net.dv8tion.jda.api.interactions.commands.Command> jdaCommandList = getGTMGuild().updateCommands().addCommands(commandsData).complete();
+        // update commands across everything
+        jdaCommandList = jda.updateCommands().addCommands(commandsData).complete();
 
         // cache all members and once done
-        MembersCache.reloadMembersAsync().thenAccept( members -> {
+        MembersCache.reloadMembersAsync().thenAccept(members -> {
 
             // load self datas
             ChannelIdData.load();
@@ -335,5 +339,9 @@ public class GTMBot extends ListenerAdapter {
 
     public static SimpleJedisManager getJedisManager() {
         return jedisManager;
+    }
+
+    public static Guild getGTMGuild() {
+        return guild;
     }
 }

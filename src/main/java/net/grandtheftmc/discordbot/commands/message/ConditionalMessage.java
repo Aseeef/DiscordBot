@@ -3,13 +3,17 @@ package net.grandtheftmc.discordbot.commands.message;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.grandtheftmc.ServerType;
-import net.grandtheftmc.discordbot.commands.stats.PlanServer;
+import net.grandtheftmc.discordbot.commands.stats.Server;
 import net.grandtheftmc.discordbot.utils.database.sql.BaseDatabase;
+import net.grandtheftmc.discordbot.utils.threads.ThreadUtil;
 import net.grandtheftmc.discordbot.utils.users.GTMUser;
 import net.grandtheftmc.discordbot.utils.users.Rank;
 import org.jetbrains.annotations.NotNull;
@@ -21,8 +25,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
-import java.util.*;
 import java.util.List;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Getter @EqualsAndHashCode
@@ -32,46 +37,85 @@ public class ConditionalMessage {
     private final String title;
     private final String content;
     private final Color color;
+    @Nullable private final String imageUrl;
     private final Set<MessageCondition> conditionOptions;
 
     private List<GTMUser> targetUsers = null;
+    private int successfullyMessaged = 0;
 
-    public ConditionalMessage(Member author, String title, String content, Color color, Set<MessageCondition> conditionOptions) {
+    public ConditionalMessage(Member author, String title, String content, Color color, @Nullable String image, Set<MessageCondition> conditionOptions) {
         this.author = author;
         this.title = title;
         this.content = content;
         this.color = color;
+        this.imageUrl = image;
         this.conditionOptions = conditionOptions;
     }
 
-    public void sendMessage() {
-        MessageEmbed embed = getEmbed();
+    public CompletableFuture<Boolean> sendMessage() throws Exception {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
 
-        if (this.targetUsers == null)
-            this.targetUsers = compileSendUsers();
+        ThreadUtil.runAsync(() -> {
+            if (this.targetUsers == null)
+                this.targetUsers = compileSendUsers();
 
-        for (GTMUser gtmUser : this.targetUsers) {
-            try {
-                Optional<User> opUser = gtmUser.getUser();
-                if (opUser.isPresent()) {
-                    opUser.get().openPrivateChannel().queue(pc -> {
+            for (GTMUser gtmUser : this.targetUsers) {
+                try {
+                    Optional<User> opUser = gtmUser.getUser();
+                    if (opUser.isPresent()) {
+                        PrivateChannel pc = opUser.get().openPrivateChannel().complete();
+                        MessageEmbed embed = getEmbed(gtmUser);
                         pc.sendMessageEmbeds(embed).complete();
-                    });
+                        successfullyMessaged++;
+                    }
                 }
-            } catch (Exception ex) {
-                ex.printStackTrace();
+                catch (ErrorResponseException ignored) {
+                    // happens when the player has dms disabled
+                }
+                catch (Exception ex) {
+                    ex.printStackTrace();
+                    future.complete(false);
+                }
             }
-        }
+
+            future.complete(true);
+        });
+
+        return future;
+
     }
 
-    public MessageEmbed getEmbed() {
-        return new EmbedBuilder()
+    public MessageEmbed getEmbed(@Nullable GTMUser gtmUser) {
+        String personalContent = content;
+        if (gtmUser != null) {
+            for (MessagePlaceholder mph : MessagePlaceholder.values()) {
+                switch (mph) {
+                    case USER_RANK:
+                        personalContent = personalContent.replace("$" + mph.getPlaceHolder(), gtmUser.getRank().n());
+                        continue;
+                    case DISCORD_ID:
+                        personalContent = personalContent.replace("$" + mph.getPlaceHolder(), String.valueOf(gtmUser.getDiscordId()));
+                        continue;
+                    case DISCORD_NAME:
+                        personalContent = personalContent.replace("$" + mph.getPlaceHolder(), gtmUser.getUser().get().getName());
+                        continue;
+                    case IN_GAME_NAME:
+                        personalContent = personalContent.replace("$" + mph.getPlaceHolder(), gtmUser.getUsername());
+                        continue;
+                    default:
+                        personalContent = personalContent.replace("$" + mph.getPlaceHolder(), "ERROR");
+                        continue;
+                }
+            }
+        }
+        EmbedBuilder eb = new EmbedBuilder()
                 .setTitle(title)
-                .setAuthor(author.getEffectiveName())
-                .setImage(author.getAvatarUrl())
-                .setDescription(content)
-                .setColor(color)
-                .build();
+                .setDescription(personalContent)
+                .setColor(color);
+        if (imageUrl != null && imageUrl.length() > 0) {
+            eb.setImage(imageUrl);
+        }
+        return eb.build();
     }
 
     /**
@@ -86,6 +130,7 @@ public class ConditionalMessage {
         // go through each condition removing users from the gtmUsers list
         // if they don't meet the condition
         for (MessageCondition condition : conditionOptions) {
+            System.out.println("[ConditionalMessage] Processing the following message condition: " + condition);
 
             switch (condition.option) {
 
@@ -103,7 +148,6 @@ public class ConditionalMessage {
                     try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
                         Set<GTMUser> tempUsers = new HashSet<>(); //all users who meet this condition
                         handleRank(conn, condition, tempUsers);
-                        handleMoney(conn, condition, tempUsers);
                         gtmUsers.removeIf(user -> !tempUsers.contains(user));
                     } catch (SQLException ex) {
                         ex.printStackTrace();
@@ -114,17 +158,16 @@ public class ConditionalMessage {
                     try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
                         Set<GTMUser> tempUsers = new HashSet<>(); //all users who meet this condition
                         handleLevel(conn, condition, tempUsers);
-                        handleMoney(conn, condition, tempUsers);
                         gtmUsers.removeIf(user -> !tempUsers.contains(user));
                     } catch (SQLException ex) {
                         ex.printStackTrace();
                     }
                     break;
+
                 case PLAYTIME:
                     try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
                         Set<GTMUser> tempUsers = new HashSet<>(); //all users who meet this condition
                         handlePlaytime(conn, condition, tempUsers);
-                        handleMoney(conn, condition, tempUsers);
                         gtmUsers.removeIf(user -> !tempUsers.contains(user));
                     } catch (SQLException ex) {
                         ex.printStackTrace();
@@ -132,10 +175,9 @@ public class ConditionalMessage {
                     break;
 
                 case LAST_PLAYED:
-                    try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.PLAN).getConnection()) {
+                    try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
                         Set<GTMUser> tempUsers = new HashSet<>(); //all users who meet this condition
                         handleLastPlayed(conn, condition, tempUsers);
-                        handleMoney(conn, condition, tempUsers);
                         gtmUsers.removeIf(user -> !tempUsers.contains(user));
                     } catch (SQLException ex) {
                         ex.printStackTrace();
@@ -161,36 +203,40 @@ public class ConditionalMessage {
             if (condition.targetServer != null)
                 ps.setString(1, condition.targetServer.toString().toUpperCase());
 
+            System.out.println("[ConditionalMessage] Executing the following query: " + ps);
+
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
+
                     long money = rs.getLong("money");
                     long discordId = rs.getLong("discord_id");
+
                     switch (condition.getType()) {
                         case EQUAL_TO:
                             if (money == (long) condition.value) {
                                 GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
                             }
-                            break;
+                            continue;
                         case LESS_THAN:
                             if (money < (long) condition.value) {
                                 GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
                             }
-                            break;
+                            continue;
                         case LESS_THAN_OR_EQUAL_TO:
                             if (money <= (long) condition.value) {
                                 GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
                             }
-                            break;
+                            continue;
                         case GREATER_THAN:
                             if (money > (long) condition.value) {
                                 GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
                             }
-                            break;
+                            continue;
                         case GREATER_THAN_OR_EQUAL_TO:
                             if (money >= (long) condition.value) {
                                 GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
                             }
-                            break;
+                            continue;
                     }
                 }
             }
@@ -206,37 +252,41 @@ public class ConditionalMessage {
             if (condition.targetServer != null)
                 ps.setString(1, condition.targetServer.toString().toUpperCase());
 
+            System.out.println("[ConditionalMessage] Executing the following query: " + ps);
+
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     long discordId = rs.getLong("discord_id");
                     Rank rank = Rank.getRankFromString(rs.getString("rank"));
-                    Rank targetRank = Rank.getRankFromString((String) condition.value);
+                    Rank targetRank = Rank.getRankFromString(((String) condition.value).toUpperCase());
                     switch (condition.getType()) {
                         case EQUAL_TO:
                             if (rank == targetRank) {
                                 GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
                             }
-                            break;
+                            continue;
                         case LESS_THAN:
                             if (targetRank.isHigher(rank)) {
                                 GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
                             }
-                            break;
+                            continue;
                         case LESS_THAN_OR_EQUAL_TO:
                             if (targetRank.isHigherOrEqualTo(rank)) {
                                 GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
                             }
-                            break;
+                            continue;
                         case GREATER_THAN:
                             if (rank.isHigher(targetRank)) {
                                 GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
                             }
-                            break;
+                            continue;
                         case GREATER_THAN_OR_EQUAL_TO:
                             if (rank.isHigherOrEqualTo(targetRank)) {
                                 GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
                             }
-                            break;
+                            continue;
+                        default:
+                            throw new IllegalArgumentException();
                     }
                 }
             }
@@ -244,26 +294,32 @@ public class ConditionalMessage {
     }
 
     public static void handleLevel(Connection conn, MessageCondition condition, Set<GTMUser> listToModify) throws SQLException {
-        String query = "SELECT ?.level,discord_users.discord_id FROM ? INNER JOIN discord_users ON ?.uuid=discord_users.uuid WHERE discord_id != -1;";
 
         if (condition.targetServer != null && condition.targetServer.getServerType() != ServerType.GTM)
             throw new IllegalArgumentException("Only GTM servers may have the level condition!");
 
-        List<PlanServer> gtmsToConsider;
+        List<Server> gtmsToConsider;
         // if target server is null, we consider all gtm servers
         if (condition.targetServer == null) {
-            gtmsToConsider = Arrays.stream(PlanServer.values()).filter(ps -> ps.getServerType() == ServerType.GTM).collect(Collectors.toList());
+            gtmsToConsider = Arrays.stream(Server.values()).filter(ps -> ps.getServerType() == ServerType.GTM).collect(Collectors.toList());
         } else {
             gtmsToConsider = Collections.singletonList(condition.targetServer);
         }
 
         // go through all gtms we are considering for this level
         // and if the player meets the level requirement on ANY GTM then select them
-        for (PlanServer planServer : gtmsToConsider) {
+        for (Server server : gtmsToConsider) {
+
+            String tableName = server.toString().toLowerCase();
+            String query = "SELECT " + tableName + ".level,discord_users.discord_id FROM " + tableName + " INNER JOIN discord_users ON " + tableName + ".uuid=discord_users.uuid WHERE discord_id != -1;";
+
+
             try (PreparedStatement ps = conn.prepareStatement(query)) {
-                ps.setString(1, planServer.toString().toLowerCase());
-                ps.setString(2, planServer.toString().toLowerCase());
-                ps.setString(3, planServer.toString().toLowerCase());
+                ps.setString(1, server.toString().toLowerCase());
+                ps.setString(2, server.toString().toLowerCase());
+                ps.setString(3, server.toString().toLowerCase());
+
+                System.out.println("[ConditionalMessage] Executing the following query: " + ps);
 
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
@@ -274,22 +330,22 @@ public class ConditionalMessage {
                                 if (level == (int) condition.value) {
                                     GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
                                 }
-                                break;
+                                continue;
                             case LESS_THAN:
                                 if (level < (int) condition.value) {
                                     GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
                                 }
-                                break;
+                                continue;
                             case LESS_THAN_OR_EQUAL_TO:
                                 if (level <= (int) condition.value) {
                                     GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
                                 }
-                                break;
+                                continue;
                             case GREATER_THAN:
                                 if (level > (int) condition.value) {
                                     GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
                                 }
-                                break;
+                                continue;
                             case GREATER_THAN_OR_EQUAL_TO:
                                 if (level >= (int) condition.value) {
                                     GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
@@ -304,15 +360,13 @@ public class ConditionalMessage {
     }
 
     public static void handlePlaytime(Connection conn, MessageCondition condition, Set<GTMUser> listToModify) throws SQLException {
-        String query = "SELECT ?.playtime,discord_users.discord_id FROM ? INNER JOIN discord_users ON ?.uuid=discord_users.uuid WHERE discord_id != -1;";
-
         if (condition.targetServer != null && condition.targetServer.getServerType() != ServerType.GTM)
             throw new IllegalArgumentException("Only GTM servers store playtime data!");
 
-        List<PlanServer> gtmsToConsider;
+        List<Server> gtmsToConsider;
         // if target server is null, we consider all gtm servers
         if (condition.targetServer == null) {
-            gtmsToConsider = Arrays.stream(PlanServer.values()).filter(ps -> ps.getServerType() == ServerType.GTM).collect(Collectors.toList());
+            gtmsToConsider = Arrays.stream(Server.values()).filter(ps -> ps.getServerType() == ServerType.GTM).collect(Collectors.toList());
         } else {
             gtmsToConsider = Collections.singletonList(condition.targetServer);
         }
@@ -320,11 +374,12 @@ public class ConditionalMessage {
         // now loop through all gtm servers we are considering,
         // combining playtime in the userPlaytimeMap
         HashMap<Long, Long> userPlaytimeMap = new HashMap<>();
-        for (PlanServer planServer : gtmsToConsider) {
+        for (Server server : gtmsToConsider) {
+            String tableName = server.toString().toLowerCase();
+            String query = "SELECT " + tableName + ".playtime,discord_id FROM " + tableName + " INNER JOIN discord_users ON " + tableName + ".uuid=discord_users.uuid WHERE discord_id != -1;";
+
             try (PreparedStatement ps = conn.prepareStatement(query)) {
-                ps.setString(1, planServer.toString().toLowerCase());
-                ps.setString(2, planServer.toString().toLowerCase());
-                ps.setString(3, planServer.toString().toLowerCase());
+                System.out.println("[ConditionalMessage] Executing the following query: " + ps);
 
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
@@ -346,27 +401,27 @@ public class ConditionalMessage {
                     if (playtimeHours == (int) condition.value) {
                         GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
                     }
-                    break;
+                    continue;
                 case LESS_THAN:
                     if (playtimeHours < (int) condition.value) {
                         GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
                     }
-                    break;
+                    continue;
                 case LESS_THAN_OR_EQUAL_TO:
                     if (playtimeHours <= (int) condition.value) {
                         GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
                     }
-                    break;
+                    continue;
                 case GREATER_THAN:
                     if (playtimeHours > (int) condition.value) {
                         GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
                     }
-                    break;
+                    continue;
                 case GREATER_THAN_OR_EQUAL_TO:
                     if (playtimeHours >= (int) condition.value) {
                         GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
                     }
-                    break;
+                    continue;
             }
         }
 
@@ -375,13 +430,15 @@ public class ConditionalMessage {
     // this is the most inefficient one because we have to get this data through plan
     // and i cant inner join discord tables...
     public static void handleLastPlayed(Connection conn, MessageCondition condition, Set<GTMUser> listToModify) throws SQLException {
-        String query = "SELECT plan_users.uuid, MAX(session_end) as 'last_seen' FROM plan_sessions INNER JOIN plan_users ON plan_sessions.user_id = plan_users.id WHERE " + (condition.targetServer == null ? "" : "server_id=? ") + "GROUP BY plan_sessions.id;";
+        String query = "SELECT HEX(user_sessions.uuid), MAX(session_end) as 'last_seen' FROM user_sessions INNER JOIN discord_users ON user_sessions.uuid=discord_users.uuid WHERE " + (condition.targetServer == null ? "" : "server_key=? ") + "GROUP BY uuid;";
 
         try (PreparedStatement ps = conn.prepareStatement(query)) {
 
             // if target server is null, then we consider last played over ALL servers
             if (condition.targetServer != null)
-                ps.setInt(1, condition.targetServer.getId());
+                ps.setString(1, condition.targetServer.toString());
+
+            System.out.println("[ConditionalMessage] Executing the following query: " + ps);
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -392,39 +449,39 @@ public class ConditionalMessage {
                             if (lastSeen == ((Instant) condition.value).toEpochMilli()) {
                                 GTMUser.getGTMUser(uuid).ifPresent(listToModify::add);
                             }
-                            break;
+                            continue;
                         case LESS_THAN:
                             if (lastSeen < ((Instant) condition.value).toEpochMilli()) {
                                 GTMUser.getGTMUser(uuid).ifPresent(listToModify::add);
                             }
-                            break;
+                            continue;
                         case LESS_THAN_OR_EQUAL_TO:
                             if (lastSeen <= ((Instant) condition.value).toEpochMilli()) {
                                 GTMUser.getGTMUser(uuid).ifPresent(listToModify::add);
                             }
-                            break;
+                            continue;
                         case GREATER_THAN:
                             if (lastSeen > ((Instant) condition.value).toEpochMilli()) {
                                 GTMUser.getGTMUser(uuid).ifPresent(listToModify::add);
                             }
-                            break;
+                            continue;
                         case GREATER_THAN_OR_EQUAL_TO:
                             if (lastSeen >= ((Instant) condition.value).toEpochMilli()) {
                                 GTMUser.getGTMUser(uuid).ifPresent(listToModify::add);
                             }
-                            break;
+                            continue;
                     }
                 }
             }
         }
     }
 
-    @Getter @AllArgsConstructor @EqualsAndHashCode
+    @Getter @AllArgsConstructor @EqualsAndHashCode @ToString
     public static class MessageCondition {
         @NotNull private ConditionalOption option;
         @NotNull private ConditionType type;
         @NotNull private Object value;
-        @Nullable private PlanServer targetServer;
+        @Nullable private Server targetServer;
     }
 
 }

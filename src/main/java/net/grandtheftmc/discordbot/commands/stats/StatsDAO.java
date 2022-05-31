@@ -13,21 +13,25 @@ import java.util.stream.Collectors;
 
 public class StatsDAO {
 
-    public static PlanUser getPlanUser (UUID uuid) {
+    public static UserProfile getUserProfile(UUID uuid) {
+        try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
 
-        try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.PLAN).getConnection()) {
-            String query = "SELECT * FROM `plan_users` WHERE uuid=?";
+            String query = "SELECT lastname,join_date,last_login FROM users WHERE uuid=?;";
+
             try (PreparedStatement ps = conn.prepareStatement(query)) {
                 ps.setString(1, uuid.toString());
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        String name = rs.getString("name");
-                        long registered = rs.getLong("registered");
-                        int timesKicked = rs.getInt("times_kicked");
-                        return new PlanUser(uuid, name, registered, timesKicked);
+                        return new UserProfile(
+                                uuid,
+                                rs.getString("lastname"),
+                                rs.getTimestamp("join_date"),
+                                rs.getTimestamp("last_login")
+                        );
                     }
                 }
             }
+
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -42,10 +46,10 @@ public class StatsDAO {
         if (to == null)
             to = System.currentTimeMillis();
 
-        try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.PLAN).getConnection()) {
-            String query = "SELECT session_start,session_end,afk_time,server_id FROM plan_sessions INNER JOIN plan_users ON plan_sessions.user_id=plan_users.id WHERE plan_users.uuid=? AND session_start > ? AND session_start < ?";
+        try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()) {
+            String query = "SELECT session_start,session_end,afk_time,server_key FROM user_sessions WHERE uuid=UNHEX(?) AND session_start > ? AND session_start < ?";
             try (PreparedStatement ps = conn.prepareStatement(query)) {
-                ps.setString(1, uuid.toString());
+                ps.setString(1, uuid.toString().replace("-", ""));
                 ps.setLong(2, from);
                 ps.setLong(3, to);
                 try (ResultSet rs = ps.executeQuery()) {
@@ -56,8 +60,8 @@ public class StatsDAO {
                         long start = rs.getLong("session_start");
                         long playtime = rs.getLong("session_end") - start;
                         long afkTime = rs.getLong("afk_time");
-                        PlanServer server = PlanServer.getFromID(rs.getInt("server_id"));
-                        sessionsList.add(new Session(start, playtime, afkTime, server));
+                        String server = rs.getString("server_key");
+                        sessionsList.add(new Session(start, playtime, afkTime, Server.valueOf(server.toUpperCase())));
                     }
 
                     return sessionsList;

@@ -1,27 +1,22 @@
 package net.grandtheftmc.discordbot.commands;
 
-import com.google.common.collect.Lists;
-import net.dv8tion.jda.api.entities.ChannelType;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.grandtheftmc.discordbot.GTMBot;
-import net.grandtheftmc.discordbot.utils.StringUtils;
 import net.grandtheftmc.discordbot.utils.confighelpers.Config;
 import net.grandtheftmc.discordbot.utils.users.GTMUser;
 import net.grandtheftmc.discordbot.utils.users.Rank;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static net.grandtheftmc.discordbot.utils.console.Logs.log;
 
@@ -51,6 +46,7 @@ public abstract class Command extends ListenerAdapter {
 
         this.commandData = Commands.slash(name.toLowerCase(), description);
         this.buildCommandData(this.commandData);
+        this.commandData.setDefaultEnabled(false);
 
         GTMBot.getJDA().addEventListener(this);
     }
@@ -58,38 +54,36 @@ public abstract class Command extends ListenerAdapter {
     @Override
     public void onSlashCommandInteraction (@NotNull SlashCommandInteractionEvent e) {
 
-        e.getHook().setEphemeral(false); // msgs visible to everyone
-
         User user = e.getUser();
         Member member = e.getMember();
         GTMUser gtmUser = GTMUser.getGTMUser(user.getIdLong()).orElse(null);
         MessageChannel channel = e.getChannel();
-        String commandMessage = e.getInteraction().getCommandPath();
-        List<String> listPath = new LinkedList<>(Arrays.asList(commandMessage.split("/")));
-        listPath.remove(0);
-        listPath.addAll(e.getOptions().stream().map(OptionMapping::getAsString).collect(Collectors.toList()));
-        String[] path = listPath.toArray(new String[0]);
+        String[] path = e.getInteraction().getCommandPath().split("/");
 
         if (e.getName().equalsIgnoreCase(name)) {
 
             log("User " + user.getAsTag() +
-                    "(" + user.getId() + ") issued command: /" + e.getName() + " " + StringUtils.join(path, " "));
+                    "(" + user.getId() + ") issued command: " + e.getCommandString());
 
             // Check perms
             if (!Rank.hasRolePerms(member, rank)) {
+                e.getHook().setEphemeral(true);
                 e.reply("**Sorry but you must be " + getRank().name() + " or higher to use this command! Use `/help` to list all commands you can use.**").setEphemeral(true).queue();
                 return;
             }
 
             // Check type
             if (type == Type.DISCORD_ONLY && e.getChannelType() == ChannelType.PRIVATE) {
+                e.getHook().setEphemeral(true);
                 e.reply("**Sorry but this command can only be executed on the GTM discord!**").setEphemeral(true).queue();
                 return;
             } else if (type == Type.DMS_ONLY && e.getChannelType() != ChannelType.PRIVATE) {
+                e.getHook().setEphemeral(true);
                 e.reply("**Sorry but this command can only be executed in direct messages with me!**").setEphemeral(true).queue();
                 return;
             }
 
+            e.getHook().setEphemeral(false); // msgs visible to everyone by default
             onCommandUse(e.getInteraction(), channel, e.getOptions(), member, gtmUser, path);
         }
 
@@ -121,6 +115,10 @@ public abstract class Command extends ListenerAdapter {
 
     public static Command getByName (String commandName) {
         return commandList.stream().filter( (command) -> command.getName().equals(commandName)).findFirst().orElse(null);
+    }
+
+    public List<Role> getPrivilegedRoles() {
+        return this.rank.getRolesAbove();
     }
 
     /**

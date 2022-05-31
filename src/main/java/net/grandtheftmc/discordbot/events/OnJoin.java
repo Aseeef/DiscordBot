@@ -1,6 +1,6 @@
 package net.grandtheftmc.discordbot.events;
 
-import net.grandtheftmc.discordbot.utils.Utils;
+import net.grandtheftmc.discordbot.GTMBot;
 import net.grandtheftmc.discordbot.utils.confighelpers.Config;
 import net.grandtheftmc.discordbot.utils.tools.RaidModeTools;
 import net.dv8tion.jda.api.entities.Member;
@@ -74,7 +74,7 @@ public class OnJoin extends ListenerAdapter {
         previousJoin = member;
 
         // if they are still a member after all that, message them a welcome message
-        if (Utils.guild.isMember(member.getUser())) {
+        if (GTMBot.getGTMGuild().isMember(member.getUser())) {
             member.getUser().openPrivateChannel().queue(pc -> {
                 pc.sendMessageEmbeds(WelcomeTools.getWelcomeEmbed(member.getUser())).queue();
             });

@@ -25,7 +25,7 @@ import static net.grandtheftmc.discordbot.utils.console.Logs.log;
 public class DatabaseHandler implements Database {
 
 	/** The default MySQL driver */
-	private static final String DEFAULT_MYSQL_DRIVER = "com.mysql.jdbc.Driver";
+	private static final String DEFAULT_MYSQL_DRIVER = "org.mariadb.jdbc.Driver";
 	/** The database credentials */
 	private DatabaseCredentials dbCreds;
 	/** Data source connection pool from HikariCP */
@@ -87,7 +87,7 @@ public class DatabaseHandler implements Database {
 
 		// set the jdbc url, note the character encoding
 		// https://stackoverflow.com/questions/3040597/jdbc-character-encoding
-		hikariSource.setJdbcUrl("jdbc:mysql://" + connURL + "/" + dbCreds.getName() + "?characterEncoding=UTF-8");
+		hikariSource.setJdbcUrl("jdbc:mariadb://" + connURL + "/" + dbCreds.getName() + "?characterEncoding=UTF-8&rewriteBatchedStatements=true");
 
 		// set user/pass
 		hikariSource.setUsername(dbCreds.getUser());
