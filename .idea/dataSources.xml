@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="users@dev1-ash.gtm.clients.prodity.net" uuid="29850e6a-2869-4c63-a20c-a263db706ff9">
-      <driver-ref>mysql.8</driver-ref>
+    <data-source source="LOCAL" name="MySQL - users@us-box1.backend.gtm.network" uuid="29850e6a-2869-4c63-a20c-a263db706ff9">
+      <driver-ref>mariadb</driver-ref>
       <synchronize>true</synchronize>
-      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://dev1-ash.gtm.clients.prodity.net:3306/users</jdbc-url>
+      <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mariadb://us-box1.backend.gtm.network:3306/users</jdbc-url>
       <driver-properties>
         <property name="autoReconnect" value="true" />
-        <property name="zeroDateTimeBehavior" value="CONVERT_TO_NULL" />
-        <property name="tinyInt1isBit" value="false" />
-        <property name="characterEncoding" value="utf8" />
-        <property name="characterSetResults" value="utf8" />
-        <property name="yearIsDateType" value="false" />
         <property name="serverTimezone" value="America/New_York" />
       </driver-properties>
+    </data-source>
+    <data-source source="LOCAL" name="Box 2" uuid="67845f6e-25b9-4148-8894-149a0df78138">
+      <driver-ref>mariadb</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mariadb://us-box2.backend.gtm.network:3306/plan</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
 </project>
