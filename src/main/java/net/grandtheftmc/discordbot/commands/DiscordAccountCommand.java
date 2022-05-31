@@ -1,8 +1,10 @@
 package net.grandtheftmc.discordbot.commands;
 
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.grandtheftmc.discordbot.utils.Data;
 import net.grandtheftmc.discordbot.utils.Utils;
 import net.grandtheftmc.discordbot.utils.threads.ThreadUtil;
@@ -25,40 +27,40 @@ public class DiscordAccountCommand extends Command {
 
     @Override
     public void buildCommandData(SlashCommandData slashCommandData) {
+        SubcommandData verify = new SubcommandData("verify", "Verify your discord account with GTM");
+        verify.addOption(OptionType.STRING, "secret-code", "Your secret verification code (NEVER SHARE THIS)", true);
 
+        SubcommandData unVerify = new SubcommandData("unverify", "Un-link your discord account with GTM");
+
+        SubcommandData info = new SubcommandData("info", "Displays your current account information");
+
+        SubcommandData update = new SubcommandData("update", "Force update your account data");
+
+        slashCommandData.addSubcommands(verify, unVerify, info, update);
     }
 
     @Override
     public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, List<OptionMapping> arguments, Member member, GTMUser gtmUser, String[] path) {
 
-        if (path.length < 1) {
-            Utils.sendThenDelete(channel, getAccountHelpMsg());
-            return;
-        }
-
         switch (path[0].toLowerCase()) {
             case "verify":
 
-                if (path.length < 2) {
-                    Utils.sendThenDelete(channel, "`/Discord Verify <Code>` - *Verify your discord account with GTM*");
-                    return;
-                }
-
                 if (Data.exists(Data.USER, member.getIdLong())) {
                     GTMUser user = (GTMUser) Data.obtainData(Data.USER, member.getIdLong());
-                    channel.sendMessage("**Your discord account is already linked to the player `" + user.getUsername() + "`!**").queue();
+                    interaction.reply("**Your discord account is already linked to the player `" + user.getUsername() + "`!**").setEphemeral(true).queue();
                     return;
                 }
 
                 ThreadUtil.runAsync( () -> {
-                    boolean success = Verification.verifyMember(member, path[1]);
+                    String verifyCode = interaction.getOption("secret-code").getAsString();
+                    boolean success = Verification.verifyMember(member, verifyCode);
                     System.out.println("[Debug] Discord verification status for " + member.getAsMention() + ": Success=" + success);
 
                     if (success) {
                         GTMUser user = (GTMUser) Data.obtainData(Data.USER, member.getIdLong());
-                        channel.sendMessage("**Verification successful! Your discord account has now been linked to `" + user.getUsername() + "`!**").queue();
+                        interaction.reply("**Verification successful! Your discord account has now been linked to `" + user.getUsername() + "`!**").setEphemeral(true).queue();
                     } else {
-                        channel.sendMessage("**Verification failed!** Please make sure you provided to correct verification code from GTM. To get this verification code, log on to GTM with your account and use /discord verify.").queue();
+                        interaction.reply("**Verification failed!** Please make sure you provided to correct verification code from GTM. To get this verification code, log on to GTM with your account and use /discord verify.").setEphemeral(true).queue();
                     }
                 });
 
@@ -67,7 +69,7 @@ public class DiscordAccountCommand extends Command {
             case "unverify":
 
                 if (gtmUser == null) {
-                    channel.sendMessage("**Your discord account is already not linked to any player!**").queue();
+                    interaction.reply("**Your discord account is already not linked to any player!**").setEphemeral(true).queue();
                     return;
                 }
 
@@ -75,25 +77,23 @@ public class DiscordAccountCommand extends Command {
 
                 Verification.unVerifyUser(gtmUser);
 
-                channel.sendMessage(deleted ? "**You have successfully unlinked your account from the player `" + gtmUser.getUsername() + "`!**" : "**Unable to proccess request. It appears something went wrong...!**").queue();
+                interaction.reply(deleted ? "**You have successfully unlinked your account from the player `" + gtmUser.getUsername() + "`!**" : "**Unable to proccess request. It appears something went wrong...!**").setEphemeral(true).queue();
 
                 break;
 
             case "info":
-                if (gtmUser == null) Utils.sendThenDelete(channel, "**Your discord account is not linked to any user!**");
-                else Utils.sendThenDelete(channel, getInfo(gtmUser).build());
+                if (gtmUser == null) interaction.reply("**Your discord account is not linked to any user!**").setEphemeral(true).queue();
+                else interaction.replyEmbeds(getInfo(gtmUser).build()).setEphemeral(true).queue();
                 break;
 
             case "update":
-                if (gtmUser == null) Utils.sendThenDelete(channel, "**Your discord account is not linked to any user!**");
+                if (gtmUser == null) interaction.reply( "**Your discord account is not linked to any user!**").setEphemeral(true).queue();
                 else {
                     ThreadUtil.runAsync(gtmUser::updateUserDataNow);
-                    Utils.sendThenDelete(channel, "**Your account information has been updated!**");
+                    interaction.reply("**Your account information has been updated!**").setEphemeral(true).queue();
                 }
                 break;
 
-            default:
-                Utils.sendThenDelete(channel, getAccountHelpMsg());
         }
 
     }
@@ -108,16 +108,6 @@ public class DiscordAccountCommand extends Command {
                 .addField("**Rank:**", gtmUser.getRank().n(), false)
                 .setColor(new Color(207,181,59)) //gold color
                 ;
-    }
-
-    private Message getAccountHelpMsg() {
-        return new MessageBuilder()
-                .append("> **Please enter a valid command argument:**\n")
-                .append("> `/Discord Verify <Code>` - *Verify your discord account with GTM*\n")
-                .append("> `/Discord UnVerify` - *Un-link your discord account with GTM*\n")
-                .append("> `/Discord Info` - *Displays your current account information*\n")
-                .append("> `/Discord Update` - *Force update your account data*\n")
-                .build();
     }
 
 }

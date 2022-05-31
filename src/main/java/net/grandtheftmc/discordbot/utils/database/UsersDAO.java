@@ -44,6 +44,8 @@ public class UsersDAO {
                 }
             }
 
+            System.out.println(gangId + " -- " + gangName);
+
             // Step 3: Get all users with that gang id
             if (gangId != null) {
                 List<UUID> gangUuids = new ArrayList<>();

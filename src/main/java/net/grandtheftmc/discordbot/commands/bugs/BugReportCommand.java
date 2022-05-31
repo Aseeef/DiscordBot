@@ -70,7 +70,7 @@ public class BugReportCommand extends Command {
                 if (arguments.get(0).getAsString().equalsIgnoreCase("send")) {
                     // Set settings
                     ChannelIdData.get().setBugReportChannelId(channel.getIdLong());
-                    interaction.reply("**" + textChannel.getAsMention() + " has been set as the bug reports channel!**").queue();
+                    interaction.reply("**" + textChannel.getAsMention() + " has been set as the bug reports channel!**").setEphemeral(true).queue();
                     // Delete previous msg
                     try {
                         GTMBot.getGTMGuild().getTextChannelById(ChannelIdData.getData().getBugReportChannelId()).retrieveMessageById(BotData.LAST_BUG_EMBED_ID.getData(Number.class).longValue()).queue(m -> m.delete().queue());
@@ -88,7 +88,7 @@ public class BugReportCommand extends Command {
                 } else if (arguments.get(0).getAsString().equalsIgnoreCase("receive")) {
                     // Set settings
                     ChannelIdData.get().setBugReceiveChannelId(channel.getIdLong());
-                    interaction.reply("**" + textChannel.getAsMention() + " has been set as the bug receive channel!**").queue();
+                    interaction.reply("**" + textChannel.getAsMention() + " has been set as the bug receive channel!**").setEphemeral(true).queue();
                 }
                 break;
             }
@@ -100,7 +100,7 @@ public class BugReportCommand extends Command {
                 report.setStatus(BugReport.ReportStatus.REJECTED_REPORT);
                 report.sendUpdate(path.length > 2 ? Utils.joinArgsAfter(path, 2) : null);
                 CUTask.editTask(report.getId(), BugReport.ReportStatus.REJECTED_REPORT);
-                sendThenDelete(channel, "**Success!** You set bug report id " + path[1] + " to " + BugReport.ReportStatus.REJECTED_REPORT + "!");
+                interaction.reply("**Success!** You set bug report id " + path[1] + " to " + BugReport.ReportStatus.REJECTED_REPORT + "!").setEphemeral(true).queue();
                 break;
             }
             case "complete": {
@@ -110,7 +110,7 @@ public class BugReportCommand extends Command {
                 report.setStatus(BugReport.ReportStatus.PATCHED);
                 report.sendUpdate(path.length > 2 ? Utils.joinArgsAfter(path, 2) : null);
                 CUTask.editTask(report.getId(), BugReport.ReportStatus.PATCHED);
-                interaction.reply("**Success!** You set bug report id " + path[1] + " to " + BugReport.ReportStatus.PATCHED + "!").queue();
+                interaction.reply("**Success!** You set bug report id " + path[1] + " to " + BugReport.ReportStatus.PATCHED + "!").setEphemeral(true).queue();
                 break;
             }
             case "duplicate": {
@@ -120,7 +120,7 @@ public class BugReportCommand extends Command {
                 report.setStatus(BugReport.ReportStatus.DUPLICATE_REPORT);
                 report.sendUpdate(path.length > 2 ? Utils.joinArgsAfter(path, 2) : null);
                 CUTask.editTask(report.getId(), BugReport.ReportStatus.DUPLICATE_REPORT);
-                interaction.reply("**Success!** You set bug report id " + path[1] + " to " + BugReport.ReportStatus.DUPLICATE_REPORT + "!").queue();
+                interaction.reply("**Success!** You set bug report id " + path[1] + " to " + BugReport.ReportStatus.DUPLICATE_REPORT + "!").setEphemeral(true).queue();
                 break;
             }
             case "approve": {
@@ -131,7 +131,7 @@ public class BugReportCommand extends Command {
                     if (path[2].equalsIgnoreCase("true") || path[2].equalsIgnoreCase("false")) {
                         b = Boolean.parseBoolean(path[2]);
                     } else {
-                        interaction.reply("**The hide boolean '" + path[2] + "' is not a true or false.**").queue();
+                        interaction.reply("**The hide boolean '" + path[2] + "' is not a true or false.**").setEphemeral(true).queue();
                         return;
                     }
                 }
@@ -158,17 +158,5 @@ public class BugReportCommand extends Command {
         }
         return true;
     }
-
-    private static Message getHelpMsg() {
-        return new MessageBuilder()
-                .append("> **Please enter a valid command argument:**\n")
-                .append("> `/BugReports SetChannel (Report/Receive)` - *Set current channel to the bug Report or the bug Receive channel*\n")
-                .append("> `/BugReports Approve <ID> (Hide-true/false) (Reason)` - *Approve this bug report. (Set 'Hide' to true to hide report from players)*\n")
-                .append("> `/BugReports Deny <ID> (Reason)` - *Deny AND delete the bug report.*\n")
-                .append("> `/BugReports Complete <ID> (Reason)` - *Set the status of the bug to fixed.*\n")
-                .append("> `/BugReports Duplicate <ID> (Reason)` - *Deny the bug report because it is a duplicate.*\n")
-                .build();
-    }
-
 
 }

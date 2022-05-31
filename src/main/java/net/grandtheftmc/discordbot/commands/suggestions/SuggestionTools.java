@@ -1,5 +1,11 @@
 package net.grandtheftmc.discordbot.commands.suggestions;
 
+import club.minnced.discord.webhook.WebhookClientBuilder;
+import net.dv8tion.jda.api.entities.WebhookClient;
+import net.dv8tion.jda.api.interactions.components.Modal;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.interactions.components.text.TextInput;
+import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.grandtheftmc.discordbot.GTMBot;
 import net.grandtheftmc.discordbot.utils.BotData;
 import net.grandtheftmc.discordbot.utils.Utils;
@@ -27,7 +33,9 @@ public class SuggestionTools {
         String gtmLearnablesEmoji = GTMBot.getJDA().getEmotesByName("gtmlearnables", true).get(0).getAsMention();
         embed.setTitle(gtmLearnablesEmoji + "  SUGGESTION ID: #" + s.getNumber());
         embed.setThumbnail(userById(s.getSuggesterId()).getAvatarUrl());
-        embed.setDescription("\n\u200E"+s.getMsg()+"\n\u200E");
+        embed.addField("**What is this suggest for?**", s.getServer(), false);
+        embed.addField("**What is your Suggestion? Be concise and clear!**", s.getSuggestion(), false);
+        embed.addField("**Why should we implement this suggestion?**", s.getSuggestion(), false);
         embed.addField("**Suggestion Status:**", "**"+s.getStatus()+"**: "+s.getStatusReason(), true);
         embed.setFooter("Submitted by " + userById(s.getSuggesterId()).getAsTag() +
                 " (" + s.getSuggesterId() + ")");
@@ -40,75 +48,75 @@ public class SuggestionTools {
         return embed.build();
     }
 
-    public static MessageEmbed createHowSuggestionEmbed () {
+    public static MessageEmbed createHowSuggestionEmbed() {
         EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle("How to Make a Suggestion");
+        embed.setTitle("✏️ How to Make a Suggestion");
         embed.setColor(Color.GRAY);
-        embed.setDescription("Welcome to the GTM Suggestions channel! To post your suggestion, simply **Copy and Paste** the below format in to chat, " +
-                "and then fill it out. If you do not copy and paste the suggestion format in to your suggestion, the **bot will delete your message**! " +
-                "Please note, **once sent, you can NOT edit your suggestion**, so please proof read your message before sending.");
+        embed.setDescription("Welcome to the GTM Suggestions channel! To post your suggestion, use the **click** the button below!\n\n" +
+                "After clicking the below button, you will be prompted with a forum which you will then fill out. To prevent spam, you " +
+                "**must be verified with `/discord verify`** in order to use suggestions! Finally, note, " +
+                "**once sent, you can NOT edit your suggestion**, so please proof read your message before sending.");
         return embed.build();
-    }
-
-    public static Message suggestionMessage() {
-        MessageBuilder msg = new MessageBuilder()
-                .append("```")
-                .append("What Server is your Suggestion for?")
-                .append("\n")
-                .append("[Type what server here]")
-                .append("\n\u200E\n")
-                .append("What is your Suggestion? Be concise!")
-                .append("\n")
-                .append("[Explain suggestion here (10+ words)]")
-                .append("\n\u200E\n")
-                .append("Why do you Suggestion this?")
-                .append("\n")
-                .append("[Explain reason here (16+ words)]")
-                .append("```");
-        return msg.build();
     }
 
     // Send how to make a suggestion instructions for the next person & delete previous using callbacks
     public static void suggestionInstruct(TextChannel channel) {
 
-        channel.sendMessageEmbeds(createHowSuggestionEmbed()).queueAfter(5, TimeUnit.SECONDS, (embedMsg) -> {
-            channel.sendMessage(suggestionMessage()).queueAfter(250, TimeUnit.MILLISECONDS, (rawMsg) -> {
+        channel.sendMessageEmbeds(createHowSuggestionEmbed())
+                .setActionRow(Button.primary("suggest-btn", "Create Suggestion!"))
+                .queueAfter(5, TimeUnit.SECONDS, (embedMsg) -> {
 
-                // These longs will always store the id of the previous suggestion instruction msgs
-                long prevSuggestHelpEmbedId = BotData.LAST_SUGGEST_EMBED_ID.getData(Long.TYPE);
-                long prevSuggestHelpMsgId = BotData.LAST_SUGGEST_MSG_ID.getData(Long.TYPE);
-                TextChannel prevSuggestHelpChannel = GTMBot.getJDA().getTextChannelById(ChannelIdData.get().getPrevSuggestHelpChannelId());
+            // These longs will always store the id of the previous suggestion instruction msgs
+            long prevSuggestHelpEmbedId = BotData.LAST_SUGGEST_EMBED_ID.getData(Long.TYPE);
+            TextChannel prevSuggestHelpChannel = GTMBot.getJDA().getTextChannelById(ChannelIdData.get().getPrevSuggestHelpChannelId());
 
-                // Delete previous instruction embed & msg
-                if (prevSuggestHelpChannel != null) {
-                    prevSuggestHelpChannel.retrieveMessageById(prevSuggestHelpEmbedId).queue( (prevEmbed) -> {
-                        if (prevEmbed != null)
-                            prevEmbed.delete().queue();
-                            });
-                    prevSuggestHelpChannel.retrieveMessageById(prevSuggestHelpMsgId).queue( (prevMsg) -> {
-                        if (prevMsg != null)
-                            prevMsg.delete().queue();
-                    });
-                }
+            // Delete previous instruction embed & msg
+            if (prevSuggestHelpChannel != null) {
+                prevSuggestHelpChannel.retrieveMessageById(prevSuggestHelpEmbedId).queue((prevEmbed) -> {
+                    if (prevEmbed != null)
+                        prevEmbed.delete().queue();
+                });
+            }
 
-                // Save current embed & msg ids
-                BotData.LAST_SUGGEST_EMBED_ID.setValue(embedMsg.getIdLong());
-                BotData.LAST_SUGGEST_MSG_ID.setValue(rawMsg.getIdLong());
-                ChannelIdData.get().setPrevSuggestHelpChannelId(channel.getIdLong());
-
-            });
+            // Save current embed & msg ids
+            BotData.LAST_SUGGEST_EMBED_ID.setValue(embedMsg.getIdLong());
+            ChannelIdData.get().setPrevSuggestHelpChannelId(channel.getIdLong());
 
         });
 
     }
 
-    public static String formatSuggestion(String msg) {
-        if (msg.startsWith("```")) msg = msg.replaceFirst("```", "");
-        if (msg.endsWith("```")) msg = Utils.replaceLast(msg, "```", "");
-        msg = msg.replaceFirst(".*What Server is your Suggestion for\\?.*\n", "**What Server is your Suggestion for?**\n");
-        msg = msg.replaceFirst(".*What is your Suggestion\\? Be concise!.*\n", "**What is your Suggestion? Be concise!**\n");
-        msg = msg.replaceFirst(".*Why do you Suggestion this\\?.*\n", "**Why do you Suggestion this?**\n");
-        return msg;
+    public static Modal getSuggestModal() {
+        return Modal
+                .create("suggest-create", "Create a New Suggestion")
+                .addActionRow(
+                        TextInput.create(
+                                        "server",
+                                        "What is this suggest for?",
+                                        TextInputStyle.SHORT
+                                ).setMinLength(3)
+                                .setPlaceholder("(e.i. for discord, for gtm1, for all gtms...?)")
+                                .build()
+                )
+                .addActionRow(
+                        TextInput.create(
+                                        "suggestion",
+                                        "What is your Suggestion? Be concise!",
+                                        TextInputStyle.PARAGRAPH
+                                ).setMinLength(12)
+                                .setPlaceholder("My suggestion is that we...")
+                                .build()
+                )
+                .addActionRow(
+                        TextInput.create(
+                                        "reason",
+                                        "Why should we implement this suggestion?",
+                                        TextInputStyle.PARAGRAPH
+                                ).setMinLength(18)
+                                .setPlaceholder("You should add this suggestion because...")
+                                .build()
+                )
+                .build();
     }
 
 }

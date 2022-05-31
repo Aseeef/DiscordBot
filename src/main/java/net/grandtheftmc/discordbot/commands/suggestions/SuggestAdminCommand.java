@@ -1,8 +1,10 @@
 package net.grandtheftmc.discordbot.commands.suggestions;
 
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.grandtheftmc.discordbot.commands.Command;
 import net.grandtheftmc.discordbot.utils.Data;
 import net.grandtheftmc.discordbot.utils.Utils;
@@ -20,31 +22,47 @@ import java.util.List;
 import static net.grandtheftmc.discordbot.utils.Utils.sendThenDelete;
 import static net.grandtheftmc.discordbot.utils.Utils.userById;
 
-public class SuggestionCommand extends Command {
+public class SuggestAdminCommand extends Command {
 
-    public SuggestionCommand() {
-        super("suggestion", "Manage player suggestions", Rank.ADMIN, Type.DISCORD_ONLY);
+    public SuggestAdminCommand() {
+        super("suggestadmin", "Manage player suggestions", Rank.ADMIN, Type.DISCORD_ONLY);
     }
 
     @Override
     public void buildCommandData(SlashCommandData slashCommandData) {
 
+        SubcommandData setChannel = new SubcommandData("setchannel", "Set current channel to the suggestion channel");
+
+        SubcommandData delete = new SubcommandData("delete", "Deletes selected suggestion");
+        delete.addOption(OptionType.INTEGER, "suggestion-id", "The integer id for the suggestion");
+
+        SubcommandData deny = new SubcommandData("approve", "Denies selected suggestion");
+        deny.addOption(OptionType.INTEGER, "suggestion-id", "The integer id for the suggestion");
+
+        SubcommandData approve = new SubcommandData("deny", "Approves selected suggestion");
+        approve.addOption(OptionType.INTEGER, "suggestion-id", "The integer id for the suggestion");
+
+        SubcommandData complete = new SubcommandData("complete", "Marks the selected suggestion as completed");
+        complete.addOption(OptionType.INTEGER, "suggestion-id", "The integer id for the suggestion");
+
+        SubcommandData hold = new SubcommandData("hold", "Marks the selected suggestion as on hold");
+        hold.addOption(OptionType.INTEGER, "suggestion-id", "The integer id for the suggestion");
+
+        slashCommandData.addSubcommands(setChannel, delete, deny, approve, complete, hold);
     }
 
     @Override
     public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, List<OptionMapping> arguments, Member member, GTMUser gtmUser, String[] path) {
-        // If there are no command arguments send sub command help list
-        if (path.length == 0) {
-            Utils.sendThenDelete(channel, getSuggestionsHelpMsg());
-        }
+
+        interaction.getHook().setEphemeral(true);
 
         // Suggestions SetChannel Command
-        else if (path[0].equalsIgnoreCase("setchannel")) {
+        if (path[0].equalsIgnoreCase("setchannel")) {
 
             // Set suggestions settings
             ChannelIdData.get().setSuggestionChannelId(channel.getIdLong());
 
-            Utils.sendThenDelete(channel, suggestChannelSet((TextChannel) channel));
+            interaction.reply(suggestChannelSet((TextChannel) channel)).setEphemeral(true).queue();
 
             // Send how to make a suggestion instruction
             SuggestionTools.suggestionInstruct((TextChannel) channel);
@@ -52,20 +70,22 @@ public class SuggestionCommand extends Command {
         }
 
         else if (path[0].equalsIgnoreCase("delete")) {
-            if (Data.doesDataExist(Data.SUGGESTIONS, Integer.parseInt(path[1]))) {
+            int suggestionId = interaction.getOption("suggestion-id").getAsInt();
+            if (Data.doesDataExist(Data.SUGGESTIONS, suggestionId)) {
                 Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(path[1]));
                 SuggestionTools.getSuggestionsChannel().deleteMessageById(suggestion.getId()).queue();
                 Data.deleteData(Data.SUGGESTIONS, Integer.parseInt(path[1]));
-                Utils.sendThenDelete(channel, "**Suggestion #" + Integer.parseInt(path[1]) + " has been deleted!**");
+                interaction.reply("**Suggestion #" + Integer.parseInt(path[1]) + " has been deleted!**").setEphemeral(true).queue();
             }
             else {
-                Utils.sendThenDelete(channel, "**Suggestion not found. Please check your command!**");
+                interaction.reply("**Suggestion not found. Please check your command!**").setEphemeral(true).queue();
             }
         }
 
         // Suggestions Deny Command
         else if (path[0].equalsIgnoreCase("deny")) {
-            if (Data.doesDataExist(Data.SUGGESTIONS, Integer.parseInt(path[1]))) {
+            int suggestionId = interaction.getOption("suggestion-id").getAsInt();
+            if (Data.doesDataExist(Data.SUGGESTIONS, suggestionId)) {
 
                 // Get suggestion instance
                 Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(path[1]));
@@ -89,18 +109,19 @@ public class SuggestionCommand extends Command {
                 });
 
                 // Send message in channel informing executor that the command was ran
-                Utils.sendThenDelete(channel, "**Suggestion #"+suggestion.getNumber()+" has been set to DENIED!**");
+                interaction.reply("**Suggestion #"+suggestion.getNumber()+" has been set to DENIED!**").setEphemeral(true).queue();
 
             }
             // If none of the suggestions match provided id
             else {
-                Utils.sendThenDelete(channel, "**Suggestion not found. Please check your command!**");
+                interaction.reply("**Suggestion not found. Please check your command!**").setEphemeral(true).queue();
             }
         }
 
         // Suggestions Approve Command
         else if (path[0].equalsIgnoreCase("approve")) {
-            if (Data.doesDataExist(Data.SUGGESTIONS, Integer.parseInt(path[1]))) {
+            int suggestionId = interaction.getOption("suggestion-id").getAsInt();
+            if (Data.doesDataExist(Data.SUGGESTIONS, suggestionId)) {
 
                 Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(path[1]));
                 // Set new data
@@ -119,18 +140,19 @@ public class SuggestionCommand extends Command {
                 });
 
                 // Send message in channel informing executor that the command was ran
-                Utils.sendThenDelete(channel, "**Suggestion #"+suggestion.getNumber()+" has been set to APPROVED!**");
+                interaction.reply("**Suggestion #"+suggestion.getNumber()+" has been set to APPROVED!**").setEphemeral(true).queue();
 
             }
             // If none of the suggestions match provided id
             else {
-                Utils.sendThenDelete(channel, "**Suggestion not found. Please check your command!**");
+                interaction.reply("**Suggestion not found. Please check your command!**").setEphemeral(true).queue();
             }
         }
 
         // Suggestions Approve Command
         else if (path[0].equalsIgnoreCase("complete")) {
-            if (Data.doesDataExist(Data.SUGGESTIONS, Integer.parseInt(path[1]))) {
+            int suggestionId = interaction.getOption("suggestion-id").getAsInt();
+            if (Data.doesDataExist(Data.SUGGESTIONS, suggestionId)) {
 
                 Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(path[1]));
                 // Set new data
@@ -149,18 +171,19 @@ public class SuggestionCommand extends Command {
                 });
 
                 // Send message in channel informing executor that the command was ran
-                Utils.sendThenDelete(channel, "**Suggestion #"+suggestion.getNumber()+" has been set to COMPLETED!**");
+                interaction.reply("**Suggestion #"+suggestion.getNumber()+" has been set to COMPLETED!**").setEphemeral(true).queue();
 
             }
             // If none of the suggestions match provided id
             else {
-                Utils.sendThenDelete(channel, "**Suggestion not found. Please check your command!**");
+                interaction.reply("**Suggestion not found. Please check your command!**").setEphemeral(true).queue();
             }
         }
 
         // Suggestions Hold Command
         else if (path[0].equalsIgnoreCase("hold")) {
-            if (Data.doesDataExist(Data.SUGGESTIONS, Integer.parseInt(path[1]))) {
+            int suggestionId = interaction.getOption("suggestion-id").getAsInt();
+            if (Data.doesDataExist(Data.SUGGESTIONS, suggestionId)) {
 
                 Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(path[1]));
                 // Set new data
@@ -179,36 +202,21 @@ public class SuggestionCommand extends Command {
                 });
 
                 // Send message in channel informing executor that the command was ran
-                Utils.sendThenDelete(channel, "**Suggestion #"+suggestion.getNumber()+" has been set to PENDING!**");
+                interaction.reply( "**Suggestion #"+suggestion.getNumber()+" has been set to PENDING!**").setEphemeral(true).queue();
 
             }
             // If none of the suggestions match provided id
             else {
-                Utils.sendThenDelete(channel, "**Suggestion not found. Please check your command!**");
+                interaction.reply("**Suggestion not found. Please check your command!**").setEphemeral(true).queue();
             }
         }
 
-        // If no sub commands match
-        else {
-            Utils.sendThenDelete(channel, getSuggestionsHelpMsg());
-        }
     }
 
     private static Message suggestChannelSet(TextChannel channel) {
         return new MessageBuilder().setContent(
                 "**" + channel.getAsMention() + " has been set as the suggestions channel!**"
         ).build();
-    }
-
-    private static Message getSuggestionsHelpMsg() {
-        return new MessageBuilder()
-                .append("> **Please enter a valid command argument:**\n")
-                .append("> `/Suggestion SetChannel` - *Set current channel to the suggestion channel*\n")
-                .append("> `/Suggestion Delete <ID>` - *Deletes selected suggestion*\n")
-                .append("> `/Suggestion Approve <ID> (Reason)` - *Approve a suggestion*\n")
-                .append("> `/Suggestion Deny <ID> (Reason)` - *Deny a suggestion*\n")
-                .append("> `/Suggestion Hold <ID> (Reason)` - *Put a suggestion on hold*")
-                .build();
     }
 
     private String generateStatusReason(String[] args) {

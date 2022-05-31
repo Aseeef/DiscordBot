@@ -78,7 +78,7 @@ public class ConditionalMessageCommand extends Command {
                                 "`" + "\n\n" +
                                 "**Example Usage** [for the last-played condition]: `>= 2022-20-04:global`\n" +
                                 "This string will filter target players to everyone who last played on or after __April 20, 2022__ on ANY GTM server."
-                        ).queue();
+                        ).setEphemeral(true).queue();
                 return;
             }
 
@@ -93,7 +93,7 @@ public class ConditionalMessageCommand extends Command {
                                 "__Rank Condition__: `>=ELITE:gtm4` - filter to players or have a rank greater than or equal to ELITE on gtm4.\n" +
                                 "__Level Condition__: `==100:global` - filter to players that have EXACTLY level 100 on ANY gtm server.\n" +
                                 "__Last-Played Condition__: `>=2022-20-04:global` - filter to all players that played on or after April 20, 2022 across the network."
-                ).queue();
+                ).setEphemeral(true).queue();
                 return;
             }
 
@@ -113,7 +113,7 @@ public class ConditionalMessageCommand extends Command {
                                 "Known servers are:\n" +
                                 "`" + StringUtils.join(knownServers, "`, `") + "`"
 
-                ).queue();
+                ).setEphemeral(true).queue();
                 return;
             }
 
@@ -130,7 +130,7 @@ public class ConditionalMessageCommand extends Command {
             else if (co.getOptionType() == Integer.class || co.getOptionType() == Long.class) {
                 value = Long.parseLong(condStringSplit[0]);
             } else {
-                interaction.reply("An internal **error** occurred. Please check logs.").queue();
+                interaction.reply("An internal **error** occurred. Please check logs.").setEphemeral(true).queue();
                 System.err.println("[ConditionalMessageCommand] Received an unsupported data type!");
                 return;
             }

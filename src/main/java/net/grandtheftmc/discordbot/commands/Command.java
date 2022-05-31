@@ -15,6 +15,7 @@ import net.grandtheftmc.discordbot.utils.users.Rank;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,6 +60,7 @@ public abstract class Command extends ListenerAdapter {
         GTMUser gtmUser = GTMUser.getGTMUser(user.getIdLong()).orElse(null);
         MessageChannel channel = e.getChannel();
         String[] path = e.getInteraction().getCommandPath().split("/");
+        path = Arrays.copyOfRange(path, 1, path.length); //get rid of the command name in the path
 
         if (e.getName().equalsIgnoreCase(name)) {
 

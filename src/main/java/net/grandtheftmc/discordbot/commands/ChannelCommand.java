@@ -1,9 +1,7 @@
 package net.grandtheftmc.discordbot.commands;
 
-import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -12,12 +10,11 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.grandtheftmc.discordbot.GTMBot;
-import net.grandtheftmc.discordbot.utils.MembersCache;
+import net.grandtheftmc.discordbot.utils.Utils;
 import net.grandtheftmc.discordbot.utils.channels.CustomChannel;
 import net.grandtheftmc.discordbot.utils.database.UsersDAO;
 import net.grandtheftmc.discordbot.utils.database.sql.BaseDatabase;
 import net.grandtheftmc.discordbot.utils.selfdata.ChannelIdData;
-import net.grandtheftmc.discordbot.utils.Utils;
 import net.grandtheftmc.discordbot.utils.threads.ThreadUtil;
 import net.grandtheftmc.discordbot.utils.users.GTMUser;
 import net.grandtheftmc.discordbot.utils.users.Rank;
@@ -67,7 +64,7 @@ public class ChannelCommand extends Command {
         OptionData gangOption = new OptionData(OptionType.STRING, "server", "Which GTM server is your gang on?", true);
         gangOption.addChoice("gtm1", "gtm1");
         gangOption.addChoice("gtm4", "gtm4");
-        add.addOptions(gangOption);
+        addGang.addOptions(gangOption);
 
         SubcommandData remove = new SubcommandData("remove", "Remove the selected discord member from your custom channel.");
         remove.addOption(OptionType.USER, "user", "The user you want to remove or blacklist from your channel", true);
@@ -100,7 +97,7 @@ public class ChannelCommand extends Command {
                 }
 
                 if (CustomChannel.get(member).isPresent()) {
-                    interaction.reply("**You can only have `1` private channel at a time!**").queue();
+                    interaction.reply("**You can only have `1` private channel at a time!**").setEphemeral(true).queue();
                     return;
                 }
 
@@ -113,7 +110,7 @@ public class ChannelCommand extends Command {
                 customChannel.create().thenAccept( (vc) -> {
                     String msg = "**Successfully created your private channel `" + vc.getName() + "`!**\n";
                     msg += customChannel.getInvite().getUrl();
-                    interaction.reply(msg).queue();
+                    interaction.reply(msg).setEphemeral(true).queue();
                 });
 
                 break;
@@ -146,13 +143,13 @@ public class ChannelCommand extends Command {
                 Optional<CustomChannel> optionalChannel = CustomChannel.get(member);
 
                 if (!optionalChannel.isPresent()) {
-                    interaction.reply("**You don't own a custom channel! Do `/channel create` to make one.**").queue();
+                    interaction.reply("**You don't own a custom channel! Do `/channel create` to make one.**").setEphemeral(true).queue();
                     return;
                 }
 
                 boolean publicChannel = interaction.getOption("public").getAsBoolean();
                 optionalChannel.get().setPublicChannel(publicChannel);
-                interaction.reply("**Setting your custom channel to " + (publicChannel ? "public" : "private") + "!**").queue();
+                interaction.reply("**Setting your custom channel to " + (publicChannel ? "public" : "private") + "!**").setEphemeral(true).queue();
 
                 break;
             }
@@ -162,14 +159,14 @@ public class ChannelCommand extends Command {
                 Optional<CustomChannel> optionalChannel = CustomChannel.get(member);
 
                 if (!optionalChannel.isPresent()) {
-                    interaction.reply("**You don't own a custom channel! Do `/channel create` to make one.**").queue();
+                    interaction.reply("**You don't own a custom channel! Do `/channel create` to make one.**").setEphemeral(true).queue();
                     return;
                 }
 
                 int limit = interaction.getOption("max-users").getAsInt();
 
                 optionalChannel.get().setChannelMax(limit);
-                interaction.reply("**Setting max channel user limit to " + limit + " users...!**").queue();
+                interaction.reply("**Setting max channel user limit to " + limit + " users...!**").setEphemeral(true).queue();
 
                 break;
             }
@@ -179,19 +176,19 @@ public class ChannelCommand extends Command {
                 Optional<CustomChannel> optionalChannel = CustomChannel.get(member);
 
                 if (!optionalChannel.isPresent()) {
-                    interaction.reply("**You don't own a custom channel! Do `/channel create` to make one.**").queue();
+                    interaction.reply("**You don't own a custom channel! Do `/channel create` to make one.**").setEphemeral(true).queue();
                     return;
                 }
 
                 Member target = interaction.getOption("user").getAsMember();
 
                 if (target.equals(member)) {
-                    interaction.reply("**You can't add yourself to your channel because you own it!**").queue();
+                    interaction.reply("**You can't add yourself to your channel because you own it!**").setEphemeral(true).queue();
                     return;
                 }
 
                 optionalChannel.get().addMember(target);
-                interaction.reply("**Inviting " + target.getAsMention() + " to your custom channel!**").queue();
+                interaction.reply("**Inviting " + target.getAsMention() + " to your custom channel!**").setEphemeral(true).queue();
 
                 break;
             }
@@ -201,19 +198,19 @@ public class ChannelCommand extends Command {
                 Optional<CustomChannel> optionalChannel = CustomChannel.get(member);
 
                 if (!optionalChannel.isPresent()) {
-                    interaction.reply("**You don't own a custom channel! Do `/channel create` to make one.**").queue();
+                    interaction.reply("**You don't own a custom channel! Do `/channel create` to make one.**").setEphemeral(true).queue();
                     return;
                 }
 
                 Member target = interaction.getOption("user").getAsMember();
 
                 if (target.equals(member)) {
-                    interaction.reply("**You can't remove yourself from your own channel!**").queue();
+                    interaction.reply("**You can't remove yourself from your own channel!**").setEphemeral(true).queue();
                     return;
                 }
 
                 if (Rank.hasRolePerms(target, Rank.ADMIN)) {
-                    interaction.reply("**Sorry but it is not possible to block admins from your custom channel!**").queue();
+                    interaction.reply("**Sorry but it is not possible to block admins from your custom channel!**").setEphemeral(true).queue();
                     return;
                 }
 
@@ -224,7 +221,7 @@ public class ChannelCommand extends Command {
                     GTMBot.getGTMGuild().kickVoiceMember(target).queue();
                 }
 
-                interaction.reply("**" + target.getAsMention() + " has been removed from your custom voice channel!**").queue();
+                interaction.reply("**" + target.getAsMention() + " has been removed from your custom voice channel!**").setEphemeral(true).queue();
                 break;
             }
 
@@ -235,23 +232,29 @@ public class ChannelCommand extends Command {
                 Optional<CustomChannel> optionalChannel = CustomChannel.get(member);
 
                 if (!optionalChannel.isPresent()) {
-                    interaction.reply("**You don't own a custom channel! Do `/channel create` to make one.**").queue();
+                    interaction.reply("**You don't own a custom channel! Do `/channel create` to make one.**").setEphemeral(true).queue();
                     return;
                 }
 
                 if (gtmUser == null) {
-                    interaction.reply("**Your discord account is not linked to GTM so I can not find your gang members!**").queue();
+                    interaction.reply("**Your discord account is not linked to GTM so I can not find your gang members!**").setEphemeral(true).queue();
                     return;
                 }
 
                 ThreadUtil.runAsync( () -> {
                     try (Connection conn = BaseDatabase.getInstance(BaseDatabase.Database.USERS).getConnection()){
+
                         Object[] gangData = UsersDAO.getGangMembersFor(conn, gtmUser, server);
                         String gangName = (String) gangData[0];
                         List<GTMUser> gangMembers = (List<GTMUser>) gangData[1];
 
+                        if (gangName == null) {
+                            interaction.reply("**You are not in a gang on `" + server + "`!**").setEphemeral(true).queue();
+                            return;
+                        }
+
                         if (gangMembers.size() == 0) {
-                            interaction.reply("**No gang members of `" + gangName + "` were found that are linked to the discord on Server " + server.toUpperCase() + "!**").queue();
+                            interaction.reply("**No gang members of `" + gangName + "` were found that are linked to the discord on Server " + server.toUpperCase() + "!**").setEphemeral(true).queue();
                             return;
                         }
 
@@ -270,10 +273,10 @@ public class ChannelCommand extends Command {
                         });
                         sb.append(" to your custom channel!**");
 
-                        interaction.reply(sb.toString()).queue();
+                        interaction.reply(sb.toString()).setEphemeral(true).queue();
 
                     } catch (SQLException e) {
-                        Utils.printStackError(e);
+                        e.printStackTrace();
                     }
                 });
 
@@ -285,12 +288,12 @@ public class ChannelCommand extends Command {
                 Optional<CustomChannel> optionalChannel = CustomChannel.get(member);
 
                 if (!optionalChannel.isPresent()) {
-                    interaction.reply("**You don't own a custom channel! Do `/channel create` to make one.**").queue();
+                    interaction.reply("**You don't own a custom channel! Do `/channel create` to make one.**").setEphemeral(true).queue();
                     return;
                 }
 
                 optionalChannel.get().reset();
-                interaction.reply("**Resetting your custom channel " + optionalChannel.get().getChannelName() + " has been reset to default settings...!**").queue();
+                interaction.reply("**Resetting your custom channel " + optionalChannel.get().getChannelName() + " has been reset to default settings...!**").setEphemeral(true).queue();
 
                 break;
             }
@@ -300,12 +303,12 @@ public class ChannelCommand extends Command {
                 Optional<CustomChannel> optionalChannel = CustomChannel.get(member);
 
                 if (!optionalChannel.isPresent()) {
-                    interaction.reply("**You don't own a custom channel! Do `/channel create` to make one.**").queue();
+                    interaction.reply("**You don't own a custom channel! Do `/channel create` to make one.**").setEphemeral(true).queue();
                     return;
                 }
 
                 optionalChannel.get().remove();
-                interaction.reply("**Deleting your custom channel `" + optionalChannel.get().getChannelName() + "`...!**").queue();
+                interaction.reply("**Deleting your custom channel `" + optionalChannel.get().getChannelName() + "`...!**").setEphemeral(true).queue();
 
                 break;
             }
@@ -313,14 +316,14 @@ public class ChannelCommand extends Command {
             case "setcategory": {
 
                 if (!Rank.hasRolePerms(member, Rank.ADMIN)) {
-                    interaction.reply("**Sorry but only Admins+ can use this sub-command!**").queue();
+                    interaction.reply("**Sorry but only Admins+ can use this sub-command!**").setEphemeral(true).queue();
                     return;
                 }
 
                 long categoryId = interaction.getOption("category").getAsGuildChannel().getIdLong();
 
                 ChannelIdData.get().setPrivateChannelsCategoryId(categoryId);
-                interaction.reply("**<@" + categoryId + "> has been successfully set as the private channels category.**").queue();
+                interaction.reply("**<@" + categoryId + "> has been successfully set as the private channels category.**").setEphemeral(true).queue();
 
                 break;
             }

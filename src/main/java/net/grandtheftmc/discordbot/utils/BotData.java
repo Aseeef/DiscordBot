@@ -11,7 +11,7 @@ public enum BotData {
     // Note: Data type must only contain default java class or primative classes list ArrayList, HashMap, Long, String, etc...
     LAST_BOT_NAME("Harry"),
     AVATAR_LAST_EDIT( 1628887011000L),
-    LAST_SUGGEST_MSG_ID( 0L),
+    //LAST_SUGGEST_MSG_ID( 0L),
     LAST_SUGGEST_EMBED_ID( 0L),
     LAST_BUG_MSG_ID( 0L),
     LAST_BUG_EMBED_ID( 0L),

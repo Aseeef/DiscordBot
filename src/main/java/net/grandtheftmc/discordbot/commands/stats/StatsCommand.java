@@ -31,9 +31,9 @@ public class StatsCommand extends Command {
         boolean success = menu.load();
 
         if (!success) {
-            interaction.reply("**Invalid Player!** The player '" + path[0] + "' does not exist / has never played GTM!").queue();
+            interaction.reply("**Invalid Player!** The player '" + path[0] + "' does not exist / has never played GTM!").setEphemeral(true).queue();
         } else {
-            interaction.reply("").queue();
+            interaction.reply("Success!").setEphemeral(true).queue();
         }
 
     }

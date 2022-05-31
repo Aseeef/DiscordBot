@@ -6,8 +6,10 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.grandtheftmc.discordbot.utils.MembersCache;
 import net.grandtheftmc.discordbot.utils.pagination.DiscordMenu;
 import net.grandtheftmc.discordbot.utils.Utils;
@@ -30,95 +32,93 @@ public class StaffAccountCommand extends Command {
 
     @Override
     public void buildCommandData(SlashCommandData slashCommandData) {
+        SubcommandData check = new SubcommandData("check", "Checks which player the specified discord user is linked to");
+        check.addOption(OptionType.STRING, "target-id", "The ingame name, discord id, or discord tag of the target user");
 
+        SubcommandData refresh = new SubcommandData("refresh", "Refreshes the target's information (if they are linked to GTM)");
+        check.addOption(OptionType.STRING, "target-id", "The ingame name, discord id, or discord tag of the target user");
+
+        SubcommandData refreshAll = new SubcommandData("refreshall", "Refreshes account data for all verified users");
+
+        SubcommandData list = new SubcommandData("list", "Lists all verified users");
+
+        slashCommandData.addSubcommands(check, refresh, refreshAll, list);
     }
 
     @Override
     public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, List<OptionMapping> arguments, Member member, GTMUser gtmUser, String[] path) {
 
-        if (path.length < 1) {
-            Utils.sendThenDelete(channel, getCommandHelpMsg());
-            return;
-        }
-
         switch (path[0].toLowerCase()) {
 
             case "check": {
 
-                if (path.length < 2) {
-                    Utils.sendThenDelete(channel, "`/Accounts Check <Member ID / Tag>` - *Verify your discord account with GTM*");
-                    return;
-                }
-
-                Optional<Member> optionalTarget = MembersCache.getMember(path[1]);
+                String targetUser = interaction.getOption("target-id").getAsString();
+                Optional<Member> optionalTarget = MembersCache.getMember(targetUser);
 
                 if (!optionalTarget.isPresent()) {
-                    Utils.sendThenDelete(channel, "**Target user not found!**");
+                    interaction.reply("**Target user not found!**").setEphemeral(true).queue();
                     return;
                 }
 
                 GTMUser user = GTMUser.getGTMUser(optionalTarget.get().getIdLong()).orElse(null);
                 if (user == null) {
-                    Utils.sendThenDelete(channel, "**That user is not linked to GTM!**");
+                    interaction.reply( "**That user is not linked to GTM!**").setEphemeral(true).queue();
                     return;
                 }
 
-                Utils.sendThenDelete(channel, getInfoFor(optionalTarget.get(), user).build());
+                interaction.replyEmbeds(getInfoFor(optionalTarget.get(), user).build()).queue();
 
                 break;
             }
 
             case "refresh": {
 
-                if (path.length < 2) {
-                    Utils.sendThenDelete(channel, "`/Accounts Refresh <Member ID / Tag>` - *Verify your discord account with GTM*");
-                    return;
-                }
-
-                Optional<Member> optionalTarget = MembersCache.getMember(path[1]);
+                String targetUser = interaction.getOption("target-id").getAsString();
+                Optional<Member> optionalTarget = MembersCache.getMember(targetUser);
 
                 if (!optionalTarget.isPresent()) {
-                    Utils.sendThenDelete(channel, "**Target user not found!**");
+                    interaction.reply("**Target user not found!**").setEphemeral(true).queue();
                     return;
                 }
 
                 GTMUser user = GTMUser.getGTMUser(optionalTarget.get().getIdLong()).orElse(null);
                 if (user == null) {
-                    Utils.sendThenDelete(channel, "**That user is not linked to GTM!**");
+                    interaction.reply("**That user is not linked to GTM!**").setEphemeral(true).queue();
                     return;
                 }
 
                 ThreadUtil.runAsync(user::updateUserDataNow);
-                Utils.sendThenDelete(channel, "**Successfully refreshed user data for " + optionalTarget.get().getUser().getAsTag() + " (" + user.getUsername() + ")!**");
+                interaction.reply( "**Successfully refreshed user data for " + optionalTarget.get().getUser().getAsTag() + " (" + user.getUsername() + ")!**").queue();
 
                 break;
             }
 
             case "refreshall": {
                 if (!Rank.hasRolePerms(member, Rank.ADMIN)) {
-                    Utils.sendThenDelete(channel, "**You must be an Admin or higher to use this command.**");
+                    interaction.reply("**You must be an Admin or higher to use this command.**").setEphemeral(true).queue();
                     return;
                 }
-                channel.sendMessage("**Updating roles and data for all verified users. [Progress: `?%`]**").queue(
-                        msg -> {
-                            AtomicInteger index = new AtomicInteger(1);
-                            List<GTMUser> users = GTMUser.getLoadedUsers();
+                interaction.reply("**Updating roles and data for all verified users. [Progress: `?%`]**").queue(interactionHook -> {
+                            interactionHook.retrieveOriginal().queue(msg -> {
+                                AtomicInteger index = new AtomicInteger(1);
+                                List<GTMUser> users = GTMUser.getLoadedUsers();
 
-                            ScheduledFuture<?> task = ThreadUtil.runTaskTimer( () -> {
-                                int percent = Math.round((((float) index.get()) / (float) users.size()) * 100);
-                                int remaining = users.size() - index.get();
-                                int eta = Math.round((remaining * 715) / 1000f); // test show each user to take ~715ms to update
-                                msg.editMessage("**Updating roles and data for all verified users. [Progress: `"+percent+"%`] [ETA: `" + eta + " sec`]**").complete();
-                            }, 1000, 3000);
-                            ThreadUtil.runAsync( () -> {
-                                long start = System.currentTimeMillis();
-                                for (GTMUser user : users) {
-                                    user.updateUserDataNow();
-                                    index.addAndGet(1);
-                                }
-                                task.cancel(true);
-                                msg.delete().complete();
-                                Utils.sendThenDelete(channel, "**All user roles and data have been successfully updated in `" + (System.currentTimeMillis() - start) + " ms`!**");
+                                ScheduledFuture<?> task = ThreadUtil.runTaskTimer(() -> {
+                                    int percent = Math.round((((float) index.get()) / (float) users.size()) * 100);
+                                    int remaining = users.size() - index.get();
+                                    int eta = Math.round((remaining * 715) / 1000f); // test show each user to take ~715ms to update
+                                    msg.editMessage("**Updating roles and data for all verified users. [Progress: `" + percent + "%`] [ETA: `" + eta + " sec`]**").complete();
+                                }, 1000, 3000);
+                                ThreadUtil.runAsync(() -> {
+                                    long start = System.currentTimeMillis();
+                                    for (GTMUser user : users) {
+                                        user.updateUserDataNow();
+                                        index.addAndGet(1);
+                                    }
+                                    task.cancel(true);
+                                    msg.delete().complete();
+                                    interactionHook.sendMessage( "**All user roles and data have been successfully updated in `" + (System.currentTimeMillis() - start) + " ms`!**").setEphemeral(true).queue();
+                                });
                             });
                         }
                 );
@@ -127,9 +127,10 @@ public class StaffAccountCommand extends Command {
 
             case "list": {
                 if (!Rank.hasRolePerms(member, Rank.ADMIN)) {
-                    Utils.sendThenDelete(channel, "**You must be an Admin or higher to use this command.**");
+                    interaction.reply("**You must be an Admin or higher to use this command.**").setEphemeral(true).queue();
                     return;
                 }
+                interaction.reply("Generating list of all verified users...").setEphemeral(true).queue();
                 List<GTMUser> users = GTMUser.getLoadedUsers();
                 users.sort( (u1, u2) -> u1.getUsername().compareToIgnoreCase(u2.getUsername()));
                 int maxPage = (int) Math.ceil(users.size() / 8f);
@@ -138,11 +139,6 @@ public class StaffAccountCommand extends Command {
                         menu.setPageContents(getPageInfo(users, menu.getPage(), menu.getMaxPages()));
                     });
                 }));
-                break;
-            }
-
-            default: {
-                Utils.sendThenDelete(channel, getCommandHelpMsg());
                 break;
             }
 
@@ -173,16 +169,6 @@ public class StaffAccountCommand extends Command {
         }));
 
         return embedBuilder;
-    }
-
-    private Message getCommandHelpMsg() {
-        return new MessageBuilder()
-                .append("> **Please enter a valid command argument:**\n")
-                .append("> `/Accounts Check <Member ID / Tag>` - *Checks which player the specified discord user is linked to*\n")
-                .append("> `/Accounts Refresh <Member ID / Tag>` - *Refreshes the target's information (if they are linked to GTM)*\n")
-                .append("> `/Accounts RefreshAll` - *Refreshes account data for all verified users*\n")
-                .append("> `/Accounts List` - *Lists all verified users*\n")
-                .build();
     }
 
 }

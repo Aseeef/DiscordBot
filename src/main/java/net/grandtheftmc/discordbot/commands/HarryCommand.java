@@ -19,17 +19,17 @@ public class HarryCommand extends Command {
 
     @Override
     public void buildCommandData(SlashCommandData slashCommandData) {
-
     }
 
     @Override
     public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, List<OptionMapping> arguments, Member member, GTMUser gtmUser, String[] path) {
         member.getUser().openPrivateChannel().queue(
                 privateChannel -> privateChannel.sendMessage("**Hello! I am Harry. The discord bot. How can I help you?** \n Tip: Use `" + Config.get().getCommandPrefix() +"help` to see a list of commands you can use!").queue( pc ->
-                        Utils.sendThenDelete(channel, "** " + member.getAsMention() + " I have opened a private channel conversation with you! Check your direct messages.**"),
+                        interaction.reply("** " + member.getAsMention() + " I have opened a private channel conversation with you! Check your direct messages.**").queue(),
                 error -> {
                     if (error != null) {
-                        Utils.sendThenDelete(channel, "**" + member.getAsMention() + " I was unable to DM you! Please make sure you have your messages from members of this this server enabled in your privacy settings as shown below!**", Utils.getAsset("whitelist.png"));
+                        interaction.reply("**" + member.getAsMention() + " I was unable to DM you! Please make sure you have your messages from members of this this server enabled in your privacy settings as shown below!**").queue();
+                        Utils.sendThenDelete(channel, "", Utils.getAsset("whitelist.png"));
                     }
                 }));
     }

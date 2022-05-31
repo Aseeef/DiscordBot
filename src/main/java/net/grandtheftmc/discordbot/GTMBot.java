@@ -8,7 +8,6 @@ import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
-import net.dv8tion.jda.api.interactions.commands.privileges.CommandPrivilege;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.grandtheftmc.discordbot.commands.*;
@@ -16,7 +15,7 @@ import net.grandtheftmc.discordbot.commands.bugs.BugReportCommand;
 import net.grandtheftmc.discordbot.commands.bugs.ReportListener;
 import net.grandtheftmc.discordbot.commands.message.ConditionalMessageCommand;
 import net.grandtheftmc.discordbot.commands.stats.StatsCommand;
-import net.grandtheftmc.discordbot.commands.suggestions.SuggestionCommand;
+import net.grandtheftmc.discordbot.commands.suggestions.SuggestAdminCommand;
 import net.grandtheftmc.discordbot.commands.suggestions.SuggestionListener;
 import net.grandtheftmc.discordbot.events.GuildReaction;
 import net.grandtheftmc.discordbot.events.OnGuildMessage;
@@ -125,12 +124,12 @@ public class GTMBot extends ListenerAdapter {
 
             // JDA Events
             jda.addEventListener(new GTMBot());
-            jda.addEventListener(new SuggestionListener());
             jda.addEventListener(new OnJoin());
             jda.addEventListener(new GuildReaction());
             jda.addEventListener(new OnGuildMessage());
             jda.addEventListener(new MembersCache());
             jda.addEventListener(new ReportListener());
+            jda.addEventListener(new SuggestionListener());
 
             // Self user settings functions to check if there was utils.config change to prevent
             // unnecessary calls to the discord api which may result in us getting rate limited
@@ -156,7 +155,7 @@ public class GTMBot extends ListenerAdapter {
         guild = GTMBot.getJDA().getGuilds().get(0);
 
         // JDA Commands - All Commands MUST BE REGISTERED HERE
-        new SuggestionCommand();
+        new SuggestAdminCommand();
         new PlayerCountCommand();
         new RaidModeCommand();
         //new SeniorsCommand();
