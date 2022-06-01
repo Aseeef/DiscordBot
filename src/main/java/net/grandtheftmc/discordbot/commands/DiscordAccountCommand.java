@@ -43,9 +43,10 @@ public class DiscordAccountCommand extends Command {
         switch (path[0].toLowerCase()) {
             case "verify":
 
+                System.out.println(member);
                 if (Data.exists(Data.USER, member.getIdLong())) {
                     GTMUser user = (GTMUser) Data.obtainData(Data.USER, member.getIdLong());
-                    interaction.reply("**Your discord account is already linked to the player `" + user.getUsername() + "`!**").setEphemeral(true).queue();
+                    interaction.reply("**Your discord account is already linked to the player `" + (user == null ? "null" : user.getUsername()) + "`!**").setEphemeral(true).queue();
                     return;
                 }
 

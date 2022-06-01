@@ -4,7 +4,7 @@ import lombok.Getter;
 
 public enum ConditionType {
 
-    EQUAL_TO("=="),
+    EQUAL_TO("="),
     GREATER_THAN(">"),
     GREATER_THAN_OR_EQUAL_TO(">="),
     LESS_THAN("<"),
@@ -12,7 +12,7 @@ public enum ConditionType {
     ;
 
     @Getter
-    private String conditionString;
+    private final String conditionString;
     ConditionType(String conditionString) {
         this.conditionString = conditionString;
     }

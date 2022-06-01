@@ -69,6 +69,9 @@ public class ConditionalMessageCommand extends Command {
                     conditionString = conditionString.replaceFirst(ct.getConditionString(), "").trim();
                 }
             }
+
+            System.out.println(conditionString);
+
             if (conditionType == null) {
                 interaction.reply(
                         "Conditional message construction **failed**! " +
@@ -85,15 +88,7 @@ public class ConditionalMessageCommand extends Command {
             // now the conditionString looks something like this: "100:gtm1"
             String[] condStringSplit = conditionString.split(":");
             if (condStringSplit.length != 2) {
-                interaction.reply(
-                        "Conditional message construction **failed**! " +
-                                "Invalid message formatting! Here are some examples of correctly formatted conditions:\n" +
-                                "__Playtime Condition__: `<15:gtm1` - filter to players with less than 15 hrs of playtime on gtm1.\n" +
-                                "__Money Condition__: `>=2500000:global` - filter to players with greater than or equal to 2.5 mil combined on all gtm servers.\n" +
-                                "__Rank Condition__: `>=ELITE:gtm4` - filter to players or have a rank greater than or equal to ELITE on gtm4.\n" +
-                                "__Level Condition__: `==100:global` - filter to players that have EXACTLY level 100 on ANY gtm server.\n" +
-                                "__Last-Played Condition__: `>=2022-20-04:global` - filter to all players that played on or after April 20, 2022 across the network."
-                ).setEphemeral(true).queue();
+                sendInvalidFormat(interaction);
                 return;
             }
 
@@ -118,20 +113,26 @@ public class ConditionalMessageCommand extends Command {
             }
 
             condStringSplit[0] = condStringSplit[0].trim();
-            if (co.getOptionType() == Double.class || co.getOptionType() == Float.class) {
-                value = Double.parseDouble(condStringSplit[0]);
-            }
-            else if (co.getOptionType() == String.class) {
-                value = condStringSplit[0];
-            }
-            else if (co.getOptionType() == Boolean.class) {
-                value = Boolean.parseBoolean(condStringSplit[0]);
-            }
-            else if (co.getOptionType() == Integer.class || co.getOptionType() == Long.class) {
-                value = Long.parseLong(condStringSplit[0]);
-            } else {
-                interaction.reply("An internal **error** occurred. Please check logs.").setEphemeral(true).queue();
-                System.err.println("[ConditionalMessageCommand] Received an unsupported data type!");
+            try {
+                if (co.getOptionType() == Double.class) {
+                    value = Double.parseDouble(condStringSplit[0]);
+                } else if (co.getOptionType() == Float.class) {
+                    value = Float.parseFloat(condStringSplit[0]);
+                } else if (co.getOptionType() == String.class) {
+                    value = condStringSplit[0];
+                } else if (co.getOptionType() == Boolean.class) {
+                    value = Boolean.parseBoolean(condStringSplit[0]);
+                } else if (co.getOptionType() == Integer.class) {
+                    value = Integer.parseInt(condStringSplit[0]);
+                } else if (co.getOptionType() == Long.class) {
+                    value = Long.parseLong(condStringSplit[0]);
+                } else {
+                    interaction.reply("An internal **error** occurred. Please check logs.").setEphemeral(true).queue();
+                    System.err.println("[ConditionalMessageCommand] Received an unsupported data type!");
+                    return;
+                }
+            } catch (NumberFormatException ignored) {
+                sendInvalidFormat(interaction);
                 return;
             }
 
@@ -142,6 +143,7 @@ public class ConditionalMessageCommand extends Command {
                 value = sdf.parse((String) value, new ParsePosition(0)).toInstant();
             }
 
+            assert value != null;
             messageConditionSet.add(new ConditionalMessage.MessageCondition(co, conditionType, value, targetServer));
         }
 
@@ -156,12 +158,12 @@ public class ConditionalMessageCommand extends Command {
         } else {
             embedBuilders.setDescription("No conditions were specified. Did you know, you can only message certain people by specifying conditions?")
                     .addField("Support Conditions", StringUtils.join(ConditionalOption.displayValues(), ", "), false)
-                    .addField("Condition Format", "[>,>=,<,<=,==][condition_name]:[server_id/global]", false)
+                    .addField("Condition Format", "[>,>=,<,<=,=][condition_name]:[server_id/global]", false)
                     .addField("Examples",
                             "__Playtime Condition__: `<15:gtm1` - filter to players with less than 15 hrs of playtime on gtm1.\n" +
                                     "__Money Condition__: `>=2500000:global` - filter to players with greater than or equal to 2.5 mil combined on all gtm servers.\n" +
                                     "__Rank Condition__: `>=ELITE:gtm4` - filter to players or have a rank greater than or equal to ELITE on gtm4.\n" +
-                                    "__Level Condition__: `==100:global` - filter to players that have EXACTLY level 100 on ANY gtm server.\n" +
+                                    "__Level Condition__: `=100:global` - filter to players that have EXACTLY level 100 on ANY gtm server.\n" +
                                     "__Last-Played Condition__: `>=2022-20-04:global` - filter to all players that played on or after April 20, 2022 across the network.",
                             false
                     );
@@ -171,6 +173,18 @@ public class ConditionalMessageCommand extends Command {
                 .queue();
 
         userConfirmationMap.put(member.getUser(), messageConditionSet);
+    }
+
+    private static void sendInvalidFormat(SlashCommandInteraction interaction) {
+        interaction.reply(
+                "Conditional message construction **failed**! " +
+                        "Invalid message formatting! Here are some examples of correctly formatted conditions:\n" +
+                        "__Playtime Condition__: `<15:gtm1` - filter to players with less than 15 hrs of playtime on gtm1.\n" +
+                        "__Money Condition__: `>=2500000:global` - filter to players with greater than or equal to 2.5 mil combined on all gtm servers.\n" +
+                        "__Rank Condition__: `>=ELITE:gtm4` - filter to players or have a rank greater than or equal to ELITE on gtm4.\n" +
+                        "__Level Condition__: `==100:global` - filter to players that have EXACTLY level 100 on ANY gtm server.\n" +
+                        "__Last-Played Condition__: `>=2022-20-04:global` - filter to all players that played on or after April 20, 2022 across the network."
+        ).setEphemeral(true).queue();
     }
 
     @Override
@@ -228,7 +242,7 @@ public class ConditionalMessageCommand extends Command {
             } catch (NumberFormatException ignored) {
             }
 
-            event.deferReply().complete();
+            event.reply("Sending messages to all target users... this might take a while...").queue();
 
             ConditionalMessage cm = new ConditionalMessage(event.getMember(), title, description, color, imageUrl, userConfirmationMap.get(event.getUser()));
             try {
