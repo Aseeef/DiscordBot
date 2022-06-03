@@ -5,21 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="fixed stuff">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/Command.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/Command.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/DiscordAccountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/DiscordAccountCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/StaffAccountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/StaffAccountCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/message/ConditionType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/message/ConditionType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/message/ConditionalMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/message/ConditionalMessage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/message/ConditionalMessageCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/message/ConditionalMessageCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/stats/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/stats/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/stats/StatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/stats/StatsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/stats/StatsDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/stats/StatsDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/stats/wrappers/Session.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/stats/wrappers/Session.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/suggestions/SuggestAdminCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/suggestions/SuggestAdminCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/suggestions/SuggestionTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/suggestions/SuggestionTools.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/console/Logs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/console/Logs.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/message/ConditionalOption.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/message/ConditionalOption.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/threads/ThreadUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/threads/ThreadUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/users/GTMUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/users/GTMUser.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -625,14 +616,8 @@
       <workItem from="1653934956092" duration="14315000" />
       <workItem from="1654011983520" duration="11768000" />
       <workItem from="1654026575282" duration="15320000" />
-      <workItem from="1654096214680" duration="393000" />
-    </task>
-    <task id="LOCAL-00049" summary="* Added basic staff stats&#10;* Improved ticket event system&#10;* Tickets not replied to in 3d+ reminder&#10;* Fixed PHP parser (hence fixed staff report alerts)&#10;* Depreciated old support ticket alert event system">
-      <created>1620764594275</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1620764594276</updated>
+      <workItem from="1654096214680" duration="1654000" />
+      <workItem from="1654275816395" duration="7426000" />
     </task>
     <task id="LOCAL-00050" summary="* Fixed version for discord jda">
       <created>1620764685470</created>
@@ -970,7 +955,14 @@
       <option name="project" value="LOCAL" />
       <updated>1654026517396</updated>
     </task>
-    <option name="localTasksCounter" value="98" />
+    <task id="LOCAL-00098" summary="fixed stuff">
+      <created>1654096878412</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1654096878412</updated>
+    </task>
+    <option name="localTasksCounter" value="99" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -20,10 +20,8 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.Instant;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -54,10 +52,10 @@ public class ConditionalMessage {
     public CompletableFuture<Boolean> sendMessage() throws Exception {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
 
-        ThreadUtil.runAsync(() -> {
-            if (this.targetUsers == null)
-                this.targetUsers = compileSendUsers();
+        if (this.targetUsers == null)
+            this.targetUsers = compileSendUsers();
 
+        ThreadUtil.runAsync(() -> {
             for (GTMUser gtmUser : this.targetUsers) {
                 try {
                     Optional<User> opUser = gtmUser.getUser();
@@ -70,6 +68,8 @@ public class ConditionalMessage {
                         if (successfullyMessaged % 20 == 0) {
                             System.out.println("[Debug] [ConditionaMessage] Successfully conditionally messaged " + successfullyMessaged + " users...!");
                         }
+                    } else {
+                        System.err.println("Error, user not found! [" + gtmUser.getDiscordId() + "] [" + gtmUser.getUsername() + "]");
                     }
                 }
                 catch (ErrorResponseException ignored) {
@@ -130,6 +130,7 @@ public class ConditionalMessage {
         // list of all potential candidates for this message (which is
         // every single verified user)
         ArrayList<GTMUser> gtmUsers = new ArrayList<>(GTMUser.getLoadedUsers());
+        GTMUser.setDisableDataUpdates(true);
 
         // go through each condition removing users from the gtmUsers list
         // if they don't meet the condition
@@ -194,6 +195,8 @@ public class ConditionalMessage {
 
         }
 
+        GTMUser.setDisableDataUpdates(false);
+
         return gtmUsers;
 
     }
@@ -242,7 +245,7 @@ public class ConditionalMessage {
                 while (rs.next()) {
                     long discordId = rs.getLong("discord_id");
                     Rank rank = Rank.getRankFromString(rs.getString("rank"));
-                    Rank targetRank = Rank.getRankFromString(((String) condition.value).toUpperCase());
+                    Rank targetRank = (Rank) condition.value;
                     switch (condition.getType()) {
                         case EQUAL_TO:
                             if (rank == targetRank) {
@@ -328,7 +331,7 @@ public class ConditionalMessage {
 
         try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, condition.targetServer == null ? "%" : condition.targetServer.toString().toUpperCase());
-            ps.setLong(2, ((long) condition.value) * 1000L * 60 * 60);
+            ps.setLong(2, ((int) condition.value) * 1000L * 60 * 60);
 
             System.out.println("[ConditionalMessage] Executing the following query: " + ps);
 
@@ -347,13 +350,14 @@ public class ConditionalMessage {
                 "                  SELECT MAX(session_end) as 'last_seen', discord_id\n" +
                 "                  FROM user_sessions INNER JOIN discord_users ON user_sessions.uuid=discord_users.uuid\n" +
                 "                  WHERE discord_id != -1 AND server_key LIKE ?\n" +
-                "                  GROUP BY user_sessions.uuid\n" +
+                "                  GROUP BY discord_id\n" +
                 "              ) as seen WHERE last_seen " + condition.getType().getConditionString() + " ?;";
 
         try (PreparedStatement ps = conn.prepareStatement(query)) {
 
             // if target server is null, then we consider last played over ALL servers (hence the wildcard)
             ps.setString(1, condition.targetServer == null ? "%" : condition.targetServer.toString().toUpperCase());
+            ps.setLong(2, ((Instant) condition.value).toEpochMilli());
 
             System.out.println("[ConditionalMessage] Executing the following query: " + ps);
 

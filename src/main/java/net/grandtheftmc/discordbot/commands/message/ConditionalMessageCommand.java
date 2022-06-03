@@ -24,8 +24,10 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.*;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public class ConditionalMessageCommand extends Command {
@@ -69,8 +71,6 @@ public class ConditionalMessageCommand extends Command {
                     conditionString = conditionString.replaceFirst(ct.getConditionString(), "").trim();
                 }
             }
-
-            System.out.println(conditionString);
 
             if (conditionType == null) {
                 interaction.reply(
@@ -126,7 +126,15 @@ public class ConditionalMessageCommand extends Command {
                     value = Integer.parseInt(condStringSplit[0]);
                 } else if (co.getOptionType() == Long.class) {
                     value = Long.parseLong(condStringSplit[0]);
-                } else {
+                }
+                else if (co.getOptionType() == Rank.class) {
+                    value = Rank.valueOf(condStringSplit[0].toUpperCase());
+                }
+                else if (co.getOptionType() == Instant.class) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    value = sdf.parse(condStringSplit[0], new ParsePosition(0)).toInstant();
+                }
+                else {
                     interaction.reply("An internal **error** occurred. Please check logs.").setEphemeral(true).queue();
                     System.err.println("[ConditionalMessageCommand] Received an unsupported data type!");
                     return;
@@ -134,13 +142,6 @@ public class ConditionalMessageCommand extends Command {
             } catch (NumberFormatException ignored) {
                 sendInvalidFormat(interaction);
                 return;
-            }
-
-            // need to convert into epoch time for the "last-played" condition
-            if (co == ConditionalOption.LAST_PLAYED) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                assert value instanceof String;
-                value = sdf.parse((String) value, new ParsePosition(0)).toInstant();
             }
 
             assert value != null;
@@ -242,17 +243,19 @@ public class ConditionalMessageCommand extends Command {
             } catch (NumberFormatException ignored) {
             }
 
-            event.reply("Sending messages to all target users... this might take a while...").queue();
+            event.deferReply().queue();
 
             ConditionalMessage cm = new ConditionalMessage(event.getMember(), title, description, color, imageUrl, userConfirmationMap.get(event.getUser()));
             try {
-                cm.sendMessage().thenAccept((success) -> {
+                CompletableFuture<Boolean> cf = cm.sendMessage();
+                event.getHook().editOriginal("Successfully compiled a list of " + cm.getTargetUsers().size() + " target users. Now sending messages... (this could take a while)").queue();
+                cf.thenAccept((success) -> {
                     if (success)
-                        event.getHook().editOriginal("Successfully sent the following conditional message to `" + cm.getSuccessfullyMessaged() + "`/`" + cm.getTargetUsers().size() + "` of the target users!").queue(
+                        event.getHook().sendMessage("Successfully sent the following conditional message to `" + cm.getSuccessfullyMessaged() + "`/`" + cm.getTargetUsers().size() + "` of the target users!").queue(
                                 followUp -> event.getHook().sendMessageEmbeds(cm.getEmbed(null)).queue()
                         );
                     else
-                        event.getHook().editOriginal("An unknown error occurred when processing messages. Only `" + cm.getSuccessfullyMessaged() + "`/`" + cm.getTargetUsers().size() + "` of the target users were messaged. Please check console!").queue(
+                        event.getHook().sendMessage("An unknown error occurred when processing messages. Only `" + cm.getSuccessfullyMessaged() + "`/`" + cm.getTargetUsers().size() + "` of the target users were messaged. Please check console!").queue(
                                 followUp -> event.getHook().sendMessageEmbeds(cm.getEmbed(null)).queue()
                         );
                 });
