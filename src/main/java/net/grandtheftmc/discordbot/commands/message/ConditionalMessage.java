@@ -20,10 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.Instant;
 import java.util.List;
 import java.util.*;
@@ -55,10 +52,10 @@ public class ConditionalMessage {
     public CompletableFuture<Boolean> sendMessage() throws Exception {
         CompletableFuture<Boolean> future = new CompletableFuture<>();
 
-        ThreadUtil.runAsync(() -> {
-            if (this.targetUsers == null)
-                this.targetUsers = compileSendUsers();
+        if (this.targetUsers == null)
+            this.targetUsers = compileSendUsers();
 
+        ThreadUtil.runAsync(() -> {
             for (GTMUser gtmUser : this.targetUsers) {
                 try {
                     Optional<User> opUser = gtmUser.getUser();
@@ -66,11 +63,18 @@ public class ConditionalMessage {
                         PrivateChannel pc = opUser.get().openPrivateChannel().complete();
                         MessageEmbed embed = getEmbed(gtmUser);
                         pc.sendMessageEmbeds(embed).complete();
+                        System.out.println("Messaging " + gtmUser.getUsername());
                         successfullyMessaged++;
+                        if (successfullyMessaged % 20 == 0) {
+                            System.out.println("[Debug] [ConditionaMessage] Successfully conditionally messaged " + successfullyMessaged + " users...!");
+                        }
+                    } else {
+                        System.err.println("Error, user not found! [" + gtmUser.getDiscordId() + "] [" + gtmUser.getUsername() + "]");
                     }
                 }
                 catch (ErrorResponseException ignored) {
                     // happens when the player has dms disabled
+                    System.out.println("Failed to message " + gtmUser.getUsername());
                 }
                 catch (Exception ex) {
                     ex.printStackTrace();
@@ -126,6 +130,7 @@ public class ConditionalMessage {
         // list of all potential candidates for this message (which is
         // every single verified user)
         ArrayList<GTMUser> gtmUsers = new ArrayList<>(GTMUser.getLoadedUsers());
+        GTMUser.setDisableDataUpdates(true);
 
         // go through each condition removing users from the gtmUsers list
         // if they don't meet the condition
@@ -159,7 +164,7 @@ public class ConditionalMessage {
                         Set<GTMUser> tempUsers = new HashSet<>(); //all users who meet this condition
                         handleLevel(conn, condition, tempUsers);
                         gtmUsers.removeIf(user -> !tempUsers.contains(user));
-                    } catch (SQLException ex) {
+                    } catch (SQLException | IllegalArgumentException ex) {
                         ex.printStackTrace();
                     }
                     break;
@@ -190,56 +195,38 @@ public class ConditionalMessage {
 
         }
 
+        GTMUser.setDisableDataUpdates(false);
+
         return gtmUsers;
 
     }
 
     public static void handleMoney(Connection conn, MessageCondition condition, Set<GTMUser> listToModify) throws SQLException {
-        String query = "SELECT discord_users.discord_id,SUM(user_currency.amount) as 'money' FROM user_currency INNER JOIN discord_users ON user_currency.uuid=discord_users.uuid WHERE discord_id != -1 " + (condition.targetServer == null ? "" : "AND user_currency.server_key=? ") + "AND (currency='BANK' OR currency='MONEY') GROUP BY user_currency.uuid;";
+        String query = "SELECT discord_id, money FROM (\n" +
+                "                                  SELECT discord_users.discord_id, SUM(user_currency.amount) as 'money'\n" +
+                "                                  FROM user_currency\n" +
+                "                                           INNER JOIN discord_users ON user_currency.uuid = discord_users.uuid\n" +
+                "                                  WHERE discord_id != -1\n" +
+                "                                    AND user_currency.server_key LIKE ?\n" +
+                "                                    AND (currency = 'BANK' OR currency = 'MONEY')\n" +
+                "                                  GROUP BY user_currency.uuid\n" +
+                "                              ) as dim WHERE money " + condition.getType().getConditionString() + " ?;";
 
         try (PreparedStatement ps = conn.prepareStatement(query)) {
 
             // if null, then we do global money
-            if (condition.targetServer != null)
-                ps.setString(1, condition.targetServer.toString().toUpperCase());
+           ps.setString(1, condition.targetServer == null ? "%" : condition.targetServer.toString().toUpperCase());
+           ps.setLong(2, (Long) condition.value);
 
             System.out.println("[ConditionalMessage] Executing the following query: " + ps);
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-
-                    long money = rs.getLong("money");
                     long discordId = rs.getLong("discord_id");
-
-                    switch (condition.getType()) {
-                        case EQUAL_TO:
-                            if (money == (long) condition.value) {
-                                GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
-                            }
-                            continue;
-                        case LESS_THAN:
-                            if (money < (long) condition.value) {
-                                GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
-                            }
-                            continue;
-                        case LESS_THAN_OR_EQUAL_TO:
-                            if (money <= (long) condition.value) {
-                                GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
-                            }
-                            continue;
-                        case GREATER_THAN:
-                            if (money > (long) condition.value) {
-                                GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
-                            }
-                            continue;
-                        case GREATER_THAN_OR_EQUAL_TO:
-                            if (money >= (long) condition.value) {
-                                GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
-                            }
-                            continue;
-                    }
+                    GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
                 }
             }
+
         }
     }
 
@@ -258,7 +245,7 @@ public class ConditionalMessage {
                 while (rs.next()) {
                     long discordId = rs.getLong("discord_id");
                     Rank rank = Rank.getRankFromString(rs.getString("rank"));
-                    Rank targetRank = Rank.getRankFromString(((String) condition.value).toUpperCase());
+                    Rank targetRank = (Rank) condition.value;
                     switch (condition.getType()) {
                         case EQUAL_TO:
                             if (rank == targetRank) {
@@ -311,166 +298,73 @@ public class ConditionalMessage {
         for (Server server : gtmsToConsider) {
 
             String tableName = server.toString().toLowerCase();
-            String query = "SELECT " + tableName + ".level,discord_users.discord_id FROM " + tableName + " INNER JOIN discord_users ON " + tableName + ".uuid=discord_users.uuid WHERE discord_id != -1;";
-
+            String query = "SELECT level,discord_users.discord_id FROM `" + tableName + "` INNER JOIN discord_users ON `" + tableName + "`.uuid=`discord_users`.uuid WHERE discord_id != -1 AND level " + condition.getType().getConditionString() + " ?;";
 
             try (PreparedStatement ps = conn.prepareStatement(query)) {
-                ps.setString(1, server.toString().toLowerCase());
-                ps.setString(2, server.toString().toLowerCase());
-                ps.setString(3, server.toString().toLowerCase());
+
+                ps.setInt(1, (int) condition.value);
 
                 System.out.println("[ConditionalMessage] Executing the following query: " + ps);
 
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
                         long discordId = rs.getLong("discord_id");
-                        int level = rs.getInt("level");
-                        switch (condition.getType()) {
-                            case EQUAL_TO:
-                                if (level == (int) condition.value) {
-                                    GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
-                                }
-                                continue;
-                            case LESS_THAN:
-                                if (level < (int) condition.value) {
-                                    GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
-                                }
-                                continue;
-                            case LESS_THAN_OR_EQUAL_TO:
-                                if (level <= (int) condition.value) {
-                                    GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
-                                }
-                                continue;
-                            case GREATER_THAN:
-                                if (level > (int) condition.value) {
-                                    GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
-                                }
-                                continue;
-                            case GREATER_THAN_OR_EQUAL_TO:
-                                if (level >= (int) condition.value) {
-                                    GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
-                                }
-                                break;
-                        }
+                        GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
                     }
                 }
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
+
         }
 
     }
 
     public static void handlePlaytime(Connection conn, MessageCondition condition, Set<GTMUser> listToModify) throws SQLException {
-        if (condition.targetServer != null && condition.targetServer.getServerType() != ServerType.GTM)
-            throw new IllegalArgumentException("Only GTM servers store playtime data!");
 
-        List<Server> gtmsToConsider;
-        // if target server is null, we consider all gtm servers
-        if (condition.targetServer == null) {
-            gtmsToConsider = Arrays.stream(Server.values()).filter(ps -> ps.getServerType() == ServerType.GTM).collect(Collectors.toList());
-        } else {
-            gtmsToConsider = Collections.singletonList(condition.targetServer);
-        }
-
-        // now loop through all gtm servers we are considering,
-        // combining playtime in the userPlaytimeMap
-        HashMap<Long, Long> userPlaytimeMap = new HashMap<>();
-        for (Server server : gtmsToConsider) {
-            String tableName = server.toString().toLowerCase();
-            String query = "SELECT " + tableName + ".playtime,discord_id FROM " + tableName + " INNER JOIN discord_users ON " + tableName + ".uuid=discord_users.uuid WHERE discord_id != -1;";
-
-            try (PreparedStatement ps = conn.prepareStatement(query)) {
-                System.out.println("[ConditionalMessage] Executing the following query: " + ps);
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        long discordId = rs.getLong("discord_id");
-                        int playtimeHours = Math.round(rs.getInt("playtime") / 20f / 60f);
-                        long existingPT = userPlaytimeMap.getOrDefault(discordId, 0L);
-                        userPlaytimeMap.put(discordId, existingPT + playtimeHours);
-                    }
-                }
-            }
-        }
-
-        // loop through the playtime map, and add all
-        // players meeting the criteria to the listToModify
-        for (long discordId : userPlaytimeMap.keySet()) {
-            long playtimeHours = userPlaytimeMap.get(discordId);
-            switch (condition.getType()) {
-                case EQUAL_TO:
-                    if (playtimeHours == (int) condition.value) {
-                        GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
-                    }
-                    continue;
-                case LESS_THAN:
-                    if (playtimeHours < (int) condition.value) {
-                        GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
-                    }
-                    continue;
-                case LESS_THAN_OR_EQUAL_TO:
-                    if (playtimeHours <= (int) condition.value) {
-                        GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
-                    }
-                    continue;
-                case GREATER_THAN:
-                    if (playtimeHours > (int) condition.value) {
-                        GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
-                    }
-                    continue;
-                case GREATER_THAN_OR_EQUAL_TO:
-                    if (playtimeHours >= (int) condition.value) {
-                        GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
-                    }
-                    continue;
-            }
-        }
-
-    }
-
-    // this is the most inefficient one because we have to get this data through plan
-    // and i cant inner join discord tables...
-    public static void handleLastPlayed(Connection conn, MessageCondition condition, Set<GTMUser> listToModify) throws SQLException {
-        String query = "SELECT HEX(user_sessions.uuid), MAX(session_end) as 'last_seen' FROM user_sessions INNER JOIN discord_users ON user_sessions.uuid=discord_users.uuid WHERE " + (condition.targetServer == null ? "" : "server_key=? ") + "GROUP BY uuid;";
+        String query = "SELECT discord_id, playtime FROM (\n" +
+                "    SELECT discord_users.discord_id,\n" +
+                "           SUM(user_sessions.session_end-user_sessions.session_start) as playtime\n" +
+                "    FROM user_sessions INNER JOIN discord_users ON user_sessions.uuid=discord_users.uuid\n" +
+                "    WHERE discord_id != -1 AND user_sessions.server_key LIKE ? GROUP BY user_sessions.uuid) as dip " +
+                "    WHERE playtime " + condition.getType().getConditionString() + " ?;";
 
         try (PreparedStatement ps = conn.prepareStatement(query)) {
-
-            // if target server is null, then we consider last played over ALL servers
-            if (condition.targetServer != null)
-                ps.setString(1, condition.targetServer.toString());
+            ps.setString(1, condition.targetServer == null ? "%" : condition.targetServer.toString().toUpperCase());
+            ps.setLong(2, ((int) condition.value) * 1000L * 60 * 60);
 
             System.out.println("[ConditionalMessage] Executing the following query: " + ps);
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    UUID uuid = UUID.fromString(rs.getString("uuid"));
-                    long lastSeen = rs.getLong("last_seen");
-                    switch (condition.getType()) {
-                        case EQUAL_TO:
-                            if (lastSeen == ((Instant) condition.value).toEpochMilli()) {
-                                GTMUser.getGTMUser(uuid).ifPresent(listToModify::add);
-                            }
-                            continue;
-                        case LESS_THAN:
-                            if (lastSeen < ((Instant) condition.value).toEpochMilli()) {
-                                GTMUser.getGTMUser(uuid).ifPresent(listToModify::add);
-                            }
-                            continue;
-                        case LESS_THAN_OR_EQUAL_TO:
-                            if (lastSeen <= ((Instant) condition.value).toEpochMilli()) {
-                                GTMUser.getGTMUser(uuid).ifPresent(listToModify::add);
-                            }
-                            continue;
-                        case GREATER_THAN:
-                            if (lastSeen > ((Instant) condition.value).toEpochMilli()) {
-                                GTMUser.getGTMUser(uuid).ifPresent(listToModify::add);
-                            }
-                            continue;
-                        case GREATER_THAN_OR_EQUAL_TO:
-                            if (lastSeen >= ((Instant) condition.value).toEpochMilli()) {
-                                GTMUser.getGTMUser(uuid).ifPresent(listToModify::add);
-                            }
-                            continue;
-                    }
+                    long discordId = rs.getLong("discord_id");
+                    GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
+                }
+            }
+        }
+
+    }
+
+    public static void handleLastPlayed(Connection conn, MessageCondition condition, Set<GTMUser> listToModify) throws SQLException {
+        String query = "SELECT discord_id, last_seen FROM (\n" +
+                "                  SELECT MAX(session_end) as 'last_seen', discord_id\n" +
+                "                  FROM user_sessions INNER JOIN discord_users ON user_sessions.uuid=discord_users.uuid\n" +
+                "                  WHERE discord_id != -1 AND server_key LIKE ?\n" +
+                "                  GROUP BY discord_id\n" +
+                "              ) as seen WHERE last_seen " + condition.getType().getConditionString() + " ?;";
+
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+
+            // if target server is null, then we consider last played over ALL servers (hence the wildcard)
+            ps.setString(1, condition.targetServer == null ? "%" : condition.targetServer.toString().toUpperCase());
+            ps.setLong(2, ((Instant) condition.value).toEpochMilli());
+
+            System.out.println("[ConditionalMessage] Executing the following query: " + ps);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    long discordId = rs.getLong("discord_id");
+                    GTMUser.getGTMUser(discordId).ifPresent(listToModify::add);
                 }
             }
         }

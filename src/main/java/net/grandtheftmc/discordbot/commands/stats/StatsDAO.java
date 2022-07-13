@@ -52,19 +52,22 @@ public class StatsDAO {
                 ps.setString(1, uuid.toString().replace("-", ""));
                 ps.setLong(2, from);
                 ps.setLong(3, to);
+
                 try (ResultSet rs = ps.executeQuery()) {
 
                     List<Session> sessionsList = new ArrayList<>();
 
                     while (rs.next()) {
                         long start = rs.getLong("session_start");
-                        long playtime = rs.getLong("session_end") - start;
+                        long end = rs.getLong("session_end");
                         long afkTime = rs.getLong("afk_time");
                         String server = rs.getString("server_key");
-                        sessionsList.add(new Session(start, playtime, afkTime, Server.valueOf(server.toUpperCase())));
+                        sessionsList.add(new Session(start, end, afkTime, Server.from(server.toUpperCase())));
                     }
 
                     return sessionsList;
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         } catch (SQLException ex) {

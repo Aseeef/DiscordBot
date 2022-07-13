@@ -7,7 +7,13 @@ public class ThreadUtil {
     private static final ExecutorService service = Executors.newFixedThreadPool(8, new ErrorCatchingThreadFactory());
 
     public static void runAsync(Runnable target) {
-        service.submit(target);
+        service.submit(() -> {
+            try {
+                target.run();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 
     public static ScheduledFuture<?> runTaskTimer(Runnable task, long startDelayMillis, long periodMillis) {
