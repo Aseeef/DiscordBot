@@ -37,16 +37,20 @@ public class SuggestAdminCommand extends Command {
         delete.addOption(OptionType.INTEGER, "suggestion-id", "The integer id for the suggestion");
 
         SubcommandData deny = new SubcommandData("approve", "Denies selected suggestion");
-        deny.addOption(OptionType.INTEGER, "suggestion-id", "The integer id for the suggestion");
+        deny.addOption(OptionType.INTEGER, "suggestion-id", "The integer id for the suggestion", true);
+        deny.addOption(OptionType.STRING, "reason", "The reason for this decision (optional)", false);
 
         SubcommandData approve = new SubcommandData("deny", "Approves selected suggestion");
-        approve.addOption(OptionType.INTEGER, "suggestion-id", "The integer id for the suggestion");
+        approve.addOption(OptionType.INTEGER, "suggestion-id", "The integer id for the suggestion", true);
+        approve.addOption(OptionType.STRING, "reason", "The reason for this decision (optional)", false);
 
         SubcommandData complete = new SubcommandData("complete", "Marks the selected suggestion as completed");
-        complete.addOption(OptionType.INTEGER, "suggestion-id", "The integer id for the suggestion");
+        complete.addOption(OptionType.INTEGER, "suggestion-id", "The integer id for the suggestion", true);
+        complete.addOption(OptionType.STRING, "reason", "The reason for this decision (optional)", false);
 
         SubcommandData hold = new SubcommandData("hold", "Marks the selected suggestion as on hold");
-        hold.addOption(OptionType.INTEGER, "suggestion-id", "The integer id for the suggestion");
+        hold.addOption(OptionType.INTEGER, "suggestion-id", "The integer id for the suggestion", true);
+        hold.addOption(OptionType.STRING, "reason", "The reason for this decision (optional)", false);
 
         slashCommandData.addSubcommands(setChannel, delete, deny, approve, complete, hold);
     }
@@ -72,7 +76,7 @@ public class SuggestAdminCommand extends Command {
         else if (path[0].equalsIgnoreCase("delete")) {
             int suggestionId = interaction.getOption("suggestion-id").getAsInt();
             if (Data.doesDataExist(Data.SUGGESTIONS, suggestionId)) {
-                Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(path[1]));
+                Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, suggestionId);
                 SuggestionTools.getSuggestionsChannel().deleteMessageById(suggestion.getId()).queue();
                 Data.deleteData(Data.SUGGESTIONS, Integer.parseInt(path[1]));
                 interaction.reply("**Suggestion #" + Integer.parseInt(path[1]) + " has been deleted!**").setEphemeral(true).queue();
@@ -88,11 +92,12 @@ public class SuggestAdminCommand extends Command {
             if (Data.doesDataExist(Data.SUGGESTIONS, suggestionId)) {
 
                 // Get suggestion instance
-                Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(path[1]));
+                Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, suggestionId);
 
                 // Set it to denied
                 suggestion.setStatus("DENIED");
-                suggestion.setStatusReason(generateStatusReason(path));
+                String reason = interaction.getOption("reason") == null ? "No reason specified" : interaction.getOption("reason").getAsString();
+                suggestion.setStatusReason(reason);
 
                 // Build and edit denied suggestion embed
                 SuggestionTools.getSuggestionsChannel().editMessageEmbedsById(suggestion.getId(), SuggestionTools.createSuggestionEmbed(suggestion)).queue();
@@ -123,10 +128,11 @@ public class SuggestAdminCommand extends Command {
             int suggestionId = interaction.getOption("suggestion-id").getAsInt();
             if (Data.doesDataExist(Data.SUGGESTIONS, suggestionId)) {
 
-                Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(path[1]));
+                Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, suggestionId);
                 // Set new data
                 suggestion.setStatus("APPROVED");
-                suggestion.setStatusReason(generateStatusReason(path));
+                String reason = interaction.getOption("reason") == null ? "No reason specified" : interaction.getOption("reason").getAsString();
+                suggestion.setStatusReason(reason);
                 // Build and edit denied suggestion embed
                 SuggestionTools.getSuggestionsChannel().editMessageEmbedsById(suggestion.getId(), SuggestionTools.createSuggestionEmbed(suggestion)).queue();
 
@@ -154,10 +160,12 @@ public class SuggestAdminCommand extends Command {
             int suggestionId = interaction.getOption("suggestion-id").getAsInt();
             if (Data.doesDataExist(Data.SUGGESTIONS, suggestionId)) {
 
-                Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(path[1]));
+                Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, suggestionId);
                 // Set new data
                 suggestion.setStatus("COMPLETED");
-                suggestion.setStatusReason(generateStatusReason(path));
+                String reason = interaction.getOption("reason") == null ? "No reason specified" : interaction.getOption("reason").getAsString();
+                suggestion.setStatusReason(reason);
+
                 // Build and edit denied suggestion embed
                 SuggestionTools.getSuggestionsChannel().editMessageEmbedsById(suggestion.getId(), SuggestionTools.createSuggestionEmbed(suggestion)).queue();
 
@@ -185,10 +193,11 @@ public class SuggestAdminCommand extends Command {
             int suggestionId = interaction.getOption("suggestion-id").getAsInt();
             if (Data.doesDataExist(Data.SUGGESTIONS, suggestionId)) {
 
-                Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, Integer.parseInt(path[1]));
+                Suggestions suggestion = (Suggestions) Data.obtainData(Data.SUGGESTIONS, suggestionId);
                 // Set new data
                 suggestion.setStatus("PENDING");
-                suggestion.setStatusReason(generateStatusReason(path));
+                String reason = interaction.getOption("reason") == null ? "No reason specified" : interaction.getOption("reason").getAsString();
+                suggestion.setStatusReason(reason);
                 // Build and edit denied suggestion embed
                 SuggestionTools.getSuggestionsChannel().editMessageEmbedsById(suggestion.getId(), SuggestionTools.createSuggestionEmbed(suggestion)).queue();
 
@@ -217,19 +226,6 @@ public class SuggestAdminCommand extends Command {
         return new MessageBuilder().setContent(
                 "**" + channel.getAsMention() + " has been set as the suggestions channel!**"
         ).build();
-    }
-
-    private String generateStatusReason(String[] args) {
-        if (args.length > 2) {
-            StringBuilder string = new StringBuilder();
-            for (int i = 2 ; i < args.length ; i++) {
-                string.append(" ").append(args[i]);
-            }
-            return string.toString();
-        }
-
-        else
-            return "No reason specified";
     }
 
 }

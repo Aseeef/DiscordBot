@@ -9,10 +9,12 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.grandtheftmc.discordbot.GTMBot;
+import net.grandtheftmc.discordbot.utils.MembersCache;
 import net.grandtheftmc.discordbot.utils.confighelpers.Config;
 import net.grandtheftmc.discordbot.utils.users.GTMUser;
 import net.grandtheftmc.discordbot.utils.users.Rank;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,7 +58,7 @@ public abstract class Command extends ListenerAdapter {
     public void onSlashCommandInteraction (@NotNull SlashCommandInteractionEvent e) {
 
         User user = e.getUser();
-        Member member = e.getMember();
+        Member member = MembersCache.getMember(user.getIdLong()).orElse(null);
         GTMUser gtmUser = GTMUser.getGTMUser(user.getIdLong()).orElse(null);
         MessageChannel channel = e.getChannel();
         String[] path = e.getInteraction().getCommandPath().split("/");
@@ -66,6 +68,11 @@ public abstract class Command extends ListenerAdapter {
 
             log("User " + user.getAsTag() +
                     "(" + user.getId() + ") issued command: " + e.getCommandString());
+
+            if (member == null) {
+                e.reply("**Sorry but you must be a part of the GTM discord to use this command. Join our discord at https://grandtheftmc.net/discord!**").setEphemeral(true).queue();
+                return;
+            }
 
             // Check perms
             if (!Rank.hasRolePerms(member, rank)) {
@@ -131,7 +138,7 @@ public abstract class Command extends ListenerAdapter {
     /** This is the logic that occurs when this command is used
      * Note: To use TextChannel or PrivateChannel methods, use casting
      */
-    public abstract void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, List<OptionMapping> arguments, Member member, GTMUser gtmUser, String[] path);
+    public abstract void onCommandUse(@NotNull SlashCommandInteraction interaction, @NotNull MessageChannel channel, @NotNull List<OptionMapping> arguments, @NotNull Member member, @Nullable GTMUser gtmUser, @NotNull String[] path);
 
     // -- Commands static methods -- //
 

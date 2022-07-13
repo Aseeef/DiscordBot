@@ -87,7 +87,7 @@ public enum Logs {
 
         @Override
         public void println(Object object) {
-            println(object.toString());
+            println(object == null ? "null" : object.toString());
         }
 
         @Override
@@ -165,7 +165,7 @@ public enum Logs {
 
         @Override
         public void println(Object object) {
-            println(object.toString());
+            println(object == null ? "null" : object.toString());
         }
 
         @Override

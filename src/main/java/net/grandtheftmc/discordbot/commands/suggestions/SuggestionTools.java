@@ -35,7 +35,7 @@ public class SuggestionTools {
         embed.setThumbnail(userById(s.getSuggesterId()).getAvatarUrl());
         embed.addField("**What is this suggest for?**", s.getServer(), false);
         embed.addField("**What is your Suggestion? Be concise and clear!**", s.getSuggestion(), false);
-        embed.addField("**Why should we implement this suggestion?**", s.getSuggestion(), false);
+        embed.addField("**Why should we implement this suggestion?**", s.getReason(), false);
         embed.addField("**Suggestion Status:**", "**"+s.getStatus()+"**: "+s.getStatusReason(), true);
         embed.setFooter("Submitted by " + userById(s.getSuggesterId()).getAsTag() +
                 " (" + s.getSuggesterId() + ")");

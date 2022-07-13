@@ -27,7 +27,7 @@ public class StatsCommand extends Command {
     @Override
     public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, List<OptionMapping> arguments, Member member, GTMUser gtmUser, String[] path) {
 
-        StatsMenu menu = new StatsMenu(member.getUser(), channel, path[0]);
+        StatsMenu menu = new StatsMenu(member.getUser(), channel, interaction.getOption("player").getAsString());
         boolean success = menu.load();
 
         if (!success) {

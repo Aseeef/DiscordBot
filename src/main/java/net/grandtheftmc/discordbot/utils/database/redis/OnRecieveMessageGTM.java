@@ -1,9 +1,11 @@
 package net.grandtheftmc.discordbot.utils.database.redis;
 
+import net.grandtheftmc.discordbot.GTMBot;
 import net.grandtheftmc.discordbot.utils.Utils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.grandtheftmc.discordbot.utils.selfdata.ChannelIdData;
 import net.grandtheftmc.simplejedis.JedisEventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -87,6 +89,26 @@ public class OnRecieveMessageGTM implements JedisEventListener {
                     break;
                 }
 
+                case "dupe": {
+                    String name = jsonObject.getString("duper-name");
+                    UUID uuid = UUID.fromString(jsonObject.getString("duper-uuid"));
+                    long detectionTime = jsonObject.getLong("detection-time");
+                    String dupeType = jsonObject.getString("dupe-type");
+
+                    DupeAlert da = new DupeAlert(name, uuid, detectionTime, dupeType);
+
+                    // currently the only dupe type
+                    if (dupeType.equalsIgnoreCase("WELL-COIN")) {
+                        int coinId = jsonObject.getInt("coin-id");
+                        UUID coinCreator = UUID.fromString(jsonObject.getString("coin-creator"));
+                        UUID usedBy = jsonObject.has("used-by") && jsonObject.getString("used-by") != null ? UUID.fromString(jsonObject.getString("used-by")) : null;
+                        GTMBot.getJDA().getTextChannelById(ChannelIdData.get().getAdminChannelId())
+                                .sendMessageEmbeds(generateWellDupeEmbed(da, coinId, coinCreator, usedBy)).queue();
+                    }
+
+                    break;
+                }
+
                 default:
                     Logs.log("[DEBUG] [OnRedisMessageReceive] '" + action + "' is an unknown action!", Logs.WARNING);
                     break;
@@ -113,6 +135,24 @@ public class OnRecieveMessageGTM implements JedisEventListener {
                 .addField("**Ping:**", String.valueOf(ping), true)
                 .addField("**TPS:**", String.valueOf(tps), true)
                 .addField("**Server**", server, true);
+
+        return embed.build();
+    }
+
+    private MessageEmbed generateWellDupeEmbed(DupeAlert da, int coinId, UUID coinCreator, UUID usedBy) {
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
+        sdf.setTimeZone(TimeZone.getTimeZone("America/New_York"));
+        String timestamp = sdf.format(new Date(da.getDetectionTime()));
+        EmbedBuilder embed = new EmbedBuilder()
+                .setTitle("**DUPE ALERT!**")
+                .setColor(Color.BLUE)
+                .setDescription("A player just tried to use a **duplicated wishing well coin**! Details are as follows:")
+                .addField("**Duper Username:**", da.getName(), true)
+                .addField("**Duper UUID:**", da.getDuperUUID().toString(), true)
+                .addField("**Timestamp:**", timestamp, true)
+                .addField("**Duped Coin ID:**", String.valueOf(coinId), true)
+                .addField("**Coin Creator:**", coinCreator.toString(), true)
+                .addField("**Originally Used By:**", usedBy == null ? "N/A" : usedBy.toString(), true);
 
         return embed.build();
     }

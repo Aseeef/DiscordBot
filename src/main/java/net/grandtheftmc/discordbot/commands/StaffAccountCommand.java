@@ -33,10 +33,10 @@ public class StaffAccountCommand extends Command {
     @Override
     public void buildCommandData(SlashCommandData slashCommandData) {
         SubcommandData check = new SubcommandData("check", "Checks which player the specified discord user is linked to");
-        check.addOption(OptionType.STRING, "target-id", "The ingame name, discord id, or discord tag of the target user");
+        check.addOption(OptionType.STRING, "target-id", "The ingame name, discord id, or discord tag of the target user", true);
 
         SubcommandData refresh = new SubcommandData("refresh", "Refreshes the target's information (if they are linked to GTM)");
-        refresh.addOption(OptionType.STRING, "target-id", "The ingame name, discord id, or discord tag of the target user");
+        refresh.addOption(OptionType.STRING, "target-id", "The ingame name, discord id, or discord tag of the target user", true);
 
         SubcommandData refreshAll = new SubcommandData("refreshall", "Refreshes account data for all verified users");
 

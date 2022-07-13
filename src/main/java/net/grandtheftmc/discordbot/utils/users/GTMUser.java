@@ -2,6 +2,8 @@ package net.grandtheftmc.discordbot.utils.users;
 
 import com.fasterxml.jackson.annotation.*;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import net.grandtheftmc.discordbot.GTMBot;
 import net.grandtheftmc.discordbot.utils.Utils;
 import net.grandtheftmc.discordbot.utils.database.DiscordDAO;
@@ -22,7 +24,9 @@ import java.util.*;
 public class GTMUser {
 
     /** A maximum of how often should the player's information be updated in minutes */
-    private static final int UPDATE_TIME = 30;
+    private static final int UPDATE_TIME = 60;
+    @Setter @Getter
+    private static boolean disableDataUpdates = false;
 
     private UUID uuid;
     private String username;
@@ -67,7 +71,7 @@ public class GTMUser {
         if (userCache.containsKey(discordId)) {
             GTMUser gtmUser = userCache.get(discordId);
             gtmUser.updateUserDataIfTime();
-            return Optional.of(userCache.get(discordId));
+            return Optional.of(gtmUser);
         }
         else if (Data.exists(Data.USER, discordId)) {
 
@@ -150,6 +154,9 @@ public class GTMUser {
     @JsonIgnore
     public synchronized void updateUserDataNow() {
 
+        if (disableDataUpdates)
+            return;
+
         if (!this.optionalMember.isPresent()) {
             Logs.log("Skipping data update for GTM Player " + this.getUsername() + " because they have left this discord!");
             return;
@@ -214,7 +221,7 @@ public class GTMUser {
     @JsonIgnore
     public void updateUserDataIfTime() {
         if (this.lastUpdated + (UPDATE_TIME * 1000 * 60) < System.currentTimeMillis())
-            ThreadUtil.runAsync(this::updateUserDataNow);
+            this.updateUserDataNow();
     }
 
     @JsonGetter

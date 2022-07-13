@@ -216,7 +216,7 @@ public class ReportListener extends ListenerAdapter {
                 .append("\n\u200E\n")
                 .append("**On a scale of 1-4, urgent is this bug?**")
                 .append("\n")
-                .append("[1=Not Urgent, 2=Normal, 3=Urgent 4=CRITIAL]")
+                .append("[1=Not Urgent, 2=Normal, 3=Urgent 4=CRITICAL]")
                 .append("\n\u200E\n")
                 .append("**Video / Screenshot:**")
                 .append("\n")

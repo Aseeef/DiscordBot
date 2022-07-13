@@ -12,14 +12,14 @@ import java.util.Map;
 
 public class Session {
 
-    long startTime;
-    long playtime;
-    long afkTime;
-    Server server;
+    private final long startTime;
+    private final long endTime;
+    private final long afkTime;
+    private final Server server;
 
-    public Session(long startTime, long playtime, long afkTime, Server server) {
+    public Session(long startTime, long endTime, long afkTime, Server server) {
         this.startTime = startTime;
-        this.playtime = playtime;
+        this.endTime = endTime;
         this.afkTime = afkTime;
         this.server = server;
     }
@@ -28,12 +28,16 @@ public class Session {
         return startTime;
     }
 
+    public long getEndTime() {
+        return endTime;
+    }
+
     public long getActivePlaytime() {
-        return playtime;
+        return getPlaytime() - getAfkTime();
     }
 
     public long getPlaytime() {
-        return playtime + afkTime;
+        return endTime - startTime;
     }
 
     public long getAfkTime() {

@@ -14,6 +14,7 @@ public enum Server {
     HUB1(ServerType.HUB),
     HUB2(ServerType.HUB),
     HUB3(ServerType.HUB),
+    HUB4(ServerType.HUB),
     CREATIVE1(ServerType.CREATIVE),
     BUNGEE1(ServerType.PROXY),
     UNKNOWN(null)
@@ -23,6 +24,15 @@ public enum Server {
 
     Server(ServerType serverType) {
         this.serverType = serverType;
+    }
+
+    public static Server from(String s) {
+        for (Server st : Server.values()) {
+            if (st.toString().equalsIgnoreCase(s)) {
+                return st;
+            }
+        }
+        return Server.UNKNOWN;
     }
 
 }
