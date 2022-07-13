@@ -13,6 +13,7 @@ public class ChannelIdData extends SavableSelfData {
     private long prevSuggestHelpChannelId = 0L;
     private long raidAlertChannelId = 0L;
     private long modChannelId = 0L;
+    private long adminChannelId = 0L;
     private long privateChannelsCategoryId = 0L;
     private long bugReportChannelId = 0L;
     private long bugReceiveChannelId = 0L;
@@ -27,6 +28,7 @@ public class ChannelIdData extends SavableSelfData {
                          @JsonProperty("prevSuggestHelpChannelId") long prevSuggestHelpChannelId,
                          @JsonProperty("raidAlertChannelId") long raidAlertChannelId,
                          @JsonProperty("modChannelId") long modChannelId,
+                         @JsonProperty("adminChannelId") long adminChannelId,
                          @JsonProperty("privateChannelsCategoryId") long privateChannelsCategoryId,
                          @JsonProperty("bugReportChannelId") long bugReportChannelId,
                          @JsonProperty("bugReceiveChannelId") long bugReceiveChannelId) {
@@ -36,6 +38,7 @@ public class ChannelIdData extends SavableSelfData {
         this.prevSuggestHelpChannelId = prevSuggestHelpChannelId;
         this.raidAlertChannelId = raidAlertChannelId;
         this.modChannelId = modChannelId;
+        this.adminChannelId = adminChannelId;
         this.privateChannelsCategoryId = privateChannelsCategoryId;
         this.bugReportChannelId = bugReportChannelId;
         this.bugReceiveChannelId = bugReceiveChannelId;
@@ -103,6 +106,17 @@ public class ChannelIdData extends SavableSelfData {
     @JsonSetter
     public void setModChannelId(long modChannelId) {
         this.modChannelId = modChannelId;
+        this.save();
+    }
+
+    @JsonGetter
+    public long getAdminChannelId() {
+        return adminChannelId;
+    }
+
+    @JsonSetter
+    public void setAdminChannelId(long adminChannelId) {
+        this.adminChannelId = adminChannelId;
         this.save();
     }
 

@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.grandtheftmc.discordbot.utils.selfdata.ChannelIdData;
 import net.grandtheftmc.discordbot.utils.users.GTMUser;
 import net.grandtheftmc.discordbot.utils.users.Rank;
@@ -24,19 +25,17 @@ public class StaffCommand extends Command {
 
     @Override
     public void buildCommandData(SlashCommandData slashCommandData) {
-
+        SubcommandData modChannel = new SubcommandData("modchannel", "Set current channel to the mod channel for mod related alerts from the bot.");
+        SubcommandData adminChannel = new SubcommandData("adminchannel", "Set current channel to the seniors channel for senior alerts from the bot.");
+        slashCommandData.addSubcommands(modChannel, adminChannel);
     }
 
     @Override
     public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, List<OptionMapping> arguments, Member member, GTMUser gtmUser, String[] path) {
 
-        interaction.reply("This command is not completed").setEphemeral(true).queue();
-        if (true)
-            return;
-
         switch (path[0].toLowerCase()) {
 
-            case "setchannel": {
+            case "modchannel": {
                 if (!Rank.hasRolePerms(member, Rank.ADMIN)) {
                     sendThenDelete(channel, "**Sorry but you must be an admin+ to execute this command!**");
                     return;
@@ -46,8 +45,21 @@ public class StaffCommand extends Command {
                 ChannelIdData.get().setModChannelId(channel.getIdLong());
 
                 // Send success msg
-                sendThenDelete(channel, modChannelSet((TextChannel) channel));
+                interaction.reply("**" + channel.getAsMention() + " has been set as the Moderator channel!**").setEphemeral(true).queue();
+                break;
+            }
 
+            case "adminchannel": {
+                if (!Rank.hasRolePerms(member, Rank.ADMIN)) {
+                    sendThenDelete(channel, "**Sorry but you must be an admin+ to execute this command!**");
+                    return;
+                }
+
+                // Set as raid mode channel
+                ChannelIdData.get().setAdminChannelId(channel.getIdLong());
+
+                // Send success msg
+                interaction.reply("**" + channel.getAsMention() + " has been set as the Admin channel!**").setEphemeral(true).queue();
                 break;
             }
 
@@ -71,10 +83,6 @@ public class StaffCommand extends Command {
                 .append("> `/Staff SetChannel` - *Sets the current text channel has the Mod channel*\n")
                 //.append("> `/Staff TLookup` - *Sets the current text channel has the Mod channel*\n")
                 .build();
-    }
-
-    private String modChannelSet(TextChannel channel) {
-        return "**" + channel.getAsMention() + " has been set as the Moderator channel!**";
     }
 
 }

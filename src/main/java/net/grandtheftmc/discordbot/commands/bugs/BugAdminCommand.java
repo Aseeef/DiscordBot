@@ -41,20 +41,23 @@ public class BugAdminCommand extends Command {
         setChannel.addOptions(typeOption, channelOption);
 
         SubcommandData deny = new SubcommandData("deny", "Deny the selected bug report");
-        deny.addOption(OptionType.STRING, "id", "The ID of the bug report you want to deny.");
+        deny.addOption(OptionType.STRING, "id", "The ID of the bug report you want to deny.", true);
+        deny.addOption(OptionType.STRING, "comments", "Comments about this bug that you want to send to the author", false);
 
         SubcommandData duplicate = new SubcommandData("duplicate", "Mark this bug report as a duplicate of an existing report.");
-        duplicate.addOption(OptionType.STRING, "id", "The ID of the bug report you want to set to duplicate.");
+        duplicate.addOption(OptionType.STRING, "id", "The ID of the bug report you want to set to duplicate.", true);
+        duplicate.addOption(OptionType.STRING, "comments", "Comments about this bug that you want to send to the author", false);
 
 
         SubcommandData approve = new SubcommandData("approve", "Approve this bug report");
         approve.addOption(OptionType.STRING, "id", "The ID of the bug report you want to approve.", true);
         approve.addOption(OptionType.BOOLEAN, "hide", "Whether you want to hide the contents of this report from public.", true);
+        approve.addOption(OptionType.STRING, "comments", "Comments about this bug that you want to send to the author", false);
 
         SubcommandData complete = new SubcommandData("complete", "Mark this bug report as fully resolved.");
         complete.addOption(OptionType.STRING, "id", "The ID of the bug report you want to mark complete.", true);
-        complete.addOption(OptionType.BOOLEAN, "hide", "Whether you want to hide the contents of this report from public.", false);
-
+        complete.addOption(OptionType.BOOLEAN, "hide", "Whether you want to hide the contents of this report from public.", true);
+        complete.addOption(OptionType.STRING, "comments", "Comments about this bug that you want to send to the author", false);
 
         slashCommandData.addSubcommands(setChannel, deny, duplicate, approve, complete);
     }
@@ -96,51 +99,57 @@ public class BugAdminCommand extends Command {
             case "deny": {
                 if (!isValidArgs(interaction, arguments))
                     return;
-                BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, path[1].toLowerCase());
+                String id = interaction.getOption("id").getAsString();
+                OptionMapping commentMapping = interaction.getOption("interaction");
+                String comments = commentMapping != null && commentMapping.getAsString().length() > 0 ? commentMapping.getAsString() : null;
+                BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, id);
                 report.setStatus(BugReport.ReportStatus.REJECTED_REPORT);
-                report.sendUpdate(path.length > 2 ? Utils.joinArgsAfter(path, 2) : null);
+                report.sendUpdate(comments);
                 CUTask.editTask(report.getId(), BugReport.ReportStatus.REJECTED_REPORT);
-                interaction.reply("**Success!** You set bug report id " + path[1] + " to " + BugReport.ReportStatus.REJECTED_REPORT + "!").setEphemeral(true).queue();
+                interaction.reply("**Success!** You set bug report id " + id + " to " + BugReport.ReportStatus.REJECTED_REPORT + "!").setEphemeral(true).queue();
                 break;
             }
             case "complete": {
                 if (!isValidArgs(interaction, arguments))
                     return;
-                BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, path[1]);
+                String id = interaction.getOption("id").getAsString();
+                boolean hide = interaction.getOption("hide").getAsBoolean();
+                OptionMapping commentMapping = interaction.getOption("interaction");
+                String comments = commentMapping != null && commentMapping.getAsString().length() > 0 ? commentMapping.getAsString() : null;
+                BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, id);
                 report.setStatus(BugReport.ReportStatus.PATCHED);
-                report.sendUpdate(path.length > 2 ? Utils.joinArgsAfter(path, 2) : null);
+                report.setHidden(hide);
+                report.sendUpdate(comments);
                 CUTask.editTask(report.getId(), BugReport.ReportStatus.PATCHED);
-                interaction.reply("**Success!** You set bug report id " + path[1] + " to " + BugReport.ReportStatus.PATCHED + "!").setEphemeral(true).queue();
+                interaction.reply("**Success!** You set bug report id " + id + " to " + BugReport.ReportStatus.PATCHED + "!").setEphemeral(true).queue();
                 break;
             }
             case "duplicate": {
                 if (!isValidArgs(interaction, arguments))
                     return;
-                BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, path[1]);
+                String id = interaction.getOption("id").getAsString();
+                OptionMapping commentMapping = interaction.getOption("interaction");
+                String comments = commentMapping != null && commentMapping.getAsString().length() > 0 ? commentMapping.getAsString() : null;
+                BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, id);
                 report.setStatus(BugReport.ReportStatus.DUPLICATE_REPORT);
-                report.sendUpdate(path.length > 2 ? Utils.joinArgsAfter(path, 2) : null);
+                report.sendUpdate(comments);
                 CUTask.editTask(report.getId(), BugReport.ReportStatus.DUPLICATE_REPORT);
-                interaction.reply("**Success!** You set bug report id " + path[1] + " to " + BugReport.ReportStatus.DUPLICATE_REPORT + "!").setEphemeral(true).queue();
+                interaction.reply("**Success!** You set bug report id " + id + " to " + BugReport.ReportStatus.DUPLICATE_REPORT + "!").setEphemeral(true).queue();
                 break;
             }
             case "approve": {
                 if (!isValidArgs(interaction, arguments))
                     return;
-                boolean b = false;
-                if (path.length > 2) {
-                    if (path[2].equalsIgnoreCase("true") || path[2].equalsIgnoreCase("false")) {
-                        b = Boolean.parseBoolean(path[2]);
-                    } else {
-                        interaction.reply("**The hide boolean '" + path[2] + "' is not a true or false.**").setEphemeral(true).queue();
-                        return;
-                    }
-                }
-                BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, path[1]);
+                String id = interaction.getOption("id").getAsString();
+                boolean hide = interaction.getOption("hide").getAsBoolean();
+                OptionMapping commentMapping = interaction.getOption("interaction");
+                String comments = commentMapping != null && commentMapping.getAsString().length() > 0 ? commentMapping.getAsString() : null;
+                BugReport report = (BugReport) Data.obtainData(Data.BUG_REPORTS, id);
                 report.setStatus(BugReport.ReportStatus.CONFIRMED_BUG);
-                report.setHidden(b);
-                report.sendUpdate(path.length > 3 ? Utils.joinArgsAfter(path, 3) : null);
+                report.setHidden(hide);
+                report.sendUpdate(comments);
                 CUTask.editTask(report.getId(), BugReport.ReportStatus.CONFIRMED_BUG);
-
+                interaction.reply("**Success!** You set bug report id " + id + " to " + BugReport.ReportStatus.CONFIRMED_BUG + "!").setEphemeral(true).queue();
                 break;
             }
 
