@@ -1,20 +1,20 @@
 package net.grandtheftmc.discordbot.commands.stats;
 
-import net.grandtheftmc.discordbot.commands.stats.wrappers.*;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
+import net.grandtheftmc.discordbot.commands.stats.wrappers.*;
+import net.grandtheftmc.discordbot.utils.Utils;
 import net.grandtheftmc.discordbot.utils.chart.PlaytimeChart;
 import net.grandtheftmc.discordbot.utils.database.DiscordDAO;
 import net.grandtheftmc.discordbot.utils.database.XenforoDAO;
-import net.grandtheftmc.discordbot.utils.threads.ThreadUtil;
-import net.grandtheftmc.discordbot.utils.web.ImgurUploader;
 import net.grandtheftmc.discordbot.utils.pagination.DiscordMenu;
 import net.grandtheftmc.discordbot.utils.pagination.MenuAction;
-import net.grandtheftmc.discordbot.utils.Utils;
+import net.grandtheftmc.discordbot.utils.threads.ThreadUtil;
 import net.grandtheftmc.discordbot.utils.users.GTMUser;
 import net.grandtheftmc.discordbot.utils.users.Rank;
+import net.grandtheftmc.discordbot.utils.web.GrandTheftMCUploader;
 import net.grandtheftmc.discordbot.xenforo.objects.tickets.Department;
 import net.grandtheftmc.discordbot.xenforo.objects.tickets.SupportTicket;
 
@@ -68,6 +68,9 @@ public class StatsMenu implements MenuAction {
     private List<WrappedPunishment> warnsGiven;
     private List<WrappedPunishment> kicksGiven;
 
+    // is deleted after stats menu is closed
+    private GrandTheftMCUploader.UploadedPNG playTimePng;
+
     public StatsMenu(User user, MessageChannel channel, String username) {
         this.creator = user;
         this.channel = channel;
@@ -117,7 +120,10 @@ public class StatsMenu implements MenuAction {
 
     @Override
     public void onAction(Type actionType, User user) {
-        if (actionType == Type.DELETE) return;
+        if (actionType == Type.DELETE) {
+            GrandTheftMCUploader.deletePngFolder(playTimePng);
+            return;
+        }
 
         int page = menu.getPage();
         if (page == 1) {
@@ -324,7 +330,9 @@ public class StatsMenu implements MenuAction {
             // todo show frequently online timing
             //PlaytimeHourChart phc = new PlaytimeHourChart(username + "'s Frequent Online Hours", Color.GREEN, 2500, 1100);
 
-            eb.setImage(ImgurUploader.uploadMedia(username + "'s Playtime.png", stream, false));
+            // temp upload bc we dont want to keep stats forever
+            playTimePng = GrandTheftMCUploader.uploadedTempPNG(username + "'s Playtime.png", stream);
+            eb.setImage(playTimePng.getUrl());
         } catch (IOException ex) {
             ex.printStackTrace();
         }

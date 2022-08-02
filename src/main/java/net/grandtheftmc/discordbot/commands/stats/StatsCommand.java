@@ -27,13 +27,15 @@ public class StatsCommand extends Command {
     @Override
     public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, List<OptionMapping> arguments, Member member, GTMUser gtmUser, String[] path) {
 
+        interaction.deferReply(true);
+
         StatsMenu menu = new StatsMenu(member.getUser(), channel, interaction.getOption("player").getAsString());
         boolean success = menu.load();
 
         if (!success) {
             interaction.reply("**Invalid Player!** The player '" + path[0] + "' does not exist / has never played GTM!").setEphemeral(true).queue();
         } else {
-            interaction.reply("Success!").setEphemeral(true).queue();
+            interaction.reply("Success! Player was found but hold a sec while we collect his data...").setEphemeral(true).queue();
         }
 
     }

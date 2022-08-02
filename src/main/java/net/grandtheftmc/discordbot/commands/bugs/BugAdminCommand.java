@@ -36,7 +36,7 @@ public class BugAdminCommand extends Command {
         OptionData typeOption = new OptionData(OptionType.STRING, "type", "Are you setting the report receive channel or the report send channel?", true);
         typeOption.addChoice("receive", "receive");
         typeOption.addChoice("send", "send");
-        OptionData channelOption = new OptionData(OptionType.CHANNEL, "channel-id", "The discord channel you want to assign for this purpose.");
+        OptionData channelOption = new OptionData(OptionType.CHANNEL, "channel-id", "The discord channel you want to assign for this purpose.", true);
         channelOption.setChannelTypes(ChannelType.TEXT);
         setChannel.addOptions(typeOption, channelOption);
 
@@ -65,7 +65,7 @@ public class BugAdminCommand extends Command {
     @Override
     public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, List<OptionMapping> arguments, Member member, GTMUser gtmUser, String[] path) {
 
-        TextChannel textChannel = interaction.getTextChannel();
+        TextChannel textChannel = interaction.getGuildChannel().asTextChannel();
 
         switch (path[0].toLowerCase()) {
 

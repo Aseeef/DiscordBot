@@ -1,6 +1,6 @@
 package net.grandtheftmc.discordbot.commands.suggestions;
 
-import net.dv8tion.jda.api.entities.Emote;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -41,8 +41,8 @@ public class SuggestionListener extends ListenerAdapter {
                 interactionHook.retrieveOriginal().queue(msg -> {
                     suggestion.setId(msg.getIdLong());
                     // React to the message
-                    Emote gtmAgree = GTMBot.getJDA().getEmotesByName("gtmagree", true).get(0);
-                    Emote gtmDisagree = GTMBot.getJDA().getEmotesByName("gtmdisagree", true).get(0);
+                    Emoji gtmAgree = GTMBot.getJDA().getEmojisByName("gtmagree", true).get(0);
+                    Emoji gtmDisagree = GTMBot.getJDA().getEmojisByName("gtmdisagree", true).get(0);
                     msg.addReaction(gtmAgree).queue();
                     msg.addReaction(gtmDisagree).queue();
                 });
@@ -72,7 +72,7 @@ public class SuggestionListener extends ListenerAdapter {
 
         if (!event.getAuthor().isBot() && SuggestionTools.getSuggestionsChannel().getIdLong() == event.getChannel().getIdLong()) {
             event.getMessage().delete().queue();
-            Utils.sendThenDelete(event.getTextChannel(), "**Hey!** You can not send messages in this channel. If you want to create a suggestion, then use the **/suggest** command!");
+            Utils.sendThenDelete(event.getChannel(), "**Hey!** You can not send messages in this channel. If you want to create a suggestion, then use the **/suggest** command!");
         }
 
     }

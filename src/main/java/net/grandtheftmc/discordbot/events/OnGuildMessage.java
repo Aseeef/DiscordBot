@@ -1,8 +1,8 @@
 package net.grandtheftmc.discordbot.events;
 
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.grandtheftmc.discordbot.utils.Utils;
 import net.grandtheftmc.discordbot.utils.selfdata.AnnoyData;
-import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
@@ -28,16 +28,16 @@ public class OnGuildMessage extends ListenerAdapter {
 
         if (annoyMap.containsKey(user.getIdLong())) {
             String emojiString = annoyMap.get(user.getIdLong());
-            Emote emoji;
+            Emoji emoji;
             try {
-                emoji =  e.getGuild().getEmoteById(emojiString);
+                emoji =  e.getGuild().getEmojiById(emojiString);
                 if (emoji != null)
                     message.addReaction(emoji).queue(null, error -> {
                         annoyMap.remove(user.getIdLong());
                         AnnoyData.get().save();
                     });
             } catch (NumberFormatException er) {
-                message.addReaction(emojiString).queue(null, error -> {
+                message.addReaction(Emoji.fromUnicode(emojiString)).queue(null, error -> {
                     annoyMap.remove(user.getIdLong());
                     AnnoyData.get().save();
                 });
@@ -47,7 +47,7 @@ public class OnGuildMessage extends ListenerAdapter {
 
         else if (scrabbleMap.containsKey(user.getIdLong())) {
             message.delete().queue();
-            WebhookUtils.retrieveWebhookUrl(e.getTextChannel()).thenAccept((hookUrl) -> {
+            WebhookUtils.retrieveWebhookUrl(e.getChannel().asTextChannel()).thenAccept((hookUrl) -> {
                 //String[] words = message.getContentRaw().split(" ");
 
                 String fullMsg = message.getContentRaw();
@@ -71,7 +71,7 @@ public class OnGuildMessage extends ListenerAdapter {
 
         else if (botMap.contains(user.getIdLong())) {
             message.delete().queue();
-            WebhookUtils.retrieveWebhookUrl(e.getTextChannel()).thenAccept((hookUrl) -> {
+            WebhookUtils.retrieveWebhookUrl(e.getChannel().asTextChannel()).thenAccept((hookUrl) -> {
                 if (hookUrl != null) {
                     WebhookUtils.sendMessageAs(e.getMessage().getContentRaw().replaceAll("@everyone", "everyone"), member, hookUrl);
                 }

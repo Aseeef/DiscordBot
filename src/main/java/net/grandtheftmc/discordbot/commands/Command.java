@@ -3,6 +3,7 @@ package net.grandtheftmc.discordbot.commands;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -49,7 +50,7 @@ public abstract class Command extends ListenerAdapter {
 
         this.commandData = Commands.slash(name.toLowerCase(), description);
         this.buildCommandData(this.commandData);
-        this.commandData.setDefaultEnabled(rank == null);
+        this.commandData.setDefaultPermissions(DefaultMemberPermissions.DISABLED);
 
         GTMBot.getJDA().addEventListener(this);
     }

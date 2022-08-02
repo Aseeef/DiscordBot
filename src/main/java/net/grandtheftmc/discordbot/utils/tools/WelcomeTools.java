@@ -22,9 +22,9 @@ public class WelcomeTools {
     public static MessageEmbed getRuleReactEmbed() {
 
         EmbedBuilder embed = new EmbedBuilder();
-        String gtmCheeky = GTMBot.getJDA().getEmotesByName("gtmcheeky", true).get(0).getAsMention();
-        String gtmAgree = GTMBot.getJDA().getEmotesByName("gtmagree", true).get(0).getAsMention();
-        String gtmDisagree = GTMBot.getJDA().getEmotesByName("gtmdisagree", true).get(0).getAsMention();
+        String gtmCheeky = GTMBot.getJDA().getEmojisByName("gtmcheeky", true).get(0).getAsMention();
+        String gtmAgree = GTMBot.getJDA().getEmojisByName("gtmagree", true).get(0).getAsMention();
+        String gtmDisagree = GTMBot.getJDA().getEmojisByName("gtmdisagree", true).get(0).getAsMention();
 
         embed.setTitle("Welcome to the Grand Theft Minecart Discord!");
         embed.setDescription(

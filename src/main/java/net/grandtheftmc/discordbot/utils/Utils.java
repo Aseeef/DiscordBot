@@ -4,17 +4,15 @@ import com.google.common.base.Charsets;
 import me.kbrewster.exceptions.APIException;
 import me.kbrewster.exceptions.InvalidPlayerException;
 import me.kbrewster.mojangapi.MojangAPI;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import net.grandtheftmc.discordbot.GTMBot;
-import net.grandtheftmc.simplejedis.SimpleJedisManager;
 import org.json.JSONObject;
 import net.grandtheftmc.discordbot.utils.confighelpers.Config;
 import net.grandtheftmc.discordbot.utils.console.Logs;
 import net.grandtheftmc.discordbot.utils.selfdata.ChannelIdData;
-import net.grandtheftmc.discordbot.utils.tools.MineStat;
 
 import javax.annotation.Nullable;
 import java.io.*;
@@ -291,15 +289,6 @@ public class Utils {
         String timeFormatted = ((monthR == 0 ? "" : monthR + " month(s), ") + (daysR == 0 ? "" : daysR + " day(s), ") + (hoursR == 0 ? "" : hoursR + " hour(s), ") + (minutesR == 0 ? "" : minutesR + " minute(s), ") + (secondsR == 0 ? "" : secondsR + " second(s), "));
 
         return timeFormatted.length() != 0 ? timeFormatted.substring(0, timeFormatted.length() - 2) : timeFormatted;
-    }
-
-    public static Optional<Emote> getEmote(String s) {
-        Pattern pattern = Pattern.compile("<:.{1,32}:([0-9]{18})>");
-        Matcher matcher = pattern.matcher(s);
-        if (matcher.find()) {
-            return Optional.ofNullable(GTMBot.getJDA().getEmoteById(matcher.group(1)));
-        }
-        return Optional.empty();
     }
 
 }

@@ -26,7 +26,7 @@ public class PlayerCountCommand extends Command {
     @Override
     public void buildCommandData(SlashCommandData slashCommandData) {
         SubcommandData setChannel = new SubcommandData("setchannel", "Displays GTM's player count at the target channel");
-        OptionData setChannelData = new OptionData(OptionType.CHANNEL, "channel", "The channel which we will display the player count in").setChannelTypes(ChannelType.VOICE);
+        OptionData setChannelData = new OptionData(OptionType.CHANNEL, "channel", "The channel which we will display the player count in", true).setChannelTypes(ChannelType.VOICE);
         setChannel.addOptions(setChannelData);
 
         slashCommandData.addSubcommands(setChannel);
@@ -37,28 +37,19 @@ public class PlayerCountCommand extends Command {
 
         // Suggestions SetChannel Command
         if (path[0].equalsIgnoreCase("setchannel")) {
-            VoiceChannel playerCountChannel = interaction.getOption("channel").getAsVoiceChannel();
+            VoiceChannel playerCountChannel = interaction.getOption("channel").getAsChannel().asVoiceChannel();
 
             // If its a valid voice channel id
-            if (playerCountChannel != null) {
 
-                // Set as player count channel
-                ChannelIdData.get().setPlayerCountChannelId(Long.parseLong(path[1]));
+            // Set as player count channel
+            ChannelIdData.get().setPlayerCountChannelId(interaction.getOption("channel").getAsChannel().getIdLong());
 
-                // Updates online players
-                updateOnlinePlayers();
+            // Send success msg
+            interaction.reply("**<`"+playerCountChannel.getIdLong()+"`>"+
+                    " has been set as the Player Count channel!**").setEphemeral(true).queue();
 
-                // Send success msg
-                interaction.reply("**<`"+playerCountChannel.getIdLong()+"`>"+
-                        " has been set as the Player Count channel!**").setEphemeral(true).queue();
-
-            }
-
-            // If channel id is invalid
-            else {
-                interaction.reply("**Invalid voice channel Id! Channel not set.**").setEphemeral(true).queue();
-            }
-
+            // Updates online players
+            updateOnlinePlayers();
         }
     }
 

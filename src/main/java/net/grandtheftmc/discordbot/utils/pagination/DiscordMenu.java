@@ -2,6 +2,8 @@ package net.grandtheftmc.discordbot.utils.pagination;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.entities.emoji.UnicodeEmoji;
 import net.dv8tion.jda.api.events.message.MessageEmbedEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveAllEvent;
@@ -15,9 +17,9 @@ import java.util.concurrent.CompletableFuture;
 
 public class DiscordMenu extends ListenerAdapter {
 
-    private static final String BACK = "◀️";
-    private static final String FORWARD = "▶️";
-    private static final String CLOSE = "❎";
+    private static final UnicodeEmoji BACK = Emoji.fromUnicode("◀️");
+    private static final UnicodeEmoji FORWARD = Emoji.fromUnicode("▶️");
+    private static final UnicodeEmoji CLOSE = Emoji.fromUnicode("❎");
 
     private Message message;
     private final User user;
@@ -115,6 +117,7 @@ public class DiscordMenu extends ListenerAdapter {
                 .queue();
     }
 
+    @Override
     public final void onMessageEmbed (MessageEmbedEvent event) {
         if (event.getMessageEmbeds().size() == 0) {
             this.message.delete().queue();
@@ -123,23 +126,24 @@ public class DiscordMenu extends ListenerAdapter {
         }
     }
 
+    @Override
     public final void onMessageReactionAdd (MessageReactionAddEvent event) {
-        onReactionAdd(event.getMessageIdLong(), event.getUser(), event.getReactionEmote());
+        onReactionAdd(event.getMessageIdLong(), event.getUser(), event.getReaction());
     }
 
-    private void onReactionAdd(long messageIdLong, User reactingUser, MessageReaction.ReactionEmote reactionEmote) {
+    private void onReactionAdd(long messageIdLong, User reactingUser, MessageReaction reactionEmote) {
 
         if (this.message != null && this.message.getIdLong() == messageIdLong && !(reactingUser == GTMBot.getJDA().getSelfUser())) {
 
             // remove the reaction
-            if (this.channel == null || this.channel instanceof PrivateChannel || (reactionEmote.isEmoji() && reactionEmote.getEmoji().equals(CLOSE))) {}
-            else if (reactionEmote.isEmoji())
-                this.message.removeReaction(reactionEmote.getEmoji(), reactingUser).queue();
-            else this.message.removeReaction(reactionEmote.getEmote(), reactingUser).queue();
+            if (this.channel == null || this.channel instanceof PrivateChannel || (reactionEmote.getEmoji().equals(CLOSE))) {
+
+            }
+            else this.message.removeReaction(reactionEmote.getEmoji(), reactingUser).queue();
 
             // fire appropriate event
 
-            if (reactionEmote.isEmoji() && reactionEmote.getEmoji().equals(BACK) && this.page - 1 >= 1) {
+            if (reactionEmote.getEmoji().equals(BACK) && this.page - 1 >= 1) {
 
                 if (this.user != reactingUser && !this.allowChangeFromAll) return; // if this discord menu doesn't accept input from all users, return
 
@@ -147,7 +151,7 @@ public class DiscordMenu extends ListenerAdapter {
                 this.menuAction.onAction(MenuAction.Type.PREVIOUS_PAGE, reactingUser);
             }
 
-            else if (reactionEmote.isEmoji() && reactionEmote.getEmoji().equals(CLOSE)) {
+            else if (reactionEmote.getEmoji().equals(CLOSE)) {
 
                 if (this.user != reactingUser && !this.allowChangeFromAll) return;
 
@@ -157,7 +161,7 @@ public class DiscordMenu extends ListenerAdapter {
                 GTMBot.getJDA().getEventManager().unregister(this);
             }
 
-            else if (reactionEmote.isEmoji() && reactionEmote.getEmoji().equals(FORWARD) && this.page + 1 <= this.maxPages) {
+            else if (reactionEmote.getEmoji().equals(FORWARD) && this.page + 1 <= this.maxPages) {
 
                 if (this.user != reactingUser && !this.allowChangeFromAll) return; // if this discord menu doesn't accept input from all users, return
 

@@ -132,7 +132,7 @@ public class ReportListener extends ListenerAdapter {
                     PrivateChannel userChannel = user.openPrivateChannel().complete();
                     userChannel.sendMessage("**Hey!** We received the following bug report from you:").setEmbeds(report.createEmbed(false)).complete();
                     userChannel.sendMessage("I will notify you if there are any further updates on this report. Thank you!").complete();
-                    String gtmAgree = GTMBot.getJDA().getEmotesByName("gtmagree", true).get(0).getAsMention();
+                    String gtmAgree = GTMBot.getJDA().getEmojisByName("gtmagree", true).get(0).getAsMention();
                     Utils.sendThenDelete(channel, gtmAgree + " **Success!** You submitted a bug report. Check your DMs for more info! (If you didn't receive a DM you may have your private messages turned off)");
                 });
             });

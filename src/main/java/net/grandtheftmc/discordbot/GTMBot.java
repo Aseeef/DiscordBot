@@ -41,10 +41,7 @@ import net.grandtheftmc.simplejedis.SimpleJedisManager;
 import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -101,19 +98,7 @@ public class GTMBot extends ListenerAdapter {
 
         try {
             jda = JDABuilder.createDefault(Config.get().getBotToken())
-                    .setEnabledIntents(
-                            GatewayIntent.DIRECT_MESSAGE_REACTIONS,
-                            GatewayIntent.DIRECT_MESSAGE_TYPING,
-                            GatewayIntent.DIRECT_MESSAGES,
-                            GatewayIntent.GUILD_MESSAGES,
-                            GatewayIntent.GUILD_MESSAGE_REACTIONS,
-                            GatewayIntent.GUILD_EMOJIS,
-                            GatewayIntent.GUILD_PRESENCES,
-                            GatewayIntent.GUILD_VOICE_STATES,
-                            GatewayIntent.GUILD_MEMBERS,
-                            GatewayIntent.GUILD_INVITES,
-                            GatewayIntent.GUILD_BANS
-                    )
+                    .setEnabledIntents(EnumSet.allOf(GatewayIntent.class))
                     .setMemberCachePolicy(MemberCachePolicy.ONLINE)
                     .build();
 

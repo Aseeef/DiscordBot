@@ -190,7 +190,7 @@ public class BugReport {
     public MessageEmbed createEmbed (boolean censor) {
         // Create suggestion embed
         EmbedBuilder embed = new EmbedBuilder();
-        String gtmHelpfulEmoji = GTMBot.getJDA().getEmotesByName("gtmhelpful", true).get(0).getAsMention();
+        String gtmHelpfulEmoji = GTMBot.getJDA().getEmojisByName("gtmhelpful", true).get(0).getAsMention();
         embed.setTitle(gtmHelpfulEmoji + "  **BUG REPORT ID:** " + this.id);
         embed.setThumbnail(userById(this.reporterId).getAvatarUrl());
         if (censor) {

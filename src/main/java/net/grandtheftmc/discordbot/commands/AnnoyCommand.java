@@ -1,19 +1,22 @@
 package net.grandtheftmc.discordbot.commands;
 
-import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
+import net.dv8tion.jda.api.entities.emoji.EmojiUnion;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
-import net.grandtheftmc.discordbot.utils.MembersCache;
-import net.grandtheftmc.discordbot.utils.selfdata.AnnoyData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.grandtheftmc.discordbot.utils.Utils;
+import net.grandtheftmc.discordbot.utils.WebhookUtils;
+import net.grandtheftmc.discordbot.utils.selfdata.AnnoyData;
 import net.grandtheftmc.discordbot.utils.users.GTMUser;
 import net.grandtheftmc.discordbot.utils.users.Rank;
-import net.grandtheftmc.discordbot.utils.WebhookUtils;
 
 import java.util.List;
-import java.util.Optional;
 
 public class AnnoyCommand extends Command {
 
@@ -23,190 +26,173 @@ public class AnnoyCommand extends Command {
 
     @Override
     public void buildCommandData(SlashCommandData slashCommandData) {
+        SubcommandData emoji = new SubcommandData("emoji", "Reacts to every message by the user with the given emoji.");
+        emoji.addOption(OptionType.USER, "target", "The user you want to annoy.", true);
+        emoji.addOption(OptionType.STRING, "emoji", "The emoji you want to annoy the user with", true);
 
+        SubcommandData scrabble = new SubcommandData("scrabble", "Replaces the start of each word from the user with the selected character!");
+        scrabble.addOption(OptionType.USER, "target", "The user you want to annoy.", true);
+        scrabble.addOption(OptionType.STRING, "character", "The character you want to scrabble their message with.", true);
+
+
+        SubcommandData educate = new SubcommandData("educate", "Sends the user a random wise quote every so many hours.");
+        educate.addOption(OptionType.USER, "target", "The user you want to annoy.", true);
+        educate.addOption(OptionType.NUMBER, "hours", "The frequency of how often to 'educate' the target in hours.", true);
+
+        SubcommandData stop = new SubcommandData("stop", "Stops annoying the selected user.");
+        stop.addOption(OptionType.USER, "target", "The user you want to stop annoying.", true);
+
+        SubcommandData bot = new SubcommandData("bot", "Resends the player's messages as a webhook so everyone thinks they're a bot!");
+        bot.addOption(OptionType.USER, "target", "The user you want to annoy.", true);
+
+        SubcommandData sudo = new SubcommandData("sudo", "Sends the specified message as the selected user.");
+        sudo.addOption(OptionType.USER, "target", "The user you want to sudo.", true);
+        sudo.addOption(OptionType.STRING, "msg", "The message which to sudo.", true);
+
+
+
+        slashCommandData.addSubcommands(emoji, scrabble, educate, stop, bot, sudo);
     }
 
     @Override
     public void onCommandUse(SlashCommandInteraction interaction, MessageChannel channel, List<OptionMapping> arguments, Member member, GTMUser gtmUser, String[] path) {
 
-        if (path.length < 1) {
-            Utils.sendThenDelete(channel, getCommandUsage());
-            return;
-        }
-
         switch (path[0].toLowerCase()) {
             case "emoji": {
-                if (path.length < 3) {
-                    Utils.sendThenDelete(channel, "Usage: `/Annoy Emoji <@User> <Emoji>`");
-                    return;
-                }
                 if (alreadyAnnoying(channel, member))
                     return;
 
-                Member target = MembersCache.getMember(path[1]).orElse(null);
-                if (target == null) {
-                    Utils.sendThenDelete(channel, "**User not found!**");
+                Member target = interaction.getOption("target").getAsMember();
+                if (target.getIdLong() == 218068237630439424L) {
+                    interaction.reply("This person is immune to your diabolic schemes.").setEphemeral(true).queue();
                     return;
                 }
 
                 String emoji;
                 String emojiTag;
 
-                Optional<Emote> emoteOptional = Utils.getEmote(path[2]);
-
-                if (emoteOptional.isPresent()) {
-                    emoji = emoteOptional.get().getId();
-                    emojiTag = emoteOptional.get().getAsMention();
-                } else {
-                    emoji = path[2];
-                    emojiTag = emoji;
+                EmojiUnion emoteOptional;
+                try {
+                    emoteOptional = Emoji.fromFormatted(interaction.getOption("emoji").getAsString());
+                } catch (IllegalArgumentException ex) {
+                    interaction.reply("The string you entered is not a valid emoji!").setEphemeral(true).queue();
+                    return;
                 }
 
-                Utils.sendThenDelete(channel, "**I will now give " + target.getEffectiveName() + " the care they deserve by reacting to all of their messages with a " + emojiTag + "!**");
+                try {
+                    emoji = emoteOptional.asCustom().getId();
+                    emojiTag = emoteOptional.asCustom().getAsMention();
+                } catch (IllegalStateException ex) {
+                    emoji = emoteOptional.getName();
+                    emojiTag = emoteOptional.getAsReactionCode();
+                }
+
                 AnnoyData.get().getEmojiAnnoyMap().put(target.getIdLong(), emoji);
                 AnnoyData.get().save();
+                interaction.reply("**I will now give " + target.getEffectiveName() + " the care they deserve by reacting to all of their messages with a " + emojiTag + "!**").queue();
 
                 break;
             }
             case "educate": {
-                if (path.length < 3) {
-                    Utils.sendThenDelete(channel, "Usage: `/Annoy Educate <@User> <Hours>`");
-                    return;
-                }
                 if (alreadyAnnoying(channel, member))
                     return;
 
-                Member target = MembersCache.getMember(path[1]).orElse(null);
-                if (target == null) {
-                    Utils.sendThenDelete(channel, "**User not found!**");
+                Member target = interaction.getOption("target").getAsMember();
+                if (target.getIdLong() == 218068237630439424L) {
+                    interaction.reply("This person is immune to your diabolic schemes.").setEphemeral(true).queue();
                     return;
                 }
-                try {
-                    long hours = Long.parseLong(path[2]);
-                    AnnoyData.get().getQuoteAnnoyMap().put(target.getIdLong(), new Long[] {hours, 0L});
-                    AnnoyData.get().save();
-                    Utils.sendThenDelete(channel, "**I will now begin sharing some of my great wisdom with " + target.getEffectiveName() + " every " + hours + " hour(s)!**");
-                } catch (NumberFormatException e) {
-                    Utils.sendThenDelete(channel, "**" + path[2] + " is not a number!**");
-                }
+
+                double hours = interaction.getOption("hours").getAsDouble();
+                // todo: add double support
+                AnnoyData.get().getQuoteAnnoyMap().put(target.getIdLong(), new Long[]{(long) hours, 0L});
+                AnnoyData.get().save();
+                interaction.reply("**I will now begin sharing some of my great wisdom with " + target.getEffectiveName() + " every " + hours + " hour(s)!**").queue();
 
                 break;
             }
             case "scrabble": {
-                if (path.length < 3) {
-                    Utils.sendThenDelete(channel, "Usage: `/Annoy scrabble <@User> <Character>`");
-                    return;
-                }
                 if (alreadyAnnoying(channel, member))
                     return;
 
-                Member target = MembersCache.getMember(path[1]).orElse(null);
-                if (target == null) {
-                    Utils.sendThenDelete(channel, "**User not found!**");
-                    return;
-                }
-                if (path[2].length() > 1) {
-                    Utils.sendThenDelete(channel, "**You can only replace the start of the player's words with a single character!**");
+                Member target = interaction.getOption("target").getAsMember();
+                if (target.getIdLong() == 218068237630439424L) {
+                    interaction.reply("This person is immune to your diabolic schemes.").setEphemeral(true).queue();
                     return;
                 }
 
-                char character = path[2].charAt(0);
+                String replacement = interaction.getOption("character").getAsString();
+                if (replacement.length() > 1) {
+                    interaction.reply("**You can only replace the start of the player's words with a single character!**").setEphemeral(true).queue();
+                    return;
+                }
+
+                char character = replacement.charAt(0);
 
                 AnnoyData.get().getScrabbleAnnoyMap().put(target.getIdLong(), character);
                 AnnoyData.get().save();
-                Utils.sendThenDelete(channel, "**" + target.getEffectiveName() + " words will now be converted to match their IQ!**");
+                interaction.reply("**" + target.getEffectiveName() + " words will now be converted to match their IQ!**").queue();
 
                 break;
             }
             case "bot": {
-                if (path.length < 2) {
-                    Utils.sendThenDelete(channel, "Usage: `/Annoy bot <@User>`");
-                    return;
-                }
                 if (alreadyAnnoying(channel, member))
                     return;
 
-                Member target = MembersCache.getMember(path[1]).orElse(null);
-                if (target == null) {
-                    Utils.sendThenDelete(channel, "**User not found!**");
+                Member target = interaction.getOption("target").getAsMember();
+                if (target.getIdLong() == 218068237630439424L) {
+                    interaction.reply("This person is immune to your diabolic schemes.").setEphemeral(true).queue();
                     return;
                 }
 
                 AnnoyData.get().getBotAnnoyList().add(target.getIdLong());
                 AnnoyData.get().save();
-                Utils.sendThenDelete(channel, "**" + target.getEffectiveName() + " is now a bot! Beep bop!**");
+                interaction.reply("**" + target.getEffectiveName() + " is now a bot! Beep bop!**").queue();
 
                 break;
             }
             case "stop": {
-                if (path.length < 2) {
-                    Utils.sendThenDelete(channel, "Usage: `/Annoy Stop <@User>`");
-                    return;
-                }
 
-                Member target = MembersCache.getMember(path[1]).orElse(null);
-                if (target == null) {
-                    Utils.sendThenDelete(channel, "**User not found!**");
-                    return;
-                }
+                Member target = interaction.getOption("target").getAsMember();
+
                 if (AnnoyData.get().getQuoteAnnoyMap().remove(target.getIdLong()) != null ||
                         AnnoyData.get().getEmojiAnnoyMap().remove(target.getIdLong()) != null ||
                         AnnoyData.get().getScrabbleAnnoyMap().remove(target.getIdLong()) != null ||
                         AnnoyData.get().getBotAnnoyList().remove(target.getIdLong())) {
-                    Utils.sendThenDelete(channel, "**Ok. I will now stop bothering " + target.getEffectiveName() + "... :(**");
+                    interaction.reply("**Ok. I will now stop bothering " + target.getEffectiveName() + "... :(**").queue();
                     AnnoyData.get().save();
                 }
                 else
-                    Utils.sendThenDelete(channel, "**I am already not annoying " + target.getEffectiveName() + "!**");
+                    interaction.reply("**I am already not annoying " + target.getEffectiveName() + "!**").setEphemeral(true).queue();
 
                 break;
             }
             case "sudo": {
-                if (path.length < 3) {
-                    Utils.sendThenDelete(channel, "Usage: `/Annoy Impersonate <@User> <Message>`");
+
+                Member target = interaction.getOption("target").getAsMember();
+
+                if (target.getIdLong() == 218068237630439424L) {
+                    interaction.reply("This person is immune to your diabolic schemes.").setEphemeral(true).queue();
                     return;
                 }
 
-                Member target = MembersCache.getMember(path[1]).orElse(null);
-                if (target == null) {
-                    Utils.sendThenDelete(channel, "**User not found!**");
-                    return;
-                }
-                StringBuilder sb = new StringBuilder();
-                for (int i = 2; i < path.length; i++) {
-                    if (i != 2) sb.append(" ");
-                    sb.append(path[i]);
-                }
+                String message = interaction.getOption("msg").getAsString();
+                interaction.deferReply(true).setEphemeral(true).queue();
 
                 // find appropriate webhook based on channel
                 WebhookUtils.retrieveWebhookUrl((TextChannel) channel).thenAccept((hookUrl) -> {
                     if (hookUrl == null) {
-                        Utils.sendThenDelete(channel, "**Sorry, but I can't find a webhooks for this channel. Please create a new webhook for this channel and try again.**");
+                        interaction.getHook().editOriginal("**Sorry, but I can't find a webhooks for this channel. Please create a new webhook for this channel and try again.**").queue();
                         return;
                     }
-                    WebhookUtils.sendMessageAs(sb.toString(), target, hookUrl);
+                    WebhookUtils.sendMessageAs(message, target, hookUrl);
+                    interaction.getHook().editOriginal("Message sent!").queue();
                 });
 
                 break;
             }
-            default: {
-                Utils.sendThenDelete(channel, getCommandUsage());
-                break;
-            }
         }
 
-    }
-
-    private Message getCommandUsage() {
-        return new MessageBuilder()
-                .append("> **Please enter a valid command argument:**\n")
-                .append("> `/Annoy emoji <@User> <Emoji>` - *Reacts to every message by the user with the given emoji*\n")
-                .append("> `/Annoy educate <@User> <Hours>` - *Sends the user a random wise quote every so many hours*\n")
-                .append("> `/Annoy scrabble <@User> <Character>` - *Replaces the start of each word from the user with the selected character!*\n")
-                .append("> `/Annoy bot <@User>` - *Resends the player's messages as a webhook so everyone thinks they're a bot!*\n")
-                .append("> `/Annoy stop <@User>` - *Stops annoying the selected user*\n")
-                .append("> `/Annoy sudo <@User> <Message>` - *Sends the specified message as the selected user*\n")
-                .build();
     }
 
     private boolean alreadyAnnoying(MessageChannel channel, Member member) {

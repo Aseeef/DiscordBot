@@ -30,7 +30,7 @@ public class SuggestionTools {
     public static MessageEmbed createSuggestionEmbed (Suggestions s) {
         // Create suggestion embed
         EmbedBuilder embed = new EmbedBuilder();
-        String gtmLearnablesEmoji = GTMBot.getJDA().getEmotesByName("gtmlearnables", true).get(0).getAsMention();
+        String gtmLearnablesEmoji = GTMBot.getJDA().getEmojisByName("gtmlearnables", true).get(0).getAsMention();
         embed.setTitle(gtmLearnablesEmoji + "  SUGGESTION ID: #" + s.getNumber());
         embed.setThumbnail(userById(s.getSuggesterId()).getAvatarUrl());
         embed.addField("**What is this suggest for?**", s.getServer(), false);

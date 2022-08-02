@@ -320,7 +320,7 @@ public class ChannelCommand extends Command {
                     return;
                 }
 
-                long categoryId = interaction.getOption("category").getAsGuildChannel().getIdLong();
+                long categoryId = interaction.getOption("category").getAsChannel().asCategory().getIdLong();
 
                 ChannelIdData.get().setPrivateChannelsCategoryId(categoryId);
                 interaction.reply("**<@" + categoryId + "> has been successfully set as the private channels category.**").setEphemeral(true).queue();
