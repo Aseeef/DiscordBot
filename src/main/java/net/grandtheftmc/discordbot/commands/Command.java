@@ -50,7 +50,7 @@ public abstract class Command extends ListenerAdapter {
 
         this.commandData = Commands.slash(name.toLowerCase(), description);
         this.buildCommandData(this.commandData);
-        this.commandData.setDefaultPermissions(DefaultMemberPermissions.DISABLED);
+        this.commandData.setDefaultPermissions(rank == null ? DefaultMemberPermissions.ENABLED : DefaultMemberPermissions.DISABLED);
 
         GTMBot.getJDA().addEventListener(this);
     }

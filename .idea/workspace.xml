@@ -4,42 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="* dupe alert system + minor bugs">
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/web/GrandTheftMCUploader.java" afterDir="false" />
+    <list default="true" id="9481f4fa-ac4c-42ee-a9c9-546975de5d27" name="Default Changelist" comment="* updated discord bot&#10;* fixed some bugs with a few commands">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/GTMBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/GTMBot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/AnnoyCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/AnnoyCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/ChannelCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/ChannelCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/Command.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/Command.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/PlayerCountCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/PlayerCountCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/bugs/BugAdminCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/bugs/BugAdminCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/bugs/BugReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/bugs/BugReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/bugs/ReportListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/bugs/ReportListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/stats/StatsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/stats/StatsCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/stats/StatsMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/stats/StatsMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/suggestions/SuggestionListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/suggestions/SuggestionListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/suggestions/SuggestionTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/commands/suggestions/SuggestionTools.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/events/OnGuildMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/events/OnGuildMessage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/Utils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/pagination/DiscordMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/pagination/DiscordMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/tools/WelcomeTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/grandtheftmc/discordbot/utils/tools/WelcomeTools.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/.gradle/7.1.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/.gradle/7.1.1/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/.gradle/7.1.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/.gradle/7.1.1/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/.gradle/7.1.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/.gradle/7.1.1/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/.gradle/7.1.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/.gradle/7.1.1/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/.gradle/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/.gradle/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/.gradle/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/.gradle/checksums/md5-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/.gradle/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/.gradle/checksums/sha1-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/.gradle/checksums/sha256-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/.gradle/checksums/sha256-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/.gradle/checksums/sha512-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/.gradle/checksums/sha512-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/build/DiscordBotLib.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/build/DiscordBotLib.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/build/publications/maven/module.json" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/build/publications/maven/module.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/build/publications/maven/pom-default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/build/publications/maven/pom-default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DiscordBotLib/build/tmp/publishMavenPublicationToMavenRepository/module-maven-metadata.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../DiscordBotLib/build/tmp/publishMavenPublicationToMavenRepository/module-maven-metadata.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -230,15 +198,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/aseef/AppData/Roaming/.minecraft/resourcepacks/gtm-resourcepacks",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/aseef/AppData/Roaming/.minecraft/resourcepacks/gtm-resourcepacks&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\aseef\IdeaProjects\GTMBot" />
@@ -648,14 +616,8 @@
       <workItem from="1658168711749" duration="712000" />
       <workItem from="1659318885537" duration="4402000" />
       <workItem from="1659327333897" duration="645000" />
-      <workItem from="1659456362680" duration="4816000" />
-    </task>
-    <task id="LOCAL-00048" summary="* added gitignore">
-      <created>1620602589937</created>
-      <option name="number" value="00048" />
-      <option name="presentableId" value="LOCAL-00048" />
-      <option name="project" value="LOCAL" />
-      <updated>1620602589937</updated>
+      <workItem from="1659456362680" duration="5066000" />
+      <workItem from="1659604839299" duration="1518000" />
     </task>
     <task id="LOCAL-00049" summary="* Added basic staff stats&#10;* Improved ticket event system&#10;* Tickets not replied to in 3d+ reminder&#10;* Fixed PHP parser (hence fixed staff report alerts)&#10;* Depreciated old support ticket alert event system">
       <created>1620764594275</created>
@@ -993,7 +955,14 @@
       <option name="project" value="LOCAL" />
       <updated>1654020898425</updated>
     </task>
-    <option name="localTasksCounter" value="97" />
+    <task id="LOCAL-00097" summary="* updated discord bot&#10;* fixed some bugs with a few commands">
+      <created>1659461302832</created>
+      <option name="number" value="00097" />
+      <option name="presentableId" value="LOCAL-00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1659461302833</updated>
+    </task>
+    <option name="localTasksCounter" value="98" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1012,7 +981,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT_PROFILE" value="Project Default" />
-    <MESSAGE value="* test" />
     <MESSAGE value="* test 2" />
     <MESSAGE value="* test 3" />
     <MESSAGE value="* test 5" />
@@ -1037,7 +1005,8 @@
     <MESSAGE value="updated to mariadb" />
     <MESSAGE value="discord bot 2.0 progress..." />
     <MESSAGE value="discord bot 2.0 more progress..." />
-    <option name="LAST_COMMIT_MESSAGE" value="discord bot 2.0 more progress..." />
+    <MESSAGE value="* updated discord bot&#10;* fixed some bugs with a few commands" />
+    <option name="LAST_COMMIT_MESSAGE" value="* updated discord bot&#10;* fixed some bugs with a few commands" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
