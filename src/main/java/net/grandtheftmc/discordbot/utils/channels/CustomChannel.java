@@ -20,10 +20,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.restaction.PermissionOverrideAction;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -222,9 +219,8 @@ public class CustomChannel extends ListenerAdapter {
                     .queue(vc -> {
                         this.voiceChannel = vc;
                         this.voiceChannelId = vc.getIdLong();
-                        vc.upsertPermissionOverride(owner).setAllowed(
-                                EnumSet.of(Permission.VOICE_CONNECT, Permission.VOICE_MOVE_OTHERS)
-                        ).queue(po -> vc.createInvite().setMaxAge(1L, TimeUnit.DAYS)
+                        vc.upsertPermissionOverride(owner).setAllowed(EnumSet.of(Permission.VOICE_CONNECT, Permission.VOICE_MOVE_OTHERS))
+                                .queue(po -> vc.createInvite().setMaxAge(1L, TimeUnit.DAYS)
                                 .queue((invite) -> {
                                     this.invite = invite;
                                     // update channel
@@ -326,7 +322,8 @@ public class CustomChannel extends ListenerAdapter {
 
         // If neither in the blacklist or whitelist, delete permission override for member
         this.voiceChannel.getMemberPermissionOverrides().forEach( (po) -> {
-            if (po.getMember() == owner) return;
+            if (po.getMember() == null) return;
+            if (Objects.equals(po.getMember(), owner)) return;
             if (!this.blacklist.contains(po.getMember()) && !this.whitelist.contains(po.getMember()))
                 po.delete().queue();
         });

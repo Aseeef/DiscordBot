@@ -1,5 +1,6 @@
 package net.grandtheftmc.discordbot.commands.suggestions;
 
+import net.dv8tion.jda.api.entities.ThreadChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -45,6 +46,9 @@ public class SuggestionListener extends ListenerAdapter {
                     Emoji gtmDisagree = GTMBot.getJDA().getEmojisByName("gtmdisagree", true).get(0);
                     msg.addReaction(gtmAgree).queue();
                     msg.addReaction(gtmDisagree).queue();
+                    msg.createThreadChannel("Suggestions #" + suggestion.getNumber()).setAutoArchiveDuration(ThreadChannel.AutoArchiveDuration.TIME_3_DAYS).queue( threadChannel ->
+                            threadChannel.sendMessage("Got any feedback on this suggestion? How would you add to this suggestion to make it better? Write your thoughts about this suggestion here to help us decide whether to add this!").queue()
+                    );
                 });
             });
 
