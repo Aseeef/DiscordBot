@@ -1,18 +1,16 @@
 package net.grandtheftmc.discordbot.utils;
 
 import com.google.common.base.Charsets;
-import me.kbrewster.exceptions.APIException;
-import me.kbrewster.exceptions.InvalidPlayerException;
-import me.kbrewster.mojangapi.MojangAPI;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.requests.restaction.MessageAction;
 import net.grandtheftmc.discordbot.GTMBot;
-import org.json.JSONObject;
 import net.grandtheftmc.discordbot.utils.confighelpers.Config;
 import net.grandtheftmc.discordbot.utils.console.Logs;
+import net.grandtheftmc.discordbot.utils.mojang.APIException;
+import net.grandtheftmc.discordbot.utils.mojang.MojangAPI;
 import net.grandtheftmc.discordbot.utils.selfdata.ChannelIdData;
+import org.json.JSONObject;
 
 import javax.annotation.Nullable;
 import java.io.*;
@@ -21,8 +19,6 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static net.grandtheftmc.discordbot.utils.console.Logs.log;
 
@@ -229,12 +225,11 @@ public class Utils {
     }
 
     public static List<String> getAllUsernames(UUID uuid) {
+        //todo find work around to mojang removing this
         try {
-            List<String> nameHist = new ArrayList<>();
-            MojangAPI.getNameHistory(uuid).forEach( (name) -> nameHist.add(name.getName()));
-            return nameHist;
-        } catch (InvalidPlayerException | NullPointerException e) {
-            Utils.printStackError(e);
+            return Collections.singletonList(MojangAPI.getInstance().getUsername(uuid));
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
         return null;
     }
@@ -247,8 +242,8 @@ public class Utils {
 
     public static Optional<UUID> getUUID(String userName) {
         try {
-            return Optional.of(MojangAPI.getUUID(userName));
-        } catch (IOException | InvalidPlayerException | APIException | NullPointerException e) {
+            return Optional.of(MojangAPI.getInstance().getUUID(userName));
+        } catch (IOException | APIException | NullPointerException e) {
             Utils.printStackError(e);
         }
         return Optional.empty();
@@ -261,8 +256,8 @@ public class Utils {
 
     public static Optional<String> getUsername(UUID uuid) {
         try {
-            return Optional.of(MojangAPI.getUsername(uuid));
-        } catch (IOException | InvalidPlayerException | APIException | NullPointerException e) {
+            return Optional.of(MojangAPI.getInstance().getUsername(uuid));
+        } catch (IOException | APIException | NullPointerException e) {
             Utils.printStackError(e);
         }
         return Optional.empty();

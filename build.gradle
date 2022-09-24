@@ -63,7 +63,7 @@ repositories {
 
 dependencies {
 
-    compileOnly ('net.grandtheftmc:discordbotlib:1.0.5') {
+    compileOnly ('net.grandtheftmc:discordbotlib:1.0.6') {
         changing = true
     }
 

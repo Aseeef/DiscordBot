@@ -13,7 +13,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Information and docs related to the XenAPI can be found at https://xenapi.readthedocs.io/
+ * Information and docs related to the XenAPI can be found at <a href="https://xenapi.readthedocs.io/">...</a>
  */
 public class Xenforo {
 

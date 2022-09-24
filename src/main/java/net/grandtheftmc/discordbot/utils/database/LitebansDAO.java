@@ -1,9 +1,9 @@
 package net.grandtheftmc.discordbot.utils.database;
 
-import me.kbrewster.exceptions.APIException;
-import me.kbrewster.mojangapi.MojangAPI;
 import net.grandtheftmc.discordbot.utils.Utils;
 import net.grandtheftmc.discordbot.utils.litebans.Ban;
+import net.grandtheftmc.discordbot.utils.mojang.APIException;
+import net.grandtheftmc.discordbot.utils.mojang.MojangAPI;
 
 import java.io.IOException;
 import java.sql.*;
@@ -13,7 +13,7 @@ public class LitebansDAO {
 
     public static Ban getBanByPlayer (Connection conn, String player) {
         try {
-            UUID uuid = MojangAPI.getUUID(player);
+            UUID uuid = MojangAPI.getInstance().getUUID(player);
             String query = "SELECT * FROM `litebans_bans` WHERE `uuid`=? AND `active`=1;";
 
             try (PreparedStatement statement = conn.prepareStatement(query)) {
